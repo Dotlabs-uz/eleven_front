@@ -1,3 +1,5 @@
+import 'package:eleven_crm/features/auth/domain/usecases/change_password.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/menu/menu_cubit.dart';
 import 'package:http/http.dart';
 
 import '../core/api/api_client.dart';
@@ -15,6 +17,8 @@ import '../features/main/data/repository/main_repository_impl.dart';
 import '../features/main/domain/repository/main_repository.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
+
 final locator = GetIt.I;
 
 void setup() {
@@ -25,6 +29,8 @@ void setup() {
         logoutUser: locator(),
         passwordChange: locator(),
       ));
+  locator.registerFactory(() => MenuCubit());
+  locator.registerFactory(() => TopMenuCubit());
   locator.registerFactory(() => AuthCubit(
         locator(),
       ));
@@ -35,7 +41,8 @@ void setup() {
   locator.registerLazySingleton<LoginUser>(() => LoginUser(locator()));
   locator.registerLazySingleton<LogoutUser>(() => LogoutUser(locator()));
   locator.registerLazySingleton<LogginedUser>(() => LogginedUser(locator()));
-
+  locator
+      .registerLazySingleton<ChangePassword>(() => ChangePassword(locator()));
 
   // Main
 
