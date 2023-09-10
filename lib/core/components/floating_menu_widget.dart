@@ -72,7 +72,6 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                   const EdgeInsets.only(left: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-
                 children: [
                   CircleAvatar(
                     radius: 25,
@@ -87,21 +86,27 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                     //           ),
                     //   ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("User name", style: TextStyle(
-                        fontFamily: "Nunito",
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),),
+                    children: const [
+                      Text(
+                        "User name",
+                        style: TextStyle(
+                          fontFamily: "Nunito",
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
                       SizedBox(height: 3),
-                      Text("Парикмахер",style: TextStyle(
-                        fontFamily: "Nunito",
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),),
+                      Text(
+                        "Парикмахер",
+                        style: TextStyle(
+                          fontFamily: "Nunito",
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -147,6 +152,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     return CleanCalendar(
       enableDenseViewForDates: true,
       enableDenseSplashForDates: true,
+
 
       dateSelectionMode: DatePickerSelectionMode.disable,
       startWeekday: WeekDay.monday,
