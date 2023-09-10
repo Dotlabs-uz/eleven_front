@@ -57,7 +57,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
       height: MediaQuery.of(context).size.height,
       padding: const EdgeInsets.all(10),
       decoration: const BoxDecoration(
-        color: Colors.amber,
+        color: AppColors.sideMenu,
 
         // color: AppColor.menuBgColor,
         // borderRadius: BorderRadius.circular(15),
@@ -103,7 +103,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                   padding: const EdgeInsets.all(10),
                   child: Container(
                     decoration: const BoxDecoration(
-                      color: Colors.orange,
+                      color: AppColors.sideMenuSelected,
                       shape: BoxShape.circle,
                     ),
                     child: Center(
@@ -119,6 +119,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                 ),
               ),
             ),
+
           ],
         ),
       ),
@@ -161,7 +162,7 @@ class FloatingMenuItemWidget extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: entity.index == currentIndex ? Colors.orange : null),
+              color: entity.index == currentIndex ?                        AppColors.sideMenuSelected : null),
           child: !isOpen
               ? _icon(entity.index == currentIndex)
               : Row(
@@ -177,7 +178,7 @@ class FloatingMenuItemWidget extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.nunito(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 16,
                           fontWeight: entity.index == currentIndex
                               ? FontWeight.w700
@@ -198,7 +199,7 @@ class FloatingMenuItemWidget extends StatelessWidget {
         child: Icon(
           entity.icon,
           size: 30,
-          color: selected ? Colors.black : Colors.black,
+          color: selected ? Colors.white : Colors.white,
         ),
       ),
     );

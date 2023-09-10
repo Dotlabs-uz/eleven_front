@@ -54,11 +54,11 @@ class ButtonWidget extends StatelessWidget {
           decoration: BoxDecoration(
             // color: Colors.red,
             color:
-            color ?? (!enabled ? AppColors.buttonDisabled : AppColors.light),
+            color ?? (AppColors.buttonColor),
             borderRadius: BorderRadius.circular(2.r),
             border: isOutlined
                 ? Border.all(
-              color:borderColor ??  AppColors.buttonDisabled,
+              color:borderColor ?? AppColors.buttonColor,
             )
                 : null,
           ),

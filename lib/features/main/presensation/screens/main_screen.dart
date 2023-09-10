@@ -17,15 +17,15 @@ import '../cubit/menu/menu_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../widget/my_icon_button.dart';
 
-class DefaultScreen extends StatefulWidget {
-  const DefaultScreen({Key? key, required this.menus}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key, required this.menus}) : super(key: key);
   final List<SubMenu> menus;
 
   @override
-  State<DefaultScreen> createState() => _DefaultScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _DefaultScreenState extends State<DefaultScreen> {
+class _MainScreenState extends State<MainScreen> {
   int selectedIndex = 0;
   String version = "";
 
@@ -231,7 +231,7 @@ class _ContentWidgetState extends State<ContentWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffd71717),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           _topMenu(),

@@ -6,16 +6,16 @@ import 'menu_constants.dart';
 
 class Routes {
   static Map<String, WidgetBuilder> getRoutes(RouteSettings setting) => {
-        RouteList.initial: (context) => DefaultScreen(menus: Menus.ordersMenu),
-        RouteList.home: (context) => DefaultScreen(menus: Menus.ordersMenu),
-        RouteList.configs: (context) => DefaultScreen(menus: Menus.configsMenu),
+        RouteList.initial: (context) => MainScreen(menus: Menus.ordersMenu),
+        RouteList.home: (context) => MainScreen(menus: Menus.ordersMenu),
+        RouteList.configs: (context) => MainScreen(menus: Menus.configsMenu),
         RouteList.management: (context) =>
-            DefaultScreen(menus: Menus.managementMenu),
-        RouteList.orders: (context) => DefaultScreen(menus: Menus.ordersMenu),
-        RouteList.product: (context) => DefaultScreen(menus: Menus.productMenu),
+            MainScreen(menus: Menus.managementMenu),
+        RouteList.orders: (context) => MainScreen(menus: Menus.ordersMenu),
+        RouteList.product: (context) => MainScreen(menus: Menus.productMenu),
         // RouteList.logout: (context) => const LoginScreen(),
         // RouteList.login: (context) => const LoginScreen(),
         RouteList.statistic: (context) =>
-            DefaultScreen(menus: Menus.statisticMenu),
+            MainScreen(menus: Menus.statisticMenu),
       };
 }

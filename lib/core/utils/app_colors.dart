@@ -1,4 +1,5 @@
-import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 class AppColors {
   static const background = Color(0xff343B71);
@@ -9,6 +10,9 @@ class AppColors {
   static const text = Color(0xff545C9B);
   static const mainTextColor = Color(0xffffffff);
   static const light = Color(0xffF9FAFF);
-  static const buttonDisabled = Color(0xffB9BCDD);
+  static const darkText = Color(0xff23120B);
+  static const sideMenu = Color(0xff394251);
+  static const sideMenuSelected = Colors.blue;
+  static const buttonColor = Colors.blue;
 
 }
