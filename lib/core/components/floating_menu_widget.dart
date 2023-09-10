@@ -68,19 +68,43 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
 
             Padding(
               padding:
-                  !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
-              child: CircleAvatar(
-                radius: 35,
-                backgroundImage: _image(""),
-                // child: Container(
-                //   child: Center(
-                //     child: avatar.isNotEmpty
-                //         ? Image.network(avatar)
-                //         : Image.asset(
-                //             Assets.tAvatarPlaceHolder,
-                //             fit: BoxFit.fill,
-                //           ),
-                //   ),
+                  // !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
+                  const EdgeInsets.only(left: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+
+                children: [
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundImage: _image(""),
+                    // child: Container(
+                    //   child: Center(
+                    //     child: avatar.isNotEmpty
+                    //         ? Image.network(avatar)
+                    //         : Image.asset(
+                    //             Assets.tAvatarPlaceHolder,
+                    //             fit: BoxFit.fill,
+                    //           ),
+                    //   ),
+                  ),
+                  SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("User name", style: TextStyle(
+                        fontFamily: "Nunito",
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),),
+                      SizedBox(height: 3),
+                      Text("Парикмахер",style: TextStyle(
+                        fontFamily: "Nunito",
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),),
+                    ],
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 30),
@@ -102,7 +126,6 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
   }
 
   ImageProvider<Object> _image(String? avatar) {
-    print("Avatar $avatar");
     if (avatar != null && avatar.isNotEmpty) {
       return NetworkImage(avatar);
     } else {
