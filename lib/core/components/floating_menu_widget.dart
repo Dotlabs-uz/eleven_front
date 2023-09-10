@@ -1,11 +1,9 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:clean_calendar/clean_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 import '../utils/app_colors.dart';
 import '../utils/assets.dart';
-
 
 class FloatingMenuEntity {
   final String title;
@@ -41,7 +39,7 @@ class FloatingMenuWidget extends StatefulWidget {
 }
 
 class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
-  static bool isOpen = false;
+  static bool isOpen = true;
   String version = "";
 
   @override
@@ -49,11 +47,10 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: isOpen ? 230 : 100,
+      width: isOpen ? 300 : 100,
       height: MediaQuery.of(context).size.height,
       padding: const EdgeInsets.all(10),
       decoration: const BoxDecoration(
@@ -67,6 +64,8 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
+            const SizedBox(height: 10),
+
             Padding(
               padding:
                   !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
@@ -84,7 +83,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                 //   ),
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 30),
             ...List.generate(widget.listEntity.length, (index) {
               return FloatingMenuItemWidget(
                 entity: widget.listEntity[index],
@@ -93,33 +92,9 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                 isOpen: isOpen,
               );
             }),
-
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: GestureDetector(
-                onTap: () => setState(() => isOpen = !isOpen),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: AppColors.sideMenuSelected,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Icon(
-                        !isOpen
-                            ? Icons.chevron_right_rounded
-                            : Icons.chevron_left_rounded,
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
+            //
+            const SizedBox(height: 40),
+            const CalendarWidget(),
           ],
         ),
       ),
@@ -133,6 +108,96 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
     } else {
       return const AssetImage(Assets.tAvatarPlaceHolder);
     }
+  }
+}
+
+class CalendarWidget extends StatefulWidget {
+  const CalendarWidget({Key? key}) : super(key: key);
+
+  @override
+  State<CalendarWidget> createState() => _CalendarWidgetState();
+}
+
+class _CalendarWidgetState extends State<CalendarWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return CleanCalendar(
+      enableDenseViewForDates: true,
+      enableDenseSplashForDates: true,
+
+      dateSelectionMode: DatePickerSelectionMode.disable,
+      startWeekday: WeekDay.monday,
+
+      headerProperties: HeaderProperties(
+        monthYearDecoration: MonthYearDecoration(
+          monthYearTextColor: Colors.white,
+          monthYearTextStyle: const TextStyle(
+            color: Colors.white,
+            fontFamily: "Nunito",
+            fontSize: 16,
+          ),
+        ),
+        navigatorDecoration: NavigatorDecoration(
+          navigateLeftButtonIcon: const Icon(
+            Icons.chevron_left_rounded,
+            color: Colors.white,
+          ),
+          navigateRightButtonIcon: const Icon(
+            Icons.chevron_right_rounded,
+            color: Colors.white,
+          ),
+          navigatorResetButtonIcon: const Icon(
+            Icons.date_range_rounded,
+            color: Colors.white,
+          ),
+        ),
+      ),
+
+      selectedDatesProperties: DatesProperties(
+        datesDecoration: DatesDecoration(
+          datesBackgroundColor: Colors.amber,
+          datesBorderRadius: 6,
+          datesBorderColor: Colors.transparent,
+          datesTextStyle: const TextStyle(
+            fontFamily: "Nunito",
+            color: Colors.white,
+          ),
+        ),
+      ),
+      leadingTrailingDatesProperties: DatesProperties(
+          datesDecoration: DatesDecoration(
+        datesBorderRadius: 6,
+        datesBorderColor: Colors.black26,
+        datesBackgroundColor: Colors.black26,
+        datesTextColor: Colors.black26,
+      )),
+      // selectedDatesProperties: ,
+      generalDatesProperties: DatesProperties(
+        datesDecoration: DatesDecoration(
+          // datesBackgroundColor: const Color(0xff1A1A1A),
+          datesBorderColor: Colors.transparent,
+          datesBackgroundColor: Colors.transparent,
+          datesTextColor: Colors.white,
+          // datesTextStyle: const TextStyle(
+          //   fontFamily: "Nunito",
+          //   color: Colors.white,
+          // )
+        ),
+      ),
+
+      weekdaysProperties: WeekdaysProperties(
+        generalWeekdaysDecoration: WeekdaysDecoration(
+            weekdayTextColor: Colors.white,
+            weekdayTextStyle: GoogleFonts.nunito(
+              color: Colors.white,
+            )),
+      ),
+      selectedDates: [DateTime.now()],
+      onCalendarViewDate: (DateTime calendarViewDate) {
+        // print(calendarViewDate);
+      },
+      onSelectedDates: (List<DateTime> value) {},
+    );
   }
 }
 
@@ -162,7 +227,9 @@ class FloatingMenuItemWidget extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: entity.index == currentIndex ?                        AppColors.sideMenuSelected : null),
+              color: entity.index == currentIndex
+                  ? AppColors.sideMenuSelected
+                  : null),
           child: !isOpen
               ? _icon(entity.index == currentIndex)
               : Row(
