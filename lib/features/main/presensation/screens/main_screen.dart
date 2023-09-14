@@ -141,9 +141,9 @@ class SideMenuWidget extends StatelessWidget {
           return FloatingMenuWidget(
             listEntity: [
               FloatingMenuEntity(
-                key: RouteList.orders,
-                icon: Icons.add_shopping_cart_outlined,
-                title: "orders".tr(),
+                key: RouteList.home,
+                icon: Icons.home_filled,
+                title: "homeScreen".tr(),
                 index: 0,
               ),
               // FloatingMenuEntity(
@@ -156,25 +156,25 @@ class SideMenuWidget extends StatelessWidget {
                 key: RouteList.management,
                 icon: Icons.manage_accounts_outlined,
                 title: "management".tr(),
-                index: 3,
+                index: 1,
               ),
               FloatingMenuEntity(
                 key: RouteList.product,
                 icon: Icons.assessment_outlined,
                 title: "product".tr(),
-                index: 4,
+                index: 2,
               ),
               FloatingMenuEntity(
                 key: RouteList.configs,
                 icon: EvaIcons.settingsOutline,
                 title: "config".tr(),
-                index: 1,
+                index: 3,
               ),
               FloatingMenuEntity(
-                key: RouteList.statistic,
+                key: RouteList.settings,
                 icon: EvaIcons.barChart2,
-                title: "statistic".tr(),
-                index: 6,
+                title: "settings".tr(),
+                index: 4,
               ),
               FloatingMenuEntity(
                 key: RouteList.logout,

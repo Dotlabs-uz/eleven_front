@@ -1,4 +1,8 @@
+import 'package:eleven_crm/features/main/presensation/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../../features/main/presensation/screens/home_screen.dart';
+import '../../features/management/presentation/screens/customer_screen.dart';
 
 class SubMenu {
   final String text;
@@ -14,19 +18,19 @@ class Menus {
   static List<SubMenu> ordersMenu = [
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
-      text: 'customer_orders',
-      page: Container(),
+      text: 'homeScreen',
+      page: const HomeScreen(),
     ),
-    SubMenu(
-      icon: const Icon(Icons.category),
-      text: 'order_payments',
-      page: Container(),
-    ),
-    SubMenu(
-      icon: const Icon(Icons.category),
-      text: 'blind_order_items',
-      page: Container(),
-    ),
+    // SubMenu(
+    //   icon: const Icon(Icons.category),
+    //   text: 'order_payments',
+    //   page: Container(),
+    // ),
+    // SubMenu(
+    //   icon: const Icon(Icons.category),
+    //   text: 'blind_order_items',
+    //   page: Container(),
+    // ),
   ];
 
   // static List<SubMenu> crmMenu = [
@@ -41,7 +45,7 @@ class Menus {
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'customer',
-      page: Container(),
+      page: const CustomerScreen(),
 
     ),
 
@@ -60,7 +64,7 @@ class Menus {
     SubMenu(
       icon: const Icon(Icons.category),
       text: 'profile',
-      page: Container(),
+      page: const ProfileScreen(),
     ),
 
   ];

@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../features/main/presensation/cubit/menu/menu_cubit.dart';
-import '../utils/app_colors.dart';
 import '../utils/assets.dart';
 import '../utils/route_constants.dart';
 import 'floating_menu_widget.dart';
@@ -27,50 +26,6 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
-  final List<FloatingMenuEntity> listEntity = [
-    FloatingMenuEntity(
-      key: RouteList.orders,
-      icon: Icons.add_shopping_cart_outlined,
-      title: "orders".tr(),
-      index: 0,
-    ),
-    FloatingMenuEntity(
-      key: RouteList.crm,
-      icon: Icons.accessibility_outlined,
-      title: "crm".tr(),
-      index: 2,
-    ),
-    FloatingMenuEntity(
-      key: RouteList.management,
-      icon: Icons.manage_accounts_outlined,
-      title: "management".tr(),
-      index: 3,
-    ),
-    FloatingMenuEntity(
-      key: RouteList.product,
-      icon: Icons.assessment_outlined,
-      title: "product".tr(),
-      index: 4,
-    ),
-    FloatingMenuEntity(
-      key: RouteList.configs,
-      icon: EvaIcons.settingsOutline,
-      title: "config".tr(),
-      index: 1,
-    ),
-    FloatingMenuEntity(
-      key: RouteList.logout,
-      icon: EvaIcons.logOutOutline,
-      title: "signOut".tr(),
-      index: 5,
-    ),
-    FloatingMenuEntity(
-      key: RouteList.statistic,
-      icon: EvaIcons.barChart2,
-      title: "statistic".tr(),
-      index: 6,
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -91,66 +46,48 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
               ),
               const SizedBox(height: 15),
-              Text(
-                "${"Balance".tr()}: ",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.nunito(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 15),
-              Text(
-                "${"ShopBalance".tr()}: ",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.nunito(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14,
-                ),
-              ),
+
               _item(
-                title: "orders".tr(),
+                title: "homeScreen".tr(),
                 index: 0,
-                icon: Icons.add_shopping_cart_outlined,
+                icon: Icons.home_filled,
                 isActive: state == 0,
-                onChanged: (value) => widget.onChanged.call(listEntity[0]),
+                onChanged: (value) => widget.onChanged.call(listEntityPages[0]),
               ),
               _item(
                 title: "management".tr(),
-                index: 3,
+                index: 1,
                 icon: Icons.manage_accounts_outlined,
-                isActive: state == 3,
-                onChanged: (value) => widget.onChanged.call(listEntity[2]),
+                isActive: state == 1,
+                onChanged: (value) => widget.onChanged.call(listEntityPages[1]),
               ),
               _item(
                 title: "product".tr(),
-                index: 4,
+                index: 2,
                 icon: Icons.assessment_outlined,
-                isActive: state == 4,
-                onChanged: (value) => widget.onChanged.call(listEntity[3]),
+                isActive: state == 2,
+                onChanged: (value) => widget.onChanged.call(listEntityPages[2]),
               ),
               _item(
                 title: "config".tr(),
-                index: 1,
+                index: 3,
                 icon: EvaIcons.settingsOutline,
-                isActive: state == 1,
-                onChanged: (value) => widget.onChanged.call(listEntity[4]),
+                isActive: state == 3,
+                onChanged: (value) => widget.onChanged.call(listEntityPages[3]),
               ),
               _item(
-                title: "statistic".tr(),
-                index: 6,
-                icon: EvaIcons.barChart2,
-                isActive: state == 6,
-                onChanged: (value) => widget.onChanged.call(listEntity[6]),
+                title: "settings".tr(),
+                index: 4,
+                icon: EvaIcons.settings,
+                isActive: state == 4,
+                onChanged: (value) => widget.onChanged.call(listEntityPages[4]),
               ),
               _item(
                 title: "signOut".tr(),
                 index: 5,
                 icon: EvaIcons.logOutOutline,
                 isActive: state == 5,
-                onChanged: (value) => widget.onChanged.call(listEntity[5]),
+                onChanged: (value) => widget.onChanged.call(listEntityPages[5]),
               ),
               const SizedBox(height: 10),
               Center(

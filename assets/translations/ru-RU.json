@@ -601,5 +601,13 @@
   "remainingDuty": "Оставшийся долг",
   "union": "Смежная",
   "unionType": "Тип смежной",
-  "userNotAuthed": "Пользователь не найден, проверьте ваш логин и пароль"
+  "userNotAuthed": "Пользователь не найден, проверьте ваш логин и пароль",
+  "homeScreen": "Главный экран",
+  "empty": "Пусто",
+  "data": "data",
+  "data": "data",
+  "data": "data",
+  "data": "data",
+  "data": "data",
+  "data": "data"
 }

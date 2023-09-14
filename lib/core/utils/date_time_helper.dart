@@ -13,8 +13,17 @@ class DateTimeHelper {
     return pickedDate;
   }
 
-  static String dateTo24(DateTime dateTime) {
-    final formatted = DateFormat('d MMM y').format(dateTime);
-    return formatted;
+  static String formatToFilter(DateTime dt) {
+    return DateFormat('yyyy-MM-dd 00:mm:ss').format(dt).toString();
+  }
+
+  static String formatForTable(DateTime? dt) {
+    if (dt == null) return "";
+    return DateFormat('yyyy-MM-dd').format(dt).toString();
+  }
+
+  static String formatTimeAndDateForTable(DateTime? dt) {
+    if (dt == null) return "";
+    return DateFormat('yyyy-MM-dd hh:mm:ss').format(dt).toString();
   }
 }

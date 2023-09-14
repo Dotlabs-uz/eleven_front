@@ -16,5 +16,13 @@ class AppColors {
   // static const buttonColor = Colors.blue;
   static const sideMenuSelected = Color(0xff1A1A1A);
   static const buttonColor = Colors.yellow;
+  static const  successColor = Color(0xFF0AE286);
+  static const hintTextColor = Color(0xFF999999);
+
+  static const Color enabledTextColor = Colors.green;
+
+  static const Color disabledTextColor = Color.fromARGB(255, 229, 64, 64);
+
+
 
 }

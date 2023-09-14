@@ -1,8 +1,13 @@
 import 'package:eleven_crm/features/auth/domain/usecases/change_password.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/menu/menu_cubit.dart';
+import 'package:eleven_crm/features/management/data/datasources/management_remote_data_source.dart';
+import 'package:eleven_crm/features/management/domain/repositories/management_repository.dart';
+import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:http/http.dart';
 
 import '../core/api/api_client.dart';
+import '../core/utils/storage_service.dart';
 import '../features/auth/data/datasources/authentication_local_data_source.dart';
 import '../features/auth/data/datasources/authentication_remote_data_source.dart';
 import '../features/auth/data/repositories/authentication_repository_impl.dart';
@@ -18,6 +23,8 @@ import '../features/main/domain/repository/main_repository.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
+import '../features/management/data/repositories/management_repository_impl.dart';
+import '../features/management/domain/usecases/customer.dart';
 
 final locator = GetIt.I;
 
@@ -35,6 +42,11 @@ void setup() {
         locator(),
       ));
 
+  locator.registerFactory(() => CustomerCubit(getData: locator(), saveData: locator(), deleteData: locator(),
+  ));
+  locator.registerFactory(() => DataFormCubit(
+  ));
+
   // ================ UseCases ================ //
 
   // Auth
@@ -46,7 +58,11 @@ void setup() {
 
   // Main
 
-  // Credit card
+  // Management
+  locator.registerLazySingleton<GetCustomer>(() => GetCustomer(locator()));
+  locator.registerLazySingleton<DeleteCustomer>(() => DeleteCustomer(locator()));
+  locator.registerLazySingleton<SaveCustomer>(() => SaveCustomer(locator()));
+
 
   // Order
 
@@ -84,9 +100,22 @@ void setup() {
     ),
   );
 
+
   // locator.registerLazySingleton<MainLocalDataSource>(
   //   () => MainLocalDataSourceImpl(),
   // );
+
+  locator.registerLazySingleton<ManagementRepository>(
+        () => ManagementRepositoryImpl(
+      locator(),
+    ),
+  );
+
+  locator.registerLazySingleton<ManagementRemoteDataSource>(
+        () => ManagementRemoteDataSourceImpl(
+      locator(),
+    ),
+  );
 
   // ================ Core ================ //
 
@@ -94,6 +123,9 @@ void setup() {
 
   locator
       .registerLazySingleton<ApiClient>(() => ApiClient(locator(), locator()));
+
+  locator.registerLazySingleton<StorageService>(() => StorageService());
+
 
   // ================ External ================ //
 

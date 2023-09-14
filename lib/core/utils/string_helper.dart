@@ -1,33 +1,21 @@
 class StringHelper {
-  static String getMonthName(int month) {
-    switch (month) {
-      case 1:
-        return 'Январь';
-      case 2:
-        return 'Февраль';
-      case 3:
-        return 'Март';
-      case 4:
-        return 'Апрель';
-      case 5:
-        return 'Май';
-      case 6:
-        return 'Июнь';
-      case 7:
-        return 'Июль';
-      case 8:
-        return 'Август';
-      case 9:
-        return 'Сентябрь';
-      case 10:
-        return 'Октябрь';
-      case 11:
-        return 'Ноябрь';
-      case 12:
-        return 'Декабрь';
-      default:
-        return '';
-    }
+  static String monthName({required int index}) {
+    final Map<int, String> map = {
+      1: 'January',
+      2: 'February',
+      3: 'March',
+      4: 'April',
+      5: 'May',
+      6: 'June',
+      7: 'July',
+      8: 'August',
+      9: 'September',
+      10: 'October',
+      11: 'November',
+      12: 'December',
+    };
+
+    return map[index] ?? "";
   }
 
   static String getCardNumberForCard(String cardNumber) {

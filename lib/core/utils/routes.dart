@@ -13,9 +13,8 @@ class Routes {
             MainScreen(menus: Menus.managementMenu),
         RouteList.orders: (context) => MainScreen(menus: Menus.ordersMenu),
         RouteList.product: (context) => MainScreen(menus: Menus.productMenu),
+        RouteList.settings: (context) => MainScreen(menus: Menus.configsMenu),
         // RouteList.logout: (context) => const LoginScreen(),
         // RouteList.login: (context) => const LoginScreen(),
-        RouteList.statistic: (context) =>
-            MainScreen(menus: Menus.statisticMenu),
       };
 }

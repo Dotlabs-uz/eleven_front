@@ -49,6 +49,17 @@ dependencies:
   eva_icons_flutter: ^3.1.0
   syncfusion_flutter_calendar: ^21.2.3
   clean_calendar: ^1.1.0
+  image_picker: ^1.0.4
+  image_cropper: ^4.0.1
+  cached_network_image: ^3.2.3
+  dropdown_search: ^5.0.6
+  confirm_dialog: ^1.0.2
+  lottie: ^2.3.2
+  pluto_grid:
+    git: https://github.com/Samir-Sattarov/pluto_grid.git
+  hive: ^2.2.3
+  another_flushbar: ^1.12.30
+  currency_text_input_formatter: ^2.1.8
 
 dev_dependencies:
   flutter_test:

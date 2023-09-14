@@ -19,4 +19,8 @@ class ApiConstants {
   static const String registerNewDrawer = "api/register_new_driver";
   static const String saveToken = "api/add_push_token";
 
+
+  static const String customer = "customer/";
+
+
 }

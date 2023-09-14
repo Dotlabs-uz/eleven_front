@@ -17,6 +17,8 @@ class FloatingMenuEntity {
     required this.key,
     required this.index,
   });
+
+
 }
 
 class FloatingMenuWidget extends StatefulWidget {

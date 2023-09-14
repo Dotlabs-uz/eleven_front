@@ -595,5 +595,7 @@
   "remainingDuty": "Qolgan qarz",
   "union": "Qo'shni",
   "unionType": "Qo'shni yozing",
-  "userNotAuthed": "Foydalanuvchi topilmadi, foydalanuvchi nomi va parolingizni tekshiring"
+  "userNotAuthed": "Foydalanuvchi topilmadi, foydalanuvchi nomi va parolingizni tekshiring",
+  "homeScreen": "Asosiy ekran",
+  "empty": "Bo'sh"
 }
