@@ -17,6 +17,7 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/field_formatters.dart';
 import '../../../../core/utils/responsive.dart';
+import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -26,6 +27,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool isUzbekLanguage = false;
+
+
+
   final TextEditingController controllerUserName = TextEditingController();
   final TextEditingController controllerFirstName = TextEditingController();
   final TextEditingController controllerLastName = TextEditingController();
@@ -54,26 +59,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   initialize() {
-    // BlocProvider.of<TopMenuCubit>(context).clear();
+    BlocProvider.of<TopMenuCubit>(context).clear();
 
-    // Future.delayed(
-    //   Duration.zero,
-    //   () {
-    //     log(context.locale.countryCode.toString());
-    //     if (context.locale.countryCode == 'uz' ||
-    //         context.locale.countryCode == 'UZ') {
-    //       setState(() => isUzbekLanguage = true);
-    //     } else {
-    //       setState(() => isUzbekLanguage = false);
-    //     }
-    //   },
-    // );
+    Future.delayed(
+      Duration.zero,
+      () {
+        log(context.locale.countryCode.toString());
+        if (context.locale.countryCode == 'uz' ||
+            context.locale.countryCode == 'UZ') {
+          setState(() => isUzbekLanguage = true);
+        } else {
+          setState(() => isUzbekLanguage = false);
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
@@ -85,16 +90,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      // setState(() {
-                      //   if (!isUzbekLanguage) {
-                      //     isUzbekLanguage = true;
-                      //     context.setLocale(const Locale('uz', 'UZ'));
-                      //   } else {
-                      //     isUzbekLanguage = false;
-                      //
-                      //     context.setLocale(const Locale('ru', 'RU'));
-                      //   }
-                      // });
+                      setState(() {
+                        if (!isUzbekLanguage) {
+                          isUzbekLanguage = true;
+                          context.setLocale(const Locale('uz', 'UZ'));
+                        } else {
+                          isUzbekLanguage = false;
+
+                          context.setLocale(const Locale('ru', 'RU'));
+                        }
+                      });
                     },
                     child: SizedBox(
                       width: 50,

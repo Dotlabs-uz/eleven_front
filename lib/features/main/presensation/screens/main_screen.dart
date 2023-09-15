@@ -278,7 +278,7 @@ class _ContentWidgetState extends State<ContentWidget> {
             ),
           ),
         ),
-        PopupMenuButton<SubMenu>(
+     if(widget.menus.length > 1)   PopupMenuButton<SubMenu>(
           padding: const EdgeInsets.only(right: 15),
           icon: const Icon(
             Icons.more_horiz_rounded,

@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import '../../../../core/api/api_client.dart';
 import '../../../../core/api/api_constants.dart';
 import '../model/customer_model.dart';
@@ -30,11 +32,17 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     //
     // return results;
 
-    return CustomerResultsModel(count: 3, pageCount: 3, results: [
+
+    final data =  CustomerResultsModel(count: 3, pageCount: 3, results: [
       CustomerModel(id: 1, fullName: "fullName", createdAt: DateTime.now().toString(), updatedAt: DateTime.now().toString(), phoneNumber: "+998931231212", address: "address"),
       CustomerModel(id: 2, fullName: "fullName", createdAt: DateTime.now().toString(), updatedAt: DateTime.now().toString(), phoneNumber: "+998931231212", address: "address"),
       CustomerModel(id: 3, fullName: "fullName", createdAt: DateTime.now().toString(), updatedAt: DateTime.now().toString(), phoneNumber: "+998931231212", address: "address"),
     ]);
+
+
+
+    return data;
+
   }
 
   @override

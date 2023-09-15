@@ -19,6 +19,14 @@ class CustomerResultsModel extends CustomerResultsEntity {
           .toList(),
     );
   }
+
+  Map<String,dynamic>toJson() {
+    final Map<String,dynamic> data= {};
+    data['count'] = count;
+    data['page_count'] = pageCount;
+    data['results'] = results.map((e) =>CustomerModel.fromEntity( e).toJson());
+    return data;
+  }
 }
 
 // @HiveType(typeId: 9)
