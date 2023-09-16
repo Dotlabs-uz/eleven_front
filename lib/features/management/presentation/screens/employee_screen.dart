@@ -13,29 +13,29 @@ import '../../../../core/components/page_selector_widget.dart';
 import '../../../../core/components/responsive_builder.dart';
 import '../../../../core/components/search_field.dart';
 import '../../../../core/components/success_flash_bar.dart';
-import '../../../../core/utils/dialogs.dart';
 import '../../../../core/utils/hive_box_keys_constants.dart';
 import '../../../../get_it/locator.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
-import '../../domain/entity/customer_entity.dart';
-import '../cubit/customer/customer_cubit.dart';
 import 'package:collection/collection.dart';
 
-class CustomerScreen extends StatefulWidget {
-  const CustomerScreen({Key? key}) : super(key: key);
+import '../../domain/entity/employee_entity.dart';
+import '../cubit/employee/employee_cubit.dart';
+
+class EmployeeScreen extends StatefulWidget {
+  const EmployeeScreen({Key? key}) : super(key: key);
 
   @override
-  State<CustomerScreen> createState() => _CustomerScreenState();
+  State<EmployeeScreen> createState() => _EmployeeScreenState();
 }
 
-class _CustomerScreenState extends State<CustomerScreen> {
-  late CustomerCubit customerCubit;
+class _EmployeeScreenState extends State<EmployeeScreen> {
+  late EmployeeCubit employeeCubit;
 
   @override
   void initState() {
-    customerCubit = locator<CustomerCubit>();
+    employeeCubit = locator<EmployeeCubit>();
     super.initState();
   }
 
@@ -43,23 +43,25 @@ class _CustomerScreenState extends State<CustomerScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<CustomerCubit>(
-          create: (context) => customerCubit,
+        BlocProvider<EmployeeCubit>(
+          create: (context) => employeeCubit,
         ),
       ],
       child: ContentWidget(
-        customerCubit: customerCubit,
+        employeeCubit: employeeCubit,
       ),
     );
   }
 }
 
 class ContentWidget extends StatefulWidget {
+
+  final EmployeeCubit employeeCubit;
+
   const ContentWidget({
     Key? key,
-    required this.customerCubit,
+    required this.employeeCubit,
   }) : super(key: key);
-  final CustomerCubit customerCubit;
 
   @override
   State<ContentWidget> createState() => _ContentWidgetState();
@@ -71,8 +73,8 @@ class _ContentWidgetState extends State<ContentWidget> {
   static int dataCount = 0;
   static int pageCount = 0;
   final GlobalKey<DataFormWidgetState> _formKey = GlobalKey();
-  late List<CustomerEntity> customers;
-  late CustomerEntity activeData;
+  late List<EmployeeEntity> customers;
+  late EmployeeEntity activeData;
 
   late List<PlutoRow> selectedRows;
   late List<PlutoRow> rows;
@@ -82,11 +84,11 @@ class _ContentWidgetState extends State<ContentWidget> {
   var filter = "";
 
   void _saveData() {
-    BlocProvider.of<CustomerCubit>(context)
-        .save(customer: CustomerEntity.fromFields());
+    BlocProvider.of<EmployeeCubit>(context)
+        .save(customer: EmployeeEntity.fromFields());
   }
 
-  void _deleteData(CustomerEntity customerEntity) async {
+  void _deleteData(EmployeeEntity customerEntity) async {
     if (await confirm(
       super.context,
       title: const Text('confirming').tr(),
@@ -95,11 +97,11 @@ class _ContentWidgetState extends State<ContentWidget> {
       textCancel: const Text('cancel').tr(),
     )) {
       // ignore: use_build_context_synchronously
-      BlocProvider.of<CustomerCubit>(context).delete(entity: customerEntity);
+      BlocProvider.of<EmployeeCubit>(context).delete(entity: customerEntity);
     }
   }
 
-  void _editData(CustomerEntity data) {
+  void _editData(EmployeeEntity data) {
     BlocProvider.of<DataFormCubit>(context).editData(data.getFields());
 
     if (ResponsiveBuilder.isMobile(context)) {
@@ -127,29 +129,13 @@ class _ContentWidgetState extends State<ContentWidget> {
     selectedRows = [];
     isFormVisible = false;
 
-    activeData = CustomerEntity.empty();
+    activeData = EmployeeEntity.empty();
     customers = [];
 
-    BlocProvider.of<CustomerCubit>(context).load("");
+    BlocProvider.of<EmployeeCubit>(context).load();
     _setWidgetTop();
   }
 
-  void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
-    if (event.isRow) {
-      if (event.isChecked ?? false) {
-        selectedRows.add(event.row!);
-      } else {
-        selectedRows.removeWhere((element) => element == event.row!);
-      }
-    } else {
-      selectedRows.clear();
-      stateManager.checkedRows.forEach((element) {
-        selectedRows.add(element);
-      });
-
-      print(stateManager.checkedRows.length);
-    }
-  }
 
   _setWidgetTop() {
     final Map<String, dynamic> filtr = {};
@@ -162,7 +148,7 @@ class _ContentWidgetState extends State<ContentWidget> {
         ),
         MyIconButton(
           onPressed: () {
-            activeData = CustomerEntity.empty();
+            activeData = EmployeeEntity.empty();
             _editData(activeData);
           },
           icon: const Icon(Icons.add_box_rounded),
@@ -175,8 +161,7 @@ class _ContentWidgetState extends State<ContentWidget> {
         ),
         MyIconButton(
             onPressed: () {
-              BlocProvider.of<CustomerCubit>(context).load(
-                "",
+              BlocProvider.of<EmployeeCubit>(context).load(
               );
             },
             icon: const Icon(Icons.refresh)),
@@ -187,11 +172,11 @@ class _ContentWidgetState extends State<ContentWidget> {
   fetch(
     int page,
   ) async {
-    BlocProvider.of<CustomerCubit>(context).load("", page: page);
+    BlocProvider.of<EmployeeCubit>(context).load(search: "", page: page);
   }
 
   initCubit() {
-    BlocProvider.of<CustomerCubit>(context).init();
+    BlocProvider.of<EmployeeCubit>(context).init();
   }
 
   @override
@@ -205,26 +190,26 @@ class _ContentWidgetState extends State<ContentWidget> {
             child: isSearch
                 ? SearchField(
                     onSearch: (value) {
-                      BlocProvider.of<CustomerCubit>(context).load(
-                        value,
+                      BlocProvider.of<EmployeeCubit>(context).load(
+                      search:  value,
                       );
                     },
                   )
                 : const SizedBox(),
           ),
-          BlocConsumer<CustomerCubit, CustomerState>(
+          BlocConsumer<EmployeeCubit, EmployeeState>(
             listener: (context, state) {
-              if (state is CustomerLoaded) {
+              if (state is EmployeeLoaded) {
                 customers = state.data;
                 dataCount = state.dataCount;
               }
 
               {
-                if (state is CustomerSaved) {
+                if (state is EmployeeSaved) {
                   SuccessFlushBar("change_success".tr()).show(context);
-                } else if (state is CustomerDeleted) {
+                } else if (state is EmployeeDeleted) {
                   SuccessFlushBar("data_deleted".tr()).show(context);
-                } else if (state is CustomerError) {
+                } else if (state is EmployeeError) {
                   ErrorFlushBar("change_error".tr(args: [state.message]))
                       .show(context);
                 }
@@ -232,10 +217,10 @@ class _ContentWidgetState extends State<ContentWidget> {
               ;
             },
             builder: (context, state) {
-              if (state is CustomerLoading) {
+              if (state is EmployeeLoading) {
                 return const Expanded(child: LoadingCircle());
               } else {
-                if (state is CustomerSaved) {
+                if (state is EmployeeSaved) {
                   activeData = state.data;
                   BlocProvider.of<DataFormCubit>(context)
                       .editData(activeData.getFields());
@@ -247,7 +232,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                     customers.insert(0, activeData);
                   }
                   initCubit();
-                } else if (state is CustomerDeleted) {
+                } else if (state is EmployeeDeleted) {
                   var id = state.id;
                   isFormVisible = false;
 
@@ -267,7 +252,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                       );
 
                       if (elementToDelete != null) {
-                        print(
+                        debugPrint(
                             "Element to delete is not null ${elementToDelete.id}");
                         _deleteData(elementToDelete);
                       }
@@ -278,7 +263,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                     onTap: (data) {
                       if (data != null) {
                         selectedRow = data!;
-                        final entity = CustomerEntity.fromRow(selectedRow);
+                        final entity = EmployeeEntity.fromRow(selectedRow);
                         activeData = entity;
                         _editData(entity);
                       }
@@ -297,9 +282,9 @@ class _ContentWidgetState extends State<ContentWidget> {
               }
             },
           ),
-          BlocBuilder<CustomerCubit, CustomerState>(
+          BlocBuilder<EmployeeCubit, EmployeeState>(
             builder: (context, state) {
-              if (state is CustomerLoaded) {
+              if (state is EmployeeLoaded) {
                 pageCount = state.pageCount;
               }
               return Padding(
@@ -314,8 +299,8 @@ class _ContentWidgetState extends State<ContentWidget> {
                         child: PageSelectorWidget(
                           pageCount: pageCount,
                           onChanged: (value) {
-                            BlocProvider.of<CustomerCubit>(context).load(
-                              "",
+                            BlocProvider.of<EmployeeCubit>(context).load(
+                              search: "",
                               page: value,
                             );
                           },

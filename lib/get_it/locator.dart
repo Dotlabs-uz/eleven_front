@@ -3,7 +3,9 @@ import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_
 import 'package:eleven_crm/features/main/presensation/cubit/menu/menu_cubit.dart';
 import 'package:eleven_crm/features/management/data/datasources/management_remote_data_source.dart';
 import 'package:eleven_crm/features/management/domain/repositories/management_repository.dart';
+import 'package:eleven_crm/features/management/domain/usecases/employee.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
 import 'package:http/http.dart';
 
 import '../core/api/api_client.dart';
@@ -38,14 +40,19 @@ void setup() {
       ));
   locator.registerFactory(() => MenuCubit());
   locator.registerFactory(() => TopMenuCubit());
-  locator.registerFactory(() => AuthCubit(
-        locator(),
-      ));
+  locator.registerFactory(() => DataFormCubit());
+  locator.registerFactory(() => AuthCubit(locator()));
 
-  locator.registerFactory(() => CustomerCubit(getData: locator(), saveData: locator(), deleteData: locator(),
-  ));
-  locator.registerFactory(() => DataFormCubit(
-  ));
+
+  // Customer
+
+  locator.registerFactory(() => CustomerCubit(getData: locator(), saveData: locator(), deleteData: locator()));
+
+  // Employee
+
+  locator.registerFactory(() => EmployeeCubit( locator(), locator(), locator()));
+
+
 
   // ================ UseCases ================ //
 
@@ -58,10 +65,15 @@ void setup() {
 
   // Main
 
-  // Management
+  // Customer
   locator.registerLazySingleton<GetCustomer>(() => GetCustomer(locator()));
   locator.registerLazySingleton<DeleteCustomer>(() => DeleteCustomer(locator()));
   locator.registerLazySingleton<SaveCustomer>(() => SaveCustomer(locator()));
+
+  // Employee
+  locator.registerLazySingleton<GetEmployee>(() => GetEmployee(locator()));
+  locator.registerLazySingleton<DeleteEmployee>(() => DeleteEmployee(locator()));
+  locator.registerLazySingleton<SaveEmployee>(() => SaveEmployee(locator()));
 
 
   // Order

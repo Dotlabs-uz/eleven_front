@@ -1,10 +1,7 @@
-// ignore_for_file: unused_import
-
 import 'dart:developer';
+
 import '../../../../core/api/api_client.dart';
 import '../../../../core/api/api_constants.dart';
-import '../models/login_response_model.dart';
-import '../models/request_password_model.dart';
 import '../models/request_token_model.dart';
 import '../models/token_model.dart';
 
@@ -60,10 +57,6 @@ class AuthenticationRemoteDataSourceImpl
 
   @override
   Future<bool> deleteUser({required String smsCode, required String token}) async {
-
-    final response = await _client.deleteWithBody(ApiConstants.deleteAccount + "/$smsCode", );
-
-    log(response.toString(), name: "Get delete user ");
 
     return true;
   }

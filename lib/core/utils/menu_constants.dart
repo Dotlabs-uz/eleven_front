@@ -1,8 +1,9 @@
-import 'package:eleven_crm/features/main/presensation/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/main/presensation/screens/home_screen.dart';
+import '../../features/main/presensation/screens/profile_screen.dart';
 import '../../features/management/presentation/screens/customer_screen.dart';
+import '../../features/management/presentation/screens/employee_screen.dart';
 
 class SubMenu {
   final String text;
@@ -46,7 +47,11 @@ class Menus {
       icon: const Icon(Icons.display_settings_rounded),
       text: 'customer',
       page: const CustomerScreen(),
-
+    ),
+    SubMenu(
+      icon: const Icon(Icons.display_settings_rounded),
+      text: 'employee',
+      page: const EmployeeScreen(),
     ),
 
   ];
