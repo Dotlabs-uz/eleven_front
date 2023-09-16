@@ -98,7 +98,7 @@
 //             ),
 //             BlocListener<LoginCubit, LoginState>(
 //               listener: (context, state) {
-//                 print("state $state");
+//                 debugPrint("state $state");
 //                 if (state is LoginError) {
 //                   ErrorFlushBar("change_error".tr(args: [state.message.tr()]))
 //                       .show(context);

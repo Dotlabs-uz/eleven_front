@@ -52,10 +52,10 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     // return results;
 
 
-    final data =  CustomerResultsModel(count: 3, pageCount: 3, results: [
-      CustomerModel(id: 1, fullName: "fullName", createdAt: DateTime.now().toString(), updatedAt: DateTime.now().toString(), phoneNumber: "+998931231212", address: "address"),
-      CustomerModel(id: 2, fullName: "fullName", createdAt: DateTime.now().toString(), updatedAt: DateTime.now().toString(), phoneNumber: "+998931231212", address: "address"),
-      CustomerModel(id: 3, fullName: "fullName", createdAt: DateTime.now().toString(), updatedAt: DateTime.now().toString(), phoneNumber: "+998931231212", address: "address"),
+    final data =  CustomerResultsModel(count: 3, pageCount: 3, results:const [
+       CustomerModel(id: 1, fullName: "fullName",  phoneNumber: "+998931231212", ordersCount: 3),
+        CustomerModel(id: 2, fullName: "fullName",  phoneNumber: "+998931231212", ordersCount: 43),
+        CustomerModel(id: 3, fullName: "fullName",  phoneNumber: "+998931231212", ordersCount: 345),
     ]);
 
 
@@ -98,9 +98,9 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
 
     final data =  EmployeeResultsModel(count: 3, pageCount: 3, results: [
-      EmployeeModel(id: 1, fullName: "fullName", createdAt: DateTime.now().toString(), updatedAt: DateTime.now().toString(), phoneNumber: "+998931231212", address: "address"),
-      EmployeeModel(id: 2, fullName: "fullName", createdAt: DateTime.now().toString(), updatedAt: DateTime.now().toString(), phoneNumber: "+998931231212", address: "address"),
-      EmployeeModel(id: 3, fullName: "fullName", createdAt: DateTime.now().toString(), updatedAt: DateTime.now().toString(), phoneNumber: "+998931231212", address: "address"),
+      EmployeeModel(id: 1, fullName: "fullName", createdAt: DateTime.now().toString(),phoneNumber: "+998931231212", shopName: "address"),
+      EmployeeModel(id: 2, fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address"),
+      EmployeeModel(id: 3, fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address"),
     ]);
 
 

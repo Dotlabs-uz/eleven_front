@@ -124,7 +124,7 @@ class _PageSelectorWidgetState extends State<PageSelectorWidget> {
             onPressed: () {
               setState(() {
                 if (selectedPage - 5 <= 1) {
-                  print("first $selectedPage");
+                  debugPrint("first $selectedPage");
                   selectedPage = 1;
                   widget.onChanged.call(selectedPage);
                 } else {
@@ -297,7 +297,7 @@ class _PageSelectorWidgetState extends State<PageSelectorWidget> {
 //             ? () {
 //                 setState(() {
 //                   if (selectedPage - 5 <= 1) {
-//                     print("first $selectedPage");
+//                     debugPrint("first $selectedPage");
 //                     selectedPage = 1;
 //                     widget.onChanged.call(selectedPage);
 //                   } else {

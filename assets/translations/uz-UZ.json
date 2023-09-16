@@ -597,5 +597,6 @@
   "unionType": "Qo'shni yozing",
   "userNotAuthed": "Foydalanuvchi topilmadi, foydalanuvchi nomi va parolingizni tekshiring",
   "homeScreen": "Asosiy ekran",
-  "empty": "Bo'sh"
+  "empty": "Bo'sh",
+  "ordersCount": "Buyurtmalar soni"
 }

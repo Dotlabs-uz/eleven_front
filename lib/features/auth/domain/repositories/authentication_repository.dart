@@ -1,9 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/entities/app_error.dart';
-import '../../data/models/request_password_model.dart';
 import '../../data/models/request_token_model.dart';
-import '../entities/login_response_entity.dart';
 
 abstract class AuthenticationRepository {
   Future<Either<AppError, bool>> loginUser(RequestTokenModel model);

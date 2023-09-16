@@ -18,6 +18,7 @@ import '../../../../get_it/locator.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
 import '../../domain/entity/employee_entity.dart';
@@ -138,7 +139,7 @@ class _ContentWidgetState extends State<ContentWidget> {
 
 
   _setWidgetTop() {
-    final Map<String, dynamic> filtr = {};
+    // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
       [
@@ -214,7 +215,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                       .show(context);
                 }
               }
-              ;
+
             },
             builder: (context, state) {
               if (state is EmployeeLoading) {

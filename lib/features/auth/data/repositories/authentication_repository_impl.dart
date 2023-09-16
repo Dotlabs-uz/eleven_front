@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/api/api_exceptions.dart';
 import '../../../../core/entities/app_error.dart';
@@ -66,7 +67,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         _authenticationLocalDataSource.deleteSessionId(),
       ]);
     }
-    return const Right(Unit);
+    return const Right(null);
   }
 
   @override
@@ -96,7 +97,8 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       final token = await _authenticationLocalDataSource.getSessionId();
       final data =
           await _authenticationRemoteDataSource.deleteUser(smsCode: smsCode, token: token!);
-      return Right(data);
+      debugPrint("Delete user $data");
+      return const Right(null);
     } on SocketException {
       return const Left(AppError(appErrorType: AppErrorType.network));
     } on UnauthorisedException {

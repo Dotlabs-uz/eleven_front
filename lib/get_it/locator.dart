@@ -108,7 +108,7 @@ void setup() {
 
   locator.registerLazySingleton<MainRemoteDataSource>(
     () => MainRemoteDataSourceImpl(
-      locator(),
+      // locator(),
     ),
   );
 

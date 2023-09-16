@@ -108,7 +108,7 @@ class _DataTextFieldWidgetState extends State<DataTextFieldWidget> {
               ),
               hintStyle: Theme.of(context)
                   .textTheme
-                  .bodyText1!
+                  .bodyLarge!
                   .copyWith(color: AppColors.hintTextColor),
             ),
             enabled: widget.enabled,

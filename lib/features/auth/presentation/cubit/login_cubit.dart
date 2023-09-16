@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/entities/no_params.dart';
 import '../../data/models/request_token_model.dart';
@@ -40,7 +41,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     eitherResponse.fold(
       (l) {
-        print("Error ${l.errorMessage}");
+        debugPrint("Error ${l.errorMessage}");
         final message = l.errorMessage;
 
         if (message.contains("server error")) {
@@ -50,7 +51,7 @@ class LoginCubit extends Cubit<LoginState> {
         }
       },
       (r) async {
-        print("Login Success $r");
+        debugPrint("Login Success $r");
         if (r) {
 
           emit(LoginSuccess());
@@ -71,7 +72,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     data.fold(
       (l) {
-        print("change password error ${l.errorMessage}");
+        debugPrint("change password error ${l.errorMessage}");
         emit(ChangePasswordError(l.errorMessage));
       },
       (r) {

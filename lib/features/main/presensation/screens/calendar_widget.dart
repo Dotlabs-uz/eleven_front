@@ -36,7 +36,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       viewNavigationMode: ViewNavigationMode.none,
       showNavigationArrow: false,
       onViewChanged: (viewChangedDetails) {
-        print("View changed");
+        debugPrint("View changed");
       },
       selectionDecoration: BoxDecoration(
         color: Colors.transparent,

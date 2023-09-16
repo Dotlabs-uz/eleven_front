@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
+
 import '../../../../core/api/api_client.dart';
 import '../../../../core/api/api_constants.dart';
 import '../models/request_token_model.dart';
@@ -34,7 +36,7 @@ class AuthenticationRemoteDataSourceImpl
 
     log(response.toString(), name: "Token");
 
-    print("Validate login");
+    debugPrint("Validate login");
 
     return TokenModel.fromJson(response);
   }

@@ -117,15 +117,17 @@ class _DataIntFieldWidgetState extends State<DataIntFieldWidget> {
                   hintText: widget.fieldEntity.hintText.tr(),
                   hintStyle: Theme.of(context)
                       .textTheme
-                      .bodyText1!
+                      .bodyLarge!
                       .copyWith(color: AppColors.hintTextColor),
                 ),
                 enabled: widget.isEnabled,
                 onChanged: (value) {
                   try {
-                    print("INTEDGE $value");
+                    debugPrint("INTEDGE $value");
                     widget.fieldEntity.val = int.parse(value);
-                  } catch (e) {}
+                  } catch (e) {
+                    debugPrint("Error $e");
+                  }
                 }),
           ),
         ],

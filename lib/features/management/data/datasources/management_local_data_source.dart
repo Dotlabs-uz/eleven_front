@@ -58,7 +58,7 @@
 //
 //     final response = devicesBox.get(HiveBoxKeysConstants.customerResult);
 //
-//     print("Get Customers $response");
+//     debugPrint("Get Customers $response");
 //
 //     return Future.value(response);
 //   }
@@ -70,7 +70,7 @@
 //         HiveBoxNamesConstants.customerResultBox,
 //       );
 //
-//       print("Customer save result ${data.count}");
+//       debugPrint("Customer save result ${data.count}");
 //       await customerBox.put(HiveBoxKeysConstants.customerResult, data);
 //
 //       return true;
@@ -200,7 +200,7 @@
 //
 //     final response = devicesBox.get(HiveBoxKeysConstants.shopResult);
 //
-//     print("Get shop $response");
+//     debugPrint("Get shop $response");
 //
 //     return Future.value(response);
 //   }
@@ -211,7 +211,7 @@
 //       HiveBoxNamesConstants.shopResultBoxBox,
 //     );
 //
-//     print("Shop save result ${data.count}");
+//     debugPrint("Shop save result ${data.count}");
 //     await devicesBox.put(HiveBoxKeysConstants.shopResult, data);
 //   }
 //
@@ -226,7 +226,7 @@
 //
 //     final response = devicesBox.get(HiveBoxKeysConstants.providerResult);
 //
-//     print("Get shop $response");
+//     debugPrint("Get shop $response");
 //
 //     if (response != null && isActive != null) {
 //       response.results
@@ -242,7 +242,7 @@
 //       HiveBoxNamesConstants.providerResultBox,
 //     );
 //
-//     print("Shop save result ${data.count}");
+//     debugPrint("Shop save result ${data.count}");
 //     await devicesBox.put(HiveBoxKeysConstants.providerResult, data);
 //   }
 //

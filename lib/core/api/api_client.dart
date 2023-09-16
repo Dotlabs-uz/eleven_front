@@ -37,7 +37,7 @@ class ApiClient {
     final response = await _client.get(
       pth, //?format=json
       headers: {
-        'token': '$sessionId',
+        'Authorization': 'Bearer $sessionId',
         'Content-Type': 'application/json',
       },
     );
@@ -87,12 +87,12 @@ class ApiClient {
 
     log("Basic $sessionId");
     if (sessionId != '') {
-      print("Token $sessionId");
+      debugPrint("Token $sessionId");
 
       headers.addAll({'Authorization': 'Bearer $sessionId'});
     }
 
-    print("filename $filename");
+    debugPrint("filename $filename");
     var request = http.MultipartRequest(
         'PUT', Uri.parse('${ApiConstants.baseApiUrl}$path'));
     request.files.add(await http.MultipartFile.fromPath(
@@ -103,12 +103,12 @@ class ApiClient {
 
     http.StreamedResponse response = await request.send();
 
-    print("Status ${response.statusCode}");
+    debugPrint("Status ${response.statusCode}");
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      debugPrint(await response.stream.bytesToString());
       return true;
     } else {
-      print(response.reasonPhrase);
+      debugPrint(response.reasonPhrase);
       return false;
     }
 
@@ -157,7 +157,10 @@ class ApiClient {
     }
     if (sessionId != '' && withToken) {
       log("Session != null $sessionId");
-      userHeader.addAll({'token': '$sessionId'});
+      userHeader.addAll({
+        'Authorization': 'Bearer $sessionId',
+
+      });
     }
 
     final uri = Uri.parse(ApiConstants.baseApiUrl + path);
@@ -171,13 +174,13 @@ class ApiClient {
       headers: userHeader,
     );
     if (kDebugMode) {
-      print("API post response: ${response.statusCode} ");
-      print(utf8.decode(response.bodyBytes));
+      debugPrint("API post response: ${response.statusCode} ");
+      debugPrint(utf8.decode(response.bodyBytes));
     }
 
-    print("Response status ${response.statusCode}");
+    debugPrint("Response status ${response.statusCode}");
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // print("Everyt thing ok");
+      // debugPrint("Everyt thing ok");
       return json.decode(utf8.decode(response.bodyBytes));
     }
     if (response.statusCode == 400 ||
@@ -207,7 +210,7 @@ class ApiClient {
     } else if (response.statusCode == 404) {
       throw const ExceptionWithMessage("Not found");
     } else {
-      print("Exception ${response.reasonPhrase}");
+      debugPrint("Exception ${response.reasonPhrase}");
       throw Exception(response.reasonPhrase);
     }
   }
@@ -229,12 +232,12 @@ class ApiClient {
       headers: userHeader,
     );
     if (kDebugMode) {
-      print(utf8.decode(response.bodyBytes));
+      debugPrint(utf8.decode(response.bodyBytes));
     }
 
-    print("Response $path ${response.statusCode}");
+    debugPrint("Response $path ${response.statusCode}");
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // print("Everyt thing ok");
+      // debugPrint("Everyt thing ok");
       return json.decode(utf8.decode(response.bodyBytes));
     }
     if (response.statusCode == 400 ||
@@ -263,7 +266,7 @@ class ApiClient {
     } else if (response.statusCode == 404) {
       throw const ExceptionWithMessage("Not found");
     } else {
-      print("Exception ${response.reasonPhrase}");
+      debugPrint("Exception ${response.reasonPhrase}");
       throw Exception(response.reasonPhrase);
     }
   }
@@ -276,13 +279,14 @@ class ApiClient {
       Uri.parse('${ApiConstants.baseApiUrl}$path'),
 
       headers: {
-        'token': '$sessionId',
+        'Authorization': 'Bearer $sessionId',
+
         // 'Content-Type': 'application/json',
       },
     );
 
-    print("API delete response code: ${response.statusCode} ");
-    print(utf8.decode(response.bodyBytes));
+    debugPrint("API delete response code: ${response.statusCode} ");
+    debugPrint(utf8.decode(response.bodyBytes));
     if (response.statusCode == 204) {
       return {'success': true};
     } else if (response.statusCode == 200) {

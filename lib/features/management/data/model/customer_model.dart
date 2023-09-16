@@ -6,17 +6,13 @@ class CustomerModel extends CustomerEntity {
   const CustomerModel({
     required int id,
     required String fullName,
-    required String createdAt,
-    required String updatedAt,
     required String phoneNumber,
-    required String address,
+    required int ordersCount,
   }) : super(
     id: id,
     fullName: fullName,
-    createdAt: createdAt,
-    updatedAt: updatedAt,
     phoneNumber: phoneNumber,
-    address: address,
+    ordersCount: ordersCount,
   );
 
 
@@ -38,9 +34,9 @@ class CustomerModel extends CustomerEntity {
         val: phoneNumber,
       ),
       MobileFieldEntity(
-        title: "address",
-        type: Types.string,
-        val: address,
+        title: "ordersCount",
+        type: Types.int,
+        val: ordersCount,
       ),
     ];
   }
@@ -49,10 +45,8 @@ class CustomerModel extends CustomerEntity {
     return CustomerModel(
       id: json['id'],
       fullName: json['full_name'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
       phoneNumber: json['phone_number'],
-      address: json['address'],
+      ordersCount: json['orders_count'] ?? 0,
     );
   }
 
@@ -60,10 +54,8 @@ class CustomerModel extends CustomerEntity {
     return CustomerModel(
       id: entity.id,
       fullName: entity.fullName,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
       phoneNumber: entity.phoneNumber,
-      address: entity.address,
+      ordersCount: entity.ordersCount,
     );
   }
 
@@ -72,7 +64,7 @@ class CustomerModel extends CustomerEntity {
     data['id'] = id;
     data['full_name'] = fullName;
     data['phone_number'] = phoneNumber;
-    data['address'] = address;
+    data['orders_count'] = ordersCount;
     return data;
   }
 }

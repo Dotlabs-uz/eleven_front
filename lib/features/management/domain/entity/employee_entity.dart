@@ -11,17 +11,15 @@ class EmployeeEntity extends Equatable {
   final int id;
   final String fullName;
   final String createdAt;
-  final String updatedAt;
   final String phoneNumber;
-  final String address;
+  final String shopName;
 
   const EmployeeEntity({
     required this.id,
     required this.fullName,
     required this.createdAt,
-    required this.updatedAt,
     required this.phoneNumber,
-    required this.address,
+    required this.shopName,
   });
 
 
@@ -39,7 +37,6 @@ class EmployeeEntity extends Equatable {
       label: "fullName",
       hintText: "fullName",
       type: Types.string,
-      isTable: true,
       isRequired: true,
       isForm: true,
       val: "",
@@ -52,9 +49,9 @@ class EmployeeEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "address": FieldEntity<String>(
-      label: "address",
-      hintText: "address",
+    "shopName": FieldEntity<String>(
+      label: "shopName",
+      hintText: "shopName",
       type: Types.string,
       isForm: true,
       isRequired: true,
@@ -74,7 +71,7 @@ class EmployeeEntity extends Equatable {
     "id": id,
     "fullName": fullName,
     "phoneNumber": phoneNumber,
-    "address": address,
+    "shopName": shopName,
   }[key];
 
   factory EmployeeEntity.fromRow(PlutoRow row) {
@@ -82,9 +79,8 @@ class EmployeeEntity extends Equatable {
       id: row.cells["id"]?.value,
       fullName: row.cells["fullName"]?.value,
       createdAt: row.cells["createdAt"]?.value,
-      updatedAt: row.cells["updatedAt"]?.value,
       phoneNumber: row.cells["phoneNumber"]?.value,
-      address: row.cells["address"]?.value,
+      shopName: row.cells["shopName"]?.value,
 
     );
   }
@@ -95,9 +91,8 @@ class EmployeeEntity extends Equatable {
       'id': PlutoCell(value: e.id),
       'fullName': PlutoCell(value: e.fullName),
       'createdAt': PlutoCell(value: e.createdAt),
-      'updatedAt': PlutoCell(value: e.updatedAt),
       'phoneNumber': PlutoCell(value: e.phoneNumber),
-      'address': PlutoCell(value: e.address),
+      'shopName': PlutoCell(value: e.shopName),
     });
   }
 
@@ -172,16 +167,6 @@ class EmployeeEntity extends Equatable {
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
-        title: 'updatedAt'.tr(),
-        field: 'updatedAt',
-        readOnly: true,
-        renderer: (rendererContext) =>
-            DateTimeForTableWidget(data: rendererContext),
-        type: PlutoColumnType.text(),
-      ),
-      PlutoColumn(
-        enableColumnDrag: false,
-        enableRowDrag: false,
         title: 'phoneNumber'.tr(),
         field: 'phoneNumber',
         readOnly: false,
@@ -190,8 +175,8 @@ class EmployeeEntity extends Equatable {
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
-        title: 'address'.tr(),
-        field: 'address',
+        title: 'shopName'.tr(),
+        field: 'shopName',
         readOnly: false,
         type: PlutoColumnType.text(),
       ),
@@ -213,9 +198,8 @@ class EmployeeEntity extends Equatable {
       id: fields["id"]?.val,
       fullName: fields["fullName"]?.val,
       phoneNumber: fields["phoneNumber"]?.val,
-      address: fields["address"]?.val,
+      shopName: fields["shopName"]?.val,
       createdAt: '',
-      updatedAt: '',
     );
   }
 
@@ -224,9 +208,8 @@ class EmployeeEntity extends Equatable {
       id: 0,
       fullName: "",
       phoneNumber: "",
-      address: "",
+      shopName: "",
       createdAt: "",
-      updatedAt: "",
     );
   }
 

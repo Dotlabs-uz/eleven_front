@@ -16,7 +16,6 @@ class FieldEntity<T> {
   final Types type;
   final bool isRequired;
   final bool isForm;
-  final bool isTable;
   final bool isDeletable;
   final int? symbolCount;
   final bool isEnable;
@@ -29,7 +28,6 @@ class FieldEntity<T> {
     this.symbolCount,
     this.isRequired = true,
     this.isDeletable = false,
-    this.isTable = true,
     this.isEnable = true,
     this.isForm = true,
     required this.val,

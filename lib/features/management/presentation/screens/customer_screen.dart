@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,6 @@ import '../../../../core/components/page_selector_widget.dart';
 import '../../../../core/components/responsive_builder.dart';
 import '../../../../core/components/search_field.dart';
 import '../../../../core/components/success_flash_bar.dart';
-import '../../../../core/utils/dialogs.dart';
 import '../../../../core/utils/hive_box_keys_constants.dart';
 import '../../../../get_it/locator.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
@@ -134,25 +135,9 @@ class _ContentWidgetState extends State<ContentWidget> {
     _setWidgetTop();
   }
 
-  void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
-    if (event.isRow) {
-      if (event.isChecked ?? false) {
-        selectedRows.add(event.row!);
-      } else {
-        selectedRows.removeWhere((element) => element == event.row!);
-      }
-    } else {
-      selectedRows.clear();
-      stateManager.checkedRows.forEach((element) {
-        selectedRows.add(element);
-      });
-
-      print(stateManager.checkedRows.length);
-    }
-  }
 
   _setWidgetTop() {
-    final Map<String, dynamic> filtr = {};
+    // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
       [
@@ -229,7 +214,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                       .show(context);
                 }
               }
-              ;
+
             },
             builder: (context, state) {
               if (state is CustomerLoading) {
@@ -267,7 +252,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                       );
 
                       if (elementToDelete != null) {
-                        print(
+                        debugPrint(
                             "Element to delete is not null ${elementToDelete.id}");
                         _deleteData(elementToDelete);
                       }

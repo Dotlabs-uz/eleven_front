@@ -11,11 +11,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import '../../../../core/components/button_widget.dart';
 import '../../../../core/components/text_form_field_widget.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/assets.dart';
-import '../../../../core/utils/field_formatters.dart';
 import '../../../../core/utils/responsive.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 
@@ -303,7 +301,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //   setState(() => this.image = imageTemp);
     //   log("image ${this.image}");
     // } on PlatformException catch (e) {
-    //   print('Failed to pick image: $e');
+    //   debugPrint('Failed to pick image: $e');
     // }
   }
 }

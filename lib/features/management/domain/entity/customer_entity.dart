@@ -3,25 +3,20 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../../../core/components/datetime_for_table_widget.dart';
 import '../../../../core/entities/field_entity.dart';
 
 class CustomerEntity extends Equatable {
 
   final int id;
   final String fullName;
-  final String createdAt;
-  final String updatedAt;
   final String phoneNumber;
-  final String address;
+  final int ordersCount;
 
   const CustomerEntity({
     required this.id,
     required this.fullName,
-    required this.createdAt,
-    required this.updatedAt,
     required this.phoneNumber,
-    required this.address,
+    required this.ordersCount,
   });
 
 
@@ -39,7 +34,6 @@ class CustomerEntity extends Equatable {
       label: "fullName",
       hintText: "fullName",
       type: Types.string,
-      isTable: true,
       isRequired: true,
       isForm: true,
       val: "",
@@ -52,13 +46,13 @@ class CustomerEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "address": FieldEntity<String>(
-      label: "address",
-      hintText: "address",
+    "ordersCount": FieldEntity<int>(
+      label: "ordersCount",
+      hintText: "ordersCount",
       type: Types.string,
-      isForm: true,
-      isRequired: true,
-      val: "",
+      isForm: false,
+      isRequired: false,
+      val:0,
     ),
   };
 
@@ -74,17 +68,15 @@ class CustomerEntity extends Equatable {
     "id": id,
     "fullName": fullName,
     "phoneNumber": phoneNumber,
-    "address": address,
+    "ordersCount": ordersCount,
   }[key];
 
   factory CustomerEntity.fromRow(PlutoRow row) {
     return CustomerEntity(
       id: row.cells["id"]?.value,
       fullName: row.cells["fullName"]?.value,
-      createdAt: row.cells["createdAt"]?.value,
-      updatedAt: row.cells["updatedAt"]?.value,
       phoneNumber: row.cells["phoneNumber"]?.value,
-      address: row.cells["address"]?.value,
+      ordersCount: row.cells["ordersCount"]?.value,
 
     );
   }
@@ -94,10 +86,8 @@ class CustomerEntity extends Equatable {
       'delete': PlutoCell(value: "Delete"),
       'id': PlutoCell(value: e.id),
       'fullName': PlutoCell(value: e.fullName),
-      'createdAt': PlutoCell(value: e.createdAt),
-      'updatedAt': PlutoCell(value: e.updatedAt),
       'phoneNumber': PlutoCell(value: e.phoneNumber),
-      'address': PlutoCell(value: e.address),
+      'ordersCount': PlutoCell(value: e.ordersCount),
     });
   }
 
@@ -159,26 +149,7 @@ class CustomerEntity extends Equatable {
         readOnly: false,
         type: PlutoColumnType.text(),
       ),
-      PlutoColumn(
-        enableColumnDrag: false,
-        enableRowDrag: false,
-        title: 'createdAt'.tr(),
-        field: 'createdAt',
-        readOnly: true,
-        renderer: (rendererContext) =>
-            DateTimeForTableWidget(data: rendererContext),
-        type: PlutoColumnType.text(),
-      ),
-      PlutoColumn(
-        enableColumnDrag: false,
-        enableRowDrag: false,
-        title: 'updatedAt'.tr(),
-        field: 'updatedAt',
-        readOnly: true,
-        renderer: (rendererContext) =>
-            DateTimeForTableWidget(data: rendererContext),
-        type: PlutoColumnType.text(),
-      ),
+
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
@@ -190,10 +161,10 @@ class CustomerEntity extends Equatable {
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
-        title: 'address'.tr(),
-        field: 'address',
+        title: 'ordersCount'.tr(),
+        field: 'ordersCount',
         readOnly: false,
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.number(),
       ),
       // PlutoColumn(
       //   enableColumnDrag: false,
@@ -213,9 +184,7 @@ class CustomerEntity extends Equatable {
       id: fields["id"]?.val,
       fullName: fields["fullName"]?.val,
       phoneNumber: fields["phoneNumber"]?.val,
-      address: fields["address"]?.val,
-      createdAt: '',
-      updatedAt: '',
+      ordersCount: fields["ordersCount"]?.val,
     );
   }
 
@@ -224,9 +193,7 @@ class CustomerEntity extends Equatable {
       id: 0,
       fullName: "",
       phoneNumber: "",
-      address: "",
-      createdAt: "",
-      updatedAt: "",
+      ordersCount:0,
     );
   }
 

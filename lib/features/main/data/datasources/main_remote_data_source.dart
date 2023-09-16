@@ -15,9 +15,9 @@ abstract class MainRemoteDataSource {
 }
 
 class MainRemoteDataSourceImpl extends MainRemoteDataSource {
-  final ApiClient _client;
+  // final ApiClient _client;
 
-  MainRemoteDataSourceImpl(this._client);
+  // MainRemoteDataSourceImpl(this._client);
 
   @override
   Future<bool> saveDriver() async {

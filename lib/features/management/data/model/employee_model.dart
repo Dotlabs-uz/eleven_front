@@ -7,16 +7,14 @@ class EmployeeModel extends EmployeeEntity {
     required int id,
     required String fullName,
     required String createdAt,
-    required String updatedAt,
     required String phoneNumber,
-    required String address,
+    required String shopName,
   }) : super(
     id: id,
     fullName: fullName,
     createdAt: createdAt,
-    updatedAt: updatedAt,
     phoneNumber: phoneNumber,
-    address: address,
+    shopName: shopName,
   );
 
 
@@ -38,9 +36,9 @@ class EmployeeModel extends EmployeeEntity {
         val: phoneNumber,
       ),
       MobileFieldEntity(
-        title: "address",
+        title: "shopName",
         type: Types.string,
-        val: address,
+        val: shopName,
       ),
     ];
   }
@@ -50,9 +48,8 @@ class EmployeeModel extends EmployeeEntity {
       id: json['id'],
       fullName: json['full_name'],
       createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
       phoneNumber: json['phone_number'],
-      address: json['address'],
+      shopName: json['shopName'],
     );
   }
 
@@ -61,9 +58,8 @@ class EmployeeModel extends EmployeeEntity {
       id: entity.id,
       fullName: entity.fullName,
       createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
       phoneNumber: entity.phoneNumber,
-      address: entity.address,
+      shopName: entity.shopName,
     );
   }
 
@@ -72,7 +68,7 @@ class EmployeeModel extends EmployeeEntity {
     data['id'] = id;
     data['full_name'] = fullName;
     data['phone_number'] = phoneNumber;
-    data['address'] = address;
+    data['shopName'] = shopName;
     return data;
   }
 }

@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../entities/field_entity.dart';
-import '../utils/field_formatters.dart';
 import 'button_widget.dart';
 import 'header_text.dart';
 
@@ -142,7 +141,7 @@ class DataFormWidgetState extends State<DataFormWidget> {
     return BlocBuilder<DataFormCubit, DataFormState>(
       builder: (context, state) {
         if (state is DataFormLoadedData) {
-          print("data form loadled ${state.fields.entries.first} ");
+          debugPrint("data form loadled ${state.fields.entries.first} ");
           _setParams(state.fields, widget.closeForm, widget.saveData);
 
           return DataFormContentWidget(
@@ -277,7 +276,7 @@ class DataFormWidgetState extends State<DataFormWidget> {
 //   //               pickerColor: pickerColor,
 //   //               onColorChanged: (color) {
 //   //                 setState(() {
-//   //                   //print("Colro selected $color");
+//   //                   //debugPrint("Colro selected $color");
 //   //                   pickerColor = color;
 //   //                 });
 //   //               },

@@ -137,7 +137,7 @@ class _DataDoubleFieldWidgetState extends State<DataDoubleFieldWidget> {
                   hintStyle: Theme
                       .of(context)
                       .textTheme
-                      .bodyText1!
+                      .bodyLarge!
                       .copyWith(color: AppColors.hintTextColor),
                 ),
                 enabled: widget.enabled,
@@ -157,7 +157,7 @@ class _DataDoubleFieldWidgetState extends State<DataDoubleFieldWidget> {
                     log("Field value  == ${widget.fieldEntity?.val} ${widget
                         .fieldEntity?.hintText ?? ""}");
                   } catch (e) {
-                    print("Error $e");
+                    debugPrint("Error $e");
                   }
                 }),
           ),

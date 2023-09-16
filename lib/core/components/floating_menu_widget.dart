@@ -225,7 +225,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       ),
       selectedDates: [DateTime.now()],
       onCalendarViewDate: (DateTime calendarViewDate) {
-        // print(calendarViewDate);
+        // debugPrint(calendarViewDate);
       },
       onSelectedDates: (List<DateTime> value) {},
     );

@@ -1,6 +1,5 @@
 // ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously, depend_on_referenced_packages
 
-import 'dart:developer';
 
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -109,7 +108,7 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
 
     if (data == null) return null;
 
-    print("data from storage $data");
+    debugPrint("data from storage $data");
 
     jsonSizes = Map<String, double>.from(data);
     return jsonSizes;
@@ -256,10 +255,8 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
       mode: PlutoGridMode.readOnly,
 
       onRowDoubleTap: (event) {
-        if (event.row != null) {
           selectedRow = event.row;
           widget.onTap?.call(event.row);
-        }
       },
 
       onLoaded: (PlutoGridOnLoadedEvent event) async {
@@ -308,8 +305,8 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
 
     PlutoColumn? columnItem;
 
-    print("set risize $sizes");
-    // print("Sizes $sizes");
+    debugPrint("set risize $sizes");
+    // debugPrint("Sizes $sizes");
 
     if (sizes != null) {
       sizes.forEach((field, size) {

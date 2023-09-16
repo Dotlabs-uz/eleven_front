@@ -4,7 +4,7 @@ class LoginResponseEntity extends Equatable {
   final bool status;
   final bool isRegistered;
 
-  LoginResponseEntity({
+  const LoginResponseEntity({
     required this.status,
     required this.isRegistered,
   });

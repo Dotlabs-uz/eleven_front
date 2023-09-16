@@ -9,7 +9,7 @@ class DataFormCubit extends Cubit<DataFormState> {
   DataFormCubit() : super(DataFormNoData());
 
   editData(Map<String, FieldEntity> fields) {
-    print("edit data ");
+    debugPrint("edit data ");
     emit(DataFormLoadedData(fields));
   }
 

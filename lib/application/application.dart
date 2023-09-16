@@ -51,7 +51,7 @@ class _ApplicationState extends State<Application> {
         title: 'Eleven CRM',
         theme: ThemeData(
           primaryColor: Colors.red,
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.blue),
           appBarTheme: const AppBarTheme(
             // color: AppColor.menuBgColor,
