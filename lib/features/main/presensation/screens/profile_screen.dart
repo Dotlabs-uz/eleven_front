@@ -29,16 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 
 
-  final TextEditingController controllerUserName = TextEditingController();
+  final TextEditingController controllerUsername = TextEditingController();
   final TextEditingController controllerFirstName = TextEditingController();
   final TextEditingController controllerLastName = TextEditingController();
-  final TextEditingController controllerEmail = TextEditingController();
-  final TextEditingController controllerIsStaff = TextEditingController();
-  final TextEditingController controllerIsSuperUser = TextEditingController();
-  final TextEditingController controllerIsActive = TextEditingController();
   final TextEditingController controllerPhoneNumber = TextEditingController();
-  final TextEditingController controllerPassport = TextEditingController();
-  final TextEditingController controllerTemp = TextEditingController();
+  final TextEditingController controllerShopName = TextEditingController();
 
   File? _file;
 
@@ -212,12 +207,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 15),
                     TextFormFieldWidget(
                       label: "username".tr(),
-                      controller: controllerUserName,
+                      controller: controllerUsername,
                     ),
                     const SizedBox(height: 15),
                     TextFormFieldWidget(
-                      label: "Email",
-                      controller: controllerEmail,
+                      label: "shopName".tr(),
+                      controller: controllerShopName,
                     ),
                     const SizedBox(height: 15),
                     TextFormFieldWidget(

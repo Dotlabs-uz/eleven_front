@@ -40,14 +40,12 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: _menuCubit),
         BlocProvider.value(value: _topMenuCubit),
         BlocProvider.value(value: _dataFormCubit),
-
-
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
-        locale: const Locale("ru"),
+        locale: context.locale,
         title: 'Eleven CRM',
         theme: ThemeData(
           primaryColor: Colors.red,
