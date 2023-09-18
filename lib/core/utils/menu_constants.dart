@@ -52,6 +52,10 @@ class Menus {
       icon: const Icon(Icons.display_settings_rounded),
       text: 'employee',
       page: const EmployeeScreen(),
+    ), SubMenu(
+      icon: const Icon(Icons.display_settings_rounded),
+      text: 'employee',
+      page: const EmployeeScreen(),
     ),
 
   ];

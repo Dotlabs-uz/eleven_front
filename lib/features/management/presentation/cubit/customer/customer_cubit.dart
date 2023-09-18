@@ -9,16 +9,16 @@ import '../../../domain/usecases/customer.dart';
 part 'customer_state.dart';
 
 class CustomerCubit extends Cubit<CustomerState> {
+  final GetCustomer getData;
+  final SaveCustomer saveData;
+  final DeleteCustomer deleteData;
+
   CustomerCubit({
     required this.getData,
     required this.saveData,
     required this.deleteData,
   }) : super(CustomerInitial());
-  final GetCustomer getData;
-  final SaveCustomer saveData;
-  final DeleteCustomer deleteData;
 
-  String searchText = '';
 
   void init() {
     emit(CustomerInitial());

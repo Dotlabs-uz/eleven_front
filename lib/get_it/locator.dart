@@ -27,6 +27,11 @@ import 'package:get_it/get_it.dart';
 import '../features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../features/management/data/repositories/management_repository_impl.dart';
 import '../features/management/domain/usecases/customer.dart';
+import '../features/products/data/datasources/products_remote_data_source.dart';
+import '../features/products/data/repository/products_repository_impl.dart';
+import '../features/products/domain/repository/products_repository.dart';
+import '../features/products/domain/usecases/service_product.dart';
+import '../features/products/presensation/cubit/service_product/service_product_cubit.dart';
 
 final locator = GetIt.I;
 
@@ -52,6 +57,10 @@ void setup() {
 
   locator.registerFactory(() => EmployeeCubit( locator(), locator(), locator()));
 
+  // Service Product
+
+  locator.registerFactory(() => ServiceProductCubit( locator(), locator(), locator()));
+
 
 
   // ================ UseCases ================ //
@@ -76,11 +85,14 @@ void setup() {
   locator.registerLazySingleton<SaveEmployee>(() => SaveEmployee(locator()));
 
 
-  // Order
+  // Product
 
-  // Privacy
 
-  // Driver
+  // Service Product
+  locator.registerLazySingleton<GetServiceProduct>(() => GetServiceProduct(locator()));
+  locator.registerLazySingleton<DeleteServiceProduct>(() => DeleteServiceProduct(locator()));
+  locator.registerLazySingleton<SaveServiceProduct>(() => SaveServiceProduct(locator()));
+
 
   // ================ Repository / Datasource ================ //
 
@@ -112,11 +124,6 @@ void setup() {
     ),
   );
 
-
-  // locator.registerLazySingleton<MainLocalDataSource>(
-  //   () => MainLocalDataSourceImpl(),
-  // );
-
   locator.registerLazySingleton<ManagementRepository>(
         () => ManagementRepositoryImpl(
       locator(),
@@ -125,6 +132,18 @@ void setup() {
 
   locator.registerLazySingleton<ManagementRemoteDataSource>(
         () => ManagementRemoteDataSourceImpl(
+      locator(),
+    ),
+  );
+
+  locator.registerLazySingleton<ProductsRepository>(
+        () => ProductsRepositoryImpl(
+      locator(),
+    ),
+  );
+
+  locator.registerLazySingleton<ProductsRemoteDataSource>(
+        () => ProductsRemoteDataSourceImpl(
       locator(),
     ),
   );

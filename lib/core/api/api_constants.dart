@@ -9,6 +9,7 @@ class ApiConstants {
 
 
   static const String customer = "customer/";
+  static const String serviceProduct = "service_product/";
   static const String employee = "employee/";
 
 
