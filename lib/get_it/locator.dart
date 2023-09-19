@@ -6,6 +6,7 @@ import 'package:eleven_crm/features/management/domain/repositories/management_re
 import 'package:eleven_crm/features/management/domain/usecases/employee.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
+import 'package:eleven_crm/features/products/domain/usecases/service_product_category.dart';
 import 'package:http/http.dart';
 
 import '../core/api/api_client.dart';
@@ -32,6 +33,7 @@ import '../features/products/data/repository/products_repository_impl.dart';
 import '../features/products/domain/repository/products_repository.dart';
 import '../features/products/domain/usecases/service_product.dart';
 import '../features/products/presensation/cubit/service_product/service_product_cubit.dart';
+import '../features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 
 final locator = GetIt.I;
 
@@ -60,6 +62,10 @@ void setup() {
   // Service Product
 
   locator.registerFactory(() => ServiceProductCubit( locator(), locator(), locator()));
+
+  // Service Product Category
+
+  locator.registerFactory(() => ServiceProductCategoryCubit( locator(), locator(), locator()));
 
 
 
@@ -92,6 +98,11 @@ void setup() {
   locator.registerLazySingleton<GetServiceProduct>(() => GetServiceProduct(locator()));
   locator.registerLazySingleton<DeleteServiceProduct>(() => DeleteServiceProduct(locator()));
   locator.registerLazySingleton<SaveServiceProduct>(() => SaveServiceProduct(locator()));
+
+  // Service Product Category
+  locator.registerLazySingleton<GetServiceProductCategory>(() => GetServiceProductCategory(locator()));
+  locator.registerLazySingleton<DeleteServiceProductCategory>(() => DeleteServiceProductCategory(locator()));
+  locator.registerLazySingleton<SaveServiceProductCategory>(() => SaveServiceProductCategory(locator()));
 
 
   // ================ Repository / Datasource ================ //

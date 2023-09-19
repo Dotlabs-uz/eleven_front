@@ -603,5 +603,6 @@
   "male": "М",
   "min": "мин",
   "service_product": "Xizmatlar",
-  "duration": "Davomi"
+  "duration": "Davomi",
+  "service_product_category": "Xizmat kategoriyalari"
 }
