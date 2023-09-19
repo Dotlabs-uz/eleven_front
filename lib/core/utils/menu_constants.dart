@@ -4,6 +4,7 @@ import '../../features/main/presensation/screens/home_screen.dart';
 import '../../features/main/presensation/screens/profile_screen.dart';
 import '../../features/management/presentation/screens/customer_screen.dart';
 import '../../features/management/presentation/screens/employee_screen.dart';
+import '../../features/products/presensation/screens/service_products_screen.dart';
 
 class SubMenu {
   final String text;
@@ -52,19 +53,17 @@ class Menus {
       icon: const Icon(Icons.display_settings_rounded),
       text: 'employee',
       page: const EmployeeScreen(),
-    ), SubMenu(
-      icon: const Icon(Icons.display_settings_rounded),
-      text: 'employee',
-      page: const EmployeeScreen(),
     ),
+
+
 
   ];
 
   static List<SubMenu> productMenu = [
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
-      text: 'blinds_type',
-      page: Container(),
+      text: 'service_product',
+      page: const ServiceProductsScreen(),
     ),
 
   ];

@@ -598,5 +598,10 @@
   "userNotAuthed": "Foydalanuvchi topilmadi, foydalanuvchi nomi va parolingizni tekshiring",
   "homeScreen": "Asosiy ekran",
   "empty": "Bo'sh",
-  "ordersCount": "Buyurtmalar soni"
+  "ordersCount": "Buyurtmalar soni",
+  "female": "Ж",
+  "male": "М",
+  "min": "мин",
+  "service_product": "Xizmatlar",
+  "duration": "Davomi"
 }
