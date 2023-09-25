@@ -28,6 +28,7 @@ import 'package:get_it/get_it.dart';
 import '../features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../features/management/data/repositories/management_repository_impl.dart';
 import '../features/management/domain/usecases/customer.dart';
+import '../features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
 import '../features/products/data/datasources/products_remote_data_source.dart';
 import '../features/products/data/repository/products_repository_impl.dart';
 import '../features/products/domain/repository/products_repository.dart';
@@ -58,6 +59,7 @@ void setup() {
   // Employee
 
   locator.registerFactory(() => EmployeeCubit( locator(), locator(), locator()));
+  locator.registerFactory(() => EmployeeScheduleCubit( ));
 
   // Service Product
 

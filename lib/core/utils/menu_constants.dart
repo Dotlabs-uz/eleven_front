@@ -1,3 +1,4 @@
+import 'package:eleven_crm/features/management/presentation/screens/employee_schedule_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/main/presensation/screens/home_screen.dart';
@@ -54,6 +55,11 @@ class Menus {
       icon: const Icon(Icons.display_settings_rounded),
       text: 'employee',
       page: const EmployeeScreen(),
+    ),
+    SubMenu(
+      icon: const Icon(Icons.display_settings_rounded),
+      text: 'employee',
+      page: const EmployeeScheduleScreen(),
     ),
 
 
