@@ -604,5 +604,20 @@
   "min": "мин",
   "service_product": "Xizmatlar",
   "duration": "Davomi",
-  "service_product_category": "Xizmat kategoriyalari"
+  "service_product_category": "Xizmat kategoriyalari",
+  "employee_schedule": "Xodimlarning ish rejasi",
+  "mon": "Dushanba",
+  "tue": "Seshanba",
+  "wed": "Сhorshanba",
+  "th": "Payshanba",
+  "fr": "Juma",
+  "sa": "Shanba",
+  "su": "Yakshanba",
+  "monSmall": "Du",
+  "tueSmall": "Se",
+  "wedSmall": "Ch",
+  "thSmall": "Pa",
+  "frSmall": "Ju",
+  "saSmall": "Sh",
+  "suSmall": "Ya"
 }

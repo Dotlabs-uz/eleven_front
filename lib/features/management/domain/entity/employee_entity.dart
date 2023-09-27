@@ -5,6 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/components/datetime_for_table_widget.dart';
 import '../../../../core/entities/field_entity.dart';
+import 'employee_schedule_entity.dart';
 
 class EmployeeEntity extends Equatable {
 
@@ -13,6 +14,7 @@ class EmployeeEntity extends Equatable {
   final String createdAt;
   final String phoneNumber;
   final String shopName;
+  final List<EmployeeScheduleEntity> schedule;
 
   const EmployeeEntity({
     required this.id,
@@ -20,6 +22,7 @@ class EmployeeEntity extends Equatable {
     required this.createdAt,
     required this.phoneNumber,
     required this.shopName,
+    required this.schedule,
   });
 
 
@@ -81,7 +84,7 @@ class EmployeeEntity extends Equatable {
       createdAt: row.cells["createdAt"]?.value,
       phoneNumber: row.cells["phoneNumber"]?.value,
       shopName: row.cells["shopName"]?.value,
-
+  schedule: [],
     );
   }
 
@@ -200,6 +203,7 @@ class EmployeeEntity extends Equatable {
       phoneNumber: fields["phoneNumber"]?.val,
       shopName: fields["shopName"]?.val,
       createdAt: '',
+      schedule: [],
     );
   }
 
@@ -210,6 +214,7 @@ class EmployeeEntity extends Equatable {
       phoneNumber: "",
       shopName: "",
       createdAt: "",
+      schedule: [],
     );
   }
 

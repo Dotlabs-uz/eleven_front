@@ -1,21 +1,9 @@
-
 import '../../../../core/entities/field_entity.dart';
 import '../../domain/entity/employee_entity.dart';
+import 'employee_schedule_model.dart';
 
 class EmployeeModel extends EmployeeEntity {
-  const EmployeeModel({
-    required int id,
-    required String fullName,
-    required String createdAt,
-    required String phoneNumber,
-    required String shopName,
-  }) : super(
-    id: id,
-    fullName: fullName,
-    createdAt: createdAt,
-    phoneNumber: phoneNumber,
-    shopName: shopName,
-  );
+  const EmployeeModel({required super.id, required super.fullName, required super.createdAt, required super.phoneNumber, required super.shopName, required super.schedule});
 
 
   List<MobileFieldEntity> getFieldsAndValues() {
@@ -50,6 +38,9 @@ class EmployeeModel extends EmployeeEntity {
       createdAt: json['created_at'],
       phoneNumber: json['phone_number'],
       shopName: json['shopName'],
+      schedule: List.from(json['work_time'])
+          .map((e) => EmployeeScheduleModel.fromJson(e))
+          .toList(),
     );
   }
 
@@ -60,6 +51,7 @@ class EmployeeModel extends EmployeeEntity {
       createdAt: entity.createdAt,
       phoneNumber: entity.phoneNumber,
       shopName: entity.shopName,
+      schedule: entity.schedule,
     );
   }
 
@@ -69,6 +61,9 @@ class EmployeeModel extends EmployeeEntity {
     data['full_name'] = fullName;
     data['phone_number'] = phoneNumber;
     data['shopName'] = shopName;
+    data['work_time'] = schedule.map((e) =>EmployeeScheduleModel.fromEntity(e).toJson());
     return data;
   }
+
+
 }

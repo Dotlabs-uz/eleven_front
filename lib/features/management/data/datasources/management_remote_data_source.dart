@@ -98,9 +98,9 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
 
     final data =  EmployeeResultsModel(count: 3, pageCount: 3, results: [
-      EmployeeModel(id: 1, fullName: "fullName", createdAt: DateTime.now().toString(),phoneNumber: "+998931231212", shopName: "address"),
-      EmployeeModel(id: 2, fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address"),
-      EmployeeModel(id: 3, fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address"),
+      EmployeeModel(id: 1, fullName: "fullName", createdAt: DateTime.now().toString(),phoneNumber: "+998931231212", shopName: "address", schedule: []),
+      EmployeeModel(id: 2, fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address", schedule: []),
+      EmployeeModel(id: 3, fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address", schedule: []),
     ]);
 
 

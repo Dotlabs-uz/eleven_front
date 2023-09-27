@@ -132,7 +132,7 @@ class _MobileViewCardState extends State<_MobileViewCard> {
               : ''));
     } else if (field.type == Types.month) {
       widgets.add(_fieldWithText(
-          field.title, StringHelper.monthName(index: field.val)));
+          field.title, StringHelper.monthName(month: field.val)));
     }  else {
       widgets.add(_fieldWithText(field.title, field.val));
     }

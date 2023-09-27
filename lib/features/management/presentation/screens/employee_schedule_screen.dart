@@ -1,29 +1,16 @@
-import 'package:confirm_dialog/confirm_dialog.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/components/data_form.dart';
-import '../../../../core/components/data_table_with_form_widget.dart';
-import '../../../../core/components/error_flash_bar.dart';
-import '../../../../core/components/loading_circle.dart';
-import '../../../../core/components/page_selector_widget.dart';
-import '../../../../core/components/responsive_builder.dart';
-import '../../../../core/components/search_field.dart';
-import '../../../../core/components/success_flash_bar.dart';
-import '../../../../core/utils/hive_box_keys_constants.dart';
 import '../../../../get_it/locator.dart';
-import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
-// ignore: depend_on_referenced_packages
-import 'package:collection/collection.dart';
-
 import '../../domain/entity/employee_entity.dart';
-import '../cubit/employee/employee_cubit.dart';
 import '../cubit/employee_schedule/employee_schedule_cubit.dart';
+import '../widgets/employee_schedule_status_widget.dart';
+import '../widgets/employee_schedule_widget.dart';
 
 class EmployeeScheduleScreen extends StatefulWidget {
   const EmployeeScheduleScreen({Key? key}) : super(key: key);
@@ -129,6 +116,87 @@ class _ContentWidgetState extends State<ContentWidget> {
 
   initCubit() => BlocProvider.of<EmployeeScheduleCubit>(context).init();
 
+  final List<EmployeeEntity> listEmployee = [
+    EmployeeEntity(
+      id: 1,
+      fullName: "Sam",
+      createdAt: DateTime.now().toIso8601String(),
+      phoneNumber: "",
+      shopName: "",
+      schedule: [
+        EmployeeScheduleEntity(
+          startTime: DateTime.now().toIso8601String(),
+          endTime: DateTime.now().toIso8601String(),
+          status: 1,
+        ),
+      ],
+    ),
+    EmployeeEntity(
+      id: 1,
+      fullName: "Alex",
+      createdAt: DateTime.now().toIso8601String(),
+      phoneNumber: "",
+      shopName: "",
+      schedule: [
+        EmployeeScheduleEntity(
+          startTime:
+              DateTime.now().add(const Duration(days: 1)).toIso8601String(),
+          endTime:
+              DateTime.now().toIso8601String(),
+          status: 1,
+        ),
+      ],
+    ),
+    EmployeeEntity(
+      id: 1,
+      fullName: "Dima",
+      createdAt: DateTime.now().toIso8601String(),
+      phoneNumber: "",
+      shopName: "",
+      schedule: [
+        EmployeeScheduleEntity(
+          startTime:
+              DateTime.now().add(const Duration(days: 2)).toIso8601String(),
+          endTime:
+              DateTime.now().add(const Duration(days: 2)).toIso8601String(),
+          status: 1,
+        ),
+      ],
+    ),
+    EmployeeEntity(
+      id: 1,
+      fullName: "Ali",
+      createdAt: DateTime.now().toIso8601String(),
+      phoneNumber: "",
+      shopName: "",
+      schedule: [
+        EmployeeScheduleEntity(
+          startTime:
+              DateTime.now().add(const Duration(days: 3)).toIso8601String(),
+          endTime:
+              DateTime.now().add(const Duration(days: 3)).toIso8601String(),
+          status: 1,
+        ),
+      ],
+    ),
+    EmployeeEntity(
+      id: 1,
+      fullName: "Peter",
+      createdAt: DateTime.now().toIso8601String(),
+      phoneNumber: "",
+      shopName: "",
+      schedule: [
+        EmployeeScheduleEntity(
+          startTime:
+              DateTime.now().add(const Duration(days: 4)).toIso8601String(),
+          endTime:
+              DateTime.now().add(const Duration(days: 4)).toIso8601String(),
+          status: 1,
+        ),
+      ],
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -138,33 +206,37 @@ class _ContentWidgetState extends State<ContentWidget> {
           Expanded(
             child: Column(
               children: [
-                SizedBox(
-                  height: 40,
-
-                  child: Row(
-                    children: <Widget>[
-                      const SizedBox(
-                        width: 120,
-                        child: Placeholder(),
-                      ),
-                      const SizedBox(width: 20),
-                      const SizedBox(
-                        width: 120,
-                        child: Placeholder(),
-                      ),
-                      const SizedBox(width: 20),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Text("Filter"),
-                      ),
-                    ],
-                  ),
+                // SizedBox(
+                //   height: 40,
+                //   child: Row(
+                //     children: <Widget>[
+                //       const SizedBox(
+                //         width: 120,
+                //         child: Placeholder(),
+                //       ),
+                //       const SizedBox(width: 20),
+                //       const SizedBox(
+                //         width: 120,
+                //         child: Placeholder(),
+                //       ),
+                //       const SizedBox(width: 20),
+                //       ElevatedButton(
+                //         onPressed: () {},
+                //         child: const Text("Filter"),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // const SizedBox(height: 20),
+                EmployeeScheduleWidget(
+                  listEmployee: listEmployee,
                 ),
                 const SizedBox(height: 20),
-                const Placeholder(),
+                const EmployeeScheduleStatusWidget(),
               ],
             ),
           ),
+          // const EmployeeScheduleStatusWidget(),
         ],
       ),
     );

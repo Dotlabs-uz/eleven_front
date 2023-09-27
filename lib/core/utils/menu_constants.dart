@@ -58,7 +58,7 @@ class Menus {
     ),
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
-      text: 'employee',
+      text: 'employee_schedule',
       page: const EmployeeScheduleScreen(),
     ),
 

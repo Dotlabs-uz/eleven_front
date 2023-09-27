@@ -610,9 +610,27 @@
   "min": "мин",
   "service_product": "Услуги",
   "duration": "Длительность",
-
   "service_product_category": "Категории сервисов",
-  "data": "data",
+  "employee_schedule": "График работы сотрудников",
+  "mon": "Понедельник",
+  "tue": "Вторник",
+  "wed": "Среда",
+  "th": "Четверг",
+  "fr": "Пятница",
+  "sa": "Суббота",
+  "su": "Воскресенье",
+
+  "monSmall": "Пн",
+  "tueSmall": "Вт",
+  "wedSmall": "Ср",
+  "thSmall": "Чт",
+  "frSmall": "Пт",
+  "saSmall": "Сб",
+  "suSmall": "Вс",
+
+
+
+
   "data": "data",
   "data": "data",
   "data": "data"
