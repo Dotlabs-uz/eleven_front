@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/utils/selections.dart';
+import '../../domain/entity/employee_schedule_entity.dart';
 
-class EmployeeScheduleStatus {
+class EmployeeScheduleStatusField {
   final String title;
   final String description;
   final Color color;
+  final EmployeeScheduleStatus status;
 
-  const EmployeeScheduleStatus(
-      {required this.title, required this.color, required this.description});
+  const EmployeeScheduleStatusField({
+    required this.title,
+    required this.color,
+    required this.description,
+    required this.status,
+  });
 }
 
 class EmployeeScheduleStatusWidget extends StatefulWidget {
@@ -21,8 +27,6 @@ class EmployeeScheduleStatusWidget extends StatefulWidget {
 
 class _EmployeeScheduleStatusWidgetState
     extends State<EmployeeScheduleStatusWidget> {
-
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -35,7 +39,7 @@ class _EmployeeScheduleStatusWidgetState
     );
   }
 
-  _buildItem(EmployeeScheduleStatus entity) {
+  _buildItem(EmployeeScheduleStatusField entity) {
     return Row(
       children: [
         Container(
@@ -60,17 +64,14 @@ class _EmployeeScheduleStatusWidgetState
         const SizedBox(width: 5),
         Text(
           entity.description,
-          style:  TextStyle(
+          style: TextStyle(
             color: Colors.grey.shade700,
             fontFamily: "Nunito",
             fontWeight: FontWeight.w400,
             fontSize: 14,
           ),
         ),
-
         const SizedBox(width: 15),
-
-
       ],
     );
   }

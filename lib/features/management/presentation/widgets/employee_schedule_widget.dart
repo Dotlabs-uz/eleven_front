@@ -1,36 +1,42 @@
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/utils/dialogs.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 import '../../../../core/utils/color_helper.dart';
 import '../../../../core/utils/string_helper.dart';
 import '../../domain/entity/employee_entity.dart';
 import 'month_selector_with_dates_widget.dart';
 
+class FieldSchedule {
+  final DateTime dateTime;
+  final int employee;
+  final int status;
+
+  FieldSchedule(this.dateTime, this.employee, this.status);
+}
+
 class EmployeeScheduleWidget extends StatefulWidget {
-  final List<EmployeeEntity> listEmployee;
   final Function(int)? onMonthChanged;
-  final Function(EmployeeScheduleFieldEntity)? onFieldSubmit;
-  const EmployeeScheduleWidget(
-      {Key? key,
-        required this.listEmployee,
-        this.onMonthChanged,
-        this.onFieldSubmit})
-      : super(key: key);
+  final List<EmployeeEntity> listEmployee;
+  final Function(List<FieldSchedule>)? onSave;
+  const EmployeeScheduleWidget({
+    Key? key,
+    this.onMonthChanged,
+    this.onSave,
+    required this.listEmployee,
+  }) : super(key: key);
 
   @override
-  State<EmployeeScheduleWidget> createState() =>
-      _EmployeeScheduleWidgetState();
+  State<EmployeeScheduleWidget> createState() => _EmployeeScheduleWidgetState();
 }
 
 class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
   int currentMonth = DateTime.now().month;
+  int currentYear = DateTime.now().year;
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  List<FieldSchedule> submittedFields = [];
 
   onMonthChanged(int val) {
     setState(() {
@@ -42,57 +48,74 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
-          // color: Colors.red
-
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const SizedBox(
-                  width: 200,
-                ),
-                MonthSelectorWithDatesWidget(
-                  onMonthChanged: (val) => onMonthChanged(val),
-                  currentMonth: currentMonth,
-                ),
-              ],
-            ),
-            ...widget.listEmployee.map((e) =>  _EmployeeScheduleFieldWidget(
+    return Container(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const SizedBox(width: 200),
+              MonthSelectorWithDatesWidget(
+                onMonthChanged: (val) => onMonthChanged(val),
+                currentMonth: currentMonth,
+              ),
+            ],
+          ),
+          ...widget.listEmployee.map(
+            (e) => _EmployeeScheduleTableWidget(
               employeeEntity: e,
               currentMonth: currentMonth,
-              onSelectionTap: (day, month, status) {
-                print("Day $day Month $month CurrentStatus $status");
+              currentYear: currentYear,
+              onFieldEdit: (
+                int day,
+                int month,
+                int year,
+                int status,
+                int employee,
+              ) {
+                final dateTime = DateTime(year, month, day);
+                final entity = FieldSchedule(dateTime, employee, status);
+
+                submittedFields.add(entity);
               },
-            )),
-            // _EmployeeScheduleFieldWidget(
-            //   employeeEntity: widget.listEmployee.first,
-            //   currentMonth: currentMonth,
-            //   onSelectionTap: (day, month, status) {
-            //     print("Day $day Month $month CurrentStatus $status");
-            //   },
-            // )
-          ],
-        ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  widget.onSave?.call(submittedFields);
+                  submittedFields.clear();
+                },
+                child: Text(
+                  "save".tr(),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 }
 
-class _EmployeeScheduleFieldWidget extends StatelessWidget {
+class _EmployeeScheduleTableWidget extends StatelessWidget {
   final EmployeeEntity employeeEntity;
   final int currentMonth;
-  final Function(int, int, int) onSelectionTap;
-  const _EmployeeScheduleFieldWidget({
+  final int currentYear;
+  final Function(int day, int month, int year, int status, int employee)
+      onFieldEdit;
+
+  const _EmployeeScheduleTableWidget({
     Key? key,
     required this.employeeEntity,
     required this.currentMonth,
-    required this.onSelectionTap,
+    required this.currentYear,
+    required this.onFieldEdit,
   }) : super(key: key);
 
   @override
@@ -107,21 +130,26 @@ class _EmployeeScheduleFieldWidget extends StatelessWidget {
         ),
         ...List.generate(
           StringHelper.getDaysByMonthIndex(month: currentMonth),
-              (index) {
+          (index) {
             final day = index + 1;
-            final entity = employeeEntity.schedule.firstWhereOrNull((element) {
+
+            final year = DateTime.now().year;
+            final EmployeeScheduleEntity? entity =
+                employeeEntity.schedule.firstWhereOrNull((element) {
               final startDateParsing = DateTime.parse(element.startTime);
               final startDate = DateTime(startDateParsing.year,
                   startDateParsing.month, startDateParsing.day);
-              final targetDate =
-              DateTime(DateTime.now().year, currentMonth, day);
-
+              final targetDate = DateTime(year, currentMonth, day);
               return startDate.difference(targetDate).inDays == 0;
             });
 
-            return _scheduleItem(
-              entity,
-                  (status) => onSelectionTap.call(day, currentMonth, status),
+            return _EmployeeScheduleFieldWidget(
+              day: day,
+              month: currentMonth,
+              year: year,
+              onFieldChange: onFieldEdit,
+              employeeId: employeeEntity.id,
+              fieldStatus: entity?.status ?? 0,
             );
           },
         ),
@@ -129,35 +157,130 @@ class _EmployeeScheduleFieldWidget extends StatelessWidget {
     );
   }
 
-  _scheduleItem(EmployeeScheduleEntity? entity, Function(int status) onTap) {
-    if (entity == null) {
+  _card() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(width: 1, color: Colors.grey.shade200),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(width: 10),
+          Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey,
+            ),
+            width: 30,
+            height: 30,
+          ),
+          const SizedBox(width: 8),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                employeeEntity.fullName,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 13,
+                ),
+              ),
+              Text(
+                employeeEntity.fullName,
+                style: TextStyle(
+                  color: Colors.grey.shade300,
+                  fontSize: 11,
+                ),
+              )
+            ],
+          ),
+          const SizedBox(width: 10),
+        ],
+      ),
+    );
+  }
+}
+
+class _EmployeeScheduleFieldWidget extends StatefulWidget {
+  final int fieldStatus;
+  final int day;
+  final int year;
+  final int month;
+  final int employeeId;
+  final Function(int day, int month, int year, int status, int employee)
+      onFieldChange;
+  const _EmployeeScheduleFieldWidget({
+    Key? key,
+    required this.fieldStatus,
+    required this.day,
+    required this.year,
+    required this.month,
+    required this.onFieldChange,
+    required this.employeeId,
+  }) : super(key: key);
+
+  @override
+  State<_EmployeeScheduleFieldWidget> createState() =>
+      _EmployeeScheduleFieldWidgetState();
+}
+
+class _EmployeeScheduleFieldWidgetState
+    extends State<_EmployeeScheduleFieldWidget> {
+  int status = 0;
+
+  @override
+  void initState() {
+    status = widget.fieldStatus;
+
+    super.initState();
+  }
+
+  changeState() {
+    Dialogs.scheduleField(
+      context: context,
+      onConfirm: (val) {
+        setState(() {
+          status = val;
+        });
+        // int day, int month, int year, int status, int employee
+
+        widget.onFieldChange.call(
+            widget.day, widget.month, widget.year, status, widget.employeeId);
+      },
+      day: widget.day,
+      month: widget.month,
+      year: widget.year,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (status == 0) {
       return GestureDetector(
-        onTap: () => onTap.call(EmployeeScheduleStatus.notSelected.index),
+        onTap: () => changeState(),
         child: Container(
           width: 35,
           height: 35,
           decoration: BoxDecoration(
             border: Border.all(width: 1, color: Colors.grey.shade200),
           ),
-          // child: Center(
-          //   child: Text("$day"),
-          // ),
         ),
       );
     }
 
     return GestureDetector(
-      onTap: () => onTap.call(entity.status),
+      onTap: () => changeState(),
       child: Container(
         width: 35,
         height: 35,
         decoration: BoxDecoration(
-          color: ColorHelper.getColorForScheduleByStatus(entity.status),
+          color: ColorHelper.getColorForScheduleByStatus(status),
           border: Border.all(width: 1, color: Colors.grey.shade200),
         ),
         child: Center(
           child: Text(
-            StringHelper.getTitleForScheduleByStatus(entity.status),
+            StringHelper.getTitleForScheduleByStatus(status),
             style: const TextStyle(
               color: Colors.white,
               fontFamily: "Nunito",
@@ -169,57 +292,4 @@ class _EmployeeScheduleFieldWidget extends StatelessWidget {
       ),
     );
   }
-
-  _card() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const SizedBox(width: 10),
-
-        Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.grey,
-          ),
-          width: 30,
-          height: 30,
-        ),
-        const SizedBox(width: 8),
-        // Spacer(),
-
-        Column(
-          children: [
-            Text(
-              employeeEntity.fullName,
-              style: const TextStyle(
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            Text(
-              employeeEntity.fullName,
-              style: const TextStyle(
-                color: Colors.black,
-              ),
-            )
-          ],
-        ),
-        const SizedBox(width: 10),
-      ],
-    );
-  }
-}
-
-class EmployeeScheduleFieldEntity {
-  final int month;
-  final int date;
-  final EmployeeScheduleStatus status;
-
-  EmployeeScheduleFieldEntity({
-    required this.month,
-    required this.date,
-    required this.status,
-  });
 }

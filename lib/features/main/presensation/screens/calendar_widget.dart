@@ -24,6 +24,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   Widget build(BuildContext context) {
     return SfCalendar(
       view: CalendarView.day,
+
       controller: _calendarController,
       dataSource: _dataSource,
       allowAppointmentResize: true,

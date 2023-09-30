@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import 'calendar_resourse_widget.dart';
 import 'calendar_widget.dart';
 
 
@@ -24,7 +25,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: CalendarWidget(),);
+    return const Scaffold(body: CalendarResourceWidget(),);
     // return Scaffold(
     //     body: SfCalendar(
     //   view: CalendarView.workWeek,

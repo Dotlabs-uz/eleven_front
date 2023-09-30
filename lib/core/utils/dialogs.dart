@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../features/management/domain/entity/employee_entity.dart';
+import '../../features/management/domain/entity/employee_schedule_entity.dart';
+import '../components/button_widget.dart';
 import 'assets.dart';
+import 'selections.dart';
+import 'string_helper.dart';
 
 class Dialogs {
   static exitDialog({
@@ -87,6 +92,157 @@ class Dialogs {
               //           color: const Color(0xffFA3E3E).withOpacity(0.75),
               //           onPressed: () {
               //             onExit.call();
+              //           },
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static scheduleField({
+    required BuildContext context,
+    required Function(int) onConfirm,
+    required int day,
+    required int month,
+    required int year,
+  }) {
+    return showDialog(
+      context: context,
+      useSafeArea: true,
+      builder: (context) => AlertDialog(
+        alignment: Alignment.center,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        content: Container(
+          constraints: BoxConstraints(
+            maxWidth: Responsive.isDesktop(context)
+                ? 100
+                : MediaQuery.of(context).size.width,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "pleaseSelectStatus".tr(),
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
+              ),
+
+              const SizedBox(height: 5),
+              Text(
+                "$day ${StringHelper.monthName(month: month)} $year.",
+                style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,),
+              ),
+              const SizedBox(height: 20),
+
+              ...Selections.listStatus.map((element) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    onConfirm.call(element.status.index);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: element.color,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Center(
+                            child: Text(
+                              element.title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Nunito",
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          element.description,
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontFamily: "Nunito",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                      ],
+                    ),
+                  ),
+                );
+
+                return Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: element.color,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Center(
+                    child: Text(
+                      element.title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: "Nunito",
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+              const SizedBox(height: 15),
+              SizedBox(
+                height: 35,
+                child: ButtonWidget(
+                  text: 'clear'.tr(),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    onConfirm.call(EmployeeScheduleStatus.notSelected.index);
+                  },
+                  color: const Color(0xffABACAE),
+                ),
+              ),
+              // SizedBox(
+              //   height: 35,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Expanded(
+              //         child: ButtonWidget(
+              //           text: 'back'.tr(),
+              //           onPressed: () => Navigator.pop(context),
+              //           color: const Color(0xffABACAE),
+              //         ),
+              //       ),
+              //       const SizedBox(width: 15),
+              //       Expanded(
+              //         child: ButtonWidget(
+              //           text: 'save'.tr(),
+              //           color: const Color(0xff99C499).withOpacity(0.75),
+              //           onPressed: () {
+              //             onConfirm.call();
               //           },
               //         ),
               //       ),

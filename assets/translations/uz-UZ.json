@@ -619,5 +619,8 @@
   "thSmall": "Pa",
   "frSmall": "Ju",
   "saSmall": "Sh",
-  "suSmall": "Ya"
+  "suSmall": "Ya",
+
+  "pleaseSelectStatus": "Iltimos holatni tanlang",
+  "clear": "Tozalash"
 }

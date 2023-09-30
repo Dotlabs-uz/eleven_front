@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -132,7 +133,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       ],
     ),
     EmployeeEntity(
-      id: 1,
+      id: 2,
       fullName: "Alex",
       createdAt: DateTime.now().toIso8601String(),
       phoneNumber: "",
@@ -141,14 +142,13 @@ class _ContentWidgetState extends State<ContentWidget> {
         EmployeeScheduleEntity(
           startTime:
               DateTime.now().add(const Duration(days: 1)).toIso8601String(),
-          endTime:
-              DateTime.now().toIso8601String(),
+          endTime: DateTime.now().toIso8601String(),
           status: 1,
         ),
       ],
     ),
     EmployeeEntity(
-      id: 1,
+      id: 3,
       fullName: "Dima",
       createdAt: DateTime.now().toIso8601String(),
       phoneNumber: "",
@@ -164,7 +164,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       ],
     ),
     EmployeeEntity(
-      id: 1,
+      id: 4,
       fullName: "Ali",
       createdAt: DateTime.now().toIso8601String(),
       phoneNumber: "",
@@ -180,7 +180,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       ],
     ),
     EmployeeEntity(
-      id: 1,
+      id: 5,
       fullName: "Peter",
       createdAt: DateTime.now().toIso8601String(),
       phoneNumber: "",
@@ -228,8 +228,23 @@ class _ContentWidgetState extends State<ContentWidget> {
                 //   ),
                 // ),
                 // const SizedBox(height: 20),
-                EmployeeScheduleWidget(
-                  listEmployee: listEmployee,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      EmployeeScheduleWidget(
+                        onSave: (listFields) {
+                          debugPrint("List fields ${listFields.length}");
+
+                          for (var element in listFields) {
+
+                            debugPrint(
+                                "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employee}");
+                          }
+                        }, listEmployee: listEmployee,
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 20),
                 const EmployeeScheduleStatusWidget(),

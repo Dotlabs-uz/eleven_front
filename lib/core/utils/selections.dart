@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 
+import '../../features/management/domain/entity/employee_schedule_entity.dart';
 import '../../features/management/presentation/widgets/employee_schedule_status_widget.dart';
 
 class Selections {
-  static final List<EmployeeScheduleStatus> listStatus = [
-    const EmployeeScheduleStatus(
+  static const List<EmployeeScheduleStatusField> listStatus = [
+    EmployeeScheduleStatusField(
       title: "P",
       color: Color(0xff99C499),
       description: 'Рабочий',
+      status: EmployeeScheduleStatus.work,
     ),
-    const EmployeeScheduleStatus(
+    EmployeeScheduleStatusField(
       title: "Б",
       color: Color(0xffDFBBBB),
       description: 'Больничный',
+      status: EmployeeScheduleStatus.sick,
     ),
-    const EmployeeScheduleStatus(
+    EmployeeScheduleStatusField(
       title: "O",
       color: Color(0xffC9D6E6),
       description: 'Oтпуск',
+      status: EmployeeScheduleStatus.vacation,
     ),
   ];
 }
