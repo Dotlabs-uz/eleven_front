@@ -18,7 +18,7 @@ abstract class ManagementRemoteDataSource {
 
   Future<CustomerModel> saveCustomer(CustomerModel data);
 
-  Future<bool> deleteCustomer(int id);
+  Future<bool> deleteCustomer(String id);
 
 
 // ================ EMPLOYEE CRUD ================ //
@@ -28,7 +28,7 @@ abstract class ManagementRemoteDataSource {
 
   Future<EmployeeModel> saveEmployee(EmployeeModel data);
 
-  Future<bool> deleteEmployee(int id);
+  Future<bool> deleteEmployee(String id);
 
 
 }
@@ -52,10 +52,10 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     // return results;
 
 
-    final data =  CustomerResultsModel(count: 3, pageCount: 3, results:const [
-       CustomerModel(id: 1, fullName: "fullName",  phoneNumber: "+998931231212", ordersCount: 3),
-        CustomerModel(id: 2, fullName: "fullName",  phoneNumber: "+998931231212", ordersCount: 43),
-        CustomerModel(id: 3, fullName: "fullName",  phoneNumber: "+998931231212", ordersCount: 345),
+    final data =  CustomerResultsModel(count: 3, pageCount: 3, results: const [
+       CustomerModel(id: "", fullName: "fullName",  phoneNumber: "+998931231212", ordersCount: 3),
+        CustomerModel(id: "", fullName: "fullName",  phoneNumber: "+998931231212", ordersCount: 43),
+        CustomerModel(id: "", fullName: "fullName",  phoneNumber: "+998931231212", ordersCount: 345),
     ]);
 
 
@@ -78,7 +78,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
 
   @override
-  Future<bool> deleteCustomer(int id) async {
+  Future<bool> deleteCustomer(String id) async {
     final response = await _client.deleteWithBody('${ApiConstants.customer}$id/');
     return response['success'] ?? false;
   }
@@ -98,9 +98,9 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
 
     final data =  EmployeeResultsModel(count: 3, pageCount: 3, results: [
-      EmployeeModel(id: 1, fullName: "fullName", createdAt: DateTime.now().toString(),phoneNumber: "+998931231212", shopName: "address", schedule: []),
-      EmployeeModel(id: 2, fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address", schedule: []),
-      EmployeeModel(id: 3, fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address", schedule: []),
+      EmployeeModel(id: "", fullName: "fullName", createdAt: DateTime.now().toString(),phoneNumber: "+998931231212", shopName: "address", schedule: []),
+      EmployeeModel(id: "", fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address", schedule: []),
+      EmployeeModel(id: "", fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address", schedule: []),
     ]);
 
 
@@ -123,7 +123,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
 
   @override
-  Future<bool> deleteEmployee(int id) async {
+  Future<bool> deleteEmployee(String id) async {
     final response = await _client.deleteWithBody('${ApiConstants.employee}$id/');
     return response['success'] ?? false;
   }

@@ -9,7 +9,7 @@ import 'employee_schedule_entity.dart';
 
 class EmployeeEntity extends Equatable {
 
-  final int id;
+  final String id;
   final String fullName;
   final String createdAt;
   final String phoneNumber;
@@ -29,12 +29,12 @@ class EmployeeEntity extends Equatable {
 
 
   static Map<String, FieldEntity> fields = {
-    "id": FieldEntity<int>(
+    "id": FieldEntity<String>(
       label: "id",
       hintText: "id",
-      type: Types.int,
+      type: Types.string,
       isForm: true,
-      val: 0,
+      val: "",
     ),
     "fullName": FieldEntity<String>(
       label: "fullName",
@@ -140,7 +140,7 @@ class EmployeeEntity extends Equatable {
         enableRowChecked: false,
         readOnly: true,
         // enableDropToResize: true,
-        type: PlutoColumnType.number(),
+        type: PlutoColumnType.text(),
       ),
       // PlutoColumn(
       //   enableColumnDrag: false,
@@ -209,7 +209,7 @@ class EmployeeEntity extends Equatable {
 
   factory EmployeeEntity.empty() {
     return const EmployeeEntity(
-      id: 0,
+      id: "",
       fullName: "",
       phoneNumber: "",
       shopName: "",

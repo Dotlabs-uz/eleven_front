@@ -20,7 +20,7 @@ abstract class ProductsRemoteDataSource {
 
   Future<ServiceProductModel> saveServiceProduct(ServiceProductModel data);
 
-  Future<bool> deleteServiceProduct(int id);
+  Future<bool> deleteServiceProduct(String id);
 
   // ================ SERVICE PRODUCT CATEGORY CRUD ================ //
 
@@ -31,7 +31,7 @@ abstract class ProductsRemoteDataSource {
 
   Future<ServiceProductCategoryModel> saveServiceProductCategory(ServiceProductCategoryModel data);
 
-  Future<bool> deleteServiceProductCategory(int id);
+  Future<bool> deleteServiceProductCategory(String id);
 
 
 
@@ -57,9 +57,9 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
 
 
     const  data =    ServiceResultsProductModel(count: 3, pageCount: 3, results:[
-      ServiceProductModel(id: 1, name: "Укладка", price: 30, duration: 45, categoryId: 3, sex: 2),
-      ServiceProductModel(id: 2, name: "Стрижка", price: 75, duration: 55, categoryId: 3, sex: 1),
-      ServiceProductModel(id: 3, name: "Стрижка топором", price: 100, duration: 1, categoryId: 3, sex: 1),
+      ServiceProductModel(id: "", name: "Укладка", price: 30, duration: 45, categoryId: 3, sex: 2),
+      ServiceProductModel(id: "", name: "Стрижка", price: 75, duration: 55, categoryId: 3, sex: 1),
+      ServiceProductModel(id: "", name: "Стрижка топором", price: 100, duration: 1, categoryId: 3, sex: 1),
     ]);
 
 
@@ -82,7 +82,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
 
 
   @override
-  Future<bool> deleteServiceProduct(int id) async {
+  Future<bool> deleteServiceProduct(String id) async {
     final response = await _client.deleteWithBody('${ApiConstants.serviceProduct}$id/');
     return response['success'] ?? false;
   }
@@ -101,8 +101,8 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
 
 
     const  data =    ServiceProductCategoryResultsModel(count: 3, pageCount: 3, results:[
-      ServiceProductCategoryModel(id: 1, name: "Укладка",),
-      ServiceProductCategoryModel(id: 2, name: "Стрижка",),
+      ServiceProductCategoryModel(id: "", name: "Укладка",),
+      ServiceProductCategoryModel(id: "", name: "Стрижка",),
     ]);
 
 
@@ -124,7 +124,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
 
 
   @override
-  Future<bool> deleteServiceProductCategory(int id) async {
+  Future<bool> deleteServiceProductCategory(String id) async {
     final response = await _client.deleteWithBody('${ApiConstants.serviceProductCategory}$id/');
     return response['success'] ?? false;
   }

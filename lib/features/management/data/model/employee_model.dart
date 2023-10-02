@@ -3,8 +3,13 @@ import '../../domain/entity/employee_entity.dart';
 import 'employee_schedule_model.dart';
 
 class EmployeeModel extends EmployeeEntity {
-  const EmployeeModel({required super.id, required super.fullName, required super.createdAt, required super.phoneNumber, required super.shopName, required super.schedule});
-
+  const EmployeeModel(
+      {required super.id,
+      required super.fullName,
+      required super.createdAt,
+      required super.phoneNumber,
+      required super.shopName,
+      required super.schedule});
 
   List<MobileFieldEntity> getFieldsAndValues() {
     return [
@@ -33,7 +38,7 @@ class EmployeeModel extends EmployeeEntity {
 
   factory EmployeeModel.fromJson(Map<String, dynamic> json) {
     return EmployeeModel(
-      id: json['id'],
+      id: json['__id'],
       fullName: json['full_name'],
       createdAt: json['created_at'],
       phoneNumber: json['phone_number'],
@@ -57,13 +62,12 @@ class EmployeeModel extends EmployeeEntity {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['id'] = id;
+    data['__id'] = id;
     data['full_name'] = fullName;
     data['phone_number'] = phoneNumber;
     data['shopName'] = shopName;
-    data['work_time'] = schedule.map((e) =>EmployeeScheduleModel.fromEntity(e).toJson());
+    data['work_time'] =
+        schedule.map((e) => EmployeeScheduleModel.fromEntity(e).toJson());
     return data;
   }
-
-
 }

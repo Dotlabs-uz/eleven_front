@@ -7,7 +7,7 @@ import '../../../../core/entities/field_entity.dart';
 
 class CustomerEntity extends Equatable {
 
-  final int id;
+  final String id;
   final String fullName;
   final String phoneNumber;
   final int ordersCount;
@@ -23,12 +23,12 @@ class CustomerEntity extends Equatable {
 
 
   static Map<String, FieldEntity> fields = {
-    "id": FieldEntity<int>(
+    "id": FieldEntity<String>(
       label: "id",
       hintText: "id",
-      type: Types.int,
+      type: Types.string,
       isForm: true,
-      val: 0,
+      val: "",
     ),
     "fullName": FieldEntity<String>(
       label: "fullName",
@@ -132,7 +132,7 @@ class CustomerEntity extends Equatable {
         enableRowChecked: false,
         readOnly: true,
         // enableDropToResize: true,
-        type: PlutoColumnType.number(),
+        type: PlutoColumnType.text(),
       ),
       // PlutoColumn(
       //   enableColumnDrag: false,
@@ -190,7 +190,7 @@ class CustomerEntity extends Equatable {
 
   factory CustomerEntity.empty() {
     return const CustomerEntity(
-      id: 0,
+      id: "",
       fullName: "",
       phoneNumber: "",
       ordersCount:0,

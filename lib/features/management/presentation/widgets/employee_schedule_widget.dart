@@ -11,10 +11,10 @@ import 'month_selector_with_dates_widget.dart';
 
 class FieldSchedule {
   final DateTime dateTime;
-  final int employee;
+  final String employeeId;
   final int status;
 
-  FieldSchedule(this.dateTime, this.employee, this.status);
+  FieldSchedule(this.dateTime, this.employeeId, this.status);
 }
 
 class EmployeeScheduleWidget extends StatefulWidget {
@@ -73,10 +73,12 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
                 int month,
                 int year,
                 int status,
-                int employee,
+                  String employee,
               ) {
                 final dateTime = DateTime(year, month, day);
                 final entity = FieldSchedule(dateTime, employee, status);
+
+
 
                 submittedFields.add(entity);
               },
@@ -107,7 +109,7 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
   final EmployeeEntity employeeEntity;
   final int currentMonth;
   final int currentYear;
-  final Function(int day, int month, int year, int status, int employee)
+  final Function(int day, int month, int year, int status, String employee)
       onFieldEdit;
 
   const _EmployeeScheduleTableWidget({
@@ -207,8 +209,8 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
   final int day;
   final int year;
   final int month;
-  final int employeeId;
-  final Function(int day, int month, int year, int status, int employee)
+  final String employeeId;
+  final Function(int day, int month, int year, int status, String employee)
       onFieldChange;
   const _EmployeeScheduleFieldWidget({
     Key? key,

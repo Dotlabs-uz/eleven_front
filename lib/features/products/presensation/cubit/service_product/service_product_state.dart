@@ -41,7 +41,7 @@ class ServiceProductSaved extends ServiceProductState {
 }
 
 class ServiceProductDeleted extends ServiceProductState {
-  final int id;
+  final String id;
 
   const ServiceProductDeleted({required this.id});
 

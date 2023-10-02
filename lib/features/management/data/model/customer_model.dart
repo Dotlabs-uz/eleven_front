@@ -1,20 +1,18 @@
-
 import '../../../../core/entities/field_entity.dart';
 import '../../domain/entity/customer_entity.dart';
 
 class CustomerModel extends CustomerEntity {
   const CustomerModel({
-    required int id,
+    required String id,
     required String fullName,
     required String phoneNumber,
     required int ordersCount,
   }) : super(
-    id: id,
-    fullName: fullName,
-    phoneNumber: phoneNumber,
-    ordersCount: ordersCount,
-  );
-
+          id: id,
+          fullName: fullName,
+          phoneNumber: phoneNumber,
+          ordersCount: ordersCount,
+        );
 
   List<MobileFieldEntity> getFieldsAndValues() {
     return [
@@ -43,7 +41,7 @@ class CustomerModel extends CustomerEntity {
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     return CustomerModel(
-      id: json['id'],
+      id: json['__id'],
       fullName: json['full_name'],
       phoneNumber: json['phone_number'],
       ordersCount: json['orders_count'] ?? 0,
@@ -61,7 +59,7 @@ class CustomerModel extends CustomerEntity {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['id'] = id;
+    data['__id'] = id;
     data['full_name'] = fullName;
     data['phone_number'] = phoneNumber;
     data['orders_count'] = ordersCount;

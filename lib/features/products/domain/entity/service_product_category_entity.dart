@@ -7,7 +7,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../../core/entities/field_entity.dart';
 
 class ServiceProductCategoryEntity extends Equatable {
-  final int id;
+  final String id;
   final String name;
 
   const ServiceProductCategoryEntity({
@@ -16,12 +16,12 @@ class ServiceProductCategoryEntity extends Equatable {
   });
 
   static Map<String, FieldEntity> fields = {
-    "id": FieldEntity<int>(
+    "id": FieldEntity<String>(
       label: "id",
       hintText: "id",
       type: Types.int,
       isForm: true,
-      val: 0,
+      val: "",
     ),
     "name": FieldEntity<String>(
       label: "name",
@@ -103,7 +103,7 @@ class ServiceProductCategoryEntity extends Equatable {
         enableRowChecked: false,
         readOnly: true,
         // enableDropToResize: true,
-        type: PlutoColumnType.number(),
+        type: PlutoColumnType.text(),
       ),
       // PlutoColumn(
       //   enableColumnDrag: false,
@@ -135,7 +135,7 @@ class ServiceProductCategoryEntity extends Equatable {
 
   factory ServiceProductCategoryEntity.empty() {
     return const ServiceProductCategoryEntity(
-      id: 0,
+      id: "",
       name: "",
     );
   }

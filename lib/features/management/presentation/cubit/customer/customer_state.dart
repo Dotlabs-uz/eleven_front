@@ -36,7 +36,7 @@ class CustomerSaved extends CustomerState {
 }
 
 class CustomerDeleted extends CustomerState {
-  final int id;
+  final String id;
 
   const CustomerDeleted({required this.id});
 

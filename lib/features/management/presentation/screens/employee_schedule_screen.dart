@@ -119,7 +119,7 @@ class _ContentWidgetState extends State<ContentWidget> {
 
   final List<EmployeeEntity> listEmployee = [
     EmployeeEntity(
-      id: 1,
+      id: "",
       fullName: "Sam",
       createdAt: DateTime.now().toIso8601String(),
       phoneNumber: "",
@@ -133,7 +133,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       ],
     ),
     EmployeeEntity(
-      id: 2,
+      id: "",
       fullName: "Alex",
       createdAt: DateTime.now().toIso8601String(),
       phoneNumber: "",
@@ -148,7 +148,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       ],
     ),
     EmployeeEntity(
-      id: 3,
+      id: "",
       fullName: "Dima",
       createdAt: DateTime.now().toIso8601String(),
       phoneNumber: "",
@@ -164,7 +164,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       ],
     ),
     EmployeeEntity(
-      id: 4,
+      id: "",
       fullName: "Ali",
       createdAt: DateTime.now().toIso8601String(),
       phoneNumber: "",
@@ -180,7 +180,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       ],
     ),
     EmployeeEntity(
-      id: 5,
+      id: "",
       fullName: "Peter",
       createdAt: DateTime.now().toIso8601String(),
       phoneNumber: "",
@@ -237,11 +237,11 @@ class _ContentWidgetState extends State<ContentWidget> {
                           debugPrint("List fields ${listFields.length}");
 
                           for (var element in listFields) {
-
                             debugPrint(
-                                "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employee}");
+                                "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employeeId}");
                           }
-                        }, listEmployee: listEmployee,
+                        },
+                        listEmployee: listEmployee,
                       ),
                     ],
                   ),

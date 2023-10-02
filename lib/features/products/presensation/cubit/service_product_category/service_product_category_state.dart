@@ -36,7 +36,7 @@ class ServiceProductCategorySaved extends ServiceProductCategoryState {
   List<Object> get props => [data];
 }
 class ServiceProductCategoryDeleted extends ServiceProductCategoryState {
-  final int id;
+  final String id;
 
   const ServiceProductCategoryDeleted({required this.id});
 

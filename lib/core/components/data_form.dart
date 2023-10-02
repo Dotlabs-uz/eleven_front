@@ -37,7 +37,7 @@ class DataPage extends StatelessWidget {
           builder: (context, state) {
             if (state is DataFormLoadedData) {
               return Row(children: [
-                Expanded(child: HeaderText("ID: ${state.fields["id"]?.val}")),
+                Expanded(child: HeaderText("ID: ${state.fields["id"]?.val.toString()}")),
               ]);
             }
             return const Text('Add').tr();

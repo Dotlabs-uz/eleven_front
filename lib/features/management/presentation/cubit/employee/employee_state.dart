@@ -33,7 +33,7 @@ class EmployeeSaved extends EmployeeState {
   @override
   List<Object> get props => [data ];
 }class EmployeeDeleted extends EmployeeState {
-  final int id;
+  final String id;
 
   const EmployeeDeleted({required this.id});
   @override

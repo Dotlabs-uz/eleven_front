@@ -10,7 +10,7 @@ class ServiceProductCategoryModel extends ServiceProductCategoryEntity {
 
   factory ServiceProductCategoryModel.fromJson(Map<String, dynamic> json) {
     return ServiceProductCategoryModel(
-      id: json['id'],
+      id: json['__id'],
       name: json['name'],
     );
   }
