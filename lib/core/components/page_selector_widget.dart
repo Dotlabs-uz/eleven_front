@@ -267,7 +267,8 @@ class _PageSelectorWidgetState extends State<PageSelectorWidget> {
 
         if (!((selectedPage + 5) > widget.pageCount))
           IconButton(
-            onPressed:selectedPage + 5 > widget.pageCount ?  () {
+            onPressed: () {
+              print("Press");
               setState(() {
                 if (selectedPage + 5 > widget.pageCount) {
                   selectedPage = widget.pageCount;
@@ -276,7 +277,7 @@ class _PageSelectorWidgetState extends State<PageSelectorWidget> {
                 selectedPage = selectedPage + 5;
                 widget.onChanged.call(selectedPage);
               });
-            } : null,
+            } ,
             icon: Icon(
               Icons.keyboard_double_arrow_right_rounded,
               color: selectedPage + 5 > widget.pageCount

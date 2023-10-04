@@ -120,10 +120,10 @@ class _ContentWidgetState extends State<ContentWidget> {
   final List<EmployeeEntity> listEmployee = [
     EmployeeEntity(
       id: "",
-      fullName: "Sam",
-      createdAt: DateTime.now().toIso8601String(),
+      firstName: "Sam",
+      lastName: "Satt",
       phoneNumber: "",
-      shopName: "",
+      role: "manager",
       schedule: [
         EmployeeScheduleEntity(
           date: DateTime.now().toIso8601String(),
@@ -133,10 +133,10 @@ class _ContentWidgetState extends State<ContentWidget> {
     ),
     EmployeeEntity(
       id: "",
-      fullName: "Alex",
-      createdAt: DateTime.now().toIso8601String(),
+      firstName: "Alex",
+      lastName: "Satt",
       phoneNumber: "",
-      shopName: "",
+      role: "manager",
       schedule: [
         EmployeeScheduleEntity(
           date  :
@@ -147,10 +147,10 @@ class _ContentWidgetState extends State<ContentWidget> {
     ),
     EmployeeEntity(
       id: "",
-      fullName: "Dima",
-      createdAt: DateTime.now().toIso8601String(),
+      firstName: "FFF",
+      lastName: "Satt",
       phoneNumber: "",
-      shopName: "",
+      role: "manager",
       schedule: [
         EmployeeScheduleEntity(
           date:
@@ -161,10 +161,10 @@ class _ContentWidgetState extends State<ContentWidget> {
     ),
     EmployeeEntity(
       id: "",
-      fullName: "Ali",
-      createdAt: DateTime.now().toIso8601String(),
+      firstName: "Alex",
+      lastName: "Satt",
       phoneNumber: "",
-      shopName: "",
+      role: "manager",
       schedule: [
         EmployeeScheduleEntity(
           date:
@@ -175,10 +175,10 @@ class _ContentWidgetState extends State<ContentWidget> {
     ),
     EmployeeEntity(
       id: "",
-      fullName: "Peter",
-      createdAt: DateTime.now().toIso8601String(),
+      firstName: "Alex",
+      lastName: "Satt",
       phoneNumber: "",
-      shopName: "",
+      role: "manager",
       schedule: [
         EmployeeScheduleEntity(
           date:

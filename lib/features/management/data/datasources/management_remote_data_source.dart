@@ -57,28 +57,31 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
   @override
   Future<CustomerResultsModel> getCustomer(int page, String searchText,
       String? ordering, String? startDate, String? endDate) async {
-    final response = await _client
-        .get('${ApiConstants.clients}?page=$page&search=$searchText');
-    final results = CustomerResultsModel.fromJson(response);
-
-    return results;
+    // final response = await _client
+    //     .get('${ApiConstants.clients}?page=$page&search=$searchText');
+    // final results = CustomerResultsModel.fromJson(response);
+    //
+    // return results;
 
     final data = CustomerResultsModel(count: 3, pageCount: 3, results: const [
       CustomerModel(
-          id: "",
-          fullName: "fullName",
-          phoneNumber: "+998931231212",
-          ordersCount: 3),
+        id: "",
+        fullName: "fullName",
+        phoneNumber: "+998931231212",
+        ordersCount: 3,
+      ),
       CustomerModel(
-          id: "",
-          fullName: "fullName",
-          phoneNumber: "+998931231212",
-          ordersCount: 43),
+        id: "",
+        fullName: "fullName",
+        phoneNumber: "+998931231212",
+        ordersCount: 43,
+      ),
       CustomerModel(
-          id: "",
-          fullName: "fullName",
-          phoneNumber: "+998931231212",
-          ordersCount: 345),
+        id: "",
+        fullName: "fullName",
+        phoneNumber: "+998931231212",
+        ordersCount: 345,
+      ),
     ]);
 
     return data;
@@ -111,19 +114,37 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     int page,
     String searchText,
   ) async {
-    final response = await _client
-        .get('${ApiConstants.employee}?page=$page&search=$searchText');
-    final results = EmployeeResultsModel.fromJson(response);
-
-    return results;
-
+    // final response = await _client
+    //     .get('${ApiConstants.employee}?page=$page&search=$searchText');
+    // final results = EmployeeResultsModel.fromJson(response);
     //
-    // final data =  EmployeeResultsModel(count: 3, pageCount: 3, results: [
-    //   EmployeeModel(id: "", fullName: "fullName", createdAt: DateTime.now().toString(),phoneNumber: "+998931231212", shopName: "address", schedule: []),
-    //   EmployeeModel(id: "", fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address", schedule: []),
-    //   EmployeeModel(id: "", fullName: "fullName", createdAt: DateTime.now().toString(), phoneNumber: "+998931231212", shopName: "address", schedule: []),
-    // ]);
-    // return data;
+    // return results;
+
+    const data = EmployeeResultsModel(count: 3, pageCount: 3, results: [
+      EmployeeModel(
+          id: "",
+          firstName: "firstName",
+          role: "manager",
+          phoneNumber: "+998931231212",
+          schedule: [],
+          lastName: 'Satt'),
+      EmployeeModel(
+          id: "",
+          firstName: "Alex",
+          role: "manager",
+          phoneNumber: "+998931231212",
+          schedule: [],
+          lastName: 'Satt'),
+      EmployeeModel(
+        id: "",
+        firstName: "Sammy",
+        role: "manager",
+        phoneNumber: "+998931231212",
+        schedule: [],
+        lastName: 'Satt',
+      ),
+    ]);
+    return data;
   }
 
   @override
@@ -157,11 +178,42 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
   @override
   Future<BarberResultsModel> getBarber(
       int page, String searchText, String? ordering) async {
-    final response = await _client.get(
-        "${ApiConstants.barbers}?page=$page&search=$searchText${ordering ?? ""}");
-    final results = BarberResultsModel.fromJson(response);
+    // final response = await _client.get(
+    //     "${ApiConstants.barbers}?page=$page&search=$searchText${ordering ?? ""}");
+    // final results = BarberResultsModel.fromJson(response);
+    //
+    // return results;
+    const data = BarberResultsModel(count: 10, pageCount: 10, results: [
+      BarberModel(
+        id: "id",
+        firstName: "firstName",
+        lastName: "lastName",
+        phoneNumber: "phoneNumber",
+        filialId: "filialId",
+        password: "password",
+        login: "login",
+      ),
+      BarberModel(
+        id: "id",
+        firstName: "firstName",
+        lastName: "lastName",
+        phoneNumber: "phoneNumber",
+        filialId: "filialId",
+        password: "password",
+        login: "login",
+      ),
+      BarberModel(
+        id: "id",
+        firstName: "firstName",
+        lastName: "lastName",
+        phoneNumber: "phoneNumber",
+        filialId: "filialId",
+        password: "password",
+        login: "login",
+      ),
+    ]);
 
-    return results;
+    return data;
   }
 
   @override

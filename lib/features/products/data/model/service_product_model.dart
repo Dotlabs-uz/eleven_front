@@ -16,9 +16,10 @@ class ServiceProductModel extends ServiceProductEntity {
       name: json['name'],
       price: json['price'],
       duration: json['duration'],
-      categoryId: json['category_id'],
-      sex: json['sex'],
+      categoryId: json['categoryId'],
+      sex: json['sex'] ?? "man",
     );
+
   }
 
   factory ServiceProductModel.fromEntity(ServiceProductEntity entity) {

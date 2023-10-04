@@ -182,14 +182,14 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                employeeEntity.fullName,
+                employeeEntity.firstName,
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 13,
                 ),
               ),
               Text(
-                employeeEntity.fullName,
+                employeeEntity.role,
                 style: TextStyle(
                   color: Colors.grey.shade300,
                   fontSize: 11,

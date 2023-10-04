@@ -3,13 +3,14 @@ import '../../domain/entity/employee_entity.dart';
 import 'employee_schedule_model.dart';
 
 class EmployeeModel extends EmployeeEntity {
-  const EmployeeModel(
-      {required super.id,
-      required super.fullName,
-      required super.createdAt,
-      required super.phoneNumber,
-      required super.shopName,
-      required super.schedule});
+  const EmployeeModel({
+    required super.id,
+    required super.firstName,
+    required super.lastName,
+    required super.role,
+    required super.phoneNumber,
+    required super.schedule,
+  });
 
   List<MobileFieldEntity> getFieldsAndValues() {
     return [
@@ -19,9 +20,14 @@ class EmployeeModel extends EmployeeEntity {
         val: id,
       ),
       MobileFieldEntity(
-        title: "fullName",
+        title: "firstName",
         type: Types.string,
-        val: fullName,
+        val: firstName,
+      ),
+      MobileFieldEntity(
+        title: "lastName",
+        type: Types.string,
+        val: lastName,
       ),
       MobileFieldEntity(
         title: "phoneNumber",
@@ -29,9 +35,9 @@ class EmployeeModel extends EmployeeEntity {
         val: phoneNumber,
       ),
       MobileFieldEntity(
-        title: "shopName",
+        title: "role",
         type: Types.string,
-        val: shopName,
+        val: role,
       ),
     ];
   }
@@ -39,10 +45,10 @@ class EmployeeModel extends EmployeeEntity {
   factory EmployeeModel.fromJson(Map<String, dynamic> json) {
     return EmployeeModel(
       id: json['__id'],
-      fullName: json['full_name'],
-      createdAt: json['created_at'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
       phoneNumber: json['phone_number'],
-      shopName: json['shopName'],
+      role: json['role'],
       schedule: List.from(json['work_time'])
           .map((e) => EmployeeScheduleModel.fromJson(e))
           .toList(),
@@ -52,10 +58,10 @@ class EmployeeModel extends EmployeeEntity {
   factory EmployeeModel.fromEntity(EmployeeEntity entity) {
     return EmployeeModel(
       id: entity.id,
-      fullName: entity.fullName,
-      createdAt: entity.createdAt,
+      firstName: entity.firstName,
+      lastName: entity.lastName,
       phoneNumber: entity.phoneNumber,
-      shopName: entity.shopName,
+      role: entity.role,
       schedule: entity.schedule,
     );
   }
@@ -63,9 +69,10 @@ class EmployeeModel extends EmployeeEntity {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['__id'] = id;
-    data['full_name'] = fullName;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
     data['phone_number'] = phoneNumber;
-    data['shopName'] = shopName;
+    data['role'] = role;
     data['work_time'] =
         schedule.map((e) => EmployeeScheduleModel.fromEntity(e).toJson());
     return data;

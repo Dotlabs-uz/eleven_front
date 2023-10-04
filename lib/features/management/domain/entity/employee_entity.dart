@@ -1,27 +1,28 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../../../core/components/datetime_for_table_widget.dart';
 import '../../../../core/entities/field_entity.dart';
 import 'employee_schedule_entity.dart';
+
 
 class EmployeeEntity extends Equatable {
 
   final String id;
-  final String fullName;
-  final String createdAt;
+  final String firstName;
+  final String lastName;
+  final String role;
   final String phoneNumber;
-  final String shopName;
   final List<EmployeeScheduleEntity> schedule;
 
   const EmployeeEntity({
     required this.id,
-    required this.fullName,
-    required this.createdAt,
+    required this.firstName,
+    required this.lastName,
+    required this.role,
     required this.phoneNumber,
-    required this.shopName,
     required this.schedule,
   });
 
@@ -36,9 +37,24 @@ class EmployeeEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "fullName": FieldEntity<String>(
-      label: "fullName",
-      hintText: "fullName",
+    "firstName": FieldEntity<String>(
+      label: "firstName",
+      hintText: "firstName",
+      type: Types.string,
+      isRequired: true,
+      isForm: true,
+      val: "",
+    ),    "lastName": FieldEntity<String>(
+      label: "lastName",
+      hintText: "lastName",
+      type: Types.string,
+      isRequired: true,
+      isForm: true,
+      val: "",
+    ),
+    "role": FieldEntity<String>(
+      label: "role",
+      hintText: "role",
       type: Types.string,
       isRequired: true,
       isForm: true,
@@ -47,14 +63,6 @@ class EmployeeEntity extends Equatable {
     "phoneNumber": FieldEntity<String>(
       label: "phoneNumber",
       hintText: "phoneNumber",
-      type: Types.string,
-      isRequired: true,
-      isForm: true,
-      val: "",
-    ),
-    "shopName": FieldEntity<String>(
-      label: "shopName",
-      hintText: "shopName",
       type: Types.string,
       isForm: true,
       isRequired: true,
@@ -72,18 +80,19 @@ class EmployeeEntity extends Equatable {
 
   dynamic getProp(String key) => <String, dynamic>{
     "id": id,
-    "fullName": fullName,
+    "firstName": firstName,
+    "lastName": lastName,
+    "role": role,
     "phoneNumber": phoneNumber,
-    "shopName": shopName,
   }[key];
 
   factory EmployeeEntity.fromRow(PlutoRow row) {
     return EmployeeEntity(
       id: row.cells["id"]?.value,
-      fullName: row.cells["fullName"]?.value,
-      createdAt: row.cells["createdAt"]?.value,
+      firstName: row.cells["firstName"]?.value,
+      lastName: row.cells["lastName"]?.value,
       phoneNumber: row.cells["phoneNumber"]?.value,
-      shopName: row.cells["shopName"]?.value,
+      role: row.cells["role"]?.value,
   schedule: [],
     );
   }
@@ -92,10 +101,10 @@ class EmployeeEntity extends Equatable {
     return PlutoRow(cells: {
       'delete': PlutoCell(value: "Delete"),
       'id': PlutoCell(value: e.id),
-      'fullName': PlutoCell(value: e.fullName),
-      'createdAt': PlutoCell(value: e.createdAt),
+      'firstName': PlutoCell(value: e.firstName),
+      'lastName': PlutoCell(value: e.lastName),
       'phoneNumber': PlutoCell(value: e.phoneNumber),
-      'shopName': PlutoCell(value: e.shopName),
+      'role': PlutoCell(value: e.role),
     });
   }
 
@@ -132,16 +141,16 @@ class EmployeeEntity extends Equatable {
         },
         type: PlutoColumnType.text(),
       ),
-      PlutoColumn(
-        enableColumnDrag: false,
-        enableRowDrag: false,
-        title: 'id'.tr(),
-        field: 'id',
-        enableRowChecked: false,
-        readOnly: true,
+      //PlutoColumn(
+        //enableColumnDrag: false,
+        //enableRowDrag: false,
+        //title: 'id'.tr(),
+        //field: 'id',
+        //enableRowChecked: false,
+        //readOnly: true,
         // enableDropToResize: true,
-        type: PlutoColumnType.text(),
-      ),
+       // type: PlutoColumnType.text(),
+     // ),
       // PlutoColumn(
       //   enableColumnDrag: false,
       //   enableRowDrag: false,
@@ -152,19 +161,16 @@ class EmployeeEntity extends Equatable {
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
-        title: 'fullName'.tr(),
-        field: 'fullName',
-        readOnly: false,
+        title: 'firstName'.tr(),
+        field: 'firstName',
+        readOnly: true,
         type: PlutoColumnType.text(),
-      ),
-      PlutoColumn(
+      ),PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
-        title: 'createdAt'.tr(),
-        field: 'createdAt',
+        title: 'lastName'.tr(),
+        field: 'lastName',
         readOnly: true,
-        renderer: (rendererContext) =>
-            DateTimeForTableWidget(data: rendererContext),
         type: PlutoColumnType.text(),
       ),
       PlutoColumn(
@@ -172,37 +178,43 @@ class EmployeeEntity extends Equatable {
         enableRowDrag: false,
         title: 'phoneNumber'.tr(),
         field: 'phoneNumber',
-        readOnly: false,
+        readOnly: true,
         type: PlutoColumnType.text(),
       ),
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
-        title: 'shopName'.tr(),
-        field: 'shopName',
+        title: 'role'.tr(),
+        field: 'role',
         readOnly: false,
+        renderer: (rendererContext) {
+          if (rendererContext.cell.value != null &&
+              rendererContext.cell.value.toString().isNotEmpty) {
+            return Text(
+              (rendererContext.cell.value.toString().tr() ),
+              style: GoogleFonts.nunito(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+
+          return Text("noData".tr());
+        },
+
         type: PlutoColumnType.text(),
       ),
-      // PlutoColumn(
-      //   enableColumnDrag: false,
-      //   enableRowDrag: false,
-      //   title: 'isOrganisation'.tr(),
-      //   field: 'isOrganisation',
-      //   readOnly: true,
-      //   renderer: (rendererContext) =>
-      //       BoolForTableWidget(data: rendererContext),
-      //   type: PlutoColumnType.text(),
-      // ),
     ];
   }
 
   factory EmployeeEntity.fromFields() {
     return EmployeeEntity(
       id: fields["id"]?.val,
-      fullName: fields["fullName"]?.val,
+      firstName: fields["firstName"]?.val,
+      lastName: fields["lastName"]?.val,
       phoneNumber: fields["phoneNumber"]?.val,
-      shopName: fields["shopName"]?.val,
-      createdAt: '',
+      role: fields["role"]?.val,
       schedule: [],
     );
   }
@@ -210,10 +222,10 @@ class EmployeeEntity extends Equatable {
   factory EmployeeEntity.empty() {
     return const EmployeeEntity(
       id: "",
-      fullName: "",
+      firstName: "",
+      lastName: "",
       phoneNumber: "",
-      shopName: "",
-      createdAt: "",
+      role: "",
       schedule: [],
     );
   }

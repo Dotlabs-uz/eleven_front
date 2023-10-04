@@ -9,10 +9,10 @@ import '../../../../core/entities/field_entity.dart';
 class ServiceProductEntity extends Equatable {
   final String id;
   final String name;
-  final double price;
-  final int duration;
-  final int categoryId;
-  final int sex;
+  final String price;
+  final String duration;
+  final String categoryId;
+  final String sex;
 
   const ServiceProductEntity({
     required this.id,
@@ -39,37 +39,37 @@ class ServiceProductEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "price": FieldEntity<double>(
+    "price": FieldEntity<String>(
       label: "price",
       hintText: "price",
-      type: Types.double,
+      type: Types.string,
       isRequired: true,
       isForm: true,
-      val: 0.0,
+      val: "0.0",
     ),
-    "duration": FieldEntity<int>(
+    "duration": FieldEntity<String>(
       label: "duration",
       hintText: "duration",
-      type: Types.int,
+      type: Types.string,
       isForm: true,
       isRequired: true,
-      val:0,
+      val: "0",
     ),
-    "categoryId": FieldEntity<int>(
+    "categoryId": FieldEntity<String>(
       label: "categoryId",
       hintText: "categoryId",
-      type: Types.int,
+      type: Types.string,
       isForm: false,
       isRequired: false,
-      val:0,
+      val: "0",
     ),
-    "sex": FieldEntity<int>(
+    "sex": FieldEntity<String>(
       label: "sex",
       hintText: "sex",
-      type: Types.int,
+      type: Types.string,
       isForm: false,
       isRequired: false,
-      val:0,
+      val: "man",
     ),
   };
 
@@ -148,16 +148,16 @@ class ServiceProductEntity extends Equatable {
         },
         type: PlutoColumnType.text(),
       ),
-      PlutoColumn(
-        enableColumnDrag: false,
-        enableRowDrag: false,
-        title: 'id'.tr(),
-        field: 'id',
-        enableRowChecked: false,
-        readOnly: true,
+      //PlutoColumn(
+        //enableColumnDrag: false,
+        //enableRowDrag: false,
+        //title: 'id'.tr(),
+        //field: 'id',
+        //enableRowChecked: false,
+        //readOnly: true,
         // enableDropToResize: true,
-        type: PlutoColumnType.text(),
-      ),
+       // type: PlutoColumnType.text(),
+     // ),
       // PlutoColumn(
       //   enableColumnDrag: false,
       //   enableRowDrag: false,
@@ -193,7 +193,7 @@ class ServiceProductEntity extends Equatable {
           if (rendererContext.cell.value != null &&
               rendererContext.cell.value.toString().isNotEmpty) {
             return Text(
-              (rendererContext.cell.value).toString() +" " + "min".tr()  ,
+              "${rendererContext.cell.value} ${"min".tr()}"  ,
               style: GoogleFonts.nunito(
                 fontSize: 16,
                 color: Colors.black,
@@ -217,7 +217,7 @@ class ServiceProductEntity extends Equatable {
           if (rendererContext.cell.value != null &&
               rendererContext.cell.value.toString().isNotEmpty) {
             return Text(
-              (_getSexInstance(rendererContext.cell.value).tr() ),
+              (rendererContext.cell.value.toString().tr() ),
               style: GoogleFonts.nunito(
                 fontSize: 16,
                 color: Colors.black,
@@ -270,10 +270,10 @@ class ServiceProductEntity extends Equatable {
     return const ServiceProductEntity(
       id: "",
       name: "",
-      price: 0.0,
-      duration:0,
-      categoryId:0,
-      sex:0,
+      price: "0",
+      duration: "0",
+      categoryId: "0",
+      sex: "man",
     );
   }
 

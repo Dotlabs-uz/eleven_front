@@ -49,29 +49,27 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
   @override
   Future<ServiceResultsProductModel> getServiceProducts(int page, String searchText,
       String? ordering) async {
-    final response = await _client.get(
-        '${ApiConstants.serviceProduct}/?page=$page&search=$searchText');
-    final results = ServiceResultsProductModel.fromJson(response);
+    // final response = await _client.get(
+    //     '${ApiConstants.serviceProduct}/?page=$page&search=$searchText');
+    // final results = ServiceResultsProductModel.fromJson(response);
+    //
+    // return results;
+    //
+    //
+    const  data =    ServiceResultsProductModel(count: 3, pageCount: 3, results:[
+      ServiceProductModel(id: "", name: "Укладка", price: "30", duration: "45", categoryId: "3", sex: "2"),
+      ServiceProductModel(id: "", name: "Стрижка", price: "30", duration: "55", categoryId: "3", sex: "1"),
+      ServiceProductModel(id: "", name: "Стрижка топором", price: "100", duration: "1", categoryId: "3", sex: "1"),
+    ]);
 
-    return results;
-    //
-    //
-    // const  data =    ServiceResultsProductModel(count: 3, pageCount: 3, results:[
-    //   ServiceProductModel(id: "", name: "Укладка", price: 30, duration: 45, categoryId: 3, sex: 2),
-    //   ServiceProductModel(id: "", name: "Стрижка", price: 75, duration: 55, categoryId: 3, sex: 1),
-    //   ServiceProductModel(id: "", name: "Стрижка топором", price: 100, duration: 1, categoryId: 3, sex: 1),
-    // ]);
-    //
-    //
-    //
-    // return data;
+    return data;
 
   }
 
   @override
   Future<ServiceProductModel> saveServiceProduct(ServiceProductModel data) async {
     dynamic response;
-    if (data.id == 0) {
+    if (data.id.isEmpty) {
       response = await _client.post(ApiConstants.serviceProduct, params: data.toJson());
     } else {
       response =
@@ -93,27 +91,27 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
   @override
   Future<ServiceProductCategoryResultsModel> getServiceProductCategory(int page, String searchText,
       String? ordering) async {
-    final response = await _client.get(
-        '${ApiConstants.serviceProductCategory}/?page=$page',);
-    final results = ServiceProductCategoryResultsModel.fromJson(response);
-
-    return results;
+    // final response = await _client.get(
+    //     '${ApiConstants.serviceProductCategory}/?page=$page',);
+    // final results = ServiceProductCategoryResultsModel.fromJson(response);
+    //
+    // return results;
     //
     //
-    // const  data =    ServiceProductCategoryResultsModel(count: 3, pageCount: 3, results:[
-    //   ServiceProductCategoryModel(id: "", name: "Укладка",),
-    //   ServiceProductCategoryModel(id: "", name: "Стрижка",),
-    // ]);
+    const  data =    ServiceProductCategoryResultsModel(count: 3, pageCount: 3, results:[
+      ServiceProductCategoryModel(id: "", name: "Укладка", services: [],),
+      ServiceProductCategoryModel(id: "", name: "Стрижка", services: [],),
+    ]);
     //
     //
-    // return data;
+    return data;
 
   }
 
   @override
   Future<ServiceProductCategoryModel> saveServiceProductCategory(ServiceProductCategoryModel data) async {
     dynamic response;
-    if (data.id == 0) {
+    if (data.id.isEmpty) {
       response = await _client.post(ApiConstants.serviceProductCategory, params: data.toJson());
     } else {
       response =

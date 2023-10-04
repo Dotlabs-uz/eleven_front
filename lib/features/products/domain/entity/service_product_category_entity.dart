@@ -5,14 +5,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/entities/field_entity.dart';
+import 'service_product_entity.dart';
 
 class ServiceProductCategoryEntity extends Equatable {
   final String id;
   final String name;
+  final List<ServiceProductEntity> services;
 
   const ServiceProductCategoryEntity({
     required this.id,
     required this.name,
+    required this.services,
   });
 
   static Map<String, FieldEntity> fields = {
@@ -50,7 +53,7 @@ class ServiceProductCategoryEntity extends Equatable {
   factory ServiceProductCategoryEntity.fromRow(PlutoRow row) {
     return ServiceProductCategoryEntity(
       id: row.cells["id"]?.value,
-      name: row.cells["name"]?.value,
+      name: row.cells["name"]?.value, services: [],
     );
   }
 
@@ -95,16 +98,16 @@ class ServiceProductCategoryEntity extends Equatable {
         },
         type: PlutoColumnType.text(),
       ),
-      PlutoColumn(
-        enableColumnDrag: false,
-        enableRowDrag: false,
-        title: 'id'.tr(),
-        field: 'id',
-        enableRowChecked: false,
-        readOnly: true,
+      //PlutoColumn(
+        //enableColumnDrag: false,
+        //enableRowDrag: false,
+        //title: 'id'.tr(),
+        //field: 'id',
+        //enableRowChecked: false,
+        //readOnly: true,
         // enableDropToResize: true,
-        type: PlutoColumnType.text(),
-      ),
+       // type: PlutoColumnType.text(),
+     // ),
       // PlutoColumn(
       //   enableColumnDrag: false,
       //   enableRowDrag: false,
@@ -129,14 +132,14 @@ class ServiceProductCategoryEntity extends Equatable {
   factory ServiceProductCategoryEntity.fromFields() {
     return ServiceProductCategoryEntity(
       id: fields["id"]?.val,
-      name: fields["name"]?.val,
+      name: fields["name"]?.val, services: [],
     );
   }
 
   factory ServiceProductCategoryEntity.empty() {
     return const ServiceProductCategoryEntity(
       id: "",
-      name: "",
+      name: "", services: [],
     );
   }
 
