@@ -49,22 +49,22 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
   @override
   Future<ServiceResultsProductModel> getServiceProducts(int page, String searchText,
       String? ordering) async {
-    // final response = await _client.get(
-    //     '${ApiConstants.customer}/?search=$searchText&ordering=$ordering&page=$page${startDate != null ? "&start_date=$startDate" : ""}${endDate != null ? "&end_date=$endDate" : ""}');
-    // final results = CustomerResultsModel.fromJson(response);
+    final response = await _client.get(
+        '${ApiConstants.serviceProduct}/?page=$page&search=$searchText');
+    final results = ServiceResultsProductModel.fromJson(response);
+
+    return results;
     //
-    // return results;
-
-
-    const  data =    ServiceResultsProductModel(count: 3, pageCount: 3, results:[
-      ServiceProductModel(id: "", name: "Укладка", price: 30, duration: 45, categoryId: 3, sex: 2),
-      ServiceProductModel(id: "", name: "Стрижка", price: 75, duration: 55, categoryId: 3, sex: 1),
-      ServiceProductModel(id: "", name: "Стрижка топором", price: 100, duration: 1, categoryId: 3, sex: 1),
-    ]);
-
-
-
-    return data;
+    //
+    // const  data =    ServiceResultsProductModel(count: 3, pageCount: 3, results:[
+    //   ServiceProductModel(id: "", name: "Укладка", price: 30, duration: 45, categoryId: 3, sex: 2),
+    //   ServiceProductModel(id: "", name: "Стрижка", price: 75, duration: 55, categoryId: 3, sex: 1),
+    //   ServiceProductModel(id: "", name: "Стрижка топором", price: 100, duration: 1, categoryId: 3, sex: 1),
+    // ]);
+    //
+    //
+    //
+    // return data;
 
   }
 
@@ -93,20 +93,20 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
   @override
   Future<ServiceProductCategoryResultsModel> getServiceProductCategory(int page, String searchText,
       String? ordering) async {
-    // final response = await _client.get(
-    //     '${ApiConstants.customer}/?search=$searchText&ordering=$ordering&page=$page${startDate != null ? "&start_date=$startDate" : ""}${endDate != null ? "&end_date=$endDate" : ""}');
-    // final results = CustomerResultsModel.fromJson(response);
+    final response = await _client.get(
+        '${ApiConstants.serviceProductCategory}/?page=$page',);
+    final results = ServiceProductCategoryResultsModel.fromJson(response);
+
+    return results;
     //
-    // return results;
-
-
-    const  data =    ServiceProductCategoryResultsModel(count: 3, pageCount: 3, results:[
-      ServiceProductCategoryModel(id: "", name: "Укладка",),
-      ServiceProductCategoryModel(id: "", name: "Стрижка",),
-    ]);
-
-
-    return data;
+    //
+    // const  data =    ServiceProductCategoryResultsModel(count: 3, pageCount: 3, results:[
+    //   ServiceProductCategoryModel(id: "", name: "Укладка",),
+    //   ServiceProductCategoryModel(id: "", name: "Стрижка",),
+    // ]);
+    //
+    //
+    // return data;
 
   }
 

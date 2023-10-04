@@ -34,6 +34,20 @@ class _CalendarResourceWidgetState extends State<CalendarResourceWidget> {
         CalendarView.timelineWorkWeek,
       ],
       showDatePickerButton: true,
+      allowAppointmentResize: true,
+      allowDragAndDrop: true,
+      dragAndDropSettings: const DragAndDropSettings(
+        showTimeIndicator: true,
+      ),
+      appointmentBuilder: (context, calendar) {
+        // print(calendar.appointments.first.toString());
+        final Appointment appointment = calendar.appointments.first;
+        return Container(
+          color: Colors.red,
+          child: Text(
+              ("${appointment.startTime.hour}:${appointment.startTime.minute}/${appointment.endTime.hour}:${appointment.endTime.minute}")),
+        );
+      },
       resourceViewSettings: const ResourceViewSettings(
         // displayNameTextStyle: TextStyle(color: Colors.white),
         showAvatar: true,
@@ -55,12 +69,15 @@ class _CalendarResourceWidgetState extends State<CalendarResourceWidget> {
       _employeeCollection.add(CalendarResource(
         displayName: nameCollection[i],
         id: '000$i',
-        color: Colors.red,
+        // image: const NetworkImage(
+        //   "https://c4.wallpaperflare.com/wallpaper/142/751/831/landscape-anime-digital-art-fantasy-art-wallpaper-thumb.jpg",
+        // ),
+        color: Colors.grey,
       ));
     }
   }
 
-   void _addAppointments() {
+  void _addAppointments() {
     _shiftCollection = <Appointment>[];
     List<String> subjectCollection = <String>[];
     subjectCollection.add('General Meeting');
@@ -76,8 +93,8 @@ class _CalendarResourceWidgetState extends State<CalendarResourceWidget> {
       _shiftCollection.add(
         Appointment(
           startTime: DateTime.now(),
-          endTime: DateTime.now().add(  Duration(hours: 1+ i)),
-          subject: subjectCollection[random.nextInt(8)],
+          endTime: DateTime.now().add(Duration(hours: 1 + i)),
+          subject: subjectCollection[random.nextInt(4)],
           color: Colors.green,
           resourceIds: employeeIds,
         ),

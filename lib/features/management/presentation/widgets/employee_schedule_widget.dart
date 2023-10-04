@@ -138,7 +138,7 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
             final year = DateTime.now().year;
             final EmployeeScheduleEntity? entity =
                 employeeEntity.schedule.firstWhereOrNull((element) {
-              final startDateParsing = DateTime.parse(element.startTime);
+              final startDateParsing = DateTime.parse(element.date);
               final startDate = DateTime(startDateParsing.year,
                   startDateParsing.month, startDateParsing.day);
               final targetDate = DateTime(year, currentMonth, day);

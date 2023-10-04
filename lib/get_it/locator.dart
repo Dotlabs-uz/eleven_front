@@ -3,6 +3,7 @@ import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_
 import 'package:eleven_crm/features/main/presensation/cubit/menu/menu_cubit.dart';
 import 'package:eleven_crm/features/management/data/datasources/management_remote_data_source.dart';
 import 'package:eleven_crm/features/management/domain/repositories/management_repository.dart';
+import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
 import 'package:eleven_crm/features/management/domain/usecases/employee.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
@@ -28,6 +29,7 @@ import 'package:get_it/get_it.dart';
 import '../features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../features/management/data/repositories/management_repository_impl.dart';
 import '../features/management/domain/usecases/customer.dart';
+import '../features/management/presentation/cubit/barber/barber_cubit.dart';
 import '../features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
 import '../features/products/data/datasources/products_remote_data_source.dart';
 import '../features/products/data/repository/products_repository_impl.dart';
@@ -51,25 +53,29 @@ void setup() {
   locator.registerFactory(() => DataFormCubit());
   locator.registerFactory(() => AuthCubit(locator()));
 
-
   // Customer
 
-  locator.registerFactory(() => CustomerCubit(getData: locator(), saveData: locator(), deleteData: locator()));
+  locator.registerFactory(() => CustomerCubit(
+      getData: locator(), saveData: locator(), deleteData: locator()));
 
   // Employee
 
-  locator.registerFactory(() => EmployeeCubit( locator(), locator(), locator()));
-  locator.registerFactory(() => EmployeeScheduleCubit( ));
+  locator.registerFactory(() => EmployeeCubit(locator(), locator(), locator()));
+  locator.registerFactory(() => EmployeeScheduleCubit());
 
   // Service Product
 
-  locator.registerFactory(() => ServiceProductCubit( locator(), locator(), locator()));
+  locator.registerFactory(
+      () => ServiceProductCubit(locator(), locator(), locator()));
 
   // Service Product Category
 
-  locator.registerFactory(() => ServiceProductCategoryCubit( locator(), locator(), locator()));
+  locator.registerFactory(
+      () => ServiceProductCategoryCubit(locator(), locator(), locator()));
 
+  // Barber
 
+  locator.registerFactory(() => BarberCubit(locator(), locator(), locator()));
 
   // ================ UseCases ================ //
 
@@ -84,28 +90,38 @@ void setup() {
 
   // Customer
   locator.registerLazySingleton<GetCustomer>(() => GetCustomer(locator()));
-  locator.registerLazySingleton<DeleteCustomer>(() => DeleteCustomer(locator()));
+  locator
+      .registerLazySingleton<DeleteCustomer>(() => DeleteCustomer(locator()));
   locator.registerLazySingleton<SaveCustomer>(() => SaveCustomer(locator()));
 
   // Employee
   locator.registerLazySingleton<GetEmployee>(() => GetEmployee(locator()));
-  locator.registerLazySingleton<DeleteEmployee>(() => DeleteEmployee(locator()));
+  locator
+      .registerLazySingleton<DeleteEmployee>(() => DeleteEmployee(locator()));
   locator.registerLazySingleton<SaveEmployee>(() => SaveEmployee(locator()));
-
 
   // Product
 
-
   // Service Product
-  locator.registerLazySingleton<GetServiceProduct>(() => GetServiceProduct(locator()));
-  locator.registerLazySingleton<DeleteServiceProduct>(() => DeleteServiceProduct(locator()));
-  locator.registerLazySingleton<SaveServiceProduct>(() => SaveServiceProduct(locator()));
+  locator.registerLazySingleton<GetServiceProduct>(
+      () => GetServiceProduct(locator()));
+  locator.registerLazySingleton<DeleteServiceProduct>(
+      () => DeleteServiceProduct(locator()));
+  locator.registerLazySingleton<SaveServiceProduct>(
+      () => SaveServiceProduct(locator()));
 
   // Service Product Category
-  locator.registerLazySingleton<GetServiceProductCategory>(() => GetServiceProductCategory(locator()));
-  locator.registerLazySingleton<DeleteServiceProductCategory>(() => DeleteServiceProductCategory(locator()));
-  locator.registerLazySingleton<SaveServiceProductCategory>(() => SaveServiceProductCategory(locator()));
+  locator.registerLazySingleton<GetServiceProductCategory>(
+      () => GetServiceProductCategory(locator()));
+  locator.registerLazySingleton<DeleteServiceProductCategory>(
+      () => DeleteServiceProductCategory(locator()));
+  locator.registerLazySingleton<SaveServiceProductCategory>(
+      () => SaveServiceProductCategory(locator()));
 
+  // Barber
+  locator.registerLazySingleton<GetBarber>(() => GetBarber(locator()));
+  locator.registerLazySingleton<SaveBarber>(() => SaveBarber(locator()));
+  locator.registerLazySingleton<DeleteBarber>(() => DeleteBarber(locator()));
 
   // ================ Repository / Datasource ================ //
 
@@ -133,30 +149,30 @@ void setup() {
 
   locator.registerLazySingleton<MainRemoteDataSource>(
     () => MainRemoteDataSourceImpl(
-      // locator(),
-    ),
+        // locator(),
+        ),
   );
 
   locator.registerLazySingleton<ManagementRepository>(
-        () => ManagementRepositoryImpl(
+    () => ManagementRepositoryImpl(
       locator(),
     ),
   );
 
   locator.registerLazySingleton<ManagementRemoteDataSource>(
-        () => ManagementRemoteDataSourceImpl(
+    () => ManagementRemoteDataSourceImpl(
       locator(),
     ),
   );
 
   locator.registerLazySingleton<ProductsRepository>(
-        () => ProductsRepositoryImpl(
+    () => ProductsRepositoryImpl(
       locator(),
     ),
   );
 
   locator.registerLazySingleton<ProductsRemoteDataSource>(
-        () => ProductsRemoteDataSourceImpl(
+    () => ProductsRemoteDataSourceImpl(
       locator(),
     ),
   );
@@ -169,7 +185,6 @@ void setup() {
       .registerLazySingleton<ApiClient>(() => ApiClient(locator(), locator()));
 
   locator.registerLazySingleton<StorageService>(() => StorageService());
-
 
   // ================ External ================ //
 

@@ -126,8 +126,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       shopName: "",
       schedule: [
         EmployeeScheduleEntity(
-          startTime: DateTime.now().toIso8601String(),
-          endTime: DateTime.now().toIso8601String(),
+          date: DateTime.now().toIso8601String(),
           status: 1,
         ),
       ],
@@ -140,9 +139,8 @@ class _ContentWidgetState extends State<ContentWidget> {
       shopName: "",
       schedule: [
         EmployeeScheduleEntity(
-          startTime:
+          date  :
               DateTime.now().add(const Duration(days: 1)).toIso8601String(),
-          endTime: DateTime.now().toIso8601String(),
           status: 1,
         ),
       ],
@@ -155,9 +153,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       shopName: "",
       schedule: [
         EmployeeScheduleEntity(
-          startTime:
-              DateTime.now().add(const Duration(days: 2)).toIso8601String(),
-          endTime:
+          date:
               DateTime.now().add(const Duration(days: 2)).toIso8601String(),
           status: 1,
         ),
@@ -171,9 +167,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       shopName: "",
       schedule: [
         EmployeeScheduleEntity(
-          startTime:
-              DateTime.now().add(const Duration(days: 3)).toIso8601String(),
-          endTime:
+          date:
               DateTime.now().add(const Duration(days: 3)).toIso8601String(),
           status: 1,
         ),
@@ -187,9 +181,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       shopName: "",
       schedule: [
         EmployeeScheduleEntity(
-          startTime:
-              DateTime.now().add(const Duration(days: 4)).toIso8601String(),
-          endTime:
+          date:
               DateTime.now().add(const Duration(days: 4)).toIso8601String(),
           status: 1,
         ),

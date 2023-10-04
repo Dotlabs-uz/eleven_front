@@ -34,12 +34,17 @@ class ApiClient {
       queryParameters: params,
     );
 
+
+    final header = {
+      'Authorization': sessionId,
+      'Content-Type': 'application/json',
+    };
+    print("Pth $pth header $header");
+
+
     final response = await _client.get(
       pth, //?format=json
-      headers: {
-        'Authorization': 'Bearer $sessionId',
-        'Content-Type': 'application/json',
-      },
+      headers: header,
     );
 
     // log("Token $sessionId path: ${pth}  Status code: ${response.statusCode}");
@@ -89,7 +94,7 @@ class ApiClient {
     if (sessionId != '') {
       debugPrint("Token $sessionId");
 
-      headers.addAll({'Authorization': 'Bearer $sessionId'});
+      headers.addAll({'Authorization': '$sessionId'});
     }
 
     debugPrint("filename $filename");
@@ -145,7 +150,7 @@ class ApiClient {
   }
 
   dynamic post(String path,
-      {Map<dynamic, dynamic>? params, bool withToken = true}) async {
+      {Map<dynamic, dynamic>? params, bool withToken = true,}) async {
     String sessionId =
         await _authenticationLocalDataSource.getSessionId() ?? "";
     Map<String, String> userHeader = {
@@ -158,7 +163,7 @@ class ApiClient {
     if (sessionId != '' && withToken) {
       log("Session != null $sessionId");
       userHeader.addAll({
-        'Authorization': 'Bearer $sessionId',
+        'Authorization': ' $sessionId',
 
       });
     }
@@ -224,7 +229,7 @@ class ApiClient {
     };
 
     if (sessionId != '') {
-      userHeader.addAll({'Authorization': 'Bearer $sessionId'});
+      userHeader.addAll({'Authorization': '$sessionId'});
     }
     final response = await _client.put(
       getPath(path, null),
@@ -279,7 +284,7 @@ class ApiClient {
       Uri.parse('${ApiConstants.baseApiUrl}$path'),
 
       headers: {
-        'Authorization': 'Bearer $sessionId',
+        'Authorization': ' $sessionId',
 
         // 'Content-Type': 'application/json',
       },

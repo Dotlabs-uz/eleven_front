@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController controllerFirstName = TextEditingController();
   final TextEditingController controllerLastName = TextEditingController();
   final TextEditingController controllerPhoneNumber = TextEditingController();
-  final TextEditingController controllerShopName = TextEditingController();
+  final TextEditingController controllerFilial = TextEditingController();
 
   File? _file;
 
@@ -212,7 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 15),
                     TextFormFieldWidget(
                       label: "shopName".tr(),
-                      controller: controllerShopName,
+                      controller: controllerFilial,
                     ),
                     const SizedBox(height: 15),
                     TextFormFieldWidget(

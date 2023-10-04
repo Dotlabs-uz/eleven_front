@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../features/main/presensation/screens/home_screen.dart';
 import '../../features/main/presensation/screens/profile_screen.dart';
+import '../../features/management/presentation/screens/barber_screen.dart';
 import '../../features/management/presentation/screens/customer_screen.dart';
 import '../../features/management/presentation/screens/employee_screen.dart';
 import '../../features/products/presensation/screens/service_product_category_screen.dart';
@@ -61,9 +62,11 @@ class Menus {
       text: 'employee_schedule',
       page: const EmployeeScheduleScreen(),
     ),
-
-
-
+    SubMenu(
+      icon: const Icon(Icons.display_settings_rounded),
+      text: 'barber',
+      page: const BarberScreen(),
+    ),
   ];
 
   static List<SubMenu> productMenu = [
@@ -72,13 +75,11 @@ class Menus {
       text: 'service_product',
       page: const ServiceProductsScreen(),
     ),
-
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'service_product_category',
       page: const ServiceProductCategoryScreen(),
     ),
-
   ];
 
   static List<SubMenu> configsMenu = [
@@ -87,7 +88,6 @@ class Menus {
       text: 'profile',
       page: const ProfileScreen(),
     ),
-
   ];
 
   static List<SubMenu> statisticMenu = [
@@ -96,6 +96,5 @@ class Menus {
       text: 'statisticSalary',
       page: Container(),
     ),
-
   ];
 }

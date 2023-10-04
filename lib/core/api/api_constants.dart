@@ -3,15 +3,17 @@ class ApiConstants {
 
 
 
-  static const String baseApiUrl = "https://taksist.az/";
-  static const String signIn = "login/";
+  static const String baseApiUrl = "https://eleven-pbg7.onrender.com/";
+  static const String login = "login/";
   static const String deleteAccount = "delete_account/";
+  static const String getCurrentUser = "get_current_user/";
 
 
-  static const String customer = "customer/";
-  static const String serviceProduct = "service_product/";
-  static const String serviceProductCategory = "service_product_category/";
-  static const String employee = "employee/";
+  static const String clients = "clients";
+  static const String barbers = "barbers";
+  static const String serviceProduct = "services";
+  static const String serviceProductCategory = "categories";
+  static const String employee = "employee";
 
 
 }

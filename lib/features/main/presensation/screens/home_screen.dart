@@ -1,6 +1,8 @@
+import 'package:eleven_crm/features/auth/data/datasources/authentication_local_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../../../get_it/locator.dart';
 import 'calendar_resourse_widget.dart';
 import 'calendar_widget.dart';
 
@@ -22,6 +24,25 @@ class _ContentWidget extends StatefulWidget {
 }
 
 class _ContentWidgetState extends State<_ContentWidget> {
+  late   AuthenticationLocalDataSource localDataSource;
+  @override
+  void initState() {
+
+    localDataSource = locator()
+;
+
+
+    initialize();
+
+
+    super.initState();
+  }
+  
+  initialize() async {
+    print("Saved ");
+    
+    await localDataSource.saveSessionId("eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJBbGV4IiwibGFzdE5hbWUiOiJBZGFtcyIsInBob25lIjoiOTk5OTk5OTk5OSIsInBhc3N3b3JkIjoiJDJiJDEwJFpJazJ4U2lnNWZXa0dCeERtelNnSHVLTW8uMEdjaDdZMEF5L2VFdmwzLzgyMWNmQy9PVkpLIiwibG9naW4iOiJhbGV4X2FkYW1zIiwicm9sZSI6Im1hbmFnZXIiLCJfaWQiOiI2NTFhZDJjYjhiZjIxMDE0NjZjMTQzZjYiLCJfX3YiOjB9.ZI9mmdJKJCsH0ZTo1UFFuX3s5MF7XvwkL_DFg3dVNAM");
+  }
 
   @override
   Widget build(BuildContext context) {
