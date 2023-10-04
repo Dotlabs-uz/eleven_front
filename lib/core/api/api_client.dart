@@ -39,7 +39,6 @@ class ApiClient {
       'Authorization': sessionId,
       'Content-Type': 'application/json',
     };
-    print("Pth $pth header $header");
 
 
     final response = await _client.get(
@@ -47,7 +46,8 @@ class ApiClient {
       headers: header,
     );
 
-    // log("Token $sessionId path: ${pth}  Status code: ${response.statusCode}");
+
+    // log("Token $sessionId path: ${pth}  header $header Status code: ${response.statusCode}");
     // debugPrint("Get balance $pth status code ${response.statusCode} body ${response.body}");
 
     if (response.statusCode == 200) {

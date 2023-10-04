@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:eleven_crm/features/main/data/model/current_user_model.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/api/api_client.dart';
@@ -10,18 +11,23 @@ import '../../../auth/data/models/token_model.dart';
 
 abstract class MainRemoteDataSource {
 
-  Future<bool> saveDriver();
+  Future<CurrentUserModel>getCurrentUser();
 
 }
 
 class MainRemoteDataSourceImpl extends MainRemoteDataSource {
-  // final ApiClient _client;
+  final ApiClient _client;
 
-  // MainRemoteDataSourceImpl(this._client);
+  MainRemoteDataSourceImpl(this._client);
 
   @override
-  Future<bool> saveDriver() async {
-     return true;
+  Future<CurrentUserModel> getCurrentUser() async {
+    final response = await _client.get(ApiConstants.getCurrentUser);
+
+    print("Response $response");
+    final model = CurrentUserModel.fromJson(response['results'][0]);
+
+    return CurrentUserModel(id: "id", firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber", password: "password", login: "login", role: "role");
   }
 
 }

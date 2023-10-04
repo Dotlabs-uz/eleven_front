@@ -1,4 +1,5 @@
 import 'package:eleven_crm/features/auth/domain/usecases/change_password.dart';
+import 'package:eleven_crm/features/main/domain/usecases/current_user.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/menu/menu_cubit.dart';
 import 'package:eleven_crm/features/management/data/datasources/management_remote_data_source.dart';
@@ -26,6 +27,7 @@ import '../features/main/data/repository/main_repository_impl.dart';
 import '../features/main/domain/repository/main_repository.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import '../features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../features/management/data/repositories/management_repository_impl.dart';
 import '../features/management/domain/usecases/customer.dart';
@@ -52,6 +54,7 @@ void setup() {
   locator.registerFactory(() => TopMenuCubit());
   locator.registerFactory(() => DataFormCubit());
   locator.registerFactory(() => AuthCubit(locator()));
+  locator.registerFactory(() => CurrentUserCubit(locator()));
 
   // Customer
 
@@ -123,6 +126,9 @@ void setup() {
   locator.registerLazySingleton<SaveBarber>(() => SaveBarber(locator()));
   locator.registerLazySingleton<DeleteBarber>(() => DeleteBarber(locator()));
 
+  // Current user
+  locator.registerLazySingleton<GetCurrentUser>(() => GetCurrentUser(locator()));
+
   // ================ Repository / Datasource ================ //
 
   locator.registerLazySingleton<AuthenticationRepository>(
@@ -149,7 +155,7 @@ void setup() {
 
   locator.registerLazySingleton<MainRemoteDataSource>(
     () => MainRemoteDataSourceImpl(
-        // locator(),
+        locator(),
         ),
   );
 

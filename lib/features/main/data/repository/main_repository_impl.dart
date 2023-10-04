@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:eleven_crm/features/main/domain/entity/current_user_entity.dart';
 
 import '../../../../core/api/api_exceptions.dart';
 import '../../../../core/entities/app_error.dart';
@@ -19,11 +20,13 @@ class MainRepositoryImpl extends MainRepository {
   );
 
   @override
-  Future<Either<AppError, String>> test() async {
+  Future<Either<AppError, CurrentUserEntity>> getCurrentUser() async {
     try {
 
+        final entity = await _mainRemoteDataSource.getCurrentUser();
 
-      return const Right("");
+
+      return Right(entity);
     } on SocketException {
       return const Left(AppError(appErrorType: AppErrorType.network));
     } on UnauthorisedException {

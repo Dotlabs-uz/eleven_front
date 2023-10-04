@@ -52,7 +52,7 @@ class DataPage extends StatelessWidget {
               child: Row(
                 children: [
                   if (!ResponsiveBuilder.isMobile(context))
-                    const Expanded(flex: 1, child: SizedBox.shrink()),
+                    const Expanded(flex: 2, child: SizedBox.shrink()),
                   Expanded(
                     flex: 1,
                     child: DataFormWidget(
@@ -63,7 +63,7 @@ class DataPage extends StatelessWidget {
                     ),
                   ),
                   if (!ResponsiveBuilder.isMobile(context))
-                    const Expanded(flex: 1, child: SizedBox.shrink()),
+                    const Expanded(flex:2, child: SizedBox.shrink()),
                 ],
               ),
             );
@@ -75,7 +75,7 @@ class DataPage extends StatelessWidget {
   }
 }
 
-class DataFormContentWidget extends StatefulWidget {
+class DataFormContentWidget extends StatelessWidget {
   final List<Widget> listWidget;
 
   final Function()? onExit;
@@ -87,20 +87,6 @@ class DataFormContentWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<DataFormContentWidget> createState() => _DataFormContentWidgetState();
-}
-
-class _DataFormContentWidgetState extends State<DataFormContentWidget> {
-  Color pickerColor = Colors.red;
-  late TextEditingController nameCotroller;
-  late TextEditingController descriptionController;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
@@ -108,7 +94,7 @@ class _DataFormContentWidgetState extends State<DataFormContentWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: widget.listWidget,
+          children: listWidget,
         ),
       ),
     );
