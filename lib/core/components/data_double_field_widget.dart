@@ -125,14 +125,24 @@ class _DataDoubleFieldWidgetState extends State<DataDoubleFieldWidget> {
                 ),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(width: 2, color: Colors.blue),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
                   hintText: widget.fieldEntity?.hintText.tr(),
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(width: 2),
                     borderRadius: BorderRadius.circular(6),
+                    borderSide: BorderSide(
+                      width: 2,
+                      color: widget.fieldEntity!.isRequired
+                          ? Colors.blueGrey
+                          : const Color(0xFF000000),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(6),
+                    borderSide: BorderSide(
+                      width: 2,
+                      color: widget.fieldEntity!.isRequired
+                          ? Colors.blueGrey
+                          : const Color(0xFF000000),
+                    ),
                   ),
                   hintStyle: Theme
                       .of(context)

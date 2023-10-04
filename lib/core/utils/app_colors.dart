@@ -19,9 +19,9 @@ class AppColors {
   static const  successColor = Color(0xFF0AE286);
   static const hintTextColor = Color(0xFF999999);
 
-  static const Color enabledTextColor = Colors.green;
+  static const Color enabledTextColor = Colors.black;
 
-  static const Color disabledTextColor = Color.fromARGB(255, 229, 64, 64);
+  static const Color disabledTextColor = Color.fromARGB(255, 98, 98, 98);
 
 
 

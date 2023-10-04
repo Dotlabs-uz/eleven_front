@@ -94,7 +94,7 @@ class _DataTextFieldWidgetState extends State<DataTextFieldWidget> {
               enabledBorder: widget.fieldEntity!.isRequired
                   ? const OutlineInputBorder(
                       borderSide: BorderSide(
-                      color: Colors.green,
+                      color: Colors.grey,
                     ))
                   : null,
               border: OutlineInputBorder(
@@ -102,7 +102,16 @@ class _DataTextFieldWidgetState extends State<DataTextFieldWidget> {
                 borderSide: BorderSide(
                   width: 2,
                   color: widget.fieldEntity!.isRequired
-                      ? Colors.green
+                      ? Colors.blueGrey
+                      : const Color(0xFF000000),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6),
+                borderSide: BorderSide(
+                  width: 2,
+                  color: widget.fieldEntity!.isRequired
+                      ? Colors.blueGrey
                       : const Color(0xFF000000),
                 ),
               ),

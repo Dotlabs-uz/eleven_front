@@ -89,16 +89,20 @@ class BarberEntity extends Equatable {
         "firstName": firstName,
         "lastName": lastName,
         "phoneNumber": phoneNumber,
+        "filialId": filialId,
+        "password": password,
+        "login": login,
       }[key];
 
   factory BarberEntity.fromRow(PlutoRow row) {
     return BarberEntity(
       id: row.cells["id"]?.value,
-      firstName: row.cells["fullName"]?.value,
+      firstName: row.cells["firstName"]?.value,
       lastName: row.cells["lastName"]?.value,
       phoneNumber: row.cells["phoneNumber"]?.value,
       filialId: row.cells["filialId"]?.value,
-      password: row.cells["password"]?.value,
+      // password: row.cells["password"]?.value,
+      password: "",
       login: row.cells["login"]?.value,
     );
   }

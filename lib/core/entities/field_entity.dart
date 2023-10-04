@@ -8,6 +8,8 @@ enum Types {
   date,
   dateTime,
   customers,
+  filial,
+  employeeRole,
 }
 
 class FieldEntity<T> {

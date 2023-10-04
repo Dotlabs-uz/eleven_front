@@ -41,7 +41,7 @@ class ButtonWidget extends StatelessWidget {
                 ? null
                 : LinearGradient(
               colors: isEnabled
-                  ? [Colors.blue.shade300, Colors.blue.shade200]
+                  ? [Colors.blueGrey.shade300, Colors.blueGrey.shade200]
                   : [Colors.grey, Colors.grey],
             ),
             borderRadius: const BorderRadius.all(

@@ -281,13 +281,25 @@ class _CustomerFieldContentState extends State<CustomerFieldContent> {
                   enabledBorder: widget.fieldEntity.isRequired
                       ? const OutlineInputBorder(
                           borderSide: BorderSide(
-                          color: Colors.green,
+                          color: Colors.blueGrey,
                         ))
                       : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(6),
-                    borderSide: const BorderSide(
+                    borderSide: BorderSide(
                       width: 2,
+                      color: widget.fieldEntity!.isRequired
+                          ? Colors.blueGrey
+                          : const Color(0xFF000000),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(6),
+                    borderSide: BorderSide(
+                      width: 2,
+                      color: widget.fieldEntity!.isRequired
+                          ? Colors.blueGrey
+                          : const Color(0xFF000000),
                     ),
                   ),
                   labelText: "customer".tr().toUpperCase(),
