@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../../../core/components/data_employee_form.dart';
 import '../../../../core/components/data_form.dart';
 import '../../../../core/components/data_table_with_form_widget.dart';
 import '../../../../core/components/error_flash_bar.dart';
@@ -56,7 +57,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 }
 
 class ContentWidget extends StatefulWidget {
-
   final EmployeeCubit employeeCubit;
 
   const ContentWidget({
@@ -109,8 +109,12 @@ class _ContentWidgetState extends State<ContentWidget> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DataPage(
-            saveData: _saveData,
+          builder: (context) => Scaffold(
+            body: DataEmployeeForm(
+              saveData: _saveData,
+              closeForm: () => Navigator.pop(context),
+              fields: data.getFields(),
+            ),
           ),
         ),
       );
@@ -137,7 +141,6 @@ class _ContentWidgetState extends State<ContentWidget> {
     _setWidgetTop();
   }
 
-
   _setWidgetTop() {
     // final Map<String, dynamic> filtr = {};
 
@@ -162,8 +165,7 @@ class _ContentWidgetState extends State<ContentWidget> {
         ),
         MyIconButton(
             onPressed: () {
-              BlocProvider.of<EmployeeCubit>(context).load(
-              );
+              BlocProvider.of<EmployeeCubit>(context).load();
             },
             icon: const Icon(Icons.refresh)),
       ],
@@ -192,7 +194,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                 ? SearchField(
                     onSearch: (value) {
                       BlocProvider.of<EmployeeCubit>(context).load(
-                      search:  value,
+                        search: value,
                       );
                     },
                   )
@@ -215,7 +217,6 @@ class _ContentWidgetState extends State<ContentWidget> {
                       .show(context);
                 }
               }
-
             },
             builder: (context, state) {
               if (state is EmployeeLoading) {
@@ -269,7 +270,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                         _editData(entity);
                       }
                     },
-                    form: DataFormWidget(
+                    form: DataEmployeeForm(
                       key: _formKey,
                       closeForm: () {
                         setState(() {
@@ -277,6 +278,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                         });
                       },
                       saveData: _saveData,
+                      fields: activeData.getFields(),
                     ),
                   ),
                 );
