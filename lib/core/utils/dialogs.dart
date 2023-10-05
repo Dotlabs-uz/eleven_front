@@ -73,31 +73,31 @@ class Dialogs {
                 ),
               ),
               const SizedBox(height: 66),
-              // SizedBox(
-              //   height: 34,
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Expanded(
-              //         child: ButtonWidget(
-              //           text: 'back'.tr(),
-              //           onPressed: () => Navigator.pop(context),
-              //           color: const Color(0xffABACAE),
-              //         ),
-              //       ),
-              //       const SizedBox(width: 15),
-              //       Expanded(
-              //         child: ButtonWidget(
-              //           text: 'exit'.tr(),
-              //           color: const Color(0xffFA3E3E).withOpacity(0.75),
-              //           onPressed: () {
-              //             onExit.call();
-              //           },
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+              SizedBox(
+                height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: ButtonWidget(
+                        text: 'back'.tr().toLowerCase(),
+                        onPressed: () => Navigator.pop(context),
+                        color: const Color(0xffABACAE),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: ButtonWidget(
+                        text: 'exit'.tr().toLowerCase(),
+                        color: const Color(0xffFA3E3E).withOpacity(0.75),
+                        onPressed: () {
+                          onExit.call();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

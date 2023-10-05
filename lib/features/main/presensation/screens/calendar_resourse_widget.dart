@@ -39,15 +39,15 @@ class _CalendarResourceWidgetState extends State<CalendarResourceWidget> {
       dragAndDropSettings: const DragAndDropSettings(
         showTimeIndicator: true,
       ),
-      appointmentBuilder: (context, calendar) {
-        // print(calendar.appointments.first.toString());
-        final Appointment appointment = calendar.appointments.first;
-        return Container(
-          color: Colors.red,
-          child: Text(
-              ("${appointment.startTime.hour}:${appointment.startTime.minute}/${appointment.endTime.hour}:${appointment.endTime.minute}")),
-        );
-      },
+      // appointmentBuilder: (context, calendar) {
+      //   print(calendar.appointments.first.toString());
+        // final Appointment appointment = calendar.appointments.first;
+        // return Container(
+        //   color: Colors.red,
+        //   child: Text(
+        //       ("${appointment.startTime.hour}:${appointment.startTime.minute}/${appointment.endTime.hour}:${appointment.endTime.minute}")),
+        // );
+      // },
       resourceViewSettings: const ResourceViewSettings(
         // displayNameTextStyle: TextStyle(color: Colors.white),
         showAvatar: true,

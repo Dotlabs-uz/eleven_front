@@ -169,12 +169,12 @@ class SideMenuWidget extends StatelessWidget {
                 title: "config".tr(),
                 index: 3,
               ),
-              FloatingMenuEntity(
-                key: RouteList.settings,
-                icon: EvaIcons.barChart2,
-                title: "settings".tr(),
-                index: 4,
-              ),
+              // FloatingMenuEntity(
+              //   key: RouteList.settings,
+              //   icon: EvaIcons.barChart2,
+              //   title: "settings".tr(),
+              //   index: 4,
+              // ),
               FloatingMenuEntity(
                 key: RouteList.logout,
                 icon: EvaIcons.logOutOutline,

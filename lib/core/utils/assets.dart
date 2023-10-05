@@ -13,8 +13,8 @@ class Assets {
 
 
   // Icon
-  static const String tWarningIcon = 'assets/images/payment_unsuccess.png';
-  static const String tClosedEyeIcon = "assets/images/eye_closed.svg";
+  static const String tWarningIcon = 'assets/icons/warning.svg';
+  static const String tClosedEyeIcon = "assets/icons/eye_closed.svg";
 
 
 
