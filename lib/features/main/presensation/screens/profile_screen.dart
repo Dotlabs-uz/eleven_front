@@ -15,6 +15,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../../../core/components/text_form_field_widget.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/assets.dart';
+import '../../../../core/utils/field_masks.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../get_it/locator.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
@@ -65,12 +66,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   File? _file;
 
-  var phoneMaskFormatter = MaskTextInputFormatter(
-    mask: '+998#########',
-    filter: {
-      "#": RegExp(r'[0-9]'),
-    },
-  );
+
 
   @override
   void initState() {
@@ -245,11 +241,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
                       ),
                       const SizedBox(height: 15),
                       TextFormFieldWidget(
-                        label: "username".tr(),
-                        controller: controllerUsername,
-                      ),
-                      const SizedBox(height: 15),
-                      TextFormFieldWidget(
                         label: "shopName".tr(),
                         controller: controllerFilial,
                       ),
@@ -257,7 +248,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                       TextFormFieldWidget(
                         label: "phone".tr(),
                         controller: controllerPhoneNumber,
-                        textInputFormatter: phoneMaskFormatter,
+                        textInputFormatter: FieldMasks.phoneMaskFormatter,
                       ),
                       const SizedBox(height: 15),
                       TextFormFieldWidget(
