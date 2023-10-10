@@ -1,4 +1,5 @@
 import 'package:eleven_crm/core/utils/route_constants.dart';
+import 'package:eleven_crm/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/main/presensation/screens/main_screen.dart';
@@ -14,7 +15,7 @@ class Routes {
         RouteList.orders: (context) => MainScreen(menus: Menus.ordersMenu),
         RouteList.product: (context) => MainScreen(menus: Menus.productMenu),
         RouteList.settings: (context) => MainScreen(menus: Menus.configsMenu),
-        // RouteList.logout: (context) => const LoginScreen(),
-        // RouteList.login: (context) => const LoginScreen(),
+        RouteList.logout: (context) => const SignInScreen(),
+        RouteList.login: (context) => const SignInScreen(),
       };
 }

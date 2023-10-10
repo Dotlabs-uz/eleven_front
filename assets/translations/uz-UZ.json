@@ -625,5 +625,7 @@
   "clear": "Tozalash",
   "barber": "Barberlar",
   "role": "Roli",
-  "navigateToEmployeeProfile": "Xodim profili"
+  "navigateToEmployeeProfile": "Xodim profili",
+  "enter": "Kirish",
+  "login": "Login"
 }

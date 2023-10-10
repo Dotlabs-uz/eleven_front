@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/components/button_widget.dart';
 import '../../../../core/components/logo_widget.dart';
 import '../../../../core/components/text_form_field_widget.dart';
+import '../../../../core/utils/responsive.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -24,8 +25,10 @@ class _SignInScreenState extends State<SignInScreen> {
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            constraints: const BoxConstraints(
-              maxWidth: 500,
+            constraints: BoxConstraints(
+              maxWidth: Responsive.isDesktop(context)
+                  ? 600
+                  : MediaQuery.of(context).size.width,
             ),
             padding: const EdgeInsets.all(10),
             height: MediaQuery.of(context).size.height,
