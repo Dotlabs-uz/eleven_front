@@ -8,7 +8,7 @@ class Assets {
 
 
   // Pngs
-  static const String tLogo = "assets/logo/logo.png";
+  static const String tLogo = "assets/images/logo.png";
   static const String tAvatarPlaceHolder = 'assets/images/placeholder.png';
 
 
