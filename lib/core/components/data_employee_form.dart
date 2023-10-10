@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../features/management/presentation/screens/employee_profile_screen.dart';
 import '../entities/field_entity.dart';
+import '../utils/animated_navigation.dart';
 import 'button_widget.dart';
 import 'data_int_field_widget.dart';
 import 'data_text_field_widget.dart';
@@ -74,16 +76,19 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
             DataTextFieldWidget(fieldEntity: widget.fields['lastName']!),
             DataTextFieldWidget(fieldEntity: widget.fields['role']!),
             DataTextFieldWidget(fieldEntity: widget.fields['phoneNumber']!),
-
             const SizedBox(height: 10),
             ButtonWidget(text: "save".tr(), onPressed: widget.saveData),
             const SizedBox(height: 10),
-            ButtonWidget(text: "navigateToEmployeeProfile".tr(), onPressed: () {
-
-            },),
-
+            ButtonWidget(
+              text: "navigateToEmployeeProfile".tr(),
+              onPressed: () {
+                AnimatedNavigation.push(
+                  context: context,
+                  page:   EmployeeProfileScreen(employeeId: widget.fields['id']!.val!,),
+                );
+              },
+            ),
           ],
-
         ),
       ),
     );
