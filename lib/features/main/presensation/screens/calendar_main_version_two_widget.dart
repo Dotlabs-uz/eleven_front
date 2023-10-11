@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/main/presensation/widget/calendar_ruler_widget.dart';
 import 'package:eleven_crm/features/products/domain/entity/service_product_entity.dart';
 import 'package:flutter/material.dart';
@@ -203,7 +204,9 @@ class _CalendarMainVersionTwoWidgetState
 
                                               final int differenceFromAndTo =
                                                   (orderFrom.hour -
-                                                      data.orderStart.hour) ~/ -1;
+                                                          data.orderStart
+                                                              .hour) ~/
+                                                      -1;
 
                                               data.orderEnd = DateTime(
                                                 orderTo.year,
@@ -405,7 +408,7 @@ class OrderCardWidget extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "${order.orderStart.hour}:${order.orderStart.minute} / ${order.orderEnd.hour}:${order.orderEnd.minute}",
+                          "${DateFormat('hh:mm').format(order.orderStart)} / ${DateFormat('hh:mm').format(order.orderEnd)}",
                           style: GoogleFonts.nunito(
                             color: Colors.white,
                             fontSize: 12,
@@ -467,7 +470,7 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
       constraints: BoxConstraints(
         maxHeight: Constants.timeTableItemHeight,
       ),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(width: 1, color: Colors.black26)),
         // border: Border.all(width: 1),
       ),
