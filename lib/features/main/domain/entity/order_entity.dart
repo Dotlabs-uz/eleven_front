@@ -5,31 +5,45 @@ import 'package:flutter/material.dart';
 
 import '../../../products/domain/entity/service_product_entity.dart';
 
+
+enum OrderPayment {
+  cash,
+  card,
+
+}
 @immutable
 class OrderEntity extends Equatable {
-  final String title;
+  final double discount;
+  final double discountPercent;
+  final OrderPayment paymentType;
   final int price;
-  DateTime from;
-  final DateTime to;
-  String employeeId;
+  DateTime orderStart;
+  DateTime orderEnd;
+  String barberId;
+  final String clientId;
   final List<ServiceProductEntity> services;
 
   OrderEntity({
-    required this.title,
-    required this.from,
-    required this.to,
+    required this.discount,
+    required this.discountPercent,
+    required this.paymentType,
+    required this.orderStart,
+    required this.orderEnd,
     required this.price,
-    required this.employeeId,
+    required this.barberId,
+    required this.clientId,
     required this.services,
   });
 
   @override
   List<Object?> get props => [
-        title,
-        from,
-        to,
+        discount,
+        discountPercent,
+        paymentType,
+        orderStart,
+        orderEnd,
         price,
-        employeeId,
-    services,
+        barberId,
+        services,
       ];
 }

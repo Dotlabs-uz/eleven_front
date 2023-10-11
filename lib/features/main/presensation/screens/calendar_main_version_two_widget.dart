@@ -39,12 +39,11 @@ class _CalendarMainVersionTwoWidgetState
 
   final List<OrderEntity> orders = [
     OrderEntity(
-      title: "title",
-      from: DateTime(2023, 10, 7, 8),
-      to: DateTime(2023, 10, 7, 8, 30),
+      orderStart: DateTime(2023, 10, 7, 8),
+      orderEnd: DateTime(2023, 10, 7, 8, 30),
       price: 30,
-      employeeId: "2",
-      services: [
+      barberId: "2",
+      services: const [
         ServiceProductEntity(
             id: "id",
             name: "name",
@@ -53,37 +52,53 @@ class _CalendarMainVersionTwoWidgetState
             categoryId: "categoryId",
             sex: "sex"),
       ],
+      discount: 2,
+      discountPercent: 2,
+      clientId: "333",
+      paymentType: OrderPayment.cash,
     ),
     OrderEntity(
-      title: "title",
-      from: DateTime(2023, 10, 7, 12),
-      to: DateTime(2023, 10, 7, 13, 30),
+      discount: 2,
+      discountPercent: 2,
+      clientId: "333",
+      paymentType: OrderPayment.cash,
+      orderStart: DateTime(2023, 10, 7, 12),
+      orderEnd: DateTime(2023, 10, 7, 13, 30),
       price: 30,
-      employeeId: "3",
+      barberId: "3",
       services: [],
     ),
     OrderEntity(
-      title: "title",
-      from: DateTime(2023, 10, 7, 20, 30),
-      to: DateTime(2023, 10, 7, 21, 0),
+      discount: 2,
+      discountPercent: 2,
+      clientId: "333",
+      paymentType: OrderPayment.cash,
+      orderStart: DateTime(2023, 10, 7, 20, 30),
+      orderEnd: DateTime(2023, 10, 7, 21, 0),
       price: 30,
-      employeeId: "3",
+      barberId: "3",
       services: [],
     ),
     OrderEntity(
-      title: "title",
-      from: DateTime(2023, 10, 7, 20, 15),
-      to: DateTime(2023, 10, 7, 21, 30),
+      discount: 2,
+      discountPercent: 2,
+      clientId: "333",
+      paymentType: OrderPayment.cash,
+      orderStart: DateTime(2023, 10, 7, 20, 15),
+      orderEnd: DateTime(2023, 10, 7, 21, 30),
       price: 30,
-      employeeId: "4",
+      barberId: "4",
       services: [],
     ),
     OrderEntity(
-      title: "title",
-      from: DateTime(2023, 10, 7, 10, 0),
-      to: DateTime(2023, 10, 7, 11, 5),
+      discount: 2,
+      discountPercent: 2,
+      clientId: "333",
+      paymentType: OrderPayment.cash,
+      orderStart: DateTime(2023, 10, 7, 10, 0),
+      orderEnd: DateTime(2023, 10, 7, 11, 5),
       price: 30,
-      employeeId: "1",
+      barberId: "1",
       services: [],
     ),
   ];
@@ -134,8 +149,7 @@ class _CalendarMainVersionTwoWidgetState
                         final employee = widget.listEmployee[index];
 
                         localOrders = orders
-                            .where(
-                                (element) => employee.id == element.employeeId)
+                            .where((element) => employee.id == element.barberId)
                             .toList();
 
                         return Expanded(
@@ -176,16 +190,26 @@ class _CalendarMainVersionTwoWidgetState
                                                 "Accept field target $data hour $hour",
                                               );
 
-                                              final orderFrom = data.from;
+                                              final orderFrom = data.orderStart;
 
-                                              data.from = DateTime(
+                                              data.orderStart = DateTime(
                                                 orderFrom.year,
                                                 orderFrom.month,
                                                 orderFrom.day,
                                                 hour,
-                                                data.from.minute,
+                                                data.orderStart.minute,
                                               );
-                                              data.employeeId = employee.id;
+
+                                              final differenceFromAndTo =
+                                                  data.orderEnd.hour;
+                                              // data.to = DateTime(
+                                              //   orderFrom.year,
+                                              //   orderFrom.month,
+                                              //   orderFrom.day,
+                                              //   toHour,
+                                              //   data.to.minute,
+                                              // );
+                                              data.barberId = employee.id;
 
                                               setState(() {});
                                             },
@@ -290,14 +314,14 @@ class _CalendarMainVersionTwoWidgetState
   }
 
   double _getTopPosition(OrderEntity order) {
-    if (order.from.hour == Constants.startWork) {
+    if (order.orderStart.hour == Constants.startWork) {
       // return Constants.timeTableItemHeight;
       return 0;
     }
 
     double top = Constants.startWork;
 
-    top -= order.from.hour;
+    top -= order.orderStart.hour;
 
     final formatted = top / -1;
 
@@ -309,7 +333,7 @@ class _CalendarMainVersionTwoWidgetState
     }
     // }
 
-    height += order.from.minute;
+    height += order.orderStart.minute;
 
     return height;
   }
@@ -362,8 +386,8 @@ class OrderCardWidget extends StatelessWidget {
     return Container(
       width: Constants.timeTableItemWidth,
       height: Constants.timeTableItemHeight +
-          (order.to.minute * Constants.onTimetableFieldItemRound) -
-          order.from.minute,
+          (order.orderEnd.minute * Constants.onTimetableFieldItemRound) -
+          order.orderStart.minute,
       color: isDragging ? Colors.grey.shade400 : AppColors.timeTableCard,
       child: !isDragging
           ? Column(
@@ -377,7 +401,7 @@ class OrderCardWidget extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "${order.from.hour}:${order.from.minute} / ${order.to.hour}:${order.to.minute}",
+                          "${order.orderStart.hour}:${order.orderStart.minute} / ${order.orderEnd.hour}:${order.orderEnd.minute}",
                           style: GoogleFonts.nunito(
                             color: Colors.white,
                             fontSize: 12,
