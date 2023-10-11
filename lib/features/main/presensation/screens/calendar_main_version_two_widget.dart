@@ -39,8 +39,8 @@ class _CalendarMainVersionTwoWidgetState
 
   final List<OrderEntity> orders = [
     OrderEntity(
-      orderStart: DateTime(2023, 10, 7, 8),
-      orderEnd: DateTime(2023, 10, 7, 8, 30),
+      orderStart: DateTime(2023, 10, 7, 9),
+      orderEnd: DateTime(2023, 10, 7, 9, 30),
       price: 30,
       barberId: "2",
       services: const [
@@ -191,24 +191,28 @@ class _CalendarMainVersionTwoWidgetState
                                               );
 
                                               final orderFrom = data.orderStart;
+                                              final orderTo = data.orderEnd;
 
                                               data.orderStart = DateTime(
                                                 orderFrom.year,
                                                 orderFrom.month,
                                                 orderFrom.day,
                                                 hour,
-                                                data.orderStart.minute,
+                                                orderFrom.minute,
                                               );
 
-                                              final differenceFromAndTo =
-                                                  data.orderEnd.hour;
-                                              // data.to = DateTime(
-                                              //   orderFrom.year,
-                                              //   orderFrom.month,
-                                              //   orderFrom.day,
-                                              //   toHour,
-                                              //   data.to.minute,
-                                              // );
+                                              final int differenceFromAndTo =
+                                                  (orderFrom.hour -
+                                                      data.orderStart.hour) ~/ -1;
+
+                                              data.orderEnd = DateTime(
+                                                orderTo.year,
+                                                orderTo.month,
+                                                orderTo.day,
+                                                data.orderEnd.hour +
+                                                    differenceFromAndTo,
+                                                orderTo.minute,
+                                              );
                                               data.barberId = employee.id;
 
                                               setState(() {});
