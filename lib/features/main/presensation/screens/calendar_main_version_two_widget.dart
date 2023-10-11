@@ -3,8 +3,7 @@ import 'package:eleven_crm/features/main/presensation/widget/calendar_ruler_widg
 import 'package:eleven_crm/features/products/domain/entity/service_product_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:collection/collection.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
@@ -46,12 +45,13 @@ class _CalendarMainVersionTwoWidgetState
       barberId: "2",
       services: const [
         ServiceProductEntity(
-            id: "id",
-            name: "name",
-            price: "30",
-            duration: "30",
-            categoryId: "categoryId",
-            sex: "sex"),
+          id: "id",
+          name: "name",
+          price: "30",
+          duration: "30",
+          categoryId: "categoryId",
+          sex: "sex",
+        ),
       ],
       discount: 2,
       discountPercent: 2,
@@ -320,6 +320,8 @@ class _CalendarMainVersionTwoWidgetState
     );
   }
 
+
+
   double _getTopPosition(OrderEntity order) {
     if (order.orderStart.hour == Constants.startWork) {
       // return Constants.timeTableItemHeight;
@@ -362,26 +364,10 @@ class _CalendarMainVersionTwoWidgetState
         ],
       ),
     );
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            height: 60,
-            width: 60,
-            decoration:
-                const BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-          ),
-          const SizedBox(height: 5),
-          Text("${entity.firstName} ${entity.lastName}"),
-        ],
-      ),
-    );
   }
 }
 
-class OrderCardWidget extends StatelessWidget {
+class OrderCardWidget extends StatefulWidget {
   final OrderEntity order;
   final bool isDragging;
   const OrderCardWidget(
@@ -389,14 +375,29 @@ class OrderCardWidget extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<OrderCardWidget> createState() => _OrderCardWidgetState();
+}
+
+class _OrderCardWidgetState extends State<OrderCardWidget> {
+
+  double _getCardHeight() {
+
+    if(widget.order.orderStart.hour == widget.order.orderEnd.hour) {
+      return widget.order.orderEnd.minute * Constants.onTimetableFieldItemRound;
+    }
+
+    return Constants.timeTableItemHeight +
+        (widget.order.orderEnd.minute * Constants.onTimetableFieldItemRound) -
+        widget.order.orderStart.minute;
+
+  }
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: Constants.timeTableItemWidth,
-      height: Constants.timeTableItemHeight +
-          (order.orderEnd.minute * Constants.onTimetableFieldItemRound) -
-          order.orderStart.minute,
-      color: isDragging ? Colors.grey.shade400 : AppColors.timeTableCard,
-      child: !isDragging
+      height: _getCardHeight(),
+      color: widget.isDragging ? Colors.grey.shade400 : AppColors.timeTableCard,
+      child: !widget.isDragging
           ? Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -408,7 +409,7 @@ class OrderCardWidget extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "${DateFormat('hh:mm').format(order.orderStart)} / ${DateFormat('hh:mm').format(order.orderEnd)}",
+                          "${DateFormat('hh:mm').format(widget.order.orderStart)} / ${DateFormat('hh:mm').format(widget.order.orderEnd)}",
                           style: GoogleFonts.nunito(
                             color: Colors.white,
                             fontSize: 12,
@@ -420,16 +421,18 @@ class OrderCardWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                ...order.services.map(
-                  (e) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: FittedBox(
-                      child: Text(
-                        "${e.name} ${e.price}сум. ${e.duration}м.",
-                        style: GoogleFonts.nunito(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
+                ...widget.order.services.map(
+                  (e) => Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          "${e.name} ${e.price}сум. ${e.duration}м.",
+                          style: GoogleFonts.nunito(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ),
