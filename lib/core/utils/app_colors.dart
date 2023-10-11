@@ -20,6 +20,8 @@ class AppColors {
   static const hintTextColor = Color(0xFF999999);
 
   static const Color enabledTextColor = Colors.black;
+  static const Color timeTableCardAppBar = Colors.blue;
+  static const Color timeTableCard = Color(0xffDEE8FF);
 
   static const Color disabledTextColor = Color.fromARGB(255, 98, 98, 98);
 

@@ -1,21 +1,17 @@
 import 'package:eleven_crm/features/main/presensation/widget/calendar_ruler_widget.dart';
+import 'package:eleven_crm/features/products/domain/entity/service_product_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/int_helper.dart';
 import '../../../management/domain/entity/employee_entity.dart';
+import '../../domain/entity/order_entity.dart';
 
-class Order {
-  final String title;
-  final int price;
-  final DateTime from;
-  final DateTime to;
-  final String employeeId;
-
-  Order(this.title, this.from, this.to, this.price, this.employeeId);
-}
+// ignore: must_be_immutable
 
 class CalendarMainVersionTwoWidget extends StatefulWidget {
   final List<EmployeeEntity> listEmployee;
@@ -41,41 +37,54 @@ class _CalendarMainVersionTwoWidgetState
     super.initState();
   }
 
-  final List<Order> orders = [
-    Order(
-      "title",
-      DateTime(2023, 10, 7, 8),
-      DateTime(2023, 10, 7, 8, 30),
-      30,
-      "2",
+  final List<OrderEntity> orders = [
+    OrderEntity(
+      title: "title",
+      from: DateTime(2023, 10, 7, 8),
+      to: DateTime(2023, 10, 7, 8, 30),
+      price: 30,
+      employeeId: "2",
+      services: [
+        ServiceProductEntity(
+            id: "id",
+            name: "name",
+            price: "30",
+            duration: "30",
+            categoryId: "categoryId",
+            sex: "sex"),
+      ],
     ),
-    Order(
-      "title",
-      DateTime(2023, 10, 7, 12),
-      DateTime(2023, 10, 7, 13, 30),
-      30,
-      "3",
+    OrderEntity(
+      title: "title",
+      from: DateTime(2023, 10, 7, 12),
+      to: DateTime(2023, 10, 7, 13, 30),
+      price: 30,
+      employeeId: "3",
+      services: [],
     ),
-    Order(
-      "title",
-      DateTime(2023, 10, 7, 20, 30),
-      DateTime(2023, 10, 7, 21, 0),
-      30,
-      "3",
+    OrderEntity(
+      title: "title",
+      from: DateTime(2023, 10, 7, 20, 30),
+      to: DateTime(2023, 10, 7, 21, 0),
+      price: 30,
+      employeeId: "3",
+      services: [],
     ),
-    Order(
-      "title",
-      DateTime(2023, 10, 7, 20, 15),
-      DateTime(2023, 10, 7, 21, 30),
-      30,
-      "4",
+    OrderEntity(
+      title: "title",
+      from: DateTime(2023, 10, 7, 20, 15),
+      to: DateTime(2023, 10, 7, 21, 30),
+      price: 30,
+      employeeId: "4",
+      services: [],
     ),
-    Order(
-      "title",
-      DateTime(2023, 10, 7, 10, 0),
-      DateTime(2023, 10, 7, 11, 5),
-      30,
-      "1",
+    OrderEntity(
+      title: "title",
+      from: DateTime(2023, 10, 7, 10, 0),
+      to: DateTime(2023, 10, 7, 11, 5),
+      price: 30,
+      employeeId: "1",
+      services: [],
     ),
   ];
 
@@ -120,7 +129,7 @@ class _CalendarMainVersionTwoWidgetState
                     ...List.generate(
                       widget.listEmployee.length,
                       (index) {
-                        List<Order> localOrders = [];
+                        List<OrderEntity> localOrders = [];
 
                         final employee = widget.listEmployee[index];
 
@@ -134,52 +143,131 @@ class _CalendarMainVersionTwoWidgetState
                             padding: const EdgeInsets.only(top: 24),
                             child: Stack(
                               children: [
-                                Column(
-                                  children: [
-                                    ...List.generate(
-                                      IntHelper.getCountOfCardByWorkingHours(
-                                          from, to),
-                                      (index) {
-                                        final hour = from.hour + index;
-
-                                        return SizedBox(
-                                          width: Constants.timeTableItemWidth,
-                                          child: FieldCardWidget(
-                                            hour: hour,
-                                          ),
-                                        );
-                                      },
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                          width: 1,
+                                          color: Colors.grey.shade400),
+                                      top: BorderSide(
+                                          width: 1,
+                                          color: Colors.grey.shade400),
                                     ),
-                                  ],
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      ...List.generate(
+                                        IntHelper.getCountOfCardByWorkingHours(
+                                            from, to),
+                                        (index) {
+                                          final hour = from.hour + index;
+
+                                          return DragTarget<OrderEntity>(
+                                            builder: (context, candidateData,
+                                                rejectedData) {
+                                              return FieldCardWidget(
+                                                hour: hour,
+                                                highlighted:
+                                                    candidateData.isNotEmpty,
+                                              );
+                                            },
+                                            onAccept: (data) {
+                                              print(
+                                                "Accept field target $data hour $hour",
+                                              );
+
+                                              final orderFrom = data.from;
+
+                                              data.from = DateTime(
+                                                orderFrom.year,
+                                                orderFrom.month,
+                                                orderFrom.day,
+                                                hour,
+                                                data.from.minute,
+                                              );
+                                              data.employeeId = employee.id;
+
+                                              setState(() {});
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                // DragTarget<Order>(
+                                //   builder:
+                                //       (context, candidateData, rejectedData) {
+                                //     // return Container(
+                                //     //   height: Constants.timeTableItemHeight,
+                                //     //   color: candidateData.isNotEmpty ? Colors.orange:  Colors.green,
+                                //     // );
+                                //
+                                //     // Order? candidate;
+                                //     //
+                                //     // if (candidateData.isNotEmpty) {
+                                //     //   candidate = candidateData.first;
+                                //     // }
+                                //
+                                //     return Column(
+                                //       children: [
+                                //         ...List.generate(
+                                //           IntHelper
+                                //               .getCountOfCardByWorkingHours(
+                                //                   from, to),
+                                //           (index) {
+                                //             final hour = from.hour + index;
+                                //
+                                //             return FieldCardWidget(
+                                //               hour: hour,
+                                //               // highlighted: false,
+                                //               // highlighted: (candidate !=
+                                //               //         null) &&
+                                //               //     candidate.from.hour == hour,
+                                //               highlighted: candidateData.isNotEmpty,
+                                //             );
+                                //           },
+                                //         ),
+                                //       ],
+                                //     );
+                                //   },
+                                //   // onMove: (details) {
+                                //   //   print("Details");
+                                //   // },
+                                //
+                                //   onLeave: (data) {
+                                //     print("Data leave");
+                                //   },
+                                //   onAccept: (data) {
+                                //     // if(data != null) {
+                                //     print("Accept $data");
+                                //
+                                //     // }
+                                //   },
+                                // ),
                                 ...localOrders.map(
                                   (e) {
                                     return Positioned(
                                       // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
                                       top: _getTopPosition(e),
-                                      child: Draggable<int>(
-                                        feedback: Container(
-                                          width: Constants.timeTableItemWidth,
-                                          height: Constants
-                                                  .timeTableItemHeight +
-                                              (e.to.minute *
-                                                  Constants
-                                                      .onTimetableFieldItemRound),
-                                          color: Colors.pink,
+                                      child: Draggable<OrderEntity>(
+                                        data: e,
+                                        childWhenDragging: OrderCardWidget(
+                                          order: e,
+                                          isDragging: true,
                                         ),
-                                        child: Container(
-                                          width: Constants.timeTableItemWidth,
-                                          height: Constants
-                                                  .timeTableItemHeight +
-                                              (e.to.minute *
-                                                  Constants
-                                                      .onTimetableFieldItemRound) - e.from.minute,
-                                          color: Colors.red,
-                                          child: Center(
-                                            child: Text(
-                                              "${e.title} ${e.from.hour}:${e.from.minute} / ${e.to.hour}:${e.to.minute}",
+                                        feedback: Opacity(
+                                          opacity: 0.6,
+                                          child: Material(
+                                            child: OrderCardWidget(
+                                              order: e,
+                                              isDragging: false,
                                             ),
                                           ),
+                                        ),
+                                        child: OrderCardWidget(
+                                          order: e,
+                                          isDragging: false,
                                         ),
                                       ),
                                     );
@@ -201,20 +289,13 @@ class _CalendarMainVersionTwoWidgetState
     );
   }
 
-  double _getCardHeight( ) {
-    return 30;
-  }
-
-
-  double _getTopPosition(Order order) {
+  double _getTopPosition(OrderEntity order) {
     if (order.from.hour == Constants.startWork) {
       // return Constants.timeTableItemHeight;
       return 0;
     }
 
     double top = Constants.startWork;
-
-
 
     top -= order.from.hour;
 
@@ -223,11 +304,10 @@ class _CalendarMainVersionTwoWidgetState
     double height = 0;
 
     // if((order.to.hour == order.from.hour && order.to.day == order.from.day) == false) {
-      for (var i = 0; i < formatted; i++) {
-        height += Constants.timeTableItemHeight;
-      }
+    for (var i = 0; i < formatted; i++) {
+      height += Constants.timeTableItemHeight;
+    }
     // }
-
 
     height += order.from.minute;
 
@@ -270,12 +350,75 @@ class _CalendarMainVersionTwoWidgetState
   }
 }
 
+class OrderCardWidget extends StatelessWidget {
+  final OrderEntity order;
+  final bool isDragging;
+  const OrderCardWidget(
+      {Key? key, required this.order, required this.isDragging})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: Constants.timeTableItemWidth,
+      height: Constants.timeTableItemHeight +
+          (order.to.minute * Constants.onTimetableFieldItemRound) -
+          order.from.minute,
+      color: isDragging ? Colors.grey.shade400 : AppColors.timeTableCard,
+      child: !isDragging
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  color: AppColors.timeTableCardAppBar,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          "${order.from.hour}:${order.from.minute} / ${order.to.hour}:${order.to.minute}",
+                          style: GoogleFonts.nunito(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ...order.services.map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: FittedBox(
+                      child: Text(
+                        "${e.name} ${e.price}сум. ${e.duration}м.",
+                        style: GoogleFonts.nunito(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : const SizedBox.shrink(),
+    );
+  }
+}
+
 class FieldCardWidget extends StatefulWidget {
   final int hour;
+  final bool highlighted;
 
   const FieldCardWidget({
     super.key,
     required this.hour,
+    required this.highlighted,
   });
 
   @override
@@ -293,8 +436,13 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxHeight: Constants.timeTableItemHeight),
-      decoration: BoxDecoration(border: Border.all(width: 1)),
+      constraints: BoxConstraints(
+        maxHeight: Constants.timeTableItemHeight,
+      ),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(width: 1, color: Colors.black26)),
+        // border: Border.all(width: 1),
+      ),
       child: Column(
         children: List.generate(
           12,
@@ -302,12 +450,12 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
             minute += 5;
 
             if (minute >= 65) {
-              minute = 0; // Обнуляем минуты, когда достигнут 60
+              minute = 0;
             }
             return Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: widget.highlighted ? Colors.orange : Colors.white,
                   border: Border.all(
                     width: 0.3,
                     color: Colors.black26,
