@@ -66,7 +66,7 @@ class _CalendarMainVersionTwoWidgetState
     Order(
       "title",
       DateTime(2023, 10, 7, 20, 15),
-      DateTime(2023, 10, 7, 21),
+      DateTime(2023, 10, 7, 21, 30),
       30,
       "4",
     ),
@@ -173,7 +173,7 @@ class _CalendarMainVersionTwoWidgetState
                                                   .timeTableItemHeight +
                                               (e.to.minute *
                                                   Constants
-                                                      .onTimetableFieldItemRound),
+                                                      .onTimetableFieldItemRound) - e.from.minute,
                                           color: Colors.red,
                                           child: Center(
                                             child: Text(
@@ -200,6 +200,11 @@ class _CalendarMainVersionTwoWidgetState
       ],
     );
   }
+
+  double _getCardHeight( ) {
+    return 30;
+  }
+
 
   double _getTopPosition(Order order) {
     if (order.from.hour == Constants.startWork) {
