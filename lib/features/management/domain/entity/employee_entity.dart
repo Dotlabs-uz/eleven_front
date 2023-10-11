@@ -222,8 +222,8 @@ class EmployeeEntity extends Equatable {
   factory EmployeeEntity.empty() {
     return const EmployeeEntity(
       id: "",
-      firstName: "",
-      lastName: "",
+      firstName: "Alex",
+      lastName: "James",
       phoneNumber: "",
       role: "",
       schedule: [],

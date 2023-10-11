@@ -1,11 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/utils/string_helper.dart';
 import 'package:eleven_crm/features/auth/data/datasources/authentication_local_data_source.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../../get_it/locator.dart';
-import 'calendar_resourse_widget.dart';
-import 'calendar_widget.dart';
-
+import '../../../management/domain/entity/employee_entity.dart';
+import '../../../management/domain/entity/employee_schedule_entity.dart';
+import 'calendar_main_version_two_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,29 +27,216 @@ class _ContentWidget extends StatefulWidget {
 }
 
 class _ContentWidgetState extends State<_ContentWidget> {
-  late   AuthenticationLocalDataSource localDataSource;
+  late AuthenticationLocalDataSource localDataSource;
   @override
   void initState() {
-
-    localDataSource = locator()
-;
-
+    localDataSource = locator();
 
     initialize();
 
-
     super.initState();
   }
-  
+
   initialize() async {
     print("Saved ");
-    
-    await localDataSource.saveSessionId("eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJBbGV4IiwibGFzdE5hbWUiOiJBZGFtcyIsInBob25lIjoiOTk5OTk5OTk5OSIsInBhc3N3b3JkIjoiJDJiJDEwJFpJazJ4U2lnNWZXa0dCeERtelNnSHVLTW8uMEdjaDdZMEF5L2VFdmwzLzgyMWNmQy9PVkpLIiwibG9naW4iOiJhbGV4X2FkYW1zIiwicm9sZSI6Im1hbmFnZXIiLCJfaWQiOiI2NTFhZDJjYjhiZjIxMDE0NjZjMTQzZjYiLCJfX3YiOjB9.ZI9mmdJKJCsH0ZTo1UFFuX3s5MF7XvwkL_DFg3dVNAM");
+
+    await localDataSource.saveSessionId(
+        "eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJBbGV4IiwibGFzdE5hbWUiOiJBZGFtcyIsInBob25lIjoiOTk5OTk5OTk5OSIsInBhc3N3b3JkIjoiJDJiJDEwJFpJazJ4U2lnNWZXa0dCeERtelNnSHVLTW8uMEdjaDdZMEF5L2VFdmwzLzgyMWNmQy9PVkpLIiwibG9naW4iOiJhbGV4X2FkYW1zIiwicm9sZSI6Im1hbmFnZXIiLCJfaWQiOiI2NTFhZDJjYjhiZjIxMDE0NjZjMTQzZjYiLCJfX3YiOjB9.ZI9mmdJKJCsH0ZTo1UFFuX3s5MF7XvwkL_DFg3dVNAM");
   }
+
+  Map<int, Widget> children = <int, Widget>{
+    0: Text("Day".tr()),
+    1: Text("Week".tr()),
+  };
+
+  int selectedValue = 0;
+
+  final List<EmployeeEntity> listEmployee = [
+    EmployeeEntity(
+      id: "1",
+      firstName: "Sam",
+      lastName: "Satt",
+      phoneNumber: "",
+      role: "manager",
+      schedule: [
+        EmployeeScheduleEntity(
+          date: DateTime.now().toIso8601String(),
+          status: 1,
+        ),
+      ],
+    ),
+    EmployeeEntity(
+      id: "2",
+      firstName: "Alex",
+      lastName: "Satt",
+      phoneNumber: "",
+      role: "manager",
+      schedule: [
+        EmployeeScheduleEntity(
+          date: DateTime.now().add(const Duration(days: 1)).toIso8601String(),
+          status: 1,
+        ),
+      ],
+    ),
+    EmployeeEntity(
+      id: "3",
+      firstName: "FFF",
+      lastName: "Satt",
+      phoneNumber: "",
+      role: "manager",
+      schedule: [
+        EmployeeScheduleEntity(
+          date: DateTime.now().add(const Duration(days: 2)).toIso8601String(),
+          status: 1,
+        ),
+      ],
+    ),
+    EmployeeEntity(
+      id: "4",
+      firstName: "Alex",
+      lastName: "Satt",
+      phoneNumber: "",
+      role: "manager",
+      schedule: [
+        EmployeeScheduleEntity(
+          date: DateTime.now().add(const Duration(days: 3)).toIso8601String(),
+          status: 1,
+        ),
+      ],
+    ),
+    EmployeeEntity(
+      id: "5",
+      firstName: "Alex",
+      lastName: "Satt",
+      phoneNumber: "",
+      role: "manager",
+      schedule: [
+        EmployeeScheduleEntity(
+          date: DateTime.now().add(const Duration(days: 4)).toIso8601String(),
+          status: 1,
+        ),
+      ],
+    ),
+  ];
+
+  _dateTimeWidget() {
+    final now = DateTime.now();
+    final style = TextStyle();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "${now.day} ",
+          style: style,
+        ),
+        Text(
+          "${StringHelper.monthName(month: now.month).tr().toLowerCase()} ",
+          style: style,
+        ),
+        Text(
+          StringHelper.getDayOfWeekType(now).tr().toLowerCase(),
+          style: style,
+        ),
+      ],
+    );
+  }
+
+  // List<Order> orders = [
+  //   Order(
+  //     id: '1',
+  //     startTime: DateTime(2023, 10, 7, 9, 0), // Начало заказа
+  //     endTime: DateTime(2023, 10, 7, 10, 30), // Конец заказа
+  //     title: 'Заказ 1', // Имя клиента или другой заголовок
+  //   ),
+  // ];
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: CalendarResourceWidget(),);
+    return Scaffold(
+      body: Column(
+        children: [
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              CupertinoSlidingSegmentedControl<int>(
+                backgroundColor: CupertinoColors.white,
+                thumbColor: Colors.grey,
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                groupValue: selectedValue,
+                children: children,
+                onValueChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      selectedValue = value;
+                    });
+                  }
+                },
+              ),
+              Expanded(child: _dateTimeWidget()),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // const Expanded(
+                //     child: CalendarWidget(
+                //   calendarsCount: 3,
+                // )),
+
+                Expanded(
+                  child:
+                      CalendarMainVersionTwoWidget(listEmployee: listEmployee),
+                ),
+                const SizedBox(width: 5),
+                Card(
+                  shadowColor: Colors.transparent,
+                  margin: EdgeInsets.zero,
+                  child: Container(
+                    width: 120,
+                    color: const Color(0xffF5EFE2),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        // const SizedBox(height: 20),
+                        ...List.generate(listEmployee.length, (index) {
+                          final el = listEmployee[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 60,
+                                  width: 60,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.grey,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "${el.firstName} ${el.lastName}",
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
     // return Scaffold(
     //     body: SfCalendar(
     //   view: CalendarView.workWeek,

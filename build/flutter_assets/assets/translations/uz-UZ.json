@@ -624,5 +624,8 @@
   "pleaseSelectStatus": "Iltimos holatni tanlang",
   "clear": "Tozalash",
   "barber": "Barberlar",
-  "role": "Roli"
+  "role": "Roli",
+  "navigateToEmployeeProfile": "Xodim profili",
+  "enter": "Kirish",
+  "login": "Login"
 }
