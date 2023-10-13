@@ -44,7 +44,7 @@ class EmployeeModel extends EmployeeEntity {
 
   factory EmployeeModel.fromJson(Map<String, dynamic> json) {
     return EmployeeModel(
-      id: json['__id'],
+      id: json['_id'],
       firstName: json['firstName'],
       lastName: json['lastName'],
       phoneNumber: json['phone_number'],
@@ -68,7 +68,7 @@ class EmployeeModel extends EmployeeEntity {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['__id'] = id;
+    data['_id'] = id;
     data['firstName'] = firstName;
     data['lastName'] = lastName;
     data['phone_number'] = phoneNumber;

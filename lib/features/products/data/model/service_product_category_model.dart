@@ -1,5 +1,3 @@
-
-
 import '../../domain/entity/service_product_category_entity.dart';
 import 'service_product_model.dart';
 
@@ -12,13 +10,18 @@ class ServiceProductCategoryModel extends ServiceProductCategoryEntity {
 
   factory ServiceProductCategoryModel.fromJson(Map<String, dynamic> json) {
     return ServiceProductCategoryModel(
-      id: json['__id'],
+      id: json['_id'],
       name: json['name'],
-      services: List.of(json['services']).map((e) => ServiceProductModel.fromJson(e)).toList(),
+      services: json['services'] != null
+          ? List.of(json['services'])
+              .map((e) => ServiceProductModel.fromJson(e))
+              .toList()
+          : [],
     );
   }
 
-  factory ServiceProductCategoryModel.fromEntity(ServiceProductCategoryEntity entity) {
+  factory ServiceProductCategoryModel.fromEntity(
+      ServiceProductCategoryEntity entity) {
     return ServiceProductCategoryModel(
       id: entity.id,
       name: entity.name,

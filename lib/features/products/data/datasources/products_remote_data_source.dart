@@ -81,7 +81,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
 
   @override
   Future<bool> deleteServiceProduct(String id) async {
-    final response = await _client.deleteWithBody('${ApiConstants.serviceProduct}$id/');
+    final response = await _client.deleteWithBody('${ApiConstants.serviceProduct}/$id/');
     return response['success'] ?? false;
   }
 
@@ -91,20 +91,18 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
   @override
   Future<ServiceProductCategoryResultsModel> getServiceProductCategory(int page, String searchText,
       String? ordering) async {
-    // final response = await _client.get(
-    //     '${ApiConstants.serviceProductCategory}/?page=$page',);
-    // final results = ServiceProductCategoryResultsModel.fromJson(response);
-    //
-    // return results;
-    //
-    //
-    const  data =    ServiceProductCategoryResultsModel(count: 3, pageCount: 3, results:[
-      ServiceProductCategoryModel(id: "", name: "Укладка", services: [],),
-      ServiceProductCategoryModel(id: "", name: "Стрижка", services: [],),
-    ]);
-    //
-    //
-    return data;
+    final response = await _client.get(
+        '${ApiConstants.serviceProductCategory}/?page=$page${searchText.isNotEmpty?  "&name=$searchText" : ""}',);
+    final results = ServiceProductCategoryResultsModel.fromJson(response);
+
+    return results;
+
+
+    // const  data =    ServiceProductCategoryResultsModel(count: 3, pageCount: 3, results:[
+    //   ServiceProductCategoryModel(id: "", name: "Укладка", services: [],),
+    //   ServiceProductCategoryModel(id: "", name: "Стрижка", services: [],),
+    // ]);
+    // return data;
 
   }
 
@@ -123,7 +121,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
 
   @override
   Future<bool> deleteServiceProductCategory(String id) async {
-    final response = await _client.deleteWithBody('${ApiConstants.serviceProductCategory}$id/');
+    final response = await _client.deleteWithBody('${ApiConstants.serviceProductCategory}/$id/');
     return response['success'] ?? false;
   }
 

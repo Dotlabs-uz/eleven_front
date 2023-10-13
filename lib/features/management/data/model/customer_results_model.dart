@@ -13,7 +13,7 @@ class CustomerResultsModel extends CustomerResultsEntity {
   factory CustomerResultsModel.fromJson(Map<String, dynamic> json) {
     return CustomerResultsModel(
       count: json['count'],
-      pageCount: json['page_count'],
+      pageCount: json['pageCount'],
       results: List.from(json['results'])
           .map((e) => CustomerModel.fromJson(e))
           .toList(),
@@ -23,7 +23,7 @@ class CustomerResultsModel extends CustomerResultsEntity {
   Map<String,dynamic>toJson() {
     final Map<String,dynamic> data= {};
     data['count'] = count;
-    data['page_count'] = pageCount;
+    data['pageCount'] = pageCount;
     data['results'] = results.map((e) =>CustomerModel.fromEntity( e).toJson());
     return data;
   }

@@ -13,7 +13,7 @@ class BarberResultsModel extends BarberResultsEntity {
   factory BarberResultsModel.fromJson(Map<String, dynamic> json) {
     return BarberResultsModel(
       count: json['count'],
-      pageCount: json['page_count'],
+      pageCount: json['pageCount'],
       results: List.from(json['results'])
           .map((e) => BarberModel.fromJson(e))
           .toList(),
@@ -23,7 +23,7 @@ class BarberResultsModel extends BarberResultsEntity {
   Map<String,dynamic>toJson() {
     final Map<String,dynamic> data= {};
     data['count'] = count;
-    data['page_count'] = pageCount;
+    data['pageCount'] = pageCount;
     data['results'] = results.map((e) =>BarberModel.fromEntity( e).toJson());
     return data;
   }

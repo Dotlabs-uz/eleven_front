@@ -38,28 +38,28 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  height: 30,
-                  // width: 35,
-                  decoration: BoxDecoration(
-                    color: Colors.red.shade300,
-                    borderRadius: BorderRadius.circular(50),
-                    // border: Border.all(color: Colors.white, width: 3),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                      child: Text(
-                        "${"element".tr()} № ${widget.fields['id']?.val.toString()}",
-                        style: GoogleFonts.nunito(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   height: 30,
+                //   // width: 35,
+                //   decoration: BoxDecoration(
+                //     color: Colors.red.shade300,
+                //     borderRadius: BorderRadius.circular(50),
+                //     // border: Border.all(color: Colors.white, width: 3),
+                //   ),
+                //   child: Center(
+                //     child: Padding(
+                //       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                //       child: Text(
+                //         "${"element".tr()} № ${widget.fields['id']?.val.toString()}",
+                //         style: GoogleFonts.nunito(
+                //           color: Colors.white,
+                //           fontWeight: FontWeight.bold,
+                //           fontSize: 14,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 TextButton(
                   onPressed: widget.closeForm,
                   child: Text(

@@ -11,7 +11,7 @@ class ServiceResultsProductModel extends ServiceResultsProductEntity {
   factory ServiceResultsProductModel.fromJson(Map<String, dynamic> json) {
     return ServiceResultsProductModel(
       count: json['count'],
-      pageCount: json['page_count'],
+      pageCount: json['pageCount'],
       results: List.from(json['results'])
           .map((e) => ServiceProductModel.fromJson(e))
           .toList(),

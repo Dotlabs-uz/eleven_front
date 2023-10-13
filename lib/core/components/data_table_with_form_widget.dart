@@ -34,7 +34,7 @@ class DataTableWithForm extends StatefulWidget {
   final int pageCount;
   final bool isFormVisible;
   final bool isEmpty;
-  final Function(int) onDelete;
+  final Function(String) onDelete;
   final Widget? form;
   final Function(PlutoGridOnRowCheckedEvent)? handleOnRowChecked;
 

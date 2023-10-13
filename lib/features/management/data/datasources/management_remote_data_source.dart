@@ -114,37 +114,37 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     int page,
     String searchText,
   ) async {
-    // final response = await _client
-    //     .get('${ApiConstants.employee}?page=$page&search=$searchText');
-    // final results = EmployeeResultsModel.fromJson(response);
-    //
-    // return results;
+    final response = await _client
+        .get('${ApiConstants.employee}?page=$page&search=$searchText');
+    final results = EmployeeResultsModel.fromJson(response);
 
-    const data = EmployeeResultsModel(count: 3, pageCount: 3, results: [
-      EmployeeModel(
-          id: "",
-          firstName: "firstName",
-          role: "manager",
-          phoneNumber: "+998931231212",
-          schedule: [],
-          lastName: 'Satt'),
-      EmployeeModel(
-          id: "",
-          firstName: "Alex",
-          role: "manager",
-          phoneNumber: "+998931231212",
-          schedule: [],
-          lastName: 'Satt'),
-      EmployeeModel(
-        id: "",
-        firstName: "Sammy",
-        role: "manager",
-        phoneNumber: "+998931231212",
-        schedule: [],
-        lastName: 'Satt',
-      ),
-    ]);
-    return data;
+    return results;
+
+    // const data = EmployeeResultsModel(count: 3, pageCount: 3, results: [
+    //   EmployeeModel(
+    //       id: "",
+    //       firstName: "firstName",
+    //       role: "manager",
+    //       phoneNumber: "+998931231212",
+    //       schedule: [],
+    //       lastName: 'Satt'),
+    //   EmployeeModel(
+    //       id: "",
+    //       firstName: "Alex",
+    //       role: "manager",
+    //       phoneNumber: "+998931231212",
+    //       schedule: [],
+    //       lastName: 'Satt'),
+    //   EmployeeModel(
+    //     id: "",
+    //     firstName: "Sammy",
+    //     role: "manager",
+    //     phoneNumber: "+998931231212",
+    //     schedule: [],
+    //     lastName: 'Satt',
+    //   ),
+    // ]);
+    // return data;
   }
 
   @override

@@ -12,7 +12,7 @@ class ServiceProductCategoryResultsModel extends ServiceProductCategoryResultsEn
   factory ServiceProductCategoryResultsModel.fromJson(Map<String, dynamic> json) {
     return ServiceProductCategoryResultsModel(
       count: json['count'],
-      pageCount: json['page_count'],
+      pageCount: json['pageCount'],
       results: List.from(json['results'])
           .map((e) => ServiceProductCategoryModel.fromJson(e))
           .toList(),

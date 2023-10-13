@@ -14,7 +14,7 @@ class DataMobileViewWidget extends StatefulWidget {
 
   final Function(dynamic) editData;
 
-  final Function(int) deleteData;
+  final Function(String) deleteData;
 
   const DataMobileViewWidget({
     Key? key,
@@ -60,7 +60,7 @@ class _MobileViewCard extends StatefulWidget {
 
   final Function() editData;
 
-  final Function(int) deleteData;
+  final Function(String) deleteData;
 
   const _MobileViewCard(
       {Key? key,
@@ -77,7 +77,7 @@ class _MobileViewCardState extends State<_MobileViewCard> {
   bool enableEdit = true;
   List<Widget> ctrlWidgetsFirst = [];
   List<Widget> ctrlWidgets = [];
-  int id = 0;
+  String id = "";
 
   @override
   void initState() {

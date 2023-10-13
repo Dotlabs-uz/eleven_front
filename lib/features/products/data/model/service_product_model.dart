@@ -12,7 +12,7 @@ class ServiceProductModel extends ServiceProductEntity {
 
   factory ServiceProductModel.fromJson(Map<String, dynamic> json) {
     return ServiceProductModel(
-      id: json['__id'],
+      id: json['_id'],
       name: json['name'],
       price: json['price'],
       duration: json['duration'],
