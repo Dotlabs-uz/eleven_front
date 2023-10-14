@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/main/presensation/widget/calendar_ruler_widget.dart';
+import 'package:eleven_crm/features/products/domain/entity/service_product_category_entity.dart';
 import 'package:eleven_crm/features/products/domain/entity/service_product_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -43,14 +44,14 @@ class _CalendarMainVersionTwoWidgetState
       orderEnd: DateTime(2023, 10, 7, 9, 30),
       price: 30,
       barberId: "2",
-      services: const [
+      services:   [
         ServiceProductEntity(
           id: "id",
           name: "name",
-          price: "30",
-          duration: "30",
-          categoryId: "categoryId",
-          sex: "sex",
+          price: 30,
+          duration: 30,
+          category: ServiceProductCategoryEntity.empty(),
+          sex: "man",
         ),
       ],
       discount: 2,

@@ -9,7 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../entities/field_entity.dart';
 import 'button_widget.dart';
+import 'customer_order_status_field_widget.dart';
 import 'header_text.dart';
+import 'service_category_field_widget.dart';
 
 class DataPage extends StatelessWidget {
   const DataPage({
@@ -219,6 +221,14 @@ class DataFormWidgetState extends State<DataFormWidget> {
             ));
           } else if (field.type == Types.int) {
             ctrlWidgets.add(DataDoubleFieldWidget(
+              fieldEntity: field,
+            ));
+          }else if (field.type == Types.sex) {
+            ctrlWidgets.add(SexFieldWidget(
+              fieldEntity: field,
+            ));
+          }else if (field.type == Types.serviceCategory) {
+            ctrlWidgets.add(ServiceCategoryFieldWidget(
               fieldEntity: field,
             ));
           }

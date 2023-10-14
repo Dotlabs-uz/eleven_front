@@ -5,13 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/entities/field_entity.dart';
+import 'service_product_category_entity.dart';
 
 class ServiceProductEntity extends Equatable {
   final String id;
   final String name;
-  final String price;
-  final String duration;
-  final String categoryId;
+  final double price;
+  final double duration;
+  final ServiceProductCategoryEntity category;
   final String sex;
 
   const ServiceProductEntity({
@@ -19,7 +20,7 @@ class ServiceProductEntity extends Equatable {
     required this.name,
     required this.price,
     required this.duration,
-    required this.categoryId,
+    required this.category,
     required this.sex,
   });
 
@@ -39,40 +40,39 @@ class ServiceProductEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "price": FieldEntity<String>(
+    "price": FieldEntity<double>(
       label: "price",
       hintText: "price",
-      type: Types.string,
+      type: Types.double,
       isRequired: true,
       isForm: true,
-      val: "0.0",
+      val: 0,
     ),
-    "duration": FieldEntity<String>(
+    "duration": FieldEntity<double>(
       label: "duration",
       hintText: "duration",
-      type: Types.string,
+      type: Types.double,
       isForm: true,
       isRequired: true,
-      val: "0",
+      val: 0,
     ),
-    "categoryId": FieldEntity<String>(
-      label: "categoryId",
-      hintText: "categoryId",
-      type: Types.string,
-      isForm: false,
+    "category": FieldEntity<ServiceProductCategoryEntity>(
+      label: "category",
+      hintText: "category",
+      type: Types.serviceCategory,
+      isForm: true,
       isRequired: false,
-      val: "0",
+      val: ServiceProductCategoryEntity.empty(),
     ),
     "sex": FieldEntity<String>(
       label: "sex",
       hintText: "sex",
-      type: Types.string,
-      isForm: false,
-      isRequired: false,
-      val: "man",
+      type: Types.sex,
+      isForm: true,
+      isRequired: true,
+      val: "men",
     ),
   };
-
 
   Map<String, FieldEntity> getFields() {
     fields.forEach((key, value) {
@@ -83,13 +83,13 @@ class ServiceProductEntity extends Equatable {
   }
 
   dynamic getProp(String key) => <String, dynamic>{
-    "id": id,
-    "name": name,
-    "price": price,
-    "duration": duration,
-    "categoryId": categoryId,
-    "sex": sex,
-  }[key];
+        "id": id,
+        "name": name,
+        "price": price,
+        "duration": duration,
+        "category": category,
+        "sex": sex,
+      }[key];
 
   factory ServiceProductEntity.fromRow(PlutoRow row) {
     return ServiceProductEntity(
@@ -97,9 +97,8 @@ class ServiceProductEntity extends Equatable {
       name: row.cells["name"]?.value,
       price: row.cells["price"]?.value,
       duration: row.cells["duration"]?.value,
-      categoryId: row.cells["categoryId"]?.value,
+      category: row.cells["category"]?.value,
       sex: row.cells["sex"]?.value,
-
     );
   }
 
@@ -110,7 +109,8 @@ class ServiceProductEntity extends Equatable {
       'name': PlutoCell(value: e.name),
       'price': PlutoCell(value: e.price),
       'duration': PlutoCell(value: e.duration),
-      'categoryId': PlutoCell(value: e.categoryId),
+      'category': PlutoCell(value: e.category),
+      'categoryName': PlutoCell(value: e.category),
       'sex': PlutoCell(value: e.sex),
     });
   }
@@ -149,15 +149,15 @@ class ServiceProductEntity extends Equatable {
         type: PlutoColumnType.text(),
       ),
       //PlutoColumn(
-        //enableColumnDrag: false,
-        //enableRowDrag: false,
-        //title: 'id'.tr(),
-        //field: 'id',
-        //enableRowChecked: false,
-        //readOnly: true,
-        // enableDropToResize: true,
-       // type: PlutoColumnType.text(),
-     // ),
+      //enableColumnDrag: false,
+      //enableRowDrag: false,
+      //title: 'id'.tr(),
+      //field: 'id',
+      //enableRowChecked: false,
+      //readOnly: true,
+      // enableDropToResize: true,
+      // type: PlutoColumnType.text(),
+      // ),
       // PlutoColumn(
       //   enableColumnDrag: false,
       //   enableRowDrag: false,
@@ -172,6 +172,30 @@ class ServiceProductEntity extends Equatable {
         field: 'name',
         readOnly: false,
         type: PlutoColumnType.text(),
+      ),
+
+      PlutoColumn(
+        enableColumnDrag: false,
+        enableRowDrag: false,
+        title: 'categoryName'.tr(),
+        field: 'categoryName',
+        readOnly: false,
+        type: PlutoColumnType.text(),
+        renderer: (rendererContext) {
+          if (rendererContext.cell.value != null &&
+              rendererContext.cell.value.toString().isNotEmpty) {
+            return Text(
+              "${rendererContext.cell.value.name}",
+              style: GoogleFonts.nunito(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+
+          return Text("noData".tr());
+        },
       ),
 
       PlutoColumn(
@@ -193,7 +217,7 @@ class ServiceProductEntity extends Equatable {
           if (rendererContext.cell.value != null &&
               rendererContext.cell.value.toString().isNotEmpty) {
             return Text(
-              "${rendererContext.cell.value} ${"min".tr()}"  ,
+              "${rendererContext.cell.value} ${"min".tr()}",
               style: GoogleFonts.nunito(
                 fontSize: 16,
                 color: Colors.black,
@@ -204,7 +228,6 @@ class ServiceProductEntity extends Equatable {
 
           return Text("noData".tr());
         },
-
       ),
       PlutoColumn(
         enableColumnDrag: false,
@@ -217,7 +240,7 @@ class ServiceProductEntity extends Equatable {
           if (rendererContext.cell.value != null &&
               rendererContext.cell.value.toString().isNotEmpty) {
             return Text(
-              (rendererContext.cell.value.toString().tr() ),
+              (rendererContext.cell.value.toString().tr()),
               style: GoogleFonts.nunito(
                 fontSize: 16,
                 color: Colors.black,
@@ -242,43 +265,27 @@ class ServiceProductEntity extends Equatable {
     ];
   }
 
-
-  String _getSexInstance(int index) {
-
-    switch (index) {
-      case 1:
-        return "male";
-      case 2:
-        return "female";
-      default:
-        return "undefined";
-    }
-  }
-
   factory ServiceProductEntity.fromFields() {
     return ServiceProductEntity(
       id: fields["id"]?.val,
       name: fields["name"]?.val,
       price: fields["price"]?.val,
       duration: fields["duration"]?.val,
-      categoryId: fields["categoryId"]?.val,
+      category: fields["category"]?.val,
       sex: fields["sex"]?.val,
     );
   }
 
   factory ServiceProductEntity.empty() {
-    return const ServiceProductEntity(
+    return ServiceProductEntity(
       id: "",
       name: "",
-      price: "0",
-      duration: "0",
-      categoryId: "0",
-      sex: "man",
+      price: 0,
+      duration: 0,
+      category: ServiceProductCategoryEntity.empty(),
+      sex: "men",
     );
   }
-
-
-
 
   @override
   List<Object?> get props => [

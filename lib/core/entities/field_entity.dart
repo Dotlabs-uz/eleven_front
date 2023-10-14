@@ -10,6 +10,8 @@ enum Types {
   customers,
   filial,
   employeeRole,
+  serviceCategory,
+  sex,
 }
 
 class FieldEntity<T> {

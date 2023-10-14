@@ -1,4 +1,5 @@
 import '../../domain/entity/service_product_entity.dart';
+import 'service_product_category_model.dart';
 
 class ServiceProductModel extends ServiceProductEntity {
   const ServiceProductModel({
@@ -6,7 +7,7 @@ class ServiceProductModel extends ServiceProductEntity {
     required super.name,
     required super.price,
     required super.duration,
-    required super.categoryId,
+    required super.category,
     required super.sex,
   });
 
@@ -16,10 +17,9 @@ class ServiceProductModel extends ServiceProductEntity {
       name: json['name'],
       price: json['price'],
       duration: json['duration'],
-      categoryId: json['categoryId'],
-      sex: json['sex'] ?? "man",
+      category: ServiceProductCategoryModel.fromJson(json['category']),
+      sex: json['sex'] ?? "men",
     );
-
   }
 
   factory ServiceProductModel.fromEntity(ServiceProductEntity entity) {
@@ -28,7 +28,7 @@ class ServiceProductModel extends ServiceProductEntity {
       name: entity.name,
       price: entity.price,
       duration: entity.duration,
-      categoryId: entity.categoryId,
+      category: entity.category,
       sex: entity.sex,
     );
   }
@@ -40,7 +40,8 @@ class ServiceProductModel extends ServiceProductEntity {
     data['name'] = name;
     data['price'] = price;
     data['duration'] = duration;
-    data['category_id'] = categoryId;
+    data['category'] =
+        ServiceProductCategoryModel.fromEntity(category).id;
     data['sex'] = sex;
 
     return data;

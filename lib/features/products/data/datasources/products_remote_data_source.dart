@@ -49,20 +49,20 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
   @override
   Future<ServiceResultsProductModel> getServiceProducts(int page, String searchText,
       String? ordering) async {
-    // final response = await _client.get(
-    //     '${ApiConstants.serviceProduct}/?page=$page&search=$searchText');
-    // final results = ServiceResultsProductModel.fromJson(response);
-    //
-    // return results;
-    //
-    //
-    const  data =    ServiceResultsProductModel(count: 3, pageCount: 3, results:[
-      ServiceProductModel(id: "", name: "Укладка", price: "30", duration: "45", categoryId: "3", sex: "2"),
-      ServiceProductModel(id: "", name: "Стрижка", price: "30", duration: "55", categoryId: "3", sex: "1"),
-      ServiceProductModel(id: "", name: "Стрижка топором", price: "100", duration: "1", categoryId: "3", sex: "1"),
-    ]);
+    final response = await _client.get(
+        '${ApiConstants.serviceProduct}/?page=$page${searchText.isNotEmpty ? "&name=$searchText" :"" }');
+    final results = ServiceResultsProductModel.fromJson(response);
 
-    return data;
+    return results;
+    //
+    //
+    // const  data =    ServiceResultsProductModel(count: 3, pageCount: 3, results:[
+    //   ServiceProductModel(id: "", name: "Укладка", price: "30", duration: "45", categoryId: "3", sex: "2"),
+    //   ServiceProductModel(id: "", name: "Стрижка", price: "30", duration: "55", categoryId: "3", sex: "1"),
+    //   ServiceProductModel(id: "", name: "Стрижка топором", price: "100", duration: "1", categoryId: "3", sex: "1"),
+    // ]);
+    //
+    // return data;
 
   }
 
