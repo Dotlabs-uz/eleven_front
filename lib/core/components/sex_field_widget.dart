@@ -7,13 +7,13 @@ import '../constants/type_constants.dart';
 import '../entities/field_entity.dart';
 
 class SexFieldWidget extends StatelessWidget {
-  const SexFieldWidget(
-      {Key? key,
-      this.fieldEntity,
-      this.onChanged,
-      this.enabled = true,
-      this.padding})
-      : super(key: key);
+  const SexFieldWidget({
+    Key? key,
+    this.fieldEntity,
+    this.onChanged,
+    this.enabled = true,
+    this.padding,
+  }) : super(key: key);
   final bool enabled;
   final EdgeInsets? padding;
   final FieldEntity? fieldEntity;
