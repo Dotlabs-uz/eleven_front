@@ -8,6 +8,7 @@ import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
 import 'package:eleven_crm/features/management/domain/usecases/employee.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
+import 'package:eleven_crm/features/products/domain/usecases/filial.dart';
 import 'package:eleven_crm/features/products/domain/usecases/service_product_category.dart';
 import 'package:http/http.dart';
 
@@ -37,6 +38,7 @@ import '../features/products/data/datasources/products_remote_data_source.dart';
 import '../features/products/data/repository/products_repository_impl.dart';
 import '../features/products/domain/repository/products_repository.dart';
 import '../features/products/domain/usecases/service_product.dart';
+import '../features/products/presensation/cubit/filial/filial_cubit.dart';
 import '../features/products/presensation/cubit/service_product/service_product_cubit.dart';
 import '../features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 
@@ -79,6 +81,12 @@ void setup() {
   // Barber
 
   locator.registerFactory(() => BarberCubit(locator(), locator(), locator()));
+
+  // Filial
+
+  locator.registerFactory(() => FilialCubit(locator()));
+
+
 
   // ================ UseCases ================ //
 
@@ -128,6 +136,11 @@ void setup() {
 
   // Current user
   locator.registerLazySingleton<GetCurrentUser>(() => GetCurrentUser(locator()));
+
+  // Filial
+
+  locator.registerLazySingleton<GetFilials>(() => GetFilials(locator()));
+
 
   // ================ Repository / Datasource ================ //
 

@@ -1,17 +1,19 @@
 import '../../../../core/entities/field_entity.dart';
+import '../../../products/data/model/filial_model.dart';
 import '../../domain/entity/barber_entity.dart';
 import '../../domain/entity/employee_entity.dart';
 import 'employee_schedule_model.dart';
 
 class BarberModel extends BarberEntity {
-  const BarberModel(
-      {required super.id,
-      required super.firstName,
-      required super.lastName,
-      required super.phoneNumber,
-      required super.filialId,
-      required super.password,
-      required super.login});
+  const BarberModel({
+    required super.id,
+    required super.firstName,
+    required super.lastName,
+    required super.phone,
+    required super.filial,
+    required super.password,
+    required super.login,
+  });
 
   List<MobileFieldEntity> getFieldsAndValues() {
     return [
@@ -42,8 +44,8 @@ class BarberModel extends BarberEntity {
       ),
       MobileFieldEntity(
         title: "phoneNumber",
-        type: Types.string,
-        val: phoneNumber,
+        type: Types.int,
+        val: phone,
       ),
     ];
   }
@@ -53,10 +55,10 @@ class BarberModel extends BarberEntity {
       id: json['_id'],
       firstName: json['firstName'],
       lastName: json['lastName'],
-      phoneNumber: json['phone_number'],
-      filialId: json['filialId'],
+      phone: json['phone'],
+      filial:FilialModel.fromJson(json['filial']),
       login: json['login'],
-      password: json['password'],
+      password:  "",
     );
   }
 
@@ -65,8 +67,8 @@ class BarberModel extends BarberEntity {
       id: entity.id,
       firstName: entity.firstName,
       lastName: entity.lastName,
-      phoneNumber: entity.phoneNumber,
-      filialId: entity.filialId,
+      phone: entity.phone,
+      filial: entity.filial,
       password: entity.password,
       login: entity.login,
     );
@@ -74,11 +76,11 @@ class BarberModel extends BarberEntity {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['_id'] = id;
+    // data['_id'] = id;
     data['firstName'] = firstName;
     data['lastName'] = lastName;
-    data['phoneNumber'] = phoneNumber;
-    data['filialId'] = filialId;
+    data['phone'] = phone;
+    data['filial'] = filial.id;
     data['login'] = login;
     data['password'] = password;
     return data;

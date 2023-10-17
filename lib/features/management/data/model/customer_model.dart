@@ -5,7 +5,7 @@ class CustomerModel extends CustomerEntity {
   const CustomerModel({
     required String id,
     required String fullName,
-    required String phoneNumber,
+    required int phoneNumber,
     required int ordersCount,
   }) : super(
           id: id,
@@ -28,7 +28,7 @@ class CustomerModel extends CustomerEntity {
       ),
       MobileFieldEntity(
         title: "phoneNumber",
-        type: Types.string,
+        type: Types.int,
         val: phoneNumber,
       ),
       MobileFieldEntity(
@@ -42,9 +42,9 @@ class CustomerModel extends CustomerEntity {
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     return CustomerModel(
       id: json['_id'],
-      fullName: json['full_name'],
-      phoneNumber: json['phone_number'],
-      ordersCount: json['orders_count'] ?? 0,
+      fullName: json['name'],
+      phoneNumber: json['phone'],
+      ordersCount: json['ordersCount'] ?? 0,
     );
   }
 
@@ -59,10 +59,8 @@ class CustomerModel extends CustomerEntity {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['_id'] = id;
-    data['full_name'] = fullName;
-    data['phone_number'] = phoneNumber;
-    data['orders_count'] = ordersCount;
+    data['name'] = fullName;
+    data['phone'] = phoneNumber;
     return data;
   }
 }

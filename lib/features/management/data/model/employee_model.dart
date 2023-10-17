@@ -31,7 +31,7 @@ class EmployeeModel extends EmployeeEntity {
       ),
       MobileFieldEntity(
         title: "phoneNumber",
-        type: Types.string,
+        type: Types.int,
         val: phoneNumber,
       ),
       MobileFieldEntity(
@@ -47,9 +47,9 @@ class EmployeeModel extends EmployeeEntity {
       id: json['_id'],
       firstName: json['firstName'],
       lastName: json['lastName'],
-      phoneNumber: json['phone_number'],
+      phoneNumber: json['phone'],
       role: json['role'],
-      schedule: List.from(json['work_time'])
+      schedule: List.from(json['workTime'])
           .map((e) => EmployeeScheduleModel.fromJson(e))
           .toList(),
     );
@@ -68,13 +68,12 @@ class EmployeeModel extends EmployeeEntity {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['_id'] = id;
     data['firstName'] = firstName;
     data['lastName'] = lastName;
-    data['phone_number'] = phoneNumber;
+    data['phone'] = phoneNumber;
     data['role'] = role;
-    data['work_time'] =
-        schedule.map((e) => EmployeeScheduleModel.fromEntity(e).toJson());
+    // data['workTime'] =
+    //     schedule.map((e) => EmployeeScheduleModel.fromEntity(e).toJson());
     return data;
   }
 }

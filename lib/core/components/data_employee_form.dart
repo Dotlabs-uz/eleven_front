@@ -8,6 +8,7 @@ import '../utils/animated_navigation.dart';
 import 'button_widget.dart';
 import 'data_int_field_widget.dart';
 import 'data_text_field_widget.dart';
+import 'role_field_widget.dart';
 
 class DataEmployeeForm extends StatefulWidget {
   final Map<String, FieldEntity> fields;
@@ -74,8 +75,8 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
             ),
             DataTextFieldWidget(fieldEntity: widget.fields['firstName']!),
             DataTextFieldWidget(fieldEntity: widget.fields['lastName']!),
-            DataTextFieldWidget(fieldEntity: widget.fields['role']!),
-            DataTextFieldWidget(fieldEntity: widget.fields['phoneNumber']!),
+            RoleFieldWidget(fieldEntity: widget.fields['role']!),
+            DataIntFieldWidget(fieldEntity: widget.fields['phone']!),
             const SizedBox(height: 10),
             ButtonWidget(text: "save".tr(), onPressed: widget.saveData),
             const SizedBox(height: 10),

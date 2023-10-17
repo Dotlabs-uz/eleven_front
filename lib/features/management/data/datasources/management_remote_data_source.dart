@@ -57,34 +57,34 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
   @override
   Future<CustomerResultsModel> getCustomer(int page, String searchText,
       String? ordering, String? startDate, String? endDate) async {
-    // final response = await _client
-    //     .get('${ApiConstants.clients}?page=$page&search=$searchText');
-    // final results = CustomerResultsModel.fromJson(response);
+    final response = await _client.get(
+        '${ApiConstants.clients}?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}');
+    final results = CustomerResultsModel.fromJson(response);
+
+    return results;
+
+    // final data = CustomerResultsModel(count: 3, pageCount: 3, results: const [
+    //   CustomerModel(
+    //     id: "",
+    //     fullName: "fullName",
+    //     phoneNumber: "+998931231212",
+    //     ordersCount: 3,
+    //   ),
+    //   CustomerModel(
+    //     id: "",
+    //     fullName: "fullName",
+    //     phoneNumber: "+998931231212",
+    //     ordersCount: 43,
+    //   ),
+    //   CustomerModel(
+    //     id: "",
+    //     fullName: "fullName",
+    //     phoneNumber: "+998931231212",
+    //     ordersCount: 345,
+    //   ),
+    // ]);
     //
-    // return results;
-
-    final data = CustomerResultsModel(count: 3, pageCount: 3, results: const [
-      CustomerModel(
-        id: "",
-        fullName: "fullName",
-        phoneNumber: "+998931231212",
-        ordersCount: 3,
-      ),
-      CustomerModel(
-        id: "",
-        fullName: "fullName",
-        phoneNumber: "+998931231212",
-        ordersCount: 43,
-      ),
-      CustomerModel(
-        id: "",
-        fullName: "fullName",
-        phoneNumber: "+998931231212",
-        ordersCount: 345,
-      ),
-    ]);
-
-    return data;
+    // return data;
   }
 
   @override
@@ -94,7 +94,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
       response =
           await _client.post(ApiConstants.clients, params: data.toJson());
     } else {
-      response = await _client.put('${ApiConstants.clients}${data.id}/',
+      response = await _client.put('${ApiConstants.clients}/${data.id}/',
           params: data.toJson());
     }
     return CustomerModel.fromJson(response);
@@ -103,7 +103,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
   @override
   Future<bool> deleteCustomer(String id) async {
     final response =
-        await _client.deleteWithBody('${ApiConstants.clients}$id/');
+        await _client.deleteWithBody('${ApiConstants.clients}/$id/');
     return response['success'] ?? false;
   }
 
@@ -115,7 +115,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     String searchText,
   ) async {
     final response = await _client
-        .get('${ApiConstants.employee}?page=$page&search=$searchText');
+        .get('${ApiConstants.employee}?page=$page${searchText.isNotEmpty ? "&name=$searchText": ""}');
     final results = EmployeeResultsModel.fromJson(response);
 
     return results;
@@ -154,7 +154,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
       response =
           await _client.post(ApiConstants.employee, params: data.toJson());
     } else {
-      response = await _client.put('${ApiConstants.employee}${data.id}/',
+      response = await _client.put('${ApiConstants.employee}/${data.id}/',
           params: data.toJson());
     }
     return EmployeeModel.fromJson(response);
@@ -171,49 +171,50 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
   @override
   Future<bool> deleteBarber(String id) async {
-    await _client.deleteWithBody(ApiConstants.barbers);
+    await _client.deleteWithBody("${ApiConstants.barbers}/$id");
     return true;
   }
 
   @override
   Future<BarberResultsModel> getBarber(
       int page, String searchText, String? ordering) async {
-    // final response = await _client.get(
-    //     "${ApiConstants.barbers}?page=$page&search=$searchText${ordering ?? ""}");
-    // final results = BarberResultsModel.fromJson(response);
-    //
-    // return results;
-    const data = BarberResultsModel(count: 10, pageCount: 10, results: [
-      BarberModel(
-        id: "id",
-        firstName: "firstName",
-        lastName: "lastName",
-        phoneNumber: "phoneNumber",
-        filialId: "filialId",
-        password: "password",
-        login: "login",
-      ),
-      BarberModel(
-        id: "id",
-        firstName: "firstName",
-        lastName: "lastName",
-        phoneNumber: "phoneNumber",
-        filialId: "filialId",
-        password: "password",
-        login: "login",
-      ),
-      BarberModel(
-        id: "id",
-        firstName: "firstName",
-        lastName: "lastName",
-        phoneNumber: "phoneNumber",
-        filialId: "filialId",
-        password: "password",
-        login: "login",
-      ),
-    ]);
+    final response = await _client.get(
+      "${ApiConstants.barbers}?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}${ordering ?? ""}",
+    );
+    final results = BarberResultsModel.fromJson(response);
 
-    return data;
+    return results;
+    // const data = BarberResultsModel(count: 10, pageCount: 10, results: [
+    //   BarberModel(
+    //     id: "id",
+    //     firstName: "firstName",
+    //     lastName: "lastName",
+    //     phoneNumber: "phoneNumber",
+    //     filialId: "filialId",
+    //     password: "password",
+    //     login: "login",
+    //   ),
+    //   BarberModel(
+    //     id: "id",
+    //     firstName: "firstName",
+    //     lastName: "lastName",
+    //     phoneNumber: "phoneNumber",
+    //     filialId: "filialId",
+    //     password: "password",
+    //     login: "login",
+    //   ),
+    //   BarberModel(
+    //     id: "id",
+    //     firstName: "firstName",
+    //     lastName: "lastName",
+    //     phoneNumber: "phoneNumber",
+    //     filialId: "filialId",
+    //     password: "password",
+    //     login: "login",
+    //   ),
+    // ]);
+    //
+    // return data;
   }
 
   @override

@@ -41,7 +41,7 @@ class ServiceProductModel extends ServiceProductEntity {
     data['price'] = price;
     data['duration'] = duration;
     data['category'] =
-        ServiceProductCategoryModel.fromEntity(category).id;
+        category.id;
     data['sex'] = sex;
 
     return data;

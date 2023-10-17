@@ -1,26 +1,24 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/entities/field_entity.dart';
+import 'service_product_entity.dart';
 
-class CustomerEntity extends Equatable {
-
+class FilialEntity extends Equatable {
   final String id;
-  final String fullName;
-  final int phoneNumber;
-  final int ordersCount;
+  final int phone;
+  final String name;
+  final String address;
 
-  const CustomerEntity({
+  const FilialEntity({
     required this.id,
-    required this.fullName,
-    required this.phoneNumber,
-    required this.ordersCount,
+    required this.name,
+    required this.phone,
+    required this.address,
   });
-
-
-
 
   static Map<String, FieldEntity> fields = {
     "id": FieldEntity<String>(
@@ -30,29 +28,29 @@ class CustomerEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "fullName": FieldEntity<String>(
-      label: "fullName",
-      hintText: "fullName",
+    "name": FieldEntity<String>(
+      label: "name",
+      hintText: "name",
       type: Types.string,
       isRequired: true,
       isForm: true,
       val: "",
     ),
-    "phoneNumber": FieldEntity<int>(
-      label: "phoneNumber",
-      hintText: "phoneNumber",
+    "phone": FieldEntity<int>(
+      label: "phone",
+      hintText: "phone",
       type: Types.int,
       isRequired: true,
       isForm: true,
       val: 99,
     ),
-    "ordersCount": FieldEntity<int>(
-      label: "ordersCount",
-      hintText: "ordersCount",
+    "address": FieldEntity<String>(
+      label: "address",
+      hintText: "address",
       type: Types.string,
-      isForm: false,
-      isRequired: false,
-      val:0,
+      isRequired: true,
+      isForm: true,
+      val: "",
     ),
   };
 
@@ -65,33 +63,32 @@ class CustomerEntity extends Equatable {
   }
 
   dynamic getProp(String key) => <String, dynamic>{
-    "id": id,
-    "fullName": fullName,
-    "phoneNumber": phoneNumber,
-    "ordersCount": ordersCount,
-  }[key];
+        "id": id,
+        "name": name,
+        "phone": phone,
+        "address": address,
+      }[key];
 
-  factory CustomerEntity.fromRow(PlutoRow row) {
-    return CustomerEntity(
+  factory FilialEntity.fromRow(PlutoRow row) {
+    return FilialEntity(
       id: row.cells["id"]?.value,
-      fullName: row.cells["fullName"]?.value,
-      phoneNumber: row.cells["phoneNumber"]?.value,
-      ordersCount: row.cells["ordersCount"]?.value,
-
+      name: row.cells["name"]?.value,
+      phone: row.cells["phone"]?.value,
+      address: row.cells["address"]?.value,
     );
   }
 
-  PlutoRow getRow(CustomerEntity e) {
+  PlutoRow getRow(FilialEntity e) {
     return PlutoRow(cells: {
       'delete': PlutoCell(value: "Delete"),
       'id': PlutoCell(value: e.id),
-      'fullName': PlutoCell(value: e.fullName),
-      'phoneNumber': PlutoCell(value: e.phoneNumber),
-      'ordersCount': PlutoCell(value: e.ordersCount),
+      'name': PlutoCell(value: e.name),
+      'phone': PlutoCell(value: e.phone),
+      'address': PlutoCell(value: e.address),
     });
   }
 
-  List<PlutoColumn> getColumn(Function(CustomerEntity data) onDelete) {
+  List<PlutoColumn> getColumn(Function(FilialEntity data) onDelete) {
     return [
       PlutoColumn(
         enableColumnDrag: false,
@@ -118,22 +115,22 @@ class CustomerEntity extends Equatable {
                   : Colors.red,
             ),
             onPressed: () => onDelete.call(
-              CustomerEntity.fromRow(rendererContext.row),
+              FilialEntity.fromRow(rendererContext.row),
             ),
           );
         },
         type: PlutoColumnType.text(),
       ),
       //PlutoColumn(
-        //enableColumnDrag: false,
-        //enableRowDrag: false,
-        //title: 'id'.tr(),
-        //field: 'id',
-        //enableRowChecked: false,
-        //readOnly: true,
-        // enableDropToResize: true,
-       // type: PlutoColumnType.text(),
-     // ),
+      //enableColumnDrag: false,
+      //enableRowDrag: false,
+      //title: 'id'.tr(),
+      //field: 'id',
+      //enableRowChecked: false,
+      //readOnly: true,
+      // enableDropToResize: true,
+      // type: PlutoColumnType.text(),
+      // ),
       // PlutoColumn(
       //   enableColumnDrag: false,
       //   enableRowDrag: false,
@@ -144,59 +141,53 @@ class CustomerEntity extends Equatable {
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
-        title: 'fullName'.tr(),
-        field: 'fullName',
-        readOnly: false,
-        type: PlutoColumnType.text(),
-      ),
-
-      PlutoColumn(
-        enableColumnDrag: false,
-        enableRowDrag: false,
-        title: 'phoneNumber'.tr(),
-        field: 'phoneNumber',
+        title: 'name'.tr(),
+        field: 'name',
         readOnly: false,
         type: PlutoColumnType.text(),
       ),
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
-        title: 'ordersCount'.tr(),
-        field: 'ordersCount',
+        title: 'phone'.tr(),
+        field: 'phone',
         readOnly: false,
         type: PlutoColumnType.number(),
       ),
-      // PlutoColumn(
-      //   enableColumnDrag: false,
-      //   enableRowDrag: false,
-      //   title: 'isOrganisation'.tr(),
-      //   field: 'isOrganisation',
-      //   readOnly: true,
-      //   renderer: (rendererContext) =>
-      //       BoolForTableWidget(data: rendererContext),
-      //   type: PlutoColumnType.text(),
-      // ),
+      PlutoColumn(
+        enableColumnDrag: false,
+        enableRowDrag: false,
+        title: 'filial'.tr(),
+        field: 'filial',
+        readOnly: false,
+        type: PlutoColumnType.text(),
+      ),
     ];
   }
 
-  factory CustomerEntity.fromFields() {
-    return CustomerEntity(
+  factory FilialEntity.fromFields() {
+    return FilialEntity(
       id: fields["id"]?.val,
-      fullName: fields["fullName"]?.val,
-      phoneNumber: fields["phoneNumber"]?.val,
-      ordersCount: fields["ordersCount"]?.val,
+      name: fields["name"]?.val,
+      phone: fields["phone"]?.val,
+      address: fields["address"]?.val,
     );
   }
 
-  factory CustomerEntity.empty() {
-    return const CustomerEntity(
+  factory FilialEntity.empty() {
+    return const FilialEntity(
       id: "",
-      fullName: "",
-      phoneNumber: 99,
-      ordersCount:0,
+      name: "",
+      address: "",
+      phone:99,
     );
   }
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [
+        id,
+        name,
+        address,
+        phone,
+      ];
 }

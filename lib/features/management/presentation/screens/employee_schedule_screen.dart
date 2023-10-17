@@ -122,7 +122,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       id: "",
       firstName: "Sam",
       lastName: "Satt",
-      phoneNumber: "",
+      phoneNumber: 99,
       role: "manager",
       schedule: [
         EmployeeScheduleEntity(
@@ -135,7 +135,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       id: "",
       firstName: "Alex",
       lastName: "Satt",
-      phoneNumber: "",
+      phoneNumber: 99,
       role: "manager",
       schedule: [
         EmployeeScheduleEntity(
@@ -149,7 +149,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       id: "",
       firstName: "FFF",
       lastName: "Satt",
-      phoneNumber: "",
+      phoneNumber: 99,
       role: "manager",
       schedule: [
         EmployeeScheduleEntity(
@@ -163,7 +163,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       id: "",
       firstName: "Alex",
       lastName: "Satt",
-      phoneNumber: "",
+      phoneNumber: 99,
       role: "manager",
       schedule: [
         EmployeeScheduleEntity(
@@ -177,7 +177,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       id: "",
       firstName: "Alex",
       lastName: "Satt",
-      phoneNumber: "",
+      phoneNumber: 99,
       role: "manager",
       schedule: [
         EmployeeScheduleEntity(

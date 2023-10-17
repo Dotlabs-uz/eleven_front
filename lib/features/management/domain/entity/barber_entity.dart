@@ -5,6 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/components/datetime_for_table_widget.dart';
 import '../../../../core/entities/field_entity.dart';
+import '../../../products/domain/entity/filial_entity.dart';
 import 'employee_schedule_entity.dart';
 
 class BarberEntity extends Equatable {
@@ -13,8 +14,8 @@ class BarberEntity extends Equatable {
   final String lastName;
   final String password;
   final String login;
-  final String phoneNumber;
-  final String filialId;
+  final int phone;
+  final FilialEntity filial;
 
   const BarberEntity({
     required this.id,
@@ -22,8 +23,8 @@ class BarberEntity extends Equatable {
     required this.lastName,
     required this.password,
     required this.login,
-    required this.phoneNumber,
-    required this.filialId,
+    required this.phone,
+    required this.filial,
   });
 
   static Map<String, FieldEntity> fields = {
@@ -66,13 +67,21 @@ class BarberEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "phoneNumber": FieldEntity<String>(
+    "phone": FieldEntity<int>(
       label: "phoneNumber",
       hintText: "phoneNumber",
-      type: Types.string,
+      type: Types.int,
       isRequired: true,
       isForm: true,
-      val: "",
+      val: 99,
+    ),
+    "filial": FieldEntity<FilialEntity>(
+      label: "filial",
+      hintText: "filial",
+      type: Types.filial,
+      isRequired: true,
+      isForm: true,
+      val: FilialEntity.empty(),
     ),
   };
 
@@ -88,8 +97,8 @@ class BarberEntity extends Equatable {
         "id": id,
         "firstName": firstName,
         "lastName": lastName,
-        "phoneNumber": phoneNumber,
-        "filialId": filialId,
+        "phone": phone,
+        "filial": filial,
         "password": password,
         "login": login,
       }[key];
@@ -99,8 +108,8 @@ class BarberEntity extends Equatable {
       id: row.cells["id"]?.value,
       firstName: row.cells["firstName"]?.value,
       lastName: row.cells["lastName"]?.value,
-      phoneNumber: row.cells["phoneNumber"]?.value,
-      filialId: row.cells["filialId"]?.value,
+      phone: row.cells["phone"]?.value,
+      filial: row.cells["filial"]?.value,
       // password: row.cells["password"]?.value,
       password: "",
       login: row.cells["login"]?.value,
@@ -113,8 +122,8 @@ class BarberEntity extends Equatable {
       'id': PlutoCell(value: e.id),
       'firstName': PlutoCell(value: e.firstName),
       'lastName': PlutoCell(value: e.lastName),
-      'phoneNumber': PlutoCell(value: e.phoneNumber),
-      'filialId': PlutoCell(value: e.filialId),
+      'phone': PlutoCell(value: e.phone),
+      'filial': PlutoCell(value: e.filial),
       'password': PlutoCell(value: e.password),
       'login': PlutoCell(value: e.login),
     });
@@ -172,10 +181,18 @@ class BarberEntity extends Equatable {
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
-        title: 'phoneNumber'.tr(),
-        field: 'phoneNumber',
+        title: 'login'.tr(),
+        field: 'login',
         readOnly: false,
         type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        enableColumnDrag: false,
+        enableRowDrag: false,
+        title: 'phoneNumber'.tr(),
+        field: 'phone',
+        readOnly: false,
+        type: PlutoColumnType.number(),
       ),
     ];
   }
@@ -185,20 +202,20 @@ class BarberEntity extends Equatable {
       id: fields["id"]?.val,
       firstName: fields["firstName"]?.val,
       lastName: fields["lastName"]?.val,
-      phoneNumber: fields["phoneNumber"]?.val,
-      filialId: fields["filialId"]?.val,
+      phone: fields["phone"]?.val,
+      filial: fields["filial"]?.val,
       login: fields["login"]?.val,
       password: fields["password"]?.val,
     );
   }
 
   factory BarberEntity.empty() {
-    return const BarberEntity(
+    return   BarberEntity(
       id: "",
       firstName: "",
       lastName: "",
-      phoneNumber: "",
-      filialId: "",
+      phone: 99,
+      filial: FilialEntity.empty(),
       password: "",
       login: "",
     );

@@ -14,7 +14,7 @@ class EmployeeEntity extends Equatable {
   final String firstName;
   final String lastName;
   final String role;
-  final String phoneNumber;
+  final int phoneNumber;
   final List<EmployeeScheduleEntity> schedule;
 
   const EmployeeEntity({
@@ -60,13 +60,13 @@ class EmployeeEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "phoneNumber": FieldEntity<String>(
+    "phone": FieldEntity<int>(
       label: "phoneNumber",
       hintText: "phoneNumber",
-      type: Types.string,
+      type: Types.int,
       isForm: true,
       isRequired: true,
-      val: "",
+      val: 99,
     ),
   };
 
@@ -83,7 +83,7 @@ class EmployeeEntity extends Equatable {
     "firstName": firstName,
     "lastName": lastName,
     "role": role,
-    "phoneNumber": phoneNumber,
+    "phone": phoneNumber,
   }[key];
 
   factory EmployeeEntity.fromRow(PlutoRow row) {
@@ -91,7 +91,7 @@ class EmployeeEntity extends Equatable {
       id: row.cells["id"]?.value,
       firstName: row.cells["firstName"]?.value,
       lastName: row.cells["lastName"]?.value,
-      phoneNumber: row.cells["phoneNumber"]?.value,
+      phoneNumber: row.cells["phone"]?.value,
       role: row.cells["role"]?.value,
   schedule: [],
     );
@@ -103,7 +103,7 @@ class EmployeeEntity extends Equatable {
       'id': PlutoCell(value: e.id),
       'firstName': PlutoCell(value: e.firstName),
       'lastName': PlutoCell(value: e.lastName),
-      'phoneNumber': PlutoCell(value: e.phoneNumber),
+      'phone': PlutoCell(value: e.phoneNumber),
       'role': PlutoCell(value: e.role),
     });
   }
@@ -177,7 +177,7 @@ class EmployeeEntity extends Equatable {
         enableColumnDrag: false,
         enableRowDrag: false,
         title: 'phoneNumber'.tr(),
-        field: 'phoneNumber',
+        field: 'phone',
         readOnly: true,
         type: PlutoColumnType.text(),
       ),
@@ -213,7 +213,7 @@ class EmployeeEntity extends Equatable {
       id: fields["id"]?.val,
       firstName: fields["firstName"]?.val,
       lastName: fields["lastName"]?.val,
-      phoneNumber: fields["phoneNumber"]?.val,
+      phoneNumber: fields["phone"]?.val,
       role: fields["role"]?.val,
       schedule: [],
     );
@@ -222,9 +222,9 @@ class EmployeeEntity extends Equatable {
   factory EmployeeEntity.empty() {
     return const EmployeeEntity(
       id: "",
-      firstName: "Alex",
-      lastName: "James",
-      phoneNumber: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: 99,
       role: "",
       schedule: [],
     );

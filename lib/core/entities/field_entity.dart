@@ -12,6 +12,7 @@ enum Types {
   employeeRole,
   serviceCategory,
   sex,
+  role,
 }
 
 class FieldEntity<T> {

@@ -10,7 +10,9 @@ import '../../features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../entities/field_entity.dart';
 import 'button_widget.dart';
 import 'customer_order_status_field_widget.dart';
+import 'filial_field_widget.dart';
 import 'header_text.dart';
+import 'role_field_widget.dart';
 import 'service_category_field_widget.dart';
 
 class DataPage extends StatelessWidget {
@@ -229,6 +231,14 @@ class DataFormWidgetState extends State<DataFormWidget> {
             ));
           }else if (field.type == Types.serviceCategory) {
             ctrlWidgets.add(ServiceCategoryFieldWidget(
+              fieldEntity: field,
+            ));
+          }else if (field.type == Types.filial) {
+            ctrlWidgets.add(FilialFieldWidget(
+              fieldEntity: field,
+            ));
+          }else if (field.type == Types.role) {
+            ctrlWidgets.add(RoleFieldWidget(
               fieldEntity: field,
             ));
           }

@@ -181,7 +181,7 @@ class _CustomerFieldContentState extends State<CustomerFieldContent> {
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          item.phoneNumber.replaceAll("+", ""),
+                          item.phoneNumber.toString().replaceAll("+", ""),
                           style: GoogleFonts.nunito(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
