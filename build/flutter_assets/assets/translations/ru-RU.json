@@ -631,15 +631,13 @@
 
   "pleaseSelectStatus": "Пожалуйста выберите статус",
   "clear": "Очистить",
-  "barber": "Барберы",
+  "barbers": "Барберы",
   "role": "Роль",
   "navigateToEmployeeProfile": "Профиль сотрудника",
   "enter": "Войти",
   "login": "Логин",
   "categoryName": "Название категории",
-  "data": "data",
-  "data": "data",
-  "data": "data",
+  "barber": "Барбер",
   "data": "data",
   "data": "data"
 }
