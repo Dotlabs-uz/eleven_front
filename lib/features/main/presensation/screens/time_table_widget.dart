@@ -14,19 +14,19 @@ import '../../domain/entity/order_entity.dart';
 
 // ignore: must_be_immutable
 
-class CalendarMainVersionTwoWidget extends StatefulWidget {
+class TimeTableWidget extends StatefulWidget {
   final List<EmployeeEntity> listEmployee;
 
-  const CalendarMainVersionTwoWidget({Key? key, required this.listEmployee})
+  const TimeTableWidget({Key? key, required this.listEmployee})
       : super(key: key);
 
   @override
-  State<CalendarMainVersionTwoWidget> createState() =>
-      _CalendarMainVersionTwoWidgetState();
+  State<TimeTableWidget> createState() =>
+      _TimeTableWidgetState();
 }
 
-class _CalendarMainVersionTwoWidgetState
-    extends State<CalendarMainVersionTwoWidget> {
+class _TimeTableWidgetState
+    extends State<TimeTableWidget> {
   final double rightCellPadding = 5;
   final DateTime from = DateTime(2023, 10, 7, 8);
   final DateTime to = DateTime(2023, 10, 7, 22);

@@ -17,7 +17,7 @@ import '../cubit/data_form/data_form_cubit.dart';
 import '../cubit/order/order_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../widget/my_icon_button.dart';
-import 'calendar_main_version_two_widget.dart';
+import 'time_table_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -254,7 +254,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 Expanded(
                   flex: 2,
                   child:
-                      CalendarMainVersionTwoWidget(listEmployee: listEmployee),
+                      TimeTableWidget(listEmployee: listEmployee),
                 ),
                 if (isFormVisible)
                   Expanded(
