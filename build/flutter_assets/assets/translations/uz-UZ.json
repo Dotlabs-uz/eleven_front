@@ -628,5 +628,10 @@
   "navigateToEmployeeProfile": "Xodim profili",
   "enter": "Kirish",
   "login": "Login",
-  "barber": "Sartarosh"
+  "barber": "Sartarosh",
+  "reception": "Resepsiyonist",
+  "filial": "Filial",
+  "discountPercent": "Chegirma foizi",
+  "orderStart": "Buyurtmaning boshlanishi",
+  "orderEnd": "Buyurtmaning oxiri"
 }

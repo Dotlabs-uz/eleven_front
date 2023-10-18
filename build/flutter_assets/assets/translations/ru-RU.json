@@ -638,6 +638,11 @@
   "login": "Логин",
   "categoryName": "Название категории",
   "barber": "Барбер",
+  "reception": "Рецепшин",
+  "filial": "Филиал",
+  "discountPercent": "Процент скидки",
+  "orderStart": "Начало заказа",
+  "orderEnd": "Конец заказа",
   "data": "data",
   "data": "data"
 }

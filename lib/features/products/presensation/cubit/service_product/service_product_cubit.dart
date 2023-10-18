@@ -38,6 +38,7 @@ class ServiceProductCubit extends Cubit<ServiceProductState> {
   void load(
     String searchText, {
     String? ordering,
+    String? category,
     int page = 1,
     DateTime? startDate,
     DateTime? endDate,

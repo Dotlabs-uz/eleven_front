@@ -8,10 +8,12 @@ import 'package:flutter/foundation.dart';
 import '../../../../core/api/api_client.dart';
 import '../../../../core/api/api_constants.dart';
 import '../../../auth/data/models/token_model.dart';
+import '../model/order_model.dart';
 
 abstract class MainRemoteDataSource {
 
   Future<CurrentUserModel>getCurrentUser();
+  Future<List<OrderModel>> getOrders();
 
 }
 
@@ -28,6 +30,12 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     final model = CurrentUserModel.fromJson(response['results'][0]);
 
     return CurrentUserModel(id: "id", firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber", password: "password", login: "login", role: "role");
+  }
+
+  @override
+  Future<List<OrderModel>> getOrders() async {
+    // TODO: implement getOrders
+    throw UnimplementedError();
   }
 
 }

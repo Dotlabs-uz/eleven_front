@@ -94,7 +94,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
       response =
           await _client.post(ApiConstants.clients, params: data.toJson());
     } else {
-      response = await _client.put('${ApiConstants.clients}/${data.id}/',
+      response = await _client.patch('${ApiConstants.clients}/${data.id}/',
           params: data.toJson());
     }
     return CustomerModel.fromJson(response);
@@ -154,7 +154,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
       response =
           await _client.post(ApiConstants.employee, params: data.toJson());
     } else {
-      response = await _client.put('${ApiConstants.employee}/${data.id}/',
+      response = await _client.patch('${ApiConstants.employee}/${data.id}/',
           params: data.toJson());
     }
     return EmployeeModel.fromJson(response);

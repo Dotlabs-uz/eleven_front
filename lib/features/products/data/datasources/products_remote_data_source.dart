@@ -77,7 +77,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
       response = await _client.post(ApiConstants.serviceProduct,
           params: data.toJson());
     } else {
-      response = await _client.put('${ApiConstants.serviceProduct}/${data.id}/',
+      response = await _client.patch('${ApiConstants.serviceProduct}/${data.id}/',
           params: data.toJson());
     }
     return ServiceProductModel.fromJson(response);
@@ -117,7 +117,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
       response = await _client.post(ApiConstants.serviceProductCategory,
           params: data.toJson());
     } else {
-      response = await _client.put(
+      response = await _client.patch(
           '${ApiConstants.serviceProductCategory}/${data.id}/',
           params: data.toJson());
     }

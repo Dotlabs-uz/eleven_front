@@ -222,7 +222,7 @@ class ApiClient {
     }
   }
 
-  dynamic put(String path, {Map<dynamic, dynamic>? params}) async {
+  dynamic patch(String path, {Map<dynamic, dynamic>? params}) async {
     String sessionId =
         await _authenticationLocalDataSource.getSessionId() ?? "";
     Map<String, String> userHeader = {
@@ -233,7 +233,7 @@ class ApiClient {
     if (sessionId != '') {
       userHeader.addAll({'Authorization': '$sessionId'});
     }
-    final response = await _client.put(
+    final response = await _client.patch(
       getPath(path, null),
       body: jsonEncode(params),
       headers: userHeader,

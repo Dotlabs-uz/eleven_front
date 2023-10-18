@@ -7,6 +7,7 @@ import '../../domain/entity/order_entity.dart';
 
 class OrderModel extends OrderEntity {
   OrderModel({
+    required super.id,
     required super.clientId,
     required super.discount,
     required super.discountPercent,
@@ -20,6 +21,7 @@ class OrderModel extends OrderEntity {
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     return OrderModel(
+      id: json['_id'],
       orderStart: json['from'],
       orderEnd: json['to'],
       price: json['price'],
@@ -27,9 +29,38 @@ class OrderModel extends OrderEntity {
       paymentType: json['paymentType'],
       discountPercent: json['discountPer'],
       discount: json['discount'],
-      clientId: json['clientId'], services: json['services'],
+      clientId: json['clientId'],
+      services: json['services'],
     );
   }
 
+  factory OrderModel.fromEntity(OrderEntity entity) {
+    return OrderModel(
+      id: entity.id,
+      orderStart: entity.orderStart,
+      orderEnd: entity.orderEnd,
+      price: entity.price,
+      barberId: entity.barberId,
+      paymentType: entity.paymentType,
+      discountPercent: entity.discountPercent,
+      discount: entity.discount,
+      clientId: entity.clientId,
+      services: entity.services,
+    );
+  }
 
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    // data['_id'] = id;
+    data['orderStart'] = orderStart;
+    data['orderEnd'] = orderEnd;
+    data['price'] = price;
+    data['barberId'] = barberId;
+    data['paymentType'] = paymentType;
+    data['discountPercent'] = discountPercent;
+    data['discount'] = discount;
+    data['clientId'] = clientId;
+    data['services'] = services.map((e) => e.id).toList();
+    return data;
+  }
 }

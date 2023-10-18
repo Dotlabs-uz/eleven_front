@@ -11,6 +11,9 @@ enum Types {
   filial,
   employeeRole,
   serviceCategory,
+  paymentType,
+  barber,
+  client,
   sex,
   role,
 }

@@ -3,11 +3,20 @@ import 'package:eleven_crm/core/utils/string_helper.dart';
 import 'package:eleven_crm/features/auth/data/datasources/authentication_local_data_source.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../../../core/components/data_order_form.dart';
+import '../../../../core/components/responsive_builder.dart';
 import '../../../../get_it/locator.dart';
 import '../../../management/domain/entity/employee_entity.dart';
 import '../../../management/domain/entity/employee_schedule_entity.dart';
+import '../../domain/entity/order_entity.dart';
+import '../cubit/data_form/data_form_cubit.dart';
+import '../cubit/order/order_cubit.dart';
+import '../cubit/top_menu_cubit/top_menu_cubit.dart';
+import '../widget/my_icon_button.dart';
 import 'calendar_main_version_two_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,6 +37,11 @@ class _ContentWidget extends StatefulWidget {
 
 class _ContentWidgetState extends State<_ContentWidget> {
   late AuthenticationLocalDataSource localDataSource;
+  late OrderEntity activeData;
+  late bool isFormVisible;
+
+  late PlutoRow selectedRow;
+  late PlutoGridStateManager stateManager;
   @override
   void initState() {
     localDataSource = locator();
@@ -40,8 +54,59 @@ class _ContentWidgetState extends State<_ContentWidget> {
   initialize() async {
     print("Saved ");
 
+    activeData = OrderEntity.empty();
+
+    isFormVisible = false;
+
+    _setWidgetTop();
+
     await localDataSource.saveSessionId(
         "eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJ1c2VySWQiOiI2NTJjZjQ3ZGY2NTViZDdjYmExZmQ4MTUiLCJwYXRoIjoibWFuYWdlcnMiLCJpYXQiOjE2OTc0NDQ5ODksImV4cCI6MTY5NzUzMTM4OSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwianRpIjoiOGUzMzM2NjQtMmVhZi00ZmRlLWIyYTAtMjZkN2IxNGU5MDlhIn0.D4CPUFD4_vfDCy9sCy2AM0FtDMWC2P_jTRDtmTp1nHU");
+  }
+
+  _setWidgetTop() {
+    // final Map<String, dynamic> filtr = {};
+
+    BlocProvider.of<TopMenuCubit>(context).setWidgets(
+      [
+        MyIconButton(
+          onPressed: () {
+            activeData = OrderEntity.empty();
+            _editData(activeData);
+          },
+          icon: const Icon(Icons.add_box_rounded),
+        ),
+        MyIconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.refresh),
+        ),
+      ],
+    );
+  }
+
+  void _saveData() {
+    BlocProvider.of<OrderCubit>(context).save(order: OrderEntity.fromFields());
+  }
+
+  void _editData(OrderEntity data) {
+    BlocProvider.of<DataFormCubit>(context).editData(data.getFields());
+
+    if (ResponsiveBuilder.isMobile(context)) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Scaffold(
+            body: DataOrderForm(
+              saveData: _saveData,
+              closeForm: () => Navigator.pop(context),
+              fields: data.getFields(),
+            ),
+          ),
+        ),
+      );
+    } else {
+      setState(() => isFormVisible = true);
+    }
   }
 
   Map<int, Widget> children = <int, Widget>{
@@ -83,7 +148,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
       firstName: "FFF",
       lastName: "Satt",
       phoneNumber: 99,
-
       role: "manager",
       schedule: [
         EmployeeScheduleEntity(
@@ -122,7 +186,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   _dateTimeWidget() {
     final now = DateTime.now();
-    final style = TextStyle();
+    const style = TextStyle();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -154,25 +218,26 @@ class _ContentWidgetState extends State<_ContentWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           const SizedBox(height: 10),
           Row(
             children: [
-              CupertinoSlidingSegmentedControl<int>(
-                backgroundColor: CupertinoColors.white,
-                thumbColor: Colors.grey,
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                groupValue: selectedValue,
-                children: children,
-                onValueChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      selectedValue = value;
-                    });
-                  }
-                },
-              ),
+              // CupertinoSlidingSegmentedControl<int>(
+              //   backgroundColor: CupertinoColors.white,
+              //   thumbColor: Colors.grey,
+              //   padding: const EdgeInsets.symmetric(horizontal: 15),
+              //   groupValue: selectedValue,
+              //   children: children,
+              //   onValueChanged: (value) {
+              //     if (value != null) {
+              //       setState(() {
+              //         selectedValue = value;
+              //       });
+              //     }
+              //   },
+              // ),
               Expanded(child: _dateTimeWidget()),
             ],
           ),
@@ -187,51 +252,63 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 // )),
 
                 Expanded(
+                  flex: 2,
                   child:
                       CalendarMainVersionTwoWidget(listEmployee: listEmployee),
                 ),
-                const SizedBox(width: 5),
-                Card(
-                  shadowColor: Colors.transparent,
-                  margin: EdgeInsets.zero,
-                  child: Container(
-                    width: 120,
-                    color: const Color(0xffF5EFE2),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        // const SizedBox(height: 20),
-                        ...List.generate(listEmployee.length, (index) {
-                          final el = listEmployee[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 60,
-                                  width: 60,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.grey,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  "${el.firstName} ${el.lastName}",
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-                        const SizedBox(height: 20),
-                      ],
+                if (isFormVisible)
+                  Expanded(
+                    flex: 1,
+                    child: SingleChildScrollView(
+                      child: DataOrderForm(
+                        fields: activeData.getFields(),
+                        closeForm: () => setState(() => isFormVisible = false),
+                      ),
                     ),
                   ),
-                ),
+                if (!isFormVisible) const SizedBox(width: 5),
+                if (!isFormVisible)
+                  Card(
+                    shadowColor: Colors.transparent,
+                    margin: EdgeInsets.zero,
+                    child: Container(
+                      width: 120,
+                      color: const Color(0xffe0e0e0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          // const SizedBox(height: 20),
+                          ...List.generate(listEmployee.length, (index) {
+                            final el = listEmployee[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 60,
+                                    width: 60,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.grey,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    "${el.firstName} ${el.lastName}",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

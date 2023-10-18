@@ -22,17 +22,21 @@ class EmployeeLoaded extends EmployeeState {
   final int pageCount;
   final int dataCount;
 
-  const EmployeeLoaded({required this.data, required this.pageCount,required this.dataCount});
+  const EmployeeLoaded(
+      {required this.data, required this.pageCount, required this.dataCount});
   @override
   List<Object> get props => [data, pageCount];
 }
+
 class EmployeeSaved extends EmployeeState {
   final EmployeeEntity data;
 
   const EmployeeSaved({required this.data});
   @override
-  List<Object> get props => [data ];
-}class EmployeeDeleted extends EmployeeState {
+  List<Object> get props => [data];
+}
+
+class EmployeeDeleted extends EmployeeState {
   final String id;
 
   const EmployeeDeleted({required this.id});
@@ -42,5 +46,5 @@ class EmployeeSaved extends EmployeeState {
 
 class EmployeeLoading extends EmployeeState {
   @override
-  List<Object> get props => [ ];
+  List<Object> get props => [];
 }

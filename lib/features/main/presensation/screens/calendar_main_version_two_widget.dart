@@ -44,7 +44,7 @@ class _CalendarMainVersionTwoWidgetState
       orderEnd: DateTime(2023, 10, 7, 9, 30),
       price: 30,
       barberId: "2",
-      services:   [
+      services: [
         ServiceProductEntity(
           id: "id",
           name: "name",
@@ -58,6 +58,7 @@ class _CalendarMainVersionTwoWidgetState
       discountPercent: 2,
       clientId: "333",
       paymentType: OrderPayment.cash,
+      id: '',
     ),
     OrderEntity(
       discount: 2,
@@ -69,6 +70,7 @@ class _CalendarMainVersionTwoWidgetState
       price: 30,
       barberId: "3",
       services: [],
+      id: '',
     ),
     OrderEntity(
       discount: 2,
@@ -80,6 +82,7 @@ class _CalendarMainVersionTwoWidgetState
       price: 30,
       barberId: "3",
       services: [],
+      id: '',
     ),
     OrderEntity(
       discount: 2,
@@ -91,6 +94,7 @@ class _CalendarMainVersionTwoWidgetState
       price: 30,
       barberId: "4",
       services: [],
+      id: '',
     ),
     OrderEntity(
       discount: 2,
@@ -102,6 +106,7 @@ class _CalendarMainVersionTwoWidgetState
       price: 30,
       barberId: "1",
       services: [],
+      id: '',
     ),
   ];
 
@@ -110,7 +115,7 @@ class _CalendarMainVersionTwoWidgetState
     return Column(
       children: [
         Container(
-          color: Colors.orange,
+          color: Colors.white,
           child: Row(
             children: [
               SizedBox(
@@ -321,8 +326,6 @@ class _CalendarMainVersionTwoWidgetState
     );
   }
 
-
-
   double _getTopPosition(OrderEntity order) {
     if (order.orderStart.hour == Constants.startWork) {
       // return Constants.timeTableItemHeight;
@@ -380,18 +383,16 @@ class OrderCardWidget extends StatefulWidget {
 }
 
 class _OrderCardWidgetState extends State<OrderCardWidget> {
-
   double _getCardHeight() {
-
-    if(widget.order.orderStart.hour == widget.order.orderEnd.hour) {
+    if (widget.order.orderStart.hour == widget.order.orderEnd.hour) {
       return widget.order.orderEnd.minute * Constants.onTimetableFieldItemRound;
     }
 
     return Constants.timeTableItemHeight +
         (widget.order.orderEnd.minute * Constants.onTimetableFieldItemRound) -
         widget.order.orderStart.minute;
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(

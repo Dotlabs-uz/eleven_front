@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/barber_field_widget.dart';
+import 'package:eleven_crm/core/components/client_field_widget.dart';
 import 'package:eleven_crm/core/components/customer_field_widget.dart';
 import 'package:eleven_crm/core/components/data_double_field_widget.dart';
 import 'package:eleven_crm/core/components/data_text_field_widget.dart';
+import 'package:eleven_crm/core/components/payment_type_field_widget.dart';
 import 'package:eleven_crm/core/components/responsive_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +44,9 @@ class DataPage extends StatelessWidget {
           builder: (context, state) {
             if (state is DataFormLoadedData) {
               return Row(children: [
-                Expanded(child: HeaderText("ID: ${state.fields["id"]?.val.toString()}")),
+                Expanded(
+                    child: HeaderText(
+                        "ID: ${state.fields["id"]?.val.toString()}")),
               ]);
             }
             return const Text('Add').tr();
@@ -67,7 +72,7 @@ class DataPage extends StatelessWidget {
                     ),
                   ),
                   if (!ResponsiveBuilder.isMobile(context))
-                    const Expanded(flex:2, child: SizedBox.shrink()),
+                    const Expanded(flex: 2, child: SizedBox.shrink()),
                 ],
               ),
             );
@@ -225,20 +230,32 @@ class DataFormWidgetState extends State<DataFormWidget> {
             ctrlWidgets.add(DataDoubleFieldWidget(
               fieldEntity: field,
             ));
-          }else if (field.type == Types.sex) {
+          } else if (field.type == Types.sex) {
             ctrlWidgets.add(SexFieldWidget(
               fieldEntity: field,
             ));
-          }else if (field.type == Types.serviceCategory) {
+          } else if (field.type == Types.serviceCategory) {
             ctrlWidgets.add(ServiceCategoryFieldWidget(
               fieldEntity: field,
             ));
-          }else if (field.type == Types.filial) {
+          } else if (field.type == Types.filial) {
             ctrlWidgets.add(FilialFieldWidget(
               fieldEntity: field,
             ));
-          }else if (field.type == Types.role) {
+          } else if (field.type == Types.role) {
             ctrlWidgets.add(RoleFieldWidget(
+              fieldEntity: field,
+            ));
+          } else if (field.type == Types.barber) {
+            ctrlWidgets.add(BarberFieldWidget(
+              fieldEntity: field,
+            ));
+          } else if (field.type == Types.client) {
+            ctrlWidgets.add(ClientFieldWidget(
+              fieldEntity: field,
+            ));
+          } else if (field.type == Types.paymentType) {
+            ctrlWidgets.add(PaymentTypeFieldWidget(
               fieldEntity: field,
             ));
           }

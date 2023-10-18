@@ -63,7 +63,7 @@ class _CustomerOrderFieldContentState extends State<CustomerOrderFieldContent> {
   Widget build(BuildContext context) {
     int ind = 0;
     if (widget.fieldEntity != null) {
-      ind =  widget.fieldEntity!.val == "manager" ? 0 : 1;
+      ind =  widget.fieldEntity!.val == "reception" ? 0 : 1;
       widget.fieldEntity!.val = TypeChooses.role[ind];
     }
 
