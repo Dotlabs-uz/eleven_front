@@ -7,12 +7,12 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../../core/entities/field_entity.dart';
 import 'employee_schedule_entity.dart';
 
-
 class EmployeeEntity extends Equatable {
-
   final String id;
   final String firstName;
   final String lastName;
+  final String login;
+  final String password;
   final String role;
   final int phoneNumber;
   final List<EmployeeScheduleEntity> schedule;
@@ -21,13 +21,12 @@ class EmployeeEntity extends Equatable {
     required this.id,
     required this.firstName,
     required this.lastName,
+    required this.password,
+    required this.login,
     required this.role,
     required this.phoneNumber,
     required this.schedule,
   });
-
-
-
 
   static Map<String, FieldEntity> fields = {
     "id": FieldEntity<String>(
@@ -44,9 +43,26 @@ class EmployeeEntity extends Equatable {
       isRequired: true,
       isForm: true,
       val: "",
-    ),    "lastName": FieldEntity<String>(
+    ),
+    "lastName": FieldEntity<String>(
       label: "lastName",
       hintText: "lastName",
+      type: Types.string,
+      isRequired: true,
+      isForm: true,
+      val: "",
+    ),
+    "login": FieldEntity<String>(
+      label: "login",
+      hintText: "login",
+      type: Types.string,
+      isRequired: true,
+      isForm: true,
+      val: "",
+    ),
+    "password": FieldEntity<String>(
+      label: "password",
+      hintText: "password",
       type: Types.string,
       isRequired: true,
       isForm: true,
@@ -79,12 +95,14 @@ class EmployeeEntity extends Equatable {
   }
 
   dynamic getProp(String key) => <String, dynamic>{
-    "id": id,
-    "firstName": firstName,
-    "lastName": lastName,
-    "role": role,
-    "phone": phoneNumber,
-  }[key];
+        "id": id,
+        "firstName": firstName,
+        "lastName": lastName,
+        "login": login,
+        "password": password,
+        "role": role,
+        "phone": phoneNumber,
+      }[key];
 
   factory EmployeeEntity.fromRow(PlutoRow row) {
     return EmployeeEntity(
@@ -92,8 +110,10 @@ class EmployeeEntity extends Equatable {
       firstName: row.cells["firstName"]?.value,
       lastName: row.cells["lastName"]?.value,
       phoneNumber: row.cells["phone"]?.value,
+      password: row.cells["password"]?.value,
+      login: row.cells["login"]?.value,
       role: row.cells["role"]?.value,
-  schedule: [],
+      schedule: [],
     );
   }
 
@@ -103,6 +123,8 @@ class EmployeeEntity extends Equatable {
       'id': PlutoCell(value: e.id),
       'firstName': PlutoCell(value: e.firstName),
       'lastName': PlutoCell(value: e.lastName),
+      'login': PlutoCell(value: e.login),
+      'password': PlutoCell(value: e.password),
       'phone': PlutoCell(value: e.phoneNumber),
       'role': PlutoCell(value: e.role),
     });
@@ -142,15 +164,15 @@ class EmployeeEntity extends Equatable {
         type: PlutoColumnType.text(),
       ),
       //PlutoColumn(
-        //enableColumnDrag: false,
-        //enableRowDrag: false,
-        //title: 'id'.tr(),
-        //field: 'id',
-        //enableRowChecked: false,
-        //readOnly: true,
-        // enableDropToResize: true,
-       // type: PlutoColumnType.text(),
-     // ),
+      //enableColumnDrag: false,
+      //enableRowDrag: false,
+      //title: 'id'.tr(),
+      //field: 'id',
+      //enableRowChecked: false,
+      //readOnly: true,
+      // enableDropToResize: true,
+      // type: PlutoColumnType.text(),
+      // ),
       // PlutoColumn(
       //   enableColumnDrag: false,
       //   enableRowDrag: false,
@@ -165,7 +187,8 @@ class EmployeeEntity extends Equatable {
         field: 'firstName',
         readOnly: true,
         type: PlutoColumnType.text(),
-      ),PlutoColumn(
+      ),
+      PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
         title: 'lastName'.tr(),
@@ -191,7 +214,7 @@ class EmployeeEntity extends Equatable {
           if (rendererContext.cell.value != null &&
               rendererContext.cell.value.toString().isNotEmpty) {
             return Text(
-              (rendererContext.cell.value.toString().tr() ),
+              (rendererContext.cell.value.toString().tr()),
               style: GoogleFonts.nunito(
                 fontSize: 16,
                 color: Colors.black,
@@ -202,7 +225,6 @@ class EmployeeEntity extends Equatable {
 
           return Text("noData".tr());
         },
-
         type: PlutoColumnType.text(),
       ),
     ];
@@ -214,6 +236,8 @@ class EmployeeEntity extends Equatable {
       firstName: fields["firstName"]?.val,
       lastName: fields["lastName"]?.val,
       phoneNumber: fields["phone"]?.val,
+      password: fields["password"]?.val,
+      login: fields["login"]?.val,
       role: fields["role"]?.val,
       schedule: [],
     );
@@ -224,6 +248,8 @@ class EmployeeEntity extends Equatable {
       id: "",
       firstName: "",
       lastName: "",
+      password: "",
+      login: "",
       phoneNumber: 99,
       role: "",
       schedule: [],

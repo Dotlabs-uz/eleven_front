@@ -2,11 +2,13 @@ import 'package:eleven_crm/features/management/data/model/barber_model.dart';
 
 import '../../../../core/api/api_client.dart';
 import '../../../../core/api/api_constants.dart';
+import '../../presentation/widgets/employee_schedule_widget.dart';
 import '../model/barber_results_model.dart';
 import '../model/customer_model.dart';
 import '../model/customer_results_model.dart';
 import '../model/employee_model.dart';
 import '../model/employee_results_model.dart';
+import '../model/employee_schedule_model.dart';
 
 abstract class ManagementRemoteDataSource {
   // ================ CUSTOMER CRUD ================ //
@@ -43,6 +45,7 @@ abstract class ManagementRemoteDataSource {
   );
 
   Future<BarberModel> saveBarber(BarberModel data);
+  Future<bool> saveEmployeeSchedule(List<FieldSchedule> data);
 
   Future<bool> deleteBarber(String id);
 }
@@ -224,5 +227,13 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     final results = BarberModel.fromJson(response);
 
     return results;
+  }
+
+  @override
+  Future<bool> saveEmployeeSchedule(List<FieldSchedule> data) async {
+
+    await _client.post(ApiConstants.barbers, params: {"schedule": data.map((e) => e.toJson()).toList()});
+
+    return true;
   }
 }

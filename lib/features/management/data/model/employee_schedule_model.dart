@@ -10,11 +10,12 @@ class EmployeeScheduleModel extends EmployeeScheduleEntity {
     // required super.rest,
   });
 
-  factory EmployeeScheduleModel.fromJson(Map<String, dynamic> json) {
+  factory EmployeeScheduleModel.fromJson(
+      Map<String, dynamic> json, String employeeId) {
     return EmployeeScheduleModel(
       date: json['date'],
       status: json['status'],
-      employee: json['employee'],
+      employee: employeeId,
       // rest: List.from(json['rest'])
       //     .map((e) => EmployeeScheduleRestModel.fromJson(e))
       //     .toList(),

@@ -17,7 +17,7 @@ class ServiceProductModel extends ServiceProductEntity {
       name: json['name'],
       price: json['price'],
       duration: json['duration'],
-      category: ServiceProductCategoryModel.fromJson(json['category']),
+      category: json['category'],
       sex: json['sex'] ?? "men",
     );
   }
@@ -47,3 +47,4 @@ class ServiceProductModel extends ServiceProductEntity {
     return data;
   }
 }
+

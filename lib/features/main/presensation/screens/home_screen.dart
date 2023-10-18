@@ -121,6 +121,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
       id: "1",
       firstName: "Sam",
       lastName: "Satt",
+      password: "Satt",
+      login: "Satt",
       phoneNumber: 99,
       role: "manager",
       schedule: [
@@ -134,6 +136,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
       id: "2",
       firstName: "Alex",
       lastName: "Satt",
+      password: "Satt",
+      login: "Satt",
       phoneNumber: 99,
       role: "manager",
       schedule: [
@@ -148,6 +152,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
       firstName: "FFF",
       lastName: "Satt",
       phoneNumber: 99,
+      password: "Satt",
+      login: "Satt",
       role: "manager",
       schedule: [
         EmployeeScheduleEntity(
@@ -160,6 +166,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
       id: "4",
       firstName: "Alex",
       lastName: "Satt",
+      password: "Satt",
+      login: "Satt",
       phoneNumber: 99,
       role: "manager",
       schedule: [
@@ -173,6 +181,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
       id: "5",
       firstName: "Alex",
       lastName: "Satt",
+      password: "Satt",
+      login: "Satt",
       phoneNumber: 99,
       role: "manager",
       schedule: [

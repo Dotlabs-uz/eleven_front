@@ -12,13 +12,13 @@ enum EmployeeScheduleStatus {
 class EmployeeScheduleEntity extends Equatable {
   final String date;
   int status;
-  final int employee;
+  final String employee;
   // final List<EmployeeScheduleRestEntity> rest;
 
   EmployeeScheduleEntity({
     required this.date,
     this.status = 0,
-    this.employee = 0,
+    this.employee = "",
     // required this.rest,
   });
 
@@ -27,7 +27,7 @@ class EmployeeScheduleEntity extends Equatable {
       date: '',
       // rest: [],
       status: 0,
-      employee: 0,
+      employee: "",
     );
   }
   factory EmployeeScheduleEntity.emptyWithCustomValue(

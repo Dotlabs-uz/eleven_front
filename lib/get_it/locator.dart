@@ -6,6 +6,7 @@ import 'package:eleven_crm/features/management/data/datasources/management_remot
 import 'package:eleven_crm/features/management/domain/repositories/management_repository.dart';
 import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
 import 'package:eleven_crm/features/management/domain/usecases/employee.dart';
+import 'package:eleven_crm/features/management/domain/usecases/employee_schedule.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
 import 'package:eleven_crm/features/products/domain/usecases/filial.dart';
@@ -66,7 +67,7 @@ void setup() {
   // Employee
 
   locator.registerFactory(() => EmployeeCubit(locator(), locator(), locator()));
-  locator.registerFactory(() => EmployeeScheduleCubit());
+  locator.registerFactory(() => EmployeeScheduleCubit(locator(),));
 
   // Service Product
 
@@ -140,6 +141,11 @@ void setup() {
   // Filial
 
   locator.registerLazySingleton<GetFilials>(() => GetFilials(locator()));
+
+  // Employee Schedule
+
+  locator.registerLazySingleton<SaveEmployeeSchedule>(() => SaveEmployeeSchedule(locator()));
+
 
 
   // ================ Repository / Datasource ================ //

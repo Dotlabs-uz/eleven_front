@@ -10,6 +10,8 @@ class EmployeeModel extends EmployeeEntity {
     required super.role,
     required super.phoneNumber,
     required super.schedule,
+    required super.password,
+    required super.login,
   });
 
   List<MobileFieldEntity> getFieldsAndValues() {
@@ -49,9 +51,13 @@ class EmployeeModel extends EmployeeEntity {
       lastName: json['lastName'],
       phoneNumber: json['phone'],
       role: json['role'],
-      schedule: List.from(json['workTime'])
-          .map((e) => EmployeeScheduleModel.fromJson(e))
-          .toList(),
+      login: "",
+      password: "",
+      schedule: List.from(json['workTime']).isNotEmpty
+          ? List.from(json['workTime'])
+              .map((e) => EmployeeScheduleModel.fromJson(e, json['_id'].toString()))
+              .toList()
+          : [],
     );
   }
 
@@ -63,6 +69,8 @@ class EmployeeModel extends EmployeeEntity {
       phoneNumber: entity.phoneNumber,
       role: entity.role,
       schedule: entity.schedule,
+      login: entity.login,
+      password: entity.password,
     );
   }
 
@@ -72,6 +80,8 @@ class EmployeeModel extends EmployeeEntity {
     data['lastName'] = lastName;
     data['phone'] = phoneNumber;
     data['role'] = role;
+    data['login'] = "test";
+    data['password'] = "test";
     // data['workTime'] =
     //     schedule.map((e) => EmployeeScheduleModel.fromEntity(e).toJson());
     return data;

@@ -3,10 +3,12 @@ import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart'
 import 'package:eleven_crm/features/management/domain/entity/barber_results_entity.dart';
 
 import '../../../../core/entities/app_error.dart';
+import '../../presentation/widgets/employee_schedule_widget.dart';
 import '../entity/customer_entity.dart';
 import '../entity/customer_results_entity.dart';
 import '../entity/employee_entity.dart';
 import '../entity/employee_results_entity.dart';
+import '../entity/employee_schedule_entity.dart';
 
 abstract class ManagementRepository {
   // ================ Customer ================ //
@@ -38,5 +40,6 @@ abstract class ManagementRepository {
     String searchText,
   );
   Future<Either<AppError, EmployeeEntity>> saveEmployee(EmployeeEntity data);
+  Future<Either<AppError, bool>> saveEmployeeScheduleList(List<FieldSchedule> data);
   Future<Either<AppError, bool>> deleteEmployee(EmployeeEntity entity);
 }

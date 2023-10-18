@@ -9,6 +9,8 @@ import '../../../../get_it/locator.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
 import '../../domain/entity/employee_entity.dart';
+import '../cubit/employee/employee_cubit.dart';
+import '../cubit/employee/employee_cubit.dart';
 import '../cubit/employee_schedule/employee_schedule_cubit.dart';
 import '../widgets/employee_schedule_status_widget.dart';
 import '../widgets/employee_schedule_widget.dart';
@@ -22,10 +24,12 @@ class EmployeeScheduleScreen extends StatefulWidget {
 
 class _EmployeeScheduleScreenState extends State<EmployeeScheduleScreen> {
   late EmployeeScheduleCubit employeeScheduleCubit;
+  late EmployeeCubit employeeCubit;
 
   @override
   void initState() {
     employeeScheduleCubit = locator<EmployeeScheduleCubit>();
+    employeeCubit = locator<EmployeeCubit>();
     super.initState();
   }
 
@@ -35,6 +39,8 @@ class _EmployeeScheduleScreenState extends State<EmployeeScheduleScreen> {
       providers: [
         BlocProvider<EmployeeScheduleCubit>(
           create: (context) => employeeScheduleCubit,
+        ), BlocProvider<EmployeeCubit>(
+          create: (context) =>employeeCubit ,
         ),
       ],
       child: ContentWidget(
@@ -59,9 +65,6 @@ class ContentWidget extends StatefulWidget {
 class _ContentWidgetState extends State<ContentWidget> {
   late bool isFormVisible;
   bool isSearch = false;
-  static int dataCount = 0;
-  static int pageCount = 0;
-  final GlobalKey<DataFormWidgetState> _formKey = GlobalKey();
   late List<EmployeeEntity> customers;
   late EmployeeEntity activeData;
 
@@ -72,10 +75,6 @@ class _ContentWidgetState extends State<ContentWidget> {
 
   var filter = "";
 
-  void _saveData() {
-    BlocProvider.of<EmployeeScheduleCubit>(context).save();
-  }
-
   @override
   void initState() {
     init();
@@ -83,7 +82,7 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   init() {
-    BlocProvider.of<EmployeeScheduleCubit>(context).load();
+    BlocProvider.of<EmployeeCubit>(context).load();
     _setWidgetTop();
   }
 
@@ -108,7 +107,7 @@ class _ContentWidgetState extends State<ContentWidget> {
         ),
         MyIconButton(
             onPressed: () {
-              BlocProvider.of<EmployeeScheduleCubit>(context).load();
+              BlocProvider.of<EmployeeCubit>(context).load();
             },
             icon: const Icon(Icons.refresh)),
       ],
@@ -117,76 +116,82 @@ class _ContentWidgetState extends State<ContentWidget> {
 
   initCubit() => BlocProvider.of<EmployeeScheduleCubit>(context).init();
 
-  final List<EmployeeEntity> listEmployee = [
-    EmployeeEntity(
-      id: "",
-      firstName: "Sam",
-      lastName: "Satt",
-      phoneNumber: 99,
-      role: "manager",
-      schedule: [
-        EmployeeScheduleEntity(
-          date: DateTime.now().toIso8601String(),
-          status: 1,
-        ),
-      ],
-    ),
-    EmployeeEntity(
-      id: "",
-      firstName: "Alex",
-      lastName: "Satt",
-      phoneNumber: 99,
-      role: "manager",
-      schedule: [
-        EmployeeScheduleEntity(
-          date  :
-              DateTime.now().add(const Duration(days: 1)).toIso8601String(),
-          status: 1,
-        ),
-      ],
-    ),
-    EmployeeEntity(
-      id: "",
-      firstName: "FFF",
-      lastName: "Satt",
-      phoneNumber: 99,
-      role: "manager",
-      schedule: [
-        EmployeeScheduleEntity(
-          date:
-              DateTime.now().add(const Duration(days: 2)).toIso8601String(),
-          status: 1,
-        ),
-      ],
-    ),
-    EmployeeEntity(
-      id: "",
-      firstName: "Alex",
-      lastName: "Satt",
-      phoneNumber: 99,
-      role: "manager",
-      schedule: [
-        EmployeeScheduleEntity(
-          date:
-              DateTime.now().add(const Duration(days: 3)).toIso8601String(),
-          status: 1,
-        ),
-      ],
-    ),
-    EmployeeEntity(
-      id: "",
-      firstName: "Alex",
-      lastName: "Satt",
-      phoneNumber: 99,
-      role: "manager",
-      schedule: [
-        EmployeeScheduleEntity(
-          date:
-              DateTime.now().add(const Duration(days: 4)).toIso8601String(),
-          status: 1,
-        ),
-      ],
-    ),
+   List<EmployeeEntity> listEmployee = [
+    // EmployeeEntity(
+    //   id: "",
+    //   firstName: "Sam",
+    //   lastName: "Satt",
+    //   password: "Satt",
+    //   login: "Satt",
+    //   phoneNumber: 99,
+    //   role: "manager",
+    //   schedule: [
+    //     EmployeeScheduleEntity(
+    //       date: DateTime.now().toIso8601String(),
+    //       status: 1,
+    //     ),
+    //   ],
+    // ),
+    // EmployeeEntity(
+    //   id: "",
+    //   firstName: "Alex",
+    //   lastName: "Satt",
+    //   password: "Satt",
+    //   login: "Satt",
+    //   phoneNumber: 99,
+    //   role: "manager",
+    //   schedule: [
+    //     EmployeeScheduleEntity(
+    //       date: DateTime.now().add(const Duration(days: 1)).toIso8601String(),
+    //       status: 1,
+    //     ),
+    //   ],
+    // ),
+    // EmployeeEntity(
+    //   id: "",
+    //   firstName: "FFF",
+    //   lastName: "Satt",
+    //   password: "Satt",
+    //   login: "Satt",
+    //   phoneNumber: 99,
+    //   role: "manager",
+    //   schedule: [
+    //     EmployeeScheduleEntity(
+    //       date: DateTime.now().add(const Duration(days: 2)).toIso8601String(),
+    //       status: 1,
+    //     ),
+    //   ],
+    // ),
+    // EmployeeEntity(
+    //   id: "",
+    //   firstName: "Alex",
+    //   password: "Satt",
+    //   login: "Satt",
+    //   lastName: "Satt",
+    //   phoneNumber: 99,
+    //   role: "manager",
+    //   schedule: [
+    //     EmployeeScheduleEntity(
+    //       date: DateTime.now().add(const Duration(days: 3)).toIso8601String(),
+    //       status: 1,
+    //     ),
+    //   ],
+    // ),
+    // EmployeeEntity(
+    //   id: "",
+    //   firstName: "Alex",
+    //   lastName: "Satt",
+    //   password: "Satt",
+    //   login: "Satt",
+    //   phoneNumber: 99,
+    //   role: "manager",
+    //   schedule: [
+    //     EmployeeScheduleEntity(
+    //       date: DateTime.now().add(const Duration(days: 4)).toIso8601String(),
+    //       status: 1,
+    //     ),
+    //   ],
+    // ),
   ];
 
   @override
@@ -224,16 +229,28 @@ class _ContentWidgetState extends State<ContentWidget> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      EmployeeScheduleWidget(
-                        onSave: (listFields) {
-                          debugPrint("List fields ${listFields.length}");
-
-                          for (var element in listFields) {
-                            debugPrint(
-                                "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employeeId}");
+                      BlocBuilder<EmployeeCubit, EmployeeState>(
+                        builder: (context, state) {
+                          if(state is EmployeeLoaded) {
+                           listEmployee = state.data;
                           }
+
+                          return    EmployeeScheduleWidget(
+                            onSave: (listFields) {
+                              debugPrint("List fields ${listFields.length}");
+
+                              for (var element in listFields) {
+                                debugPrint(
+                                    "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employeeId}");
+                              }
+
+                              BlocProvider.of<EmployeeScheduleCubit>(context)
+                                  .save(listData: listFields);
+                            },
+                            listEmployee: listEmployee,
+                          );
+
                         },
-                        listEmployee: listEmployee,
                       ),
                     ],
                   ),

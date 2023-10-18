@@ -15,6 +15,16 @@ class FieldSchedule {
   final int status;
 
   FieldSchedule(this.dateTime, this.employeeId, this.status);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+
+    data['date'] = dateTime.toIso8601String();
+    data['employee'] = employeeId;
+    data['status'] = status;
+
+    return data;
+  }
 }
 
 class EmployeeScheduleWidget extends StatefulWidget {
@@ -73,12 +83,10 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
                 int month,
                 int year,
                 int status,
-                  String employee,
+                String employee,
               ) {
                 final dateTime = DateTime(year, month, day);
                 final entity = FieldSchedule(dateTime, employee, status);
-
-
 
                 submittedFields.add(entity);
               },

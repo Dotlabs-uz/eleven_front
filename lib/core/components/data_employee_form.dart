@@ -75,6 +75,8 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
             ),
             DataTextFieldWidget(fieldEntity: widget.fields['firstName']!),
             DataTextFieldWidget(fieldEntity: widget.fields['lastName']!),
+            DataTextFieldWidget(fieldEntity: widget.fields['login']!),
+            DataTextFieldWidget(fieldEntity: widget.fields['password']!),
             RoleFieldWidget(fieldEntity: widget.fields['role']!),
             DataIntFieldWidget(fieldEntity: widget.fields['phone']!),
             const SizedBox(height: 10),
