@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../../../core/components/data_employee_form.dart';
 import '../../../../core/components/data_form.dart';
+import '../../../../core/components/data_manager_form.dart';
 import '../../../../core/components/data_table_with_form_widget.dart';
 import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/loading_circle.dart';
@@ -111,7 +111,7 @@ class _ContentWidgetState extends State<ContentWidget> {
         context,
         MaterialPageRoute(
           builder: (context) => Scaffold(
-            body: DataEmployeeForm(
+            body: DataManagerForm(
               saveData: _saveData,
               closeForm: () => Navigator.pop(context),
               fields: data.getFields(),
@@ -271,7 +271,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                         _editData(entity);
                       }
                     },
-                    form: DataEmployeeForm(
+                    form: DataManagerForm(
                       key: _formKey,
                       closeForm: () {
                         setState(() {
