@@ -143,15 +143,19 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 selectedItem = listData.firstWhereOrNull(
                         (e) => e.id == widget.fieldEntity.val) ??
                     listData.first;
-                widget.fieldEntity.val = selectedItem;
-                Future.delayed(
-                  Duration.zero,
-                  () {
-                    if (mounted) {
-                      widget.onChange?.call(selectedItem!);
-                    }
-                  },
-                );
+
+                if(selectedItem != null) {
+                  widget.fieldEntity.val = selectedItem!.id;
+                  Future.delayed(
+                    Duration.zero,
+                        () {
+                      if (mounted) {
+                        widget.onChange?.call(selectedItem!);
+                      }
+                    },
+                  );
+                }
+
               }
 
               filialCubit.init();
