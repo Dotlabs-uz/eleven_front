@@ -40,6 +40,17 @@ class DateTimeHelper {
     return null;
   }
 
+  static Future<TimeOfDay?> pickTime(BuildContext context,
+      {DateTime? initialDate}) async {
+    // ignore: use_build_context_synchronously
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    return pickedTime;
+  }
+
   static String formatToFilter(DateTime dt) {
     return DateFormat('yyyy-MM-dd 00:mm:ss').format(dt).toString();
   }

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/date_time_field_widget.dart';
 import 'package:eleven_crm/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../features/management/domain/entity/employee_entity.dart';
 import '../../features/management/domain/entity/employee_schedule_entity.dart';
 import '../components/button_widget.dart';
+import '../components/time_field_widget.dart';
+import '../entities/field_entity.dart';
 import 'assets.dart';
 import 'selections.dart';
 import 'string_helper.dart';
@@ -105,6 +108,28 @@ class Dialogs {
     );
   }
 
+  static timeTableEmployeeDialog({
+    required BuildContext context,
+    required Function(DateTime from, DateTime to) onTimeConfirm,
+  }) {
+    return showDialog(
+      context: context,
+      useSafeArea: true,
+      builder: (context) => AlertDialog(
+        alignment: Alignment.center,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        content: _TimeTableEmployeeDialogBody(
+          onTimeSelected: (timeFrom, timeTo) => onTimeConfirm.call(
+            timeFrom,
+            timeTo,
+          ),
+        ),
+      ),
+    );
+  }
+
   static scheduleField({
     required BuildContext context,
     required Function(int) onConfirm,
@@ -141,9 +166,10 @@ class Dialogs {
               Text(
                 "$day ${StringHelper.monthName(month: month)} $year.",
                 style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
               ),
               const SizedBox(height: 20),
 
@@ -1095,3 +1121,146 @@ class Dialogs {
 //     );
 //   }
 // }
+
+class _TimeTableEmployeeDialogBody extends StatefulWidget {
+  final Function(DateTime timeFrom, DateTime timeTo) onTimeSelected;
+  const _TimeTableEmployeeDialogBody({Key? key, required this.onTimeSelected})
+      : super(key: key);
+
+  @override
+  State<_TimeTableEmployeeDialogBody> createState() =>
+      _TimeTableEmployeeDialogBodyState();
+}
+
+enum _TimeTableEmployeeDialogState {
+  initial,
+  selectNotWorkingTIme,
+  another,
+}
+
+class _TimeTableEmployeeDialogBodyState
+    extends State<_TimeTableEmployeeDialogBody> {
+  _TimeTableEmployeeDialogState state = _TimeTableEmployeeDialogState.initial;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: Responsive.isDesktop(context)
+            ? 100
+            : MediaQuery.of(context).size.width,
+      ),
+      child: _body(),
+    );
+  }
+
+  _body() {
+    switch (state) {
+      case _TimeTableEmployeeDialogState.initial:
+        return _initialBody();
+      case _TimeTableEmployeeDialogState.selectNotWorkingTIme:
+        return _selectNotWorkingHours();
+
+      case _TimeTableEmployeeDialogState.another:
+        return SizedBox();
+        break;
+    }
+  }
+
+  _changeState(_TimeTableEmployeeDialogState newState) =>
+      setState(() => state = newState);
+
+  _initialBody() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ButtonWidget(
+          text: 'selectNotWorkingTime'.tr(),
+          onPressed: () =>
+              _changeState(_TimeTableEmployeeDialogState.selectNotWorkingTIme),
+          color: const Color(0xffef906e),
+        ),
+        const SizedBox(height: 10),
+
+        ButtonWidget(
+          text: 'removeFromTimeTable'.tr(),
+          onPressed: () {
+
+          },
+          color: Colors.blue,
+        ),
+        const SizedBox(height: 10),
+        ButtonWidget(
+          text: 'exit'.tr(),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: const Color(0xffff4040),
+        ),
+      ],
+    );
+  }
+
+  _selectNotWorkingHours() {
+    DateTime timeFrom = DateTime.now();
+    DateTime timeTo = DateTime.now();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: 33),
+        TimeFieldWithoutFieldWidget(
+          value: TimeOfDay.fromDateTime(timeFrom),
+          onSelected: (value) {
+            if (value != null) {
+              setState(() {
+                timeFrom = value;
+              });
+            }
+
+          },
+        ),
+        const SizedBox(height: 10),
+        TimeFieldWithoutFieldWidget(
+          value: TimeOfDay.fromDateTime(timeTo),
+          onSelected: (value) {
+            if (value != null) {
+              setState(() {
+                timeTo = value;
+              });
+            }
+          },
+        ),
+        const SizedBox(height: 10),
+
+        SizedBox(
+          height: 35,
+          child: Row(
+            children: [
+              Expanded(
+                child: ButtonWidget(
+                  text: 'exit'.tr(),
+                  onPressed: () =>
+                      _changeState(_TimeTableEmployeeDialogState.initial),
+                  color: const Color(0xffABACAE),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ButtonWidget(
+                  text: 'save'.tr(),
+                  onPressed: () {
+                    widget.onTimeSelected.call(timeFrom, timeTo);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  color: const Color(0xffABACAE),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}

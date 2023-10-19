@@ -643,6 +643,12 @@
   "discountPercent": "Процент скидки",
   "orderStart": "Начало заказа",
   "orderEnd": "Конец заказа",
+  "selectNotWorkingTime": "Выбрать не рабочее время",
+  "selectTime": "Выбрать время",
+  "removeFromTimeTable": "Убрать из календаря",
+  "data": "data",
+  "data": "data",
+  "data": "data",
   "data": "data",
   "data": "data"
 }

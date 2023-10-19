@@ -8,6 +8,7 @@ import 'package:collection/collection.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
+import '../../../../core/utils/dialogs.dart';
 import '../../../../core/utils/int_helper.dart';
 import '../../../management/domain/entity/employee_entity.dart';
 import '../../domain/entity/order_entity.dart';
@@ -16,17 +17,17 @@ import '../../domain/entity/order_entity.dart';
 
 class TimeTableWidget extends StatefulWidget {
   final List<EmployeeEntity> listEmployee;
+  final Function(DateTime from, DateTime to, String employeeId) onTimeConfirm;
 
-  const TimeTableWidget({Key? key, required this.listEmployee})
+  const TimeTableWidget(
+      {Key? key, required this.listEmployee, required this.onTimeConfirm})
       : super(key: key);
 
   @override
-  State<TimeTableWidget> createState() =>
-      _TimeTableWidgetState();
+  State<TimeTableWidget> createState() => _TimeTableWidgetState();
 }
 
-class _TimeTableWidgetState
-    extends State<TimeTableWidget> {
+class _TimeTableWidgetState extends State<TimeTableWidget> {
   final double rightCellPadding = 5;
   final DateTime from = DateTime(2023, 10, 7, 8);
   final DateTime to = DateTime(2023, 10, 7, 22);
@@ -40,7 +41,7 @@ class _TimeTableWidgetState
 
   final List<OrderEntity> orders = [
     OrderEntity(
-      orderStart: DateTime(2023, 10, 7, 9),
+      orderStart: DateTime(2023, 10, 7, 9, 10),
       orderEnd: DateTime(2023, 10, 7, 9, 30),
       price: 30,
       barberId: "2",
@@ -168,11 +169,13 @@ class _TimeTableWidgetState
                                   decoration: BoxDecoration(
                                     border: Border(
                                       bottom: BorderSide(
-                                          width: 1,
-                                          color: Colors.grey.shade400),
+                                        width: 1,
+                                        color: Colors.grey.shade400,
+                                      ),
                                       top: BorderSide(
-                                          width: 1,
-                                          color: Colors.grey.shade400),
+                                        width: 1,
+                                        color: Colors.grey.shade400,
+                                      ),
                                     ),
                                   ),
                                   child: Column(
@@ -354,17 +357,42 @@ class _TimeTableWidgetState
   _employeeCardWidget(EmployeeEntity entity) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 60,
-            width: 60,
-            decoration:
-                const BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                height: 60,
+                width: 60,
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.grey),
+              ),
+              const SizedBox(height: 5),
+              Text("${entity.firstName} ${entity.lastName}"),
+            ],
           ),
-          const SizedBox(height: 5),
-          Text("${entity.firstName} ${entity.lastName}"),
+          IconButton(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            onPressed: () {
+              Dialogs.timeTableEmployeeDialog(
+                context: context,
+                onTimeConfirm: (timeFrom, timeTo) {
+                  widget.onTimeConfirm.call(
+                    timeFrom,
+                    timeTo,
+                    entity.id,
+                  );
+                },
+              );
+            },
+            icon: const Icon(Icons.more_vert),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
         ],
       ),
     );

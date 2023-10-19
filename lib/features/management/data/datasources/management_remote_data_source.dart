@@ -117,8 +117,8 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     int page,
     String searchText,
   ) async {
-    final response = await _client
-        .get('${ApiConstants.employee}?page=$page${searchText.isNotEmpty ? "&name=$searchText": ""}');
+    final response = await _client.get(
+        '${ApiConstants.employee}?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}');
     final results = EmployeeResultsModel.fromJson(response);
 
     return results;
@@ -231,8 +231,8 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
   @override
   Future<bool> saveEmployeeSchedule(List<FieldSchedule> data) async {
-
-    await _client.post(ApiConstants.barbers, params: {"schedule": data.map((e) => e.toJson()).toList()});
+    await _client.post(ApiConstants.barbers,
+        params: {"schedule": data.map((e) => e.toJson()).toList()});
 
     return true;
   }

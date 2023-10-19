@@ -14,6 +14,7 @@ class EmployeeEntity extends Equatable {
   final String login;
   final String password;
   final String role;
+  final bool inTimeTable;
   final int phoneNumber;
   final List<EmployeeScheduleEntity> schedule;
 
@@ -25,6 +26,7 @@ class EmployeeEntity extends Equatable {
     required this.login,
     required this.role,
     required this.phoneNumber,
+    required this.inTimeTable,
     required this.schedule,
   });
 
@@ -114,6 +116,7 @@ class EmployeeEntity extends Equatable {
       login: row.cells["login"]?.value,
       role: row.cells["role"]?.value,
       schedule: [],
+      inTimeTable: false,
     );
   }
 
@@ -240,6 +243,7 @@ class EmployeeEntity extends Equatable {
       login: fields["login"]?.val,
       role: fields["role"]?.val,
       schedule: [],
+      inTimeTable: false,
     );
   }
 
@@ -253,6 +257,7 @@ class EmployeeEntity extends Equatable {
       phoneNumber: 99,
       role: "",
       schedule: [],
+      inTimeTable: false,
     );
   }
 

@@ -12,6 +12,7 @@ class EmployeeModel extends EmployeeEntity {
     required super.schedule,
     required super.password,
     required super.login,
+    required super.inTimeTable,
   });
 
   List<MobileFieldEntity> getFieldsAndValues() {
@@ -55,9 +56,11 @@ class EmployeeModel extends EmployeeEntity {
       password: "",
       schedule: List.from(json['workTime']).isNotEmpty
           ? List.from(json['workTime'])
-              .map((e) => EmployeeScheduleModel.fromJson(e, json['_id'].toString()))
+              .map((e) =>
+                  EmployeeScheduleModel.fromJson(e, json['_id'].toString()))
               .toList()
           : [],
+      inTimeTable: json['inTimeTable'] ?? false,
     );
   }
 
@@ -71,6 +74,7 @@ class EmployeeModel extends EmployeeEntity {
       schedule: entity.schedule,
       login: entity.login,
       password: entity.password,
+      inTimeTable: entity.inTimeTable,
     );
   }
 

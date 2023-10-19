@@ -38,4 +38,24 @@ class MainRepositoryImpl extends MainRepository {
       return const Left(AppError(appErrorType: AppErrorType.api));
     }
   }
+
+  @override
+  Future<Either<AppError, bool>> saveNotWorkingHours(DateTime from, DateTime to, String employeeId)async  {
+    try {
+
+      final entity = await _mainRemoteDataSource.saveNotWorkingHours(from, to, employeeId);
+
+
+      return Right(entity);
+    } on SocketException {
+      return const Left(AppError(appErrorType: AppErrorType.network));
+    } on UnauthorisedException {
+      return const Left(AppError(appErrorType: AppErrorType.unauthorised));
+    } on ExceptionWithMessage catch (e) {
+      return Left(AppError(
+          appErrorType: AppErrorType.msgError, errorMessage: e.message));
+    } on Exception {
+      return const Left(AppError(appErrorType: AppErrorType.api));
+    }
+  }
 }

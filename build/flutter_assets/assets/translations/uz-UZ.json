@@ -633,5 +633,7 @@
   "filial": "Filial",
   "discountPercent": "Chegirma foizi",
   "orderStart": "Buyurtmaning boshlanishi",
-  "orderEnd": "Buyurtmaning oxiri"
+  "orderEnd": "Buyurtmaning oxiri",
+  "selectNotWorkingTime": "Ishlamaydigan vaqtni tanlang",
+  "selectTime": "Vaqtni tanlang"
 }

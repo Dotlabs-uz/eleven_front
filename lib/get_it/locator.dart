@@ -1,7 +1,9 @@
 import 'package:eleven_crm/features/auth/domain/usecases/change_password.dart';
 import 'package:eleven_crm/features/main/domain/usecases/current_user.dart';
+import 'package:eleven_crm/features/main/domain/usecases/not_working_hours.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/menu/menu_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/order/not_working_hours/not_working_hours_cubit.dart';
 import 'package:eleven_crm/features/management/data/datasources/management_remote_data_source.dart';
 import 'package:eleven_crm/features/management/domain/repositories/management_repository.dart';
 import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
@@ -87,6 +89,10 @@ void setup() {
 
   locator.registerFactory(() => FilialCubit(locator()));
 
+  // Not working hours
+
+  locator.registerFactory(() => NotWorkingHoursCubit(locator()));
+
 
 
   // ================ UseCases ================ //
@@ -145,6 +151,10 @@ void setup() {
   // Employee Schedule
 
   locator.registerLazySingleton<SaveEmployeeSchedule>(() => SaveEmployeeSchedule(locator()));
+
+  // Not working hours
+
+  locator.registerLazySingleton<SaveNotWorkingHours>(() => SaveNotWorkingHours(locator()));
 
 
 

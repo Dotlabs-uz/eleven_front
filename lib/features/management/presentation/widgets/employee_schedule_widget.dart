@@ -253,10 +253,14 @@ class _EmployeeScheduleFieldWidgetState
         setState(() {
           status = val;
         });
-        // int day, int month, int year, int status, int employee
 
         widget.onFieldChange.call(
-            widget.day, widget.month, widget.year, status, widget.employeeId);
+          widget.day,
+          widget.month,
+          widget.year,
+          status,
+          widget.employeeId,
+        );
       },
       day: widget.day,
       month: widget.month,

@@ -11,10 +11,10 @@ import '../../../auth/data/models/token_model.dart';
 import '../model/order_model.dart';
 
 abstract class MainRemoteDataSource {
-
-  Future<CurrentUserModel>getCurrentUser();
+  Future<CurrentUserModel> getCurrentUser();
+  Future<bool> saveNotWorkingHours(
+      DateTime from, DateTime to, String employeeId);
   Future<List<OrderModel>> getOrders();
-
 }
 
 class MainRemoteDataSourceImpl extends MainRemoteDataSource {
@@ -29,7 +29,15 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     print("Response $response");
     final model = CurrentUserModel.fromJson(response['results'][0]);
 
-    return CurrentUserModel(id: "id", firstName: "firstName", lastName: "lastName", phoneNumber: "phoneNumber", password: "password", login: "login", role: "role");
+    return const CurrentUserModel(
+      id: "id",
+      firstName: "firstName",
+      lastName: "lastName",
+      phoneNumber: "phoneNumber",
+      password: "password",
+      login: "login",
+      role: "role",
+    );
   }
 
   @override
@@ -38,4 +46,18 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     throw UnimplementedError();
   }
 
+  @override
+  Future<bool> saveNotWorkingHours(
+      DateTime from, DateTime to, String employeeId) async {
+    log("From ${from.toIso8601String()} to ${to.toIso8601String()}");
+    await _client.post(ApiConstants.notWorkingHours, params: {
+      "from": from.toIso8601String(),
+      "to": to.toIso8601String(),
+      "employee": employeeId,
+    }
+
+        // TODO employee changed
+        );
+    return true;
+  }
 }
