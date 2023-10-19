@@ -11,6 +11,7 @@ import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/dialogs.dart';
 import '../../../../core/utils/int_helper.dart';
 import '../../../management/domain/entity/employee_entity.dart';
+import '../../../management/domain/entity/not_working_hours_entity.dart';
 import '../../domain/entity/order_entity.dart';
 
 // ignore: must_be_immutable
@@ -398,6 +399,43 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
     );
   }
 }
+
+
+
+class _NotWorkingHoursCard extends StatefulWidget {
+  final NotWorkingHoursEntity notWorkingHoursEntity;
+  const _NotWorkingHoursCard({Key? key, required this.notWorkingHoursEntity})
+      : super(key: key);
+
+  @override
+  State<_NotWorkingHoursCard> createState() => _NotWorkingHoursCardState();
+}
+
+class _NotWorkingHoursCardState extends State<_NotWorkingHoursCard> {
+  double _getCardHeight() {
+    if (widget.notWorkingHoursEntity.dateFrom.hour ==
+        widget.notWorkingHoursEntity.dateTo.hour) {
+      return widget.notWorkingHoursEntity.dateTo.minute *
+          Constants.onTimetableFieldItem;
+    }
+
+    return Constants.timeTableItemHeight +
+        (widget.notWorkingHoursEntity.dateTo.minute *
+            Constants.onTimetableFieldItem) -
+        widget.notWorkingHoursEntity.dateFrom.minute;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: _getCardHeight(),
+      color: Colors.brown.withOpacity(0.5),
+      child: const SizedBox.shrink(),
+    );
+  }
+}
+
 
 class OrderCardWidget extends StatefulWidget {
   final OrderEntity order;

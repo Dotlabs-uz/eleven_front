@@ -8,13 +8,13 @@ class ServiceProductCategoryModel extends ServiceProductCategoryEntity {
     required super.services,
   });
 
-  factory ServiceProductCategoryModel.fromJson(Map<String, dynamic> json) {
+  factory ServiceProductCategoryModel.fromJson(Map<String, dynamic> json, bool withCategoryParse) {
     return ServiceProductCategoryModel(
       id: json['_id'],
       name: json['name'],
       services: json['services'] != null
           ? List.of(json['services'])
-              .map((e) => ServiceProductModel.fromJson(e))
+              .map((e) => ServiceProductModel.fromJson(e ,withCategoryParse))
               .toList()
           : [],
     );

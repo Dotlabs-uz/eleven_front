@@ -636,5 +636,7 @@
   "orderEnd": "Buyurtmaning oxiri",
   "selectNotWorkingTime": "Ishlamaydigan vaqtni tanlang",
   "selectTime": "Vaqtni tanlang",
-  "removeFromTimeTable": "Kalendardan olib tashlang"
+  "removeFromTimeTable": "Kalendardan olib tashlang",
+  "serviceProductCategoryFieldHintText": "Xizmat toifasi",
+  "serviceProductCategoryFieldLabelText": "Xizmat toifasi"
 }

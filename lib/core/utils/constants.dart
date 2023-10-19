@@ -4,8 +4,11 @@ class Constants {
   static double endWork =23;
   static double timeTableItemWidth =200;
   static double timeTableItemHeight =100;
-  static double onTimetableFieldItemRound =1.7;
-  static double onTimetableFieldItem =1.6;
+  static double onTimetableFieldItemRound =1.55;
+  static double onTimetableFieldItem =1.4;
+
+  // static double onTimetableFieldItemRound =1.55;
+  // static double onTimetableFieldItem =1.4;
 
 
   static Map<int, List<int>> timeTableViewData = {

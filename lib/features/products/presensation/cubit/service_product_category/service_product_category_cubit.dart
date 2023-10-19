@@ -43,6 +43,7 @@ class ServiceProductCategoryCubit extends Cubit<ServiceProductCategoryState> {
       page: page,
       searchText: searchText,
       ordering: ordering,
+      withServiceCategoryParsing: false,
     ));
 
     data.fold(

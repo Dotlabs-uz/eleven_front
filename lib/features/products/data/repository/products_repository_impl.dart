@@ -44,12 +44,14 @@ class ProductsRepositoryImpl extends ProductsRepository {
     int page,
     String searchText,
     String? ordering,
+    bool withCategoryParse,
   ) async {
     try {
       final entity = await remoteDataSource.getServiceProducts(
         page,
         searchText,
         ordering,
+        withCategoryParse,
       );
 
       return Right(entity);
@@ -106,10 +108,10 @@ class ProductsRepositoryImpl extends ProductsRepository {
   @override
   Future<Either<AppError, ServiceProductCategoryResultsEntity>>
       getServiceProductCategory(
-          int page, String searchText, String? ordering) async {
+          int page, String searchText, String? ordering, bool withServiceCategoryParsing) async {
     try {
       final results = await remoteDataSource.getServiceProductCategory(
-          page, searchText, ordering);
+          page, searchText, ordering, withServiceCategoryParsing);
 
       return Right(results);
     } on SocketException {

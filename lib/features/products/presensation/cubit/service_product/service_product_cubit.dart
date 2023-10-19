@@ -50,6 +50,7 @@ class ServiceProductCubit extends Cubit<ServiceProductState> {
       page: page,
       searchText: searchText,
       ordering: ordering,
+      withCategoryParse: true,
     ));
     data.fold(
       (error) => emit(ServiceProductError(message: error.errorMessage)),

@@ -14,6 +14,7 @@ abstract class ProductsRepository {
     int page,
     String searchText,
     String? ordering,
+    bool withCategoryParse,
   );
   Future<Either<AppError, ServiceProductEntity>> saveServiceProduct(
       ServiceProductEntity data);
@@ -27,6 +28,7 @@ abstract class ProductsRepository {
     int page,
     String searchText,
     String? ordering,
+    bool withServiceCategoryParsing,
   );
 
   Future<Either<AppError, ServiceProductCategoryEntity>>

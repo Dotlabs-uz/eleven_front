@@ -8,12 +8,12 @@ class ServiceResultsProductModel extends ServiceResultsProductEntity {
     required super.results,
   });
 
-  factory ServiceResultsProductModel.fromJson(Map<String, dynamic> json) {
+  factory ServiceResultsProductModel.fromJson(Map<String, dynamic> json,bool withCategoryParse) {
     return ServiceResultsProductModel(
       count: json['count'],
       pageCount: json['pageCount'],
       results: List.from(json['results'])
-          .map((e) => ServiceProductModel.fromJson(e))
+          .map((e) => ServiceProductModel.fromJson(e,withCategoryParse ))
           .toList(),
     );
   }

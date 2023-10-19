@@ -19,6 +19,7 @@ class GetServiceProduct extends UseCase<ServiceResultsProductEntity, GetServiceP
       params.page,
       params.searchText,
       params.ordering,
+      params.withCategoryParse,
     );
   }
 }
@@ -50,10 +51,12 @@ class GetServiceProductParams extends Equatable {
   final int page;
   final String searchText;
   final String? ordering;
+  final bool withCategoryParse;
 
   const GetServiceProductParams({
     required this.page,
     this.ordering,
+    this.withCategoryParse = true,
     this.searchText = '',
   });
 

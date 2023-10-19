@@ -14,7 +14,7 @@ class ServiceProductCategoryResultsModel extends ServiceProductCategoryResultsEn
       count: json['count'],
       pageCount: json['pageCount'],
       results: List.from(json['results'])
-          .map((e) => ServiceProductCategoryModel.fromJson(e))
+          .map((e) => ServiceProductCategoryModel.fromJson(e, false))
           .toList(),
     );
   }

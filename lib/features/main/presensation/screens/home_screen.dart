@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
+import 'package:eleven_crm/features/management/domain/entity/not_working_hours_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -77,7 +78,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
   initialize() async {
     print("Saved ");
 
-
     activeData = OrderEntity.empty();
 
     isFormVisible = false;
@@ -143,7 +143,37 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   int selectedValue = 0;
 
-  List<EmployeeEntity> listEmployee = [];
+  List<EmployeeEntity> listEmployee = [
+    const EmployeeEntity(
+      id: "1",
+      firstName: "Sam",
+      lastName: "Satt",
+      password: "Satt",
+      login: "Satt",
+      phoneNumber: 99,
+      role: "manager",
+      schedule: [],
+      inTimeTable: false,
+      notWorkingHours: [],
+    ),
+    EmployeeEntity(
+      id: "2",
+      firstName: "Sam",
+      lastName: "Satt",
+      password: "Satt",
+      login: "Satt",
+      phoneNumber: 99,
+      role: "manager",
+      schedule: [],
+      inTimeTable: false,
+      notWorkingHours: [
+        NotWorkingHoursEntity(
+          dateFrom: DateTime(2023,10,19,16),
+          dateTo:  DateTime(2023,10,19,17,30),
+        ),
+      ],
+    ),
+  ];
 
   // final List<EmployeeEntity> listEmployee = [
   //   EmployeeEntity(
@@ -268,7 +298,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     Duration.zero,
                     () {
                       setState(() {
-                        listEmployee = state.data;
+                        // listEmployee.addAll(state.data);
+                        // listEmployee = state.data;
                       });
                     },
                   );
@@ -338,7 +369,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     ),
                   if (!isFormVisible) const SizedBox(width: 5),
                   if (!isFormVisible)
-                    NotSelectedEmployeeListWidget(listEmployee: listEmployee, onTap: (String employeeId) {  },),
+                    NotSelectedEmployeeListWidget(
+                      listEmployee: listEmployee,
+                      onTap: (String employeeId) {},
+                    ),
                 ],
               ),
             ),

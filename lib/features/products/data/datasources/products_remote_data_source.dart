@@ -15,6 +15,7 @@ abstract class ProductsRemoteDataSource {
     int page,
     String searchText,
     String? ordering,
+    bool withCategoryParse ,
   );
 
   Future<ServiceProductModel> saveServiceProduct(ServiceProductModel data);
@@ -35,6 +36,7 @@ abstract class ProductsRemoteDataSource {
     int page,
     String searchText,
     String? ordering,
+    bool withServiceCategoryParsing,
   );
 
   Future<ServiceProductCategoryModel> saveServiceProductCategory(
@@ -52,10 +54,10 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
 
   @override
   Future<ServiceResultsProductModel> getServiceProducts(
-      int page, String searchText, String? ordering) async {
+      int page, String searchText, String? ordering, withCategoryParse) async {
     final response = await _client.get(
         '${ApiConstants.serviceProduct}/?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}');
-    final results = ServiceResultsProductModel.fromJson(response);
+    final results = ServiceResultsProductModel.fromJson(response, withCategoryParse);
 
     return results;
     //
@@ -80,7 +82,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
       response = await _client.patch('${ApiConstants.serviceProduct}/${data.id}/',
           params: data.toJson());
     }
-    return ServiceProductModel.fromJson(response);
+    return ServiceProductModel.fromJson(response, false);
   }
 
   @override
@@ -94,7 +96,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
 
   @override
   Future<ServiceProductCategoryResultsModel> getServiceProductCategory(
-      int page, String searchText, String? ordering) async {
+      int page, String searchText, String? ordering,bool withServiceCategoryParsing) async {
     final response = await _client.get(
       '${ApiConstants.serviceProductCategory}/?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}',
     );
@@ -121,7 +123,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
           '${ApiConstants.serviceProductCategory}/${data.id}/',
           params: data.toJson());
     }
-    return ServiceProductCategoryModel.fromJson(response);
+    return ServiceProductCategoryModel.fromJson(response, false);
   }
 
   @override

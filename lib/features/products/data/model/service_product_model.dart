@@ -1,3 +1,4 @@
+import '../../domain/entity/service_product_category_entity.dart';
 import '../../domain/entity/service_product_entity.dart';
 import 'service_product_category_model.dart';
 
@@ -11,13 +12,13 @@ class ServiceProductModel extends ServiceProductEntity {
     required super.sex,
   });
 
-  factory ServiceProductModel.fromJson(Map<String, dynamic> json) {
+  factory ServiceProductModel.fromJson(Map<String, dynamic> json, bool withCategoryParse) {
     return ServiceProductModel(
       id: json['_id'] ?? '',
       name: json['name'],
       price: json['price'],
       duration: json['duration'],
-      category: json['category'],
+      category:withCategoryParse ? ServiceProductCategoryModel.fromJson( json['category'] ,false) : ServiceProductCategoryModel.fromEntity(ServiceProductCategoryEntity.empty()),
       sex: json['sex'] ?? "men",
     );
   }
