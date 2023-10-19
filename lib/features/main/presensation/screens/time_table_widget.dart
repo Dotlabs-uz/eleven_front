@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/features/main/presensation/widget/calendar_ruler_widget.dart';
 import 'package:eleven_crm/features/products/domain/entity/service_product_category_entity.dart';
 import 'package:eleven_crm/features/products/domain/entity/service_product_entity.dart';
@@ -37,11 +38,31 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
   final DateTime from = DateTime(2023, 10, 7, 8);
   final DateTime to = DateTime(2023, 10, 7, 22);
 
+  static final List<EmployeeEntity> listEmployee = [];
+
+  @override
+  void didUpdateWidget(covariant TimeTableWidget oldWidget) {
+    final newListLen = widget.listEmployee.length;
+    if (newListLen != listEmployee.length) {
+      initialize();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   void initState() {
-    // from = DateTime(2023, 10, 7, Constants.startWork.toInt());
-    // to = DateTime(2023, 10, 7, Constants.endWork.toInt());
+    initialize();
     super.initState();
+  }
+
+  void initialize() {
+    listEmployee.clear();
+
+    final List<EmployeeEntity> employeeListData = widget.listEmployee
+        .where((element) => element.inTimeTable == true)
+        .toList();
+
+    listEmployee.addAll(employeeListData);
   }
 
   final List<OrderEntity> orders = [
@@ -118,220 +139,229 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          color: Colors.white,
-          child: Row(
+    return listEmployee.isEmpty
+        ? const EmptyWidget()
+        : Column(
             children: [
-              SizedBox(
-                width: Constants.rulerWidth,
-              ),
-              Container(width: 10),
-              ...List.generate(
-                widget.listEmployee.length,
-                (index) {
-                  final el = widget.listEmployee[index];
-                  return Expanded(
-                    child: _employeeCardWidget(el),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.zero,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              Container(
+                color: Colors.white,
+                child: Row(
                   children: [
-                    CalendarRulerWidget(
-                      timeFrom: from,
-                      timeTo: to,
+                    SizedBox(
+                      width: Constants.rulerWidth,
                     ),
+                    Container(width: 10),
                     ...List.generate(
                       widget.listEmployee.length,
                       (index) {
-                        List<OrderEntity> localOrders = [];
-
-                        final employee = widget.listEmployee[index];
-
-                        localOrders = orders
-                            .where((element) => employee.id == element.barberId)
-                            .toList();
-
+                        final el = widget.listEmployee[index];
                         return Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 24),
-                            child: Stack(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.shade400,
-                                      ),
-                                      top: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.shade400,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Column(
+                          child: _employeeCardWidget(el),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CalendarRulerWidget(
+                            timeFrom: from,
+                            timeTo: to,
+                          ),
+                          ...List.generate(
+                            widget.listEmployee.length,
+                            (index) {
+                              List<OrderEntity> localOrders = [];
+
+                              final employee = widget.listEmployee[index];
+
+                              localOrders = orders
+                                  .where((element) =>
+                                      employee.id == element.barberId)
+                                  .toList();
+
+                              return Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 24),
+                                  child: Stack(
                                     children: [
-                                      ...List.generate(
-                                        IntHelper.getCountOfCardByWorkingHours(
-                                            from, to),
-                                        (index) {
-                                          final hour = from.hour + index;
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey.shade400,
+                                            ),
+                                            top: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey.shade400,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            ...List.generate(
+                                              IntHelper
+                                                  .getCountOfCardByWorkingHours(
+                                                      from, to),
+                                              (index) {
+                                                final hour = from.hour + index;
 
-                                          return DragTarget<OrderEntity>(
-                                            builder: (context, candidateData,
-                                                rejectedData) {
-                                              return FieldCardWidget(
-                                                hour: hour,
-                                                highlighted:
-                                                    candidateData.isNotEmpty,
-                                              );
-                                            },
-                                            onAccept: (data) {
-                                              print(
-                                                "Accept field target $data hour $hour",
-                                              );
+                                                return DragTarget<OrderEntity>(
+                                                  builder: (context,
+                                                      candidateData,
+                                                      rejectedData) {
+                                                    return FieldCardWidget(
+                                                      hour: hour,
+                                                      highlighted: candidateData
+                                                          .isNotEmpty,
+                                                    );
+                                                  },
+                                                  onAccept: (data) {
+                                                    print(
+                                                      "Accept field target $data hour $hour",
+                                                    );
 
-                                              final orderFrom = data.orderStart;
-                                              final orderTo = data.orderEnd;
+                                                    final orderFrom =
+                                                        data.orderStart;
+                                                    final orderTo =
+                                                        data.orderEnd;
 
-                                              data.orderStart = DateTime(
-                                                orderFrom.year,
-                                                orderFrom.month,
-                                                orderFrom.day,
-                                                hour,
-                                                orderFrom.minute,
-                                              );
+                                                    data.orderStart = DateTime(
+                                                      orderFrom.year,
+                                                      orderFrom.month,
+                                                      orderFrom.day,
+                                                      hour,
+                                                      orderFrom.minute,
+                                                    );
 
-                                              final int differenceFromAndTo =
-                                                  (orderFrom.hour -
-                                                          data.orderStart
-                                                              .hour) ~/
-                                                      -1;
+                                                    final int
+                                                        differenceFromAndTo =
+                                                        (orderFrom.hour -
+                                                                data.orderStart
+                                                                    .hour) ~/
+                                                            -1;
 
-                                              data.orderEnd = DateTime(
-                                                orderTo.year,
-                                                orderTo.month,
-                                                orderTo.day,
-                                                data.orderEnd.hour +
-                                                    differenceFromAndTo,
-                                                orderTo.minute,
-                                              );
-                                              data.barberId = employee.id;
+                                                    data.orderEnd = DateTime(
+                                                      orderTo.year,
+                                                      orderTo.month,
+                                                      orderTo.day,
+                                                      data.orderEnd.hour +
+                                                          differenceFromAndTo,
+                                                      orderTo.minute,
+                                                    );
+                                                    data.barberId = employee.id;
 
-                                              setState(() {});
-                                            },
+                                                    setState(() {});
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      // DragTarget<Order>(
+                                      //   builder:
+                                      //       (context, candidateData, rejectedData) {
+                                      //     // return Container(
+                                      //     //   height: Constants.timeTableItemHeight,
+                                      //     //   color: candidateData.isNotEmpty ? Colors.orange:  Colors.green,
+                                      //     // );
+                                      //
+                                      //     // Order? candidate;
+                                      //     //
+                                      //     // if (candidateData.isNotEmpty) {
+                                      //     //   candidate = candidateData.first;
+                                      //     // }
+                                      //
+                                      //     return Column(
+                                      //       children: [
+                                      //         ...List.generate(
+                                      //           IntHelper
+                                      //               .getCountOfCardByWorkingHours(
+                                      //                   from, to),
+                                      //           (index) {
+                                      //             final hour = from.hour + index;
+                                      //
+                                      //             return FieldCardWidget(
+                                      //               hour: hour,
+                                      //               // highlighted: false,
+                                      //               // highlighted: (candidate !=
+                                      //               //         null) &&
+                                      //               //     candidate.from.hour == hour,
+                                      //               highlighted: candidateData.isNotEmpty,
+                                      //             );
+                                      //           },
+                                      //         ),
+                                      //       ],
+                                      //     );
+                                      //   },
+                                      //   // onMove: (details) {
+                                      //   //   print("Details");
+                                      //   // },
+                                      //
+                                      //   onLeave: (data) {
+                                      //     print("Data leave");
+                                      //   },
+                                      //   onAccept: (data) {
+                                      //     // if(data != null) {
+                                      //     print("Accept $data");
+                                      //
+                                      //     // }
+                                      //   },
+                                      // ),
+                                      ...localOrders.map(
+                                        (e) {
+                                          return Positioned(
+                                            // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
+                                            top: _getTopPosition(e),
+                                            child: Draggable<OrderEntity>(
+                                              data: e,
+                                              childWhenDragging:
+                                                  OrderCardWidget(
+                                                order: e,
+                                                isDragging: true,
+                                              ),
+                                              feedback: Opacity(
+                                                opacity: 0.6,
+                                                child: Material(
+                                                  child: OrderCardWidget(
+                                                    order: e,
+                                                    isDragging: false,
+                                                  ),
+                                                ),
+                                              ),
+                                              child: OrderCardWidget(
+                                                order: e,
+                                                isDragging: false,
+                                              ),
+                                            ),
                                           );
                                         },
                                       ),
                                     ],
                                   ),
                                 ),
-                                // DragTarget<Order>(
-                                //   builder:
-                                //       (context, candidateData, rejectedData) {
-                                //     // return Container(
-                                //     //   height: Constants.timeTableItemHeight,
-                                //     //   color: candidateData.isNotEmpty ? Colors.orange:  Colors.green,
-                                //     // );
-                                //
-                                //     // Order? candidate;
-                                //     //
-                                //     // if (candidateData.isNotEmpty) {
-                                //     //   candidate = candidateData.first;
-                                //     // }
-                                //
-                                //     return Column(
-                                //       children: [
-                                //         ...List.generate(
-                                //           IntHelper
-                                //               .getCountOfCardByWorkingHours(
-                                //                   from, to),
-                                //           (index) {
-                                //             final hour = from.hour + index;
-                                //
-                                //             return FieldCardWidget(
-                                //               hour: hour,
-                                //               // highlighted: false,
-                                //               // highlighted: (candidate !=
-                                //               //         null) &&
-                                //               //     candidate.from.hour == hour,
-                                //               highlighted: candidateData.isNotEmpty,
-                                //             );
-                                //           },
-                                //         ),
-                                //       ],
-                                //     );
-                                //   },
-                                //   // onMove: (details) {
-                                //   //   print("Details");
-                                //   // },
-                                //
-                                //   onLeave: (data) {
-                                //     print("Data leave");
-                                //   },
-                                //   onAccept: (data) {
-                                //     // if(data != null) {
-                                //     print("Accept $data");
-                                //
-                                //     // }
-                                //   },
-                                // ),
-                                ...localOrders.map(
-                                  (e) {
-                                    return Positioned(
-                                      // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
-                                      top: _getTopPosition(e),
-                                      child: Draggable<OrderEntity>(
-                                        data: e,
-                                        childWhenDragging: OrderCardWidget(
-                                          order: e,
-                                          isDragging: true,
-                                        ),
-                                        feedback: Opacity(
-                                          opacity: 0.6,
-                                          child: Material(
-                                            child: OrderCardWidget(
-                                              order: e,
-                                              isDragging: false,
-                                            ),
-                                          ),
-                                        ),
-                                        child: OrderCardWidget(
-                                          order: e,
-                                          isDragging: false,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+              ),
+            ],
+          );
   }
 
   double _getTopPosition(OrderEntity order) {
@@ -393,7 +423,10 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                   );
                 },
                 onDeleteEmployeeFromTable: () {
+                  listEmployee.remove(entity);
                   widget.onDeleteEmployeeFromTable?.call(entity.id);
+
+                  setState(() {});
                 },
               );
             },

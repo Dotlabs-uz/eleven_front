@@ -93,8 +93,9 @@ class EmployeeModel extends EmployeeEntity {
     data['lastName'] = lastName;
     data['phone'] = phoneNumber;
     data['role'] = role;
-    data['login'] = "test";
-    data['password'] = "test";
+    data['login'] = login;
+    data['password'] = password;
+    data['inTimeTable'] = inTimeTable;
     // data['workTime'] =
     //     schedule.map((e) => EmployeeScheduleModel.fromEntity(e).toJson());
     return data;

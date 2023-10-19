@@ -353,14 +353,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                 child: TimeTableWidget(
                                   listEmployee: listEmployee,
                                   onDeleteEmployeeFromTable: (employeeId) {
-                                    final employee = listEmployee.firstWhere(
-                                        (element) => element.id == employeeId);
-
-                                    employee.inTimeTable = false;
-
-                                    BlocProvider.of<EmployeeCubit>(context)
-                                        .deleteEmployeeFromTable(
-                                            employee: employee);
+                                    _employeeFromTimeTableCardAction(
+                                        employeeId, false);
                                   },
                                   onTimeConfirm: (
                                     DateTime from,
@@ -380,9 +374,18 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
                               if (!isFormVisible) const SizedBox(width: 5),
                               if (!isFormVisible)
-                                NotSelectedEmployeeListWidget(
-                                  listEmployee: listEmployee,
-                                  onTap: (String employeeId) {},
+                                BlocBuilder<EmployeeCubit, EmployeeState>(
+                                  builder: (context, state) {
+                                    return NotSelectedEmployeeListWidget(
+                                      listEmployee: listEmployee,
+                                      onTap: (String employeeId) {
+                                        print("Select employee $employeeId");
+                                        setState(() {});
+                                        _employeeFromTimeTableCardAction(
+                                            employeeId, true);
+                                      },
+                                    );
+                                  },
                                 ),
                             ],
                           ),
@@ -404,5 +407,16 @@ class _ContentWidgetState extends State<_ContentWidget> {
         ),
       ),
     );
+  }
+
+  _employeeFromTimeTableCardAction(String employeeId, bool hasInTimeTable) {
+    final employee =
+        listEmployee.firstWhere((element) => element.id == employeeId);
+
+    employee.inTimeTable = hasInTimeTable;
+
+    print("in time table $hasInTimeTable");
+
+    BlocProvider.of<EmployeeCubit>(context).save(employee: employee);
   }
 }

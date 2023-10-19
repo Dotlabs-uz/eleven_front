@@ -5,7 +5,8 @@ import '../../features/management/domain/entity/employee_entity.dart';
 class NotSelectedEmployeeListWidget extends StatefulWidget {
   final List<EmployeeEntity> listEmployee;
   final Function(String emplyoeeId) onTap;
-  const NotSelectedEmployeeListWidget({Key? key, required this.listEmployee, required this.onTap})
+  const NotSelectedEmployeeListWidget(
+      {Key? key, required this.listEmployee, required this.onTap})
       : super(key: key);
 
   @override
@@ -15,7 +16,16 @@ class NotSelectedEmployeeListWidget extends StatefulWidget {
 
 class _NotSelectedEmployeeListWidgetState
     extends State<NotSelectedEmployeeListWidget> {
-  final List<EmployeeEntity> listEmployee = [];
+  static final List<EmployeeEntity> listEmployee = [];
+
+  @override
+  void didUpdateWidget(covariant NotSelectedEmployeeListWidget oldWidget) {
+    final newListLen = widget.listEmployee.length;
+    if (newListLen != listEmployee.length) {
+      initialize();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   void initState() {
@@ -40,7 +50,13 @@ class _NotSelectedEmployeeListWidgetState
       margin: EdgeInsets.zero,
       child: Container(
         width: 120,
-        color: const Color(0xffe0e0e0),
+        decoration: const BoxDecoration(
+          color: Color(0xffe0e0e0),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            bottomLeft: Radius.circular(12),
+          ),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -49,7 +65,10 @@ class _NotSelectedEmployeeListWidgetState
             ...List.generate(listEmployee.length, (index) {
               final el = listEmployee[index];
               return GestureDetector(
-                onTap: () => widget.onTap.call(el.id),
+                onTap: () {
+                  listEmployee.remove(el);
+                  widget.onTap.call(el.id);
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: Column(
