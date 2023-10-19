@@ -42,6 +42,12 @@ class EmployeeDeleted extends EmployeeState {
   const EmployeeDeleted({required this.id});
   @override
   List<Object> get props => [id];
+}class EmployeeDeletedFromTable extends EmployeeState {
+  final String id;
+
+  const EmployeeDeletedFromTable({required this.id});
+  @override
+  List<Object> get props => [id];
 }
 
 class EmployeeLoading extends EmployeeState {

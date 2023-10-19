@@ -7,23 +7,31 @@ import '../../../domain/usecases/employee.dart';
 part 'employee_state.dart';
 
 class EmployeeCubit extends Cubit<EmployeeState> {
-
   final GetEmployee getData;
   final SaveEmployee saveData;
   final DeleteEmployee deleteData;
 
-  EmployeeCubit(this.getData, this.saveData, this.deleteData) : super(EmployeeInitial());
+  EmployeeCubit(this.getData, this.saveData, this.deleteData)
+      : super(EmployeeInitial());
 
   init() => emit(EmployeeInitial());
 
-
-
-  void save({required EmployeeEntity customer}) async {
+  void save({required EmployeeEntity employee}) async {
     emit(EmployeeLoading());
-    var save = await saveData(customer);
+    var save = await saveData(employee);
     save.fold(
-            (error) => emit(EmployeeError(message: error.errorMessage)),
-            (data) => emit(EmployeeSaved(data: data)),);
+      (error) => emit(EmployeeError(message: error.errorMessage)),
+      (data) => emit(EmployeeSaved(data:employee )),
+    );
+  }
+
+  void deleteEmployeeFromTable({required EmployeeEntity employee}) async {
+    emit(EmployeeLoading());
+    var save = await saveData(employee);
+    save.fold(
+      (error) => emit(EmployeeError(message: error.errorMessage)),
+      (data) => emit(EmployeeSaved(data: employee)),
+    );
   }
 
   void delete({required EmployeeEntity entity}) async {
@@ -31,12 +39,12 @@ class EmployeeCubit extends Cubit<EmployeeState> {
 
     final delete = await deleteData(entity);
     delete.fold(
-          (error) => emit(EmployeeError(message: error.errorMessage)),
-          (data) => emit(EmployeeDeleted(id: entity.id)),
+      (error) => emit(EmployeeError(message: error.errorMessage)),
+      (data) => emit(EmployeeDeleted(id: entity.id)),
     );
   }
 
-  load({String search ="", int page = 0})async {
+  load({String search = "", int page = 0}) async {
     //loadingCubit.show();
     emit(EmployeeLoading());
     final data = await getData(GetEmployeeParams(
@@ -44,8 +52,8 @@ class EmployeeCubit extends Cubit<EmployeeState> {
       searchText: search,
     ));
     data.fold(
-          (error) => emit(EmployeeError(message: error.errorMessage)),
-          (data) {
+      (error) => emit(EmployeeError(message: error.errorMessage)),
+      (data) {
         emit(EmployeeLoaded(
           data: data.results,
           pageCount: data.pageCount,
@@ -55,5 +63,4 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     );
     //loadingCubit.hide();
   }
-
 }

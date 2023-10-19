@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import '../../../../core/entities/field_entity.dart';
 import 'employee_schedule_entity.dart';
 import 'not_working_hours_entity.dart';
 
+@immutable
 class EmployeeEntity extends Equatable {
   final String id;
   final String firstName;
@@ -15,12 +18,12 @@ class EmployeeEntity extends Equatable {
   final String login;
   final String password;
   final String role;
-  final bool inTimeTable;
+  bool inTimeTable;
   final int phoneNumber;
   final List<NotWorkingHoursEntity> notWorkingHours;
   final List<EmployeeScheduleEntity> schedule;
 
-  const EmployeeEntity({
+  EmployeeEntity({
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -119,7 +122,8 @@ class EmployeeEntity extends Equatable {
       login: row.cells["login"]?.value,
       role: row.cells["role"]?.value,
       schedule: [],
-      inTimeTable: false, notWorkingHours: [],
+      inTimeTable: false,
+      notWorkingHours: [],
     );
   }
 
@@ -246,12 +250,13 @@ class EmployeeEntity extends Equatable {
       login: fields["login"]?.val,
       role: fields["role"]?.val,
       schedule: [],
-      inTimeTable: false, notWorkingHours: [],
+      inTimeTable: false,
+      notWorkingHours: [],
     );
   }
 
   factory EmployeeEntity.empty() {
-    return const EmployeeEntity(
+    return   EmployeeEntity(
       id: "",
       firstName: "",
       lastName: "",
@@ -260,7 +265,8 @@ class EmployeeEntity extends Equatable {
       phoneNumber: 99,
       role: "",
       schedule: [],
-      inTimeTable: false, notWorkingHours: [],
+      inTimeTable: false,
+      notWorkingHours: [],
     );
   }
 

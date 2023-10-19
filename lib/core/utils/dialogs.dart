@@ -111,6 +111,7 @@ class Dialogs {
   static timeTableEmployeeDialog({
     required BuildContext context,
     required Function(DateTime from, DateTime to) onTimeConfirm,
+    required Function() onDeleteEmployeeFromTable,
   }) {
     return showDialog(
       context: context,
@@ -124,7 +125,7 @@ class Dialogs {
           onTimeSelected: (timeFrom, timeTo) => onTimeConfirm.call(
             timeFrom,
             timeTo,
-          ),
+          ), onDeleteEmployeeFromTable: onDeleteEmployeeFromTable,
         ),
       ),
     );
@@ -1124,7 +1125,11 @@ class Dialogs {
 
 class _TimeTableEmployeeDialogBody extends StatefulWidget {
   final Function(DateTime timeFrom, DateTime timeTo) onTimeSelected;
-  const _TimeTableEmployeeDialogBody({Key? key, required this.onTimeSelected})
+  final Function() onDeleteEmployeeFromTable;
+  const _TimeTableEmployeeDialogBody(
+      {Key? key,
+      required this.onTimeSelected,
+      required this.onDeleteEmployeeFromTable})
       : super(key: key);
 
   @override
@@ -1163,7 +1168,6 @@ class _TimeTableEmployeeDialogBodyState
 
       case _TimeTableEmployeeDialogState.another:
         return SizedBox();
-        break;
     }
   }
 
@@ -1181,11 +1185,10 @@ class _TimeTableEmployeeDialogBodyState
           color: const Color(0xffef906e),
         ),
         const SizedBox(height: 10),
-
         ButtonWidget(
           text: 'removeFromTimeTable'.tr(),
           onPressed: () {
-
+            widget.onDeleteEmployeeFromTable.call();
           },
           color: Colors.blue,
         ),
@@ -1217,7 +1220,6 @@ class _TimeTableEmployeeDialogBodyState
                 timeFrom = value;
               });
             }
-
           },
         ),
         const SizedBox(height: 10),
@@ -1232,7 +1234,6 @@ class _TimeTableEmployeeDialogBodyState
           },
         ),
         const SizedBox(height: 10),
-
         SizedBox(
           height: 35,
           child: Row(

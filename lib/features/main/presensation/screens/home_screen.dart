@@ -85,7 +85,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     _setWidgetTop();
 
     await localDataSource.saveSessionId(
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJ1c2VySWQiOiI2NTJjZjQ3ZGY2NTViZDdjYmExZmQ4MTUiLCJwYXRoIjoibWFuYWdlcnMiLCJpYXQiOjE2OTc0NDQ5ODksImV4cCI6MTY5NzUzMTM4OSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwianRpIjoiOGUzMzM2NjQtMmVhZi00ZmRlLWIyYTAtMjZkN2IxNGU5MDlhIn0.D4CPUFD4_vfDCy9sCy2AM0FtDMWC2P_jTRDtmTp1nHU",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJ1c2VySWQiOiI2NTMxNDNmNzI2OTUyYjYxOWJlYmZhZjYiLCJwYXRoIjoibWFuYWdlcnMiLCJpYXQiOjE2OTc3Mjc0NzksImV4cCI6MTY5NzgxMzg3OSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwianRpIjoiYzljNjQzMWMtZDY1ZS00NmFlLTlmYTQtYmQwNGIyMzA3NTYyIn0.lQNpJZKK3jhsoQ3YPihxyBr_laxyJ4BVFd0GQYZGBF0",
     );
   }
 
@@ -144,7 +144,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
   int selectedValue = 0;
 
   List<EmployeeEntity> listEmployee = [
-    const EmployeeEntity(
+    EmployeeEntity(
       id: "1",
       firstName: "Sam",
       lastName: "Satt",
@@ -168,8 +168,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
       inTimeTable: false,
       notWorkingHours: [
         NotWorkingHoursEntity(
-          dateFrom: DateTime(2023,10,19,16),
-          dateTo:  DateTime(2023,10,19,17,30),
+          dateFrom: DateTime(2023, 10, 19, 16),
+          dateTo: DateTime(2023, 10, 19, 17, 30),
         ),
       ],
     ),
@@ -346,6 +346,15 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     flex: 2,
                     child: TimeTableWidget(
                       listEmployee: listEmployee,
+                      onDeleteEmployeeFromTable: (employeeId) {
+                        final employee = listEmployee
+                            .firstWhere((element) => element.id == employeeId);
+
+                        employee.inTimeTable = false;
+
+                        BlocProvider.of<EmployeeCubit>(context)
+                            .deleteEmployeeFromTable(employee: employee);
+                      },
                       onTimeConfirm:
                           (DateTime from, DateTime to, String employeeId) {
                         BlocProvider.of<NotWorkingHoursCubit>(context).save(

@@ -19,10 +19,14 @@ import '../../domain/entity/order_entity.dart';
 class TimeTableWidget extends StatefulWidget {
   final List<EmployeeEntity> listEmployee;
   final Function(DateTime from, DateTime to, String employeeId) onTimeConfirm;
+  final Function(String employee)? onDeleteEmployeeFromTable;
 
-  const TimeTableWidget(
-      {Key? key, required this.listEmployee, required this.onTimeConfirm})
-      : super(key: key);
+  const TimeTableWidget({
+    Key? key,
+    required this.listEmployee,
+    required this.onTimeConfirm,
+    this.onDeleteEmployeeFromTable,
+  }) : super(key: key);
 
   @override
   State<TimeTableWidget> createState() => _TimeTableWidgetState();
@@ -388,6 +392,9 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                     entity.id,
                   );
                 },
+                onDeleteEmployeeFromTable: () {
+                  widget.onDeleteEmployeeFromTable?.call(entity.id);
+                },
               );
             },
             icon: const Icon(Icons.more_vert),
@@ -399,8 +406,6 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
     );
   }
 }
-
-
 
 class _NotWorkingHoursCard extends StatefulWidget {
   final NotWorkingHoursEntity notWorkingHoursEntity;
@@ -435,7 +440,6 @@ class _NotWorkingHoursCardState extends State<_NotWorkingHoursCard> {
     );
   }
 }
-
 
 class OrderCardWidget extends StatefulWidget {
   final OrderEntity order;

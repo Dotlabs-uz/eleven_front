@@ -166,7 +166,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
   @override
   Future<bool> deleteEmployee(String id) async {
     final response =
-        await _client.deleteWithBody('${ApiConstants.employee}$id/');
+        await _client.deleteWithBody('${ApiConstants.employee}/$id/');
     return response['success'] ?? false;
   }
 

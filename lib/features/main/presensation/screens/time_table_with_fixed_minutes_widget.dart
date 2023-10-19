@@ -387,7 +387,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                     timeTo,
                     entity.id,
                   );
-                },
+                }, onDeleteEmployeeFromTable: () {  },
               );
             },
             icon: const Icon(Icons.more_vert),

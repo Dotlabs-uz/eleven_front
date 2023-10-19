@@ -1,10 +1,12 @@
+// ignore_for_file: must_be_immutable
+
 import '../../../../core/entities/field_entity.dart';
 import '../../domain/entity/employee_entity.dart';
 import 'employee_schedule_model.dart';
 import 'not_working_hours_model.dart';
 
 class EmployeeModel extends EmployeeEntity {
-  const EmployeeModel({
+    EmployeeModel({
     required super.id,
     required super.firstName,
     required super.lastName,
