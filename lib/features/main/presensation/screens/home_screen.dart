@@ -362,11 +362,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         .deleteEmployeeFromTable(
                                             employee: employee);
                                   },
-                                  onTimeConfirm: (DateTime from, DateTime to,
-                                      String employeeId) {
+                                  onTimeConfirm: (
+                                    DateTime from,
+                                    DateTime to,
+                                    String employeeId,
+                                  ) {
                                     BlocProvider.of<NotWorkingHoursCubit>(
-                                            context)
-                                        .save(
+                                      context,
+                                    ).save(
                                       dateFrom: from,
                                       dateTo: to,
                                       employeeId: employeeId,

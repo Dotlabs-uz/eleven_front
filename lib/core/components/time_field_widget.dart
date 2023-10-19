@@ -11,6 +11,7 @@ class TimeFieldWithoutFieldWidget extends StatefulWidget {
   final bool isEnabled;
   final int maxLines;
   final TimeOfDay value;
+  final String? label;
   final Function(DateTime?)? onSelected;
 
   const TimeFieldWithoutFieldWidget({
@@ -18,6 +19,7 @@ class TimeFieldWithoutFieldWidget extends StatefulWidget {
     this.isEnabled = true,
     this.maxLines = 1,
     this.onSelected,
+    this.label,
     required this.value,
     // required this.callback,
   }) : super(key: key);
@@ -60,7 +62,7 @@ class _TimeFieldWithoutFieldWidgetState
         Row(
           children: [
             Text(
-              "selectTime".tr().toUpperCase(),
+    widget.label?? "selectTime".tr().toUpperCase(),
               // style: Theme.of(context).textTheme.bodyText2,
               textAlign: TextAlign.start,
               style: GoogleFonts.nunito(
@@ -117,7 +119,6 @@ class _TimeFieldWithoutFieldWidgetState
 
 
 
-                setState(() {
                   if(selectedTime != null) {
                     final selectedDateTime = DateTime(
                       now.year,
@@ -126,16 +127,11 @@ class _TimeFieldWithoutFieldWidgetState
                       selectedTime.hour,
                       selectedTime.minute,
                     );
-                    textEditingController.text =  dateFormat.format(
+                    textEditingController.text = dateFormat.format(
                       selectedDateTime,
                     );
                     widget.onSelected?.call(selectedDateTime);
-
                   }
-
-
-
-                });
               },
             ),
           ],

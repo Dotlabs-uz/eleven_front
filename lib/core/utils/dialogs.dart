@@ -1147,6 +1147,8 @@ class _TimeTableEmployeeDialogBodyState
     extends State<_TimeTableEmployeeDialogBody> {
   _TimeTableEmployeeDialogState state = _TimeTableEmployeeDialogState.initial;
 
+  DateTime timeFrom = DateTime.now();
+  DateTime timeTo = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1189,6 +1191,7 @@ class _TimeTableEmployeeDialogBodyState
           text: 'removeFromTimeTable'.tr(),
           onPressed: () {
             widget.onDeleteEmployeeFromTable.call();
+            Navigator.pop(context);
           },
           color: Colors.blue,
         ),
@@ -1205,31 +1208,32 @@ class _TimeTableEmployeeDialogBodyState
   }
 
   _selectNotWorkingHours() {
-    DateTime timeFrom = DateTime.now();
-    DateTime timeTo = DateTime.now();
+
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 33),
         TimeFieldWithoutFieldWidget(
+          label: "selectTimeFrom".tr(),
+
           value: TimeOfDay.fromDateTime(timeFrom),
           onSelected: (value) {
             if (value != null) {
-              setState(() {
+
                 timeFrom = value;
-              });
             }
           },
         ),
         const SizedBox(height: 10),
         TimeFieldWithoutFieldWidget(
+          label: "selectTimeTo".tr(),
+
           value: TimeOfDay.fromDateTime(timeTo),
           onSelected: (value) {
             if (value != null) {
-              setState(() {
+
                 timeTo = value;
-              });
             }
           },
         ),

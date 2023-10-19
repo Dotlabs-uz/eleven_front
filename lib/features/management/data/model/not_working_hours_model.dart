@@ -8,16 +8,16 @@ class NotWorkingHoursModel extends NotWorkingHoursEntity {
 
   factory NotWorkingHoursModel.fromJson(Map<String, dynamic> json) {
     return NotWorkingHoursModel(
-      dateFrom: json['from'],
-      dateTo: json['to'],
+      dateFrom:DateTime.parse( json['from']),
+      dateTo:DateTime.parse( json['to']),
     );
   }
 
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['from'] = dateFrom;
-    data['to'] = dateTo;
+    data['from'] = dateFrom.toIso8601String();
+    data['to'] = dateTo.toIso8601String();
     return data;
   }
 

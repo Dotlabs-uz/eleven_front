@@ -40,9 +40,10 @@ class DateTimeHelper {
     return null;
   }
 
-  static Future<TimeOfDay?> pickTime(BuildContext context,
-      {DateTime? initialDate}) async {
-    // ignore: use_build_context_synchronously
+  static Future<TimeOfDay?> pickTime(
+    BuildContext context, {
+    DateTime? initialDate,
+  }) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
