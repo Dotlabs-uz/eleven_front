@@ -635,5 +635,6 @@
   "orderStart": "Buyurtmaning boshlanishi",
   "orderEnd": "Buyurtmaning oxiri",
   "selectNotWorkingTime": "Ishlamaydigan vaqtni tanlang",
-  "selectTime": "Vaqtni tanlang"
+  "selectTime": "Vaqtni tanlang",
+  "removeFromTimeTable": "Kalendardan olib tashlang"
 }

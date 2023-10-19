@@ -1,6 +1,7 @@
 import '../../../../core/entities/field_entity.dart';
 import '../../domain/entity/employee_entity.dart';
 import 'employee_schedule_model.dart';
+import 'not_working_hours_model.dart';
 
 class EmployeeModel extends EmployeeEntity {
   const EmployeeModel({
@@ -13,6 +14,7 @@ class EmployeeModel extends EmployeeEntity {
     required super.password,
     required super.login,
     required super.inTimeTable,
+    required super.notWorkingHours,
   });
 
   List<MobileFieldEntity> getFieldsAndValues() {
@@ -61,6 +63,13 @@ class EmployeeModel extends EmployeeEntity {
               .toList()
           : [],
       inTimeTable: json['inTimeTable'] ?? false,
+
+      // TODO Connect not working hours
+      notWorkingHours: json['notWorkingHours'] != null && List.from(json['notWorkingHours']).isNotEmpty
+          ? List.from(json['notWorkingHours'])
+              .map((e) => NotWorkingHoursModel.fromJson(e))
+              .toList()
+          : [],
     );
   }
 
@@ -74,7 +83,7 @@ class EmployeeModel extends EmployeeEntity {
       schedule: entity.schedule,
       login: entity.login,
       password: entity.password,
-      inTimeTable: entity.inTimeTable,
+      inTimeTable: entity.inTimeTable, notWorkingHours: entity.notWorkingHours,
     );
   }
 

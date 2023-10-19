@@ -6,6 +6,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/entities/field_entity.dart';
 import 'employee_schedule_entity.dart';
+import 'not_working_hours_entity.dart';
 
 class EmployeeEntity extends Equatable {
   final String id;
@@ -16,6 +17,7 @@ class EmployeeEntity extends Equatable {
   final String role;
   final bool inTimeTable;
   final int phoneNumber;
+  final List<NotWorkingHoursEntity> notWorkingHours;
   final List<EmployeeScheduleEntity> schedule;
 
   const EmployeeEntity({
@@ -27,6 +29,7 @@ class EmployeeEntity extends Equatable {
     required this.role,
     required this.phoneNumber,
     required this.inTimeTable,
+    required this.notWorkingHours,
     required this.schedule,
   });
 
@@ -116,7 +119,7 @@ class EmployeeEntity extends Equatable {
       login: row.cells["login"]?.value,
       role: row.cells["role"]?.value,
       schedule: [],
-      inTimeTable: false,
+      inTimeTable: false, notWorkingHours: [],
     );
   }
 
@@ -243,7 +246,7 @@ class EmployeeEntity extends Equatable {
       login: fields["login"]?.val,
       role: fields["role"]?.val,
       schedule: [],
-      inTimeTable: false,
+      inTimeTable: false, notWorkingHours: [],
     );
   }
 
@@ -257,7 +260,7 @@ class EmployeeEntity extends Equatable {
       phoneNumber: 99,
       role: "",
       schedule: [],
-      inTimeTable: false,
+      inTimeTable: false, notWorkingHours: [],
     );
   }
 
