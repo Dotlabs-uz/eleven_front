@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/components/data_form.dart';
+import '../../../../core/components/error_flash_bar.dart';
+import '../../../../core/components/success_flash_bar.dart';
 import '../../../../get_it/locator.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
@@ -39,8 +41,9 @@ class _EmployeeScheduleScreenState extends State<EmployeeScheduleScreen> {
       providers: [
         BlocProvider<EmployeeScheduleCubit>(
           create: (context) => employeeScheduleCubit,
-        ), BlocProvider<EmployeeCubit>(
-          create: (context) =>employeeCubit ,
+        ),
+        BlocProvider<EmployeeCubit>(
+          create: (context) => employeeCubit,
         ),
       ],
       child: ContentWidget(
@@ -87,8 +90,6 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   _setWidgetTop() {
-    // final Map<String, dynamic> filtr = {};
-
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
       [
         MyIconButton(
@@ -116,7 +117,7 @@ class _ContentWidgetState extends State<ContentWidget> {
 
   initCubit() => BlocProvider.of<EmployeeScheduleCubit>(context).init();
 
-   List<EmployeeEntity> listEmployee = [
+  List<EmployeeEntity> listEmployee = [
     // EmployeeEntity(
     //   id: "",
     //   firstName: "Sam",
@@ -229,28 +230,54 @@ class _ContentWidgetState extends State<ContentWidget> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      BlocBuilder<EmployeeCubit, EmployeeState>(
-                        builder: (context, state) {
-                          if(state is EmployeeLoaded) {
-                           listEmployee = state.data;
-                          }
-
-                          return    EmployeeScheduleWidget(
-                            onSave: (listFields) {
-                              debugPrint("List fields ${listFields.length}");
-
-                              for (var element in listFields) {
-                                debugPrint(
-                                    "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employeeId}");
+                      MultiBlocListener(
+                        listeners: [
+                          BlocListener<EmployeeScheduleCubit,
+                              EmployeeScheduleState>(
+                            listener: (context, state) {
+                              if (state is EmployeeScheduleSaved) {
+                                SuccessFlushBar("change_success".tr())
+                                    .show(context);
+                              } else if (state is EmployeeScheduleError) {
+                                ErrorFlushBar("change_error"
+                                    .tr(args: [state.message])).show(context);
                               }
-
-                              BlocProvider.of<EmployeeScheduleCubit>(context)
-                                  .save(listData: listFields);
                             },
-                            listEmployee: listEmployee,
-                          );
+                          ),
+                          BlocListener<EmployeeCubit, EmployeeState>(
+                            listener: (context, state) {
+                              if (state is EmployeeSaved) {
+                                SuccessFlushBar("change_success".tr())
+                                    .show(context);
+                              } else if (state is EmployeeError) {
+                                ErrorFlushBar("change_error"
+                                    .tr(args: [state.message])).show(context);
+                              }
+                            },
+                          ),
+                        ],
+                        child: BlocBuilder<EmployeeCubit, EmployeeState>(
+                          builder: (context, state) {
+                            if (state is EmployeeLoaded) {
+                              listEmployee = state.data;
+                            }
 
-                        },
+                            return EmployeeScheduleWidget(
+                              onSave: (listFields) {
+                                debugPrint("List fields ${listFields.length}");
+
+                                for (var element in listFields) {
+                                  debugPrint(
+                                      "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employeeId}");
+                                }
+
+                                BlocProvider.of<EmployeeScheduleCubit>(context)
+                                    .save(listData: listFields);
+                              },
+                              listEmployee: listEmployee,
+                            );
+                          },
+                        ),
                       ),
                     ],
                   ),

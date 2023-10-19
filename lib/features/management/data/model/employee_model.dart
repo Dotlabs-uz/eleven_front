@@ -56,15 +56,13 @@ class EmployeeModel extends EmployeeEntity {
       role: json['role'],
       login: "",
       password: "",
-      schedule: List.from(json['workTime']).isNotEmpty
-          ? List.from(json['workTime'])
+      schedule: json['schedule'] != null && List.from(json['schedule']).isNotEmpty
+          ? List.from(json['schedule'])
               .map((e) =>
                   EmployeeScheduleModel.fromJson(e, json['_id'].toString()))
               .toList()
           : [],
       inTimeTable: json['inTimeTable'] ?? false,
-
-      // TODO Connect not working hours
       notWorkingHours: json['notWorkingHours'] != null && List.from(json['notWorkingHours']).isNotEmpty
           ? List.from(json['notWorkingHours'])
               .map((e) => NotWorkingHoursModel.fromJson(e))
