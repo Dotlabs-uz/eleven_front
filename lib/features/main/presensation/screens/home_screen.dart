@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
 import 'package:eleven_crm/features/management/domain/entity/not_working_hours_entity.dart';
 import 'package:flutter/material.dart';
@@ -144,35 +145,35 @@ class _ContentWidgetState extends State<_ContentWidget> {
   int selectedValue = 0;
 
   List<EmployeeEntity> listEmployee = [
-    EmployeeEntity(
-      id: "1",
-      firstName: "Sam",
-      lastName: "Satt",
-      password: "Satt",
-      login: "Satt",
-      phoneNumber: 99,
-      role: "manager",
-      schedule: [],
-      inTimeTable: false,
-      notWorkingHours: [],
-    ),
-    EmployeeEntity(
-      id: "2",
-      firstName: "Sam",
-      lastName: "Satt",
-      password: "Satt",
-      login: "Satt",
-      phoneNumber: 99,
-      role: "manager",
-      schedule: [],
-      inTimeTable: false,
-      notWorkingHours: [
-        NotWorkingHoursEntity(
-          dateFrom: DateTime(2023, 10, 19, 16),
-          dateTo: DateTime(2023, 10, 19, 17, 30),
-        ),
-      ],
-    ),
+    // EmployeeEntity(
+    //   id: "1",
+    //   firstName: "Sam",
+    //   lastName: "Satt",
+    //   password: "Satt",
+    //   login: "Satt",
+    //   phoneNumber: 99,
+    //   role: "manager",
+    //   schedule: [],
+    //   inTimeTable: false,
+    //   notWorkingHours: [],
+    // ),
+    // EmployeeEntity(
+    //   id: "2",
+    //   firstName: "Sam",
+    //   lastName: "Satt",
+    //   password: "Satt",
+    //   login: "Satt",
+    //   phoneNumber: 99,
+    //   role: "manager",
+    //   schedule: [],
+    //   inTimeTable: false,
+    //   notWorkingHours: [
+    //     NotWorkingHoursEntity(
+    //       dateFrom: DateTime(2023, 10, 19, 16),
+    //       dateTo: DateTime(2023, 10, 19, 17, 30),
+    //     ),
+    //   ],
+    // ),
   ];
 
   // final List<EmployeeEntity> listEmployee = [
@@ -298,8 +299,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     Duration.zero,
                     () {
                       setState(() {
-                        // listEmployee.addAll(state.data);
-                        // listEmployee = state.data;
+                        listEmployee = state.data;
                       });
                     },
                   );
@@ -310,81 +310,93 @@ class _ContentWidgetState extends State<_ContentWidget> {
             },
           ),
         ],
-        child: Column(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                // CupertinoSlidingSegmentedControl<int>(
-                //   backgroundColor: CupertinoColors.white,
-                //   thumbColor: Colors.grey,
-                //   padding: const EdgeInsets.symmetric(horizontal: 15),
-                //   groupValue: selectedValue,
-                //   children: children,
-                //   onValueChanged: (value) {
-                //     if (value != null) {
-                //       setState(() {
-                //         selectedValue = value;
-                //       });
-                //     }
-                //   },
-                // ),
-                Expanded(child: _dateTimeWidget()),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  // const Expanded(
-                  //     child: CalendarWidget(
-                  //   calendarsCount: 3,
-                  // )),
+            listEmployee.isEmpty
+                ? Expanded(child: EmptyWidget())
+                : Expanded(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            // CupertinoSlidingSegmentedControl<int>(
+                            //   backgroundColor: CupertinoColors.white,
+                            //   thumbColor: Colors.grey,
+                            //   padding: const EdgeInsets.symmetric(horizontal: 15),
+                            //   groupValue: selectedValue,
+                            //   children: children,
+                            //   onValueChanged: (value) {
+                            //     if (value != null) {
+                            //       setState(() {
+                            //         selectedValue = value;
+                            //       });
+                            //     }
+                            //   },
+                            // ),
+                            Expanded(child: _dateTimeWidget()),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // const Expanded(
+                              //     child: CalendarWidget(
+                              //   calendarsCount: 3,
+                              // )),
 
-                  Expanded(
-                    flex: 2,
-                    child: TimeTableWidget(
-                      listEmployee: listEmployee,
-                      onDeleteEmployeeFromTable: (employeeId) {
-                        final employee = listEmployee
-                            .firstWhere((element) => element.id == employeeId);
+                              Expanded(
+                                flex: 2,
+                                child: TimeTableWidget(
+                                  listEmployee: listEmployee,
+                                  onDeleteEmployeeFromTable: (employeeId) {
+                                    final employee = listEmployee.firstWhere(
+                                        (element) => element.id == employeeId);
 
-                        employee.inTimeTable = false;
+                                    employee.inTimeTable = false;
 
-                        BlocProvider.of<EmployeeCubit>(context)
-                            .deleteEmployeeFromTable(employee: employee);
-                      },
-                      onTimeConfirm:
-                          (DateTime from, DateTime to, String employeeId) {
-                        BlocProvider.of<NotWorkingHoursCubit>(context).save(
-                          dateFrom: from,
-                          dateTo: to,
-                          employeeId: employeeId,
-                        );
-                      },
+                                    BlocProvider.of<EmployeeCubit>(context)
+                                        .deleteEmployeeFromTable(
+                                            employee: employee);
+                                  },
+                                  onTimeConfirm: (DateTime from, DateTime to,
+                                      String employeeId) {
+                                    BlocProvider.of<NotWorkingHoursCubit>(
+                                            context)
+                                        .save(
+                                      dateFrom: from,
+                                      dateTo: to,
+                                      employeeId: employeeId,
+                                    );
+                                  },
+                                ),
+                              ),
+
+                              if (!isFormVisible) const SizedBox(width: 5),
+                              if (!isFormVisible)
+                                NotSelectedEmployeeListWidget(
+                                  listEmployee: listEmployee,
+                                  onTap: (String employeeId) {},
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  if (isFormVisible)
-                    Expanded(
-                      flex: 1,
-                      child: SingleChildScrollView(
-                        child: DataOrderForm(
-                          fields: activeData.getFields(),
-                          closeForm: () =>
-                              setState(() => isFormVisible = false),
-                        ),
-                      ),
-                    ),
-                  if (!isFormVisible) const SizedBox(width: 5),
-                  if (!isFormVisible)
-                    NotSelectedEmployeeListWidget(
-                      listEmployee: listEmployee,
-                      onTap: (String employeeId) {},
-                    ),
-                ],
+            if (isFormVisible)
+              Expanded(
+                flex: 1,
+                child: SingleChildScrollView(
+                  child: DataOrderForm(
+                    fields: activeData.getFields(),
+                    closeForm: () => setState(() => isFormVisible = false),
+                  ),
+                ),
               ),
-            ),
           ],
         ),
       ),

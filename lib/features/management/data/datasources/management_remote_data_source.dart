@@ -9,6 +9,8 @@ import '../model/customer_results_model.dart';
 import '../model/employee_model.dart';
 import '../model/employee_results_model.dart';
 import '../model/employee_schedule_model.dart';
+import '../model/manager_model.dart';
+import '../model/manager_resutls_model.dart';
 
 abstract class ManagementRemoteDataSource {
   // ================ CUSTOMER CRUD ================ //
@@ -35,6 +37,17 @@ abstract class ManagementRemoteDataSource {
   Future<EmployeeModel> saveEmployee(EmployeeModel data);
 
   Future<bool> deleteEmployee(String id);
+
+  // ================ MANAGER CRUD ================ //
+
+  Future<ManagerResultsModel> getManager(
+    int page,
+    String searchText,
+  );
+
+  Future<ManagerModel> saveManager(ManagerModel data);
+
+  Future<bool> deleteManager(String id);
 
 // ================ BARBERS CRUD ================ //
 
@@ -235,5 +248,36 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
         params: {"schedule": data.map((e) => e.toJson()).toList()});
 
     return true;
+  }
+  // ================ MANAGER CRUD ================ //
+
+  @override
+  Future<bool> deleteManager(String id) async {
+    await _client.deleteWithBody("${ApiConstants.managers}/$id");
+    return true;
+  }
+
+  @override
+  Future<ManagerResultsModel> getManager(int page, String searchText) async {
+    final response = await _client.get(
+      "${ApiConstants.managers}?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}",
+    );
+    final results = ManagerResultsModel.fromJson(response);
+
+    return results;
+  }
+
+  @override
+  Future<ManagerModel> saveManager(ManagerModel data) async {
+    dynamic response;
+    if (data.id.isEmpty) {
+      response =
+          await _client.post(ApiConstants.managers, params: data.toJson());
+    } else {
+      response = await _client.patch('${ApiConstants.managers}/${data.id}/',
+          params: data.toJson());
+    }
+
+    return ManagerModel.fromJson(response);
   }
 }

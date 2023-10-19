@@ -5,6 +5,8 @@ import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart'
 import 'package:eleven_crm/features/management/domain/entity/barber_results_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_results_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
+import 'package:eleven_crm/features/management/domain/entity/manager_entity.dart';
+import 'package:eleven_crm/features/management/domain/entity/manager_results_entity.dart';
 
 import '../../../../core/api/api_exceptions.dart';
 import '../../../../core/entities/app_error.dart';
@@ -17,6 +19,7 @@ import '../datasources/management_remote_data_source.dart';
 import '../model/barber_model.dart';
 import '../model/customer_model.dart';
 import '../model/employee_model.dart';
+import '../model/manager_model.dart';
 
 class ManagementRepositoryImpl extends ManagementRepository {
   final ManagementRemoteDataSource remoteDataSource;
@@ -213,6 +216,63 @@ class ManagementRepositoryImpl extends ManagementRepository {
     try {
 
       final result = await remoteDataSource.saveEmployeeSchedule(data);
+
+      return Right(result);
+    } on SocketException {
+      return const Left(AppError(appErrorType: AppErrorType.network));
+    } on UnauthorisedException {
+      return const Left(AppError(appErrorType: AppErrorType.unauthorised));
+    } on ExceptionWithMessage catch (e) {
+      return Left(AppError(
+          appErrorType: AppErrorType.msgError, errorMessage: e.message));
+    }
+  }
+
+  // ================ MANAGER CRUD ================ //
+
+
+
+  @override
+  Future<Either<AppError, bool>> deleteManager(ManagerEntity entity)async  {
+    try {
+      final model = ManagerModel.fromEntity(entity);
+
+      final result = await remoteDataSource.deleteManager(model.id);
+
+      return Right(result);
+    } on SocketException {
+      return const Left(AppError(appErrorType: AppErrorType.network));
+    } on UnauthorisedException {
+      return const Left(AppError(appErrorType: AppErrorType.unauthorised));
+    } on ExceptionWithMessage catch (e) {
+      return Left(AppError(
+          appErrorType: AppErrorType.msgError, errorMessage: e.message));
+    }
+  }
+
+  @override
+  Future<Either<AppError, ManagerResultsEntity>> getManager(int page, String searchText, ) async {
+    try {
+
+      final result = await remoteDataSource.getManager(page, searchText);
+
+      return Right(result);
+    } on SocketException {
+      return const Left(AppError(appErrorType: AppErrorType.network));
+    } on UnauthorisedException {
+      return const Left(AppError(appErrorType: AppErrorType.unauthorised));
+    } on ExceptionWithMessage catch (e) {
+      return Left(AppError(
+          appErrorType: AppErrorType.msgError, errorMessage: e.message));
+    }
+  }
+
+  @override
+  Future<Either<AppError, ManagerEntity>> saveManager(ManagerEntity data)async  {
+    try {
+      final model = ManagerModel.fromEntity(data);
+
+      final result = await remoteDataSource.saveManager(model);
 
       return Right(result);
     } on SocketException {

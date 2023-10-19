@@ -12,6 +12,7 @@ class ApiConstants {
 
   static const String clients = "clients";
   static const String barbers = "barbers";
+  static const String managers = "managers";
   static const String serviceProduct = "services";
   static const String serviceProductCategory = "categories";
   static const String filial = "filials";

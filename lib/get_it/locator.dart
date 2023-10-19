@@ -9,8 +9,10 @@ import 'package:eleven_crm/features/management/domain/repositories/management_re
 import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
 import 'package:eleven_crm/features/management/domain/usecases/employee.dart';
 import 'package:eleven_crm/features/management/domain/usecases/employee_schedule.dart';
+import 'package:eleven_crm/features/management/domain/usecases/manager.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/cubit/manager/manager_cubit.dart';
 import 'package:eleven_crm/features/products/domain/usecases/filial.dart';
 import 'package:eleven_crm/features/products/domain/usecases/service_product_category.dart';
 import 'package:http/http.dart';
@@ -69,7 +71,9 @@ void setup() {
   // Employee
 
   locator.registerFactory(() => EmployeeCubit(locator(), locator(), locator()));
-  locator.registerFactory(() => EmployeeScheduleCubit(locator(),));
+  locator.registerFactory(() => EmployeeScheduleCubit(
+        locator(),
+      ));
 
   // Service Product
 
@@ -93,7 +97,9 @@ void setup() {
 
   locator.registerFactory(() => NotWorkingHoursCubit(locator()));
 
+  // Manager
 
+  locator.registerFactory(() => ManagerCubit(locator(), locator(), locator()));
 
   // ================ UseCases ================ //
 
@@ -142,7 +148,8 @@ void setup() {
   locator.registerLazySingleton<DeleteBarber>(() => DeleteBarber(locator()));
 
   // Current user
-  locator.registerLazySingleton<GetCurrentUser>(() => GetCurrentUser(locator()));
+  locator
+      .registerLazySingleton<GetCurrentUser>(() => GetCurrentUser(locator()));
 
   // Filial
 
@@ -150,13 +157,18 @@ void setup() {
 
   // Employee Schedule
 
-  locator.registerLazySingleton<SaveEmployeeSchedule>(() => SaveEmployeeSchedule(locator()));
+  locator.registerLazySingleton<SaveEmployeeSchedule>(
+      () => SaveEmployeeSchedule(locator()));
 
   // Not working hours
 
-  locator.registerLazySingleton<SaveNotWorkingHours>(() => SaveNotWorkingHours(locator()));
+  locator.registerLazySingleton<SaveNotWorkingHours>(
+      () => SaveNotWorkingHours(locator()));
 
-
+  // Manager
+  locator.registerLazySingleton<GetManager>(() => GetManager(locator()));
+  locator.registerLazySingleton<SaveManager>(() => SaveManager(locator()));
+  locator.registerLazySingleton<DeleteManager>(() => DeleteManager(locator()));
 
   // ================ Repository / Datasource ================ //
 
@@ -184,8 +196,8 @@ void setup() {
 
   locator.registerLazySingleton<MainRemoteDataSource>(
     () => MainRemoteDataSourceImpl(
-        locator(),
-        ),
+      locator(),
+    ),
   );
 
   locator.registerLazySingleton<ManagementRepository>(
