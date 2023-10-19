@@ -58,9 +58,9 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
   void initialize() {
     listEmployee.clear();
 
-    final List<EmployeeEntity> employeeListData = widget.listEmployee
-        .where((element) => element.inTimeTable == true)
-        .toList();
+    final List<EmployeeEntity> employeeListData =  widget.listEmployee.where((element) => element.inTimeTable == true).toList();
+
+
 
     listEmployee.addAll(employeeListData);
   }
@@ -152,9 +152,9 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                     ),
                     Container(width: 10),
                     ...List.generate(
-                      widget.listEmployee.length,
+                      listEmployee.length,
                       (index) {
-                        final el = widget.listEmployee[index];
+                        final el = listEmployee[index];
                         return Expanded(
                           child: _employeeCardWidget(el),
                         );
@@ -178,11 +178,11 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                             timeTo: to,
                           ),
                           ...List.generate(
-                            widget.listEmployee.length,
+                            listEmployee.length,
                             (index) {
                               List<OrderEntity> localOrders = [];
 
-                              final employee = widget.listEmployee[index];
+                              final employee = listEmployee[index];
 
                               localOrders = orders
                                   .where((element) =>

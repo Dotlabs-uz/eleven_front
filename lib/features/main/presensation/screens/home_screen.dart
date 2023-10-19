@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/api/api_constants.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
+import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
-import 'package:eleven_crm/features/management/domain/entity/not_working_hours_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../../core/components/data_order_form.dart';
 import '../../../../core/components/not_selected_employee_list_widget.dart';
@@ -84,10 +84,20 @@ class _ContentWidgetState extends State<_ContentWidget> {
     isFormVisible = false;
 
     _setWidgetTop();
+    listenSockets();
 
     await localDataSource.saveSessionId(
       "eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJ1c2VySWQiOiI2NTMxNDNmNzI2OTUyYjYxOWJlYmZhZjYiLCJwYXRoIjoibWFuYWdlcnMiLCJpYXQiOjE2OTc3Mjc0NzksImV4cCI6MTY5NzgxMzg3OSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwianRpIjoiYzljNjQzMWMtZDY1ZS00NmFlLTlmYTQtYmQwNGIyMzA3NTYyIn0.lQNpJZKK3jhsoQ3YPihxyBr_laxyJ4BVFd0GQYZGBF0",
     );
+  }
+
+  listenSockets() {
+    final webSocketStream =
+        WebSocketsService().getResponse;
+
+    webSocketStream.listen((event) {
+      print("Socket event");
+    });
   }
 
   _setWidgetTop() {
@@ -99,6 +109,19 @@ class _ContentWidgetState extends State<_ContentWidget> {
           onPressed: () {
             activeData = OrderEntity.empty();
             _editOrder(activeData);
+          },
+          icon: const Icon(Icons.add_box_rounded),
+        ), MyIconButton(
+          onPressed: () {
+            final order = {
+              "barber": "652ec04ce43481d1861b7a73",
+            "services": ["652a8b0e4843eccbd6fa2f99", "652a7d70db588849046e07£6"] ,
+            "filial": "65242469aea337a1e52af793",
+            "orderStart": "2023-10-18T16:57:02.897Z" ,
+            "client": "652a9ae6cc5ce9ea4769¢756",
+            "payments": "cash"
+          };
+            
           },
           icon: const Icon(Icons.add_box_rounded),
         ),
