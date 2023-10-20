@@ -22,6 +22,7 @@ import '../../../main/presensation/widget/my_icon_button.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
+import '../../data/model/employee_model.dart';
 import '../../domain/entity/employee_entity.dart';
 import '../cubit/employee/employee_cubit.dart';
 
@@ -223,7 +224,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                 return const Expanded(child: LoadingCircle());
               } else {
                 if (state is EmployeeSaved) {
-                  activeData = state.data;
+                  activeData = EmployeeModel.fromEntity(state.data);
                   BlocProvider.of<DataFormCubit>(context)
                       .editData(activeData.getFields());
                   var ind = customers
