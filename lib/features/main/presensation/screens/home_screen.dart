@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
+import 'package:eleven_crm/features/management/domain/entity/not_working_hours_entity.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,8 @@ import '../../../../core/components/not_selected_employee_list_widget.dart';
 import '../../../../core/components/responsive_builder.dart';
 import '../../../../get_it/locator.dart';
 import '../../../auth/data/datasources/authentication_local_data_source.dart';
+import '../../../management/data/model/barber_model.dart';
+import '../../../products/domain/entity/filial_entity.dart';
 import '../../../products/domain/entity/service_product_category_entity.dart';
 import '../../../products/domain/entity/service_product_entity.dart';
 import '../../domain/entity/order_entity.dart';
@@ -83,13 +86,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     isFormVisible = false;
 
-
     listBarbers.clear();
     _setWidgetTop();
     // listenSockets();
 
     await localDataSource.saveSessionId(
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJ1c2VySWQiOiI2NTMxNDNmNzI2OTUyYjYxOWJlYmZhZjYiLCJwYXRoIjoibWFuYWdlcnMiLCJpYXQiOjE2OTc3NzcwNzQsImV4cCI6MTY5Nzg2MzQ3NCwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwianRpIjoiNmM3Mzk0MmUtMzE5NS00N2RiLWE0ZWYtZjQ5MmU1NzdmMWFiIn0.TN0nGXrTQjmCxngfusVCIC6YII5HIgwbvdTmDa7-KSA",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJ1c2VySWQiOiI2NTMxNDNmNzI2OTUyYjYxOWJlYmZhZjYiLCJwYXRoIjoibWFuYWdlcnMiLCJpYXQiOjE2OTc3OTIwOTUsImV4cCI6MTY5Nzg3ODQ5NSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwianRpIjoiNWNlYzUwZDMtYWM0OS00ZWI5LWFiMmEtNDAwMDlhMmE4MzNlIn0.glVdrSB3u4vco7t-BdUhkdmCfstsfNHSHmHjS671b_8",
     );
   }
 
@@ -187,8 +189,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
     //   ],
     // ),
   ];
-
-
 
   _dateTimeWidget() {
     final now = DateTime.now();
@@ -308,6 +308,25 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     () {
                       setState(() {
                         listBarbers = state.data.results;
+                        listBarbers.add(
+                          BarberModel(
+                              id: "id",
+                              firstName: "firstName",
+                              lastName: "lastName",
+                              password: "password",
+                              login: "",
+                              phone: 12,
+                              notWorkingHours: [
+                                NotWorkingHoursEntity(
+                                  dateFrom: DateTime.now(),
+                                  dateTo: DateTime.now().add(
+                                    const Duration(hours: 1),
+                                  ),
+                                )
+                              ],
+                              inTimeTable: true,
+                              filial: FilialEntity.empty()),
+                        );
                       });
                     },
                   );
@@ -367,14 +386,19 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     }
                                     return TimeTableWidget(
                                       listBarbers: listBarbers,
+                                      onOrderClick: (entity) =>
+                                          _editOrder(entity),
                                       onDeleteEmployeeFromTable: (employeeId) {
                                         _barberFromTimeTableCardAction(
                                           employeeId,
                                           false,
                                         );
                                       },
-                                      onTimeConfirm: (DateTime from,
-                                          DateTime to, String employeeId) {
+                                      onTimeConfirm: (
+                                        DateTime from,
+                                        DateTime to,
+                                        String employeeId,
+                                      ) {
                                         BlocProvider.of<NotWorkingHoursCubit>(
                                           context,
                                         ).save(

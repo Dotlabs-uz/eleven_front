@@ -113,14 +113,14 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                           ),
                           ...List.generate(
                             listBarber.length,
-                            (index) {
+                            (barberIndex) {
                               List<OrderEntity> localOrders = [];
 
-                              final employee = listBarber[index];
+                              final barber = listBarber[barberIndex];
 
                               localOrders = widget.listOrders.where(
                                 (element) {
-                                  return employee.id == element.barberId;
+                                  return barber.id == element.barberId;
                                 },
                               ).toList();
 
@@ -156,6 +156,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                       candidateData,
                                                       rejectedData) {
                                                     return FieldCardWidget(
+                                                      isFirstSection:
+                                                          barberIndex == 0,
                                                       hour: hour,
                                                       highlighted: candidateData
                                                           .isNotEmpty,
@@ -194,7 +196,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                           differenceFromAndTo,
                                                       orderTo.minute,
                                                     );
-                                                    data.barberId = employee.id;
+                                                    data.barberId = barber.id;
 
                                                     setState(() {});
                                                   },
@@ -287,7 +289,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                           );
                                         },
                                       ),
-                                      ...employee.notWorkingHours.map(
+                                      ...barber.notWorkingHours.map(
                                         (e) {
                                           return Positioned(
                                             // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
@@ -530,12 +532,14 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
 
 class FieldCardWidget extends StatefulWidget {
   final int hour;
+  final bool isFirstSection;
   final bool highlighted;
 
   const FieldCardWidget({
     super.key,
     required this.hour,
     required this.highlighted,
+    required this.isFirstSection,
   });
 
   @override
@@ -543,13 +547,6 @@ class FieldCardWidget extends StatefulWidget {
 }
 
 class _FieldCardWidgetState extends State<FieldCardWidget> {
-  late int minute;
-  @override
-  void initState() {
-    minute = 0;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -561,13 +558,15 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
         // border: Border.all(width: 1),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: List.generate(
-          12,
+          4,
           (index) {
-            minute += 5;
+            int minute =
+                (index) * 15; // 15, 30, 45, 60 (which will be converted to 0)
 
-            if (minute >= 65) {
-              minute = 0;
+            if (minute >= 60) {
+              minute = 0; // Convert 60 to 0
             }
             return Expanded(
               child: Container(
@@ -580,7 +579,25 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                 ),
 
                 width: double.infinity,
-                // child: Center(child: Text("${widget.hour}:${minute}")),
+                child: widget.isFirstSection
+                    ? const SizedBox()
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4, top: 2),
+                            child: Text(
+                              "${widget.hour}:${minute == 0? "00": minute}",
+                              style: TextStyle(
+                                color: Colors.grey.shade400,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                 // child: Text((index +1).toString()),
               ),
             );

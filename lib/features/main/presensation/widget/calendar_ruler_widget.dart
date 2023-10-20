@@ -13,6 +13,7 @@ class CalendarRulerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: Constants.rulerWidth,
+
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -22,7 +23,6 @@ class CalendarRulerWidget extends StatelessWidget {
       ),
     );
   }
-
   List<Widget> _buildTimeSlots() {
     List<Widget> timeSlots = [];
 
@@ -42,24 +42,27 @@ class CalendarRulerWidget extends StatelessWidget {
   Widget _buildTimeHourSlot(DateTime time) {
     return Container(
       height: 50, // Высота слота времени
-      padding: const EdgeInsets.only(left: 10),
+      color: Colors.transparent,
+      padding: const EdgeInsets.only(left: 0),
 
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+
         children: [
           Text(
             '${time.hour}', // Время
+
             style: const TextStyle(
-              fontSize: 18, // Размер шрифта времени
+              fontSize: 16, // Размер шрифта времени
               color: Colors.black,
               fontWeight: FontWeight.bold, // Жирный стиль для часа
             ),
           ),
           const SizedBox(width: 5),
-          Expanded(
-            child: Container(
-              height: 1,
-              color: Colors.black,
-            ),
+          Container(
+            height: 1,
+            width: 50,
+            color: Colors.black,
           ),
         ],
       ),
@@ -69,6 +72,7 @@ class CalendarRulerWidget extends StatelessWidget {
   Widget _buildTimeMinuteSlot(DateTime time) {
     return Container(
       height: 50, // Высота слота времени
+      color:Colors.transparent,
       padding: const EdgeInsets.only(right: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -77,8 +81,9 @@ class CalendarRulerWidget extends StatelessWidget {
           const Text(
             '30', // Время
             style: TextStyle(
-              fontSize: 18, // Размер шрифта времени
+              fontSize: 16, // Размер шрифта времени
               color: Colors.black,
+
               fontWeight: FontWeight.bold, // Жирный стиль для часа
             ),
           ),
