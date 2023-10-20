@@ -19,12 +19,14 @@ class TimeTableWidget extends StatefulWidget {
   final List<OrderEntity> listOrders;
   final Function(DateTime from, DateTime to, String employeeId) onTimeConfirm;
   final Function(String employee)? onDeleteEmployeeFromTable;
+  final Function(OrderEntity)? onOrderClick;
 
   const TimeTableWidget({
     Key? key,
     required this.listBarbers,
     required this.onTimeConfirm,
     this.onDeleteEmployeeFromTable,
+    this.onOrderClick,
     required this.listOrders,
   }) : super(key: key);
 
@@ -37,14 +39,14 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
   final DateTime from = DateTime(2023, 10, 7, 8);
   final DateTime to = DateTime(2023, 10, 7, 22);
 
-  static final List<BarberEntity> listEmployee = [];
+  static final List<BarberEntity> listBarber = [];
   static final List<OrderEntity> listOrders = [];
 
   @override
   void didUpdateWidget(covariant TimeTableWidget oldWidget) {
     final newListEmployeeLen = widget.listBarbers.length;
     final newListOrdersLen = widget.listOrders.length;
-    if (newListEmployeeLen != listEmployee.length ||
+    if (newListEmployeeLen != listBarber.length ||
         newListOrdersLen != listOrders.length) {
       initialize();
     }
@@ -58,20 +60,20 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
   }
 
   void initialize() {
-    listEmployee.clear();
+    listBarber.clear();
     listOrders.clear();
 
     final List<BarberEntity> employeeListData = widget.listBarbers
         .where((element) => element.inTimeTable == true)
         .toList();
 
-    listEmployee.addAll(employeeListData);
+    listBarber.addAll(employeeListData);
     listOrders.addAll(widget.listOrders);
   }
 
   @override
   Widget build(BuildContext context) {
-    return listEmployee.isEmpty
+    return listBarber.isEmpty
         ? const EmptyWidget()
         : Column(
             children: [
@@ -84,9 +86,9 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                     ),
                     Container(width: 10),
                     ...List.generate(
-                      listEmployee.length,
+                      listBarber.length,
                       (index) {
-                        final el = listEmployee[index];
+                        final el = listBarber[index];
                         return Expanded(
                           child: _barberUpperCardWidget(el),
                         );
@@ -110,11 +112,11 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                             timeTo: to,
                           ),
                           ...List.generate(
-                            listEmployee.length,
+                            listBarber.length,
                             (index) {
                               List<OrderEntity> localOrders = [];
 
-                              final employee = listEmployee[index];
+                              final employee = listBarber[index];
 
                               localOrders = widget.listOrders.where(
                                 (element) {
@@ -257,26 +259,43 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                           return Positioned(
                                             // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
                                             top: _getTopPosition(e),
-                                            child: Draggable<OrderEntity>(
-                                              data: e,
-                                              childWhenDragging:
-                                                  OrderCardWidget(
-                                                order: e,
-                                                isDragging: true,
-                                              ),
-                                              feedback: Opacity(
-                                                opacity: 0.6,
-                                                child: Material(
-                                                  child: OrderCardWidget(
-                                                    order: e,
-                                                    isDragging: false,
+                                            child: GestureDetector(
+                                              onDoubleTap: () =>
+                                                  widget.onOrderClick?.call(e),
+                                              child: Draggable<OrderEntity>(
+                                                data: e,
+                                                childWhenDragging:
+                                                    OrderCardWidget(
+                                                  order: e,
+                                                  isDragging: true,
+                                                ),
+                                                feedback: Opacity(
+                                                  opacity: 0.6,
+                                                  child: Material(
+                                                    child: OrderCardWidget(
+                                                      order: e,
+                                                      isDragging: false,
+                                                    ),
                                                   ),
                                                 ),
+                                                child: OrderCardWidget(
+                                                  order: e,
+                                                  isDragging: false,
+                                                ),
                                               ),
-                                              child: OrderCardWidget(
-                                                order: e,
-                                                isDragging: false,
-                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ...employee.notWorkingHours.map(
+                                        (e) {
+                                          return Positioned(
+                                            // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
+                                            top:
+                                                _getTopPositionForNotWorkingHours(
+                                                    e),
+                                            child: _NotWorkingHoursCard(
+                                              notWorkingHoursEntity: e,
                                             ),
                                           );
                                         },
@@ -322,6 +341,31 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
     return height;
   }
 
+  double _getTopPositionForNotWorkingHours(NotWorkingHoursEntity entity) {
+    if (entity.dateFrom.hour == Constants.startWork) {
+      // return Constants.timeTableItemHeight;
+      return 0;
+    }
+
+    double top = Constants.startWork;
+
+    top -= entity.dateFrom.hour;
+
+    final formatted = top / -1;
+
+    double height = 0;
+
+    // if((order.to.hour == order.from.hour && order.to.day == order.from.day) == false) {
+    for (var i = 0; i < formatted; i++) {
+      height += Constants.timeTableItemHeight;
+    }
+    // }
+
+    height += entity.dateFrom.minute;
+
+    return height;
+  }
+
   _barberUpperCardWidget(BarberEntity entity) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -356,7 +400,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                   );
                 },
                 onDeleteEmployeeFromTable: () {
-                  listEmployee.remove(entity);
+                  listBarber.remove(entity);
                   widget.onDeleteEmployeeFromTable?.call(entity.id);
 
                   setState(() {});

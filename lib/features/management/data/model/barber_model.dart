@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import '../../../../core/entities/field_entity.dart';
 import '../../../products/data/model/filial_model.dart';
 import '../../domain/entity/barber_entity.dart';
+import 'not_working_hours_model.dart';
 
 @immutable
 class BarberModel extends BarberEntity {
@@ -17,6 +18,7 @@ class BarberModel extends BarberEntity {
     required super.password,
     required super.login,
     required super.inTimeTable,
+    required super.notWorkingHours,
   });
 
   List<MobileFieldEntity> getFieldsAndValues() {
@@ -64,6 +66,12 @@ class BarberModel extends BarberEntity {
       login: json['login'],
       inTimeTable: json['inTimeTable'] ?? false,
       password: "",
+      notWorkingHours: json['notWorkingHours'] != null &&
+          List.from(json['notWorkingHours']).isNotEmpty
+          ? List.from(json['notWorkingHours'])
+          .map((e) => NotWorkingHoursModel.fromJson(e))
+          .toList()
+          : [],
     );
   }
 
@@ -77,6 +85,7 @@ class BarberModel extends BarberEntity {
       password: entity.password,
       login: entity.login,
       inTimeTable: entity.inTimeTable,
+      notWorkingHours: [],
     );
   }
 

@@ -9,6 +9,7 @@ import '../../../../core/components/datetime_for_table_widget.dart';
 import '../../../../core/entities/field_entity.dart';
 import '../../../products/domain/entity/filial_entity.dart';
 import 'employee_schedule_entity.dart';
+import 'not_working_hours_entity.dart';
 
 
 @immutable
@@ -20,6 +21,7 @@ class BarberEntity extends Equatable {
   final String login;
   final int phone;
    bool inTimeTable;
+   final List<NotWorkingHoursEntity> notWorkingHours;
   final FilialEntity filial;
 
   BarberEntity({
@@ -29,6 +31,7 @@ class BarberEntity extends Equatable {
     required this.password,
     required this.login,
     required this.phone,
+    required this.notWorkingHours,
     required this.inTimeTable,
     required this.filial,
   });
@@ -118,7 +121,7 @@ class BarberEntity extends Equatable {
       filial: row.cells["filial"]?.value,
       // password: row.cells["password"]?.value,
       password: "",
-      login: row.cells["login"]?.value, inTimeTable: false,
+      login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: [],
     );
   }
 
@@ -211,7 +214,7 @@ class BarberEntity extends Equatable {
       phone: fields["phone"]?.val,
       filial: fields["filial"]?.val,
       login: fields["login"]?.val,
-      password: fields["password"]?.val, inTimeTable: false,
+      password: fields["password"]?.val, inTimeTable: false, notWorkingHours: [],
     );
   }
 
@@ -223,7 +226,7 @@ class BarberEntity extends Equatable {
       phone: 99,
       filial: FilialEntity.empty(),
       password: "",
-      login: "", inTimeTable: false,
+      login: "", inTimeTable: false, notWorkingHours: [],
     );
   }
 

@@ -4,7 +4,6 @@ import 'package:eleven_crm/features/products/domain/entity/service_product_categ
 import 'package:eleven_crm/features/products/domain/entity/service_product_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:collection/collection.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
@@ -16,19 +15,19 @@ import '../../domain/entity/order_entity.dart';
 
 // ignore: must_be_immutable
 
-class TimeTableWidget extends StatefulWidget {
+class TimeTableWidgetWithFixedMinutesWidget extends StatefulWidget {
   final List<EmployeeEntity> listEmployee;
   final Function(DateTime from, DateTime to, String employeeId) onTimeConfirm;
 
-  const TimeTableWidget(
+  const TimeTableWidgetWithFixedMinutesWidget(
       {Key? key, required this.listEmployee, required this.onTimeConfirm})
       : super(key: key);
 
   @override
-  State<TimeTableWidget> createState() => _TimeTableWidgetState();
+  State<TimeTableWidgetWithFixedMinutesWidget> createState() => _TimeTableWidgetWithFixedMinutesWidgetState();
 }
 
-class _TimeTableWidgetState extends State<TimeTableWidget> {
+class _TimeTableWidgetWithFixedMinutesWidgetState extends State<TimeTableWidgetWithFixedMinutesWidget> {
   final double rightCellPadding = 5;
   final DateTime from = DateTime(2023, 10, 7, 8);
   final DateTime to = DateTime(2023, 10, 7, 22);
