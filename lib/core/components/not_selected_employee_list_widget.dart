@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 
-import '../../features/management/domain/entity/employee_entity.dart';
+import '../../features/management/domain/entity/barber_entity.dart';
 
-class NotSelectedEmployeeListWidget extends StatefulWidget {
-  final List<EmployeeEntity> listEmployee;
-  final Function(String emplyoeeId) onTap;
-  const NotSelectedEmployeeListWidget(
-      {Key? key, required this.listEmployee, required this.onTap})
+class NotSelectedBarbersListWidget extends StatefulWidget {
+  final List<BarberEntity> listBarbers;
+  final Function(String barberId) onTap;
+  const NotSelectedBarbersListWidget(
+      {Key? key, required this.listBarbers, required this.onTap})
       : super(key: key);
 
   @override
-  State<NotSelectedEmployeeListWidget> createState() =>
-      _NotSelectedEmployeeListWidgetState();
+  State<NotSelectedBarbersListWidget> createState() =>
+      _NotSelectedBarbersListWidgetState();
 }
 
-class _NotSelectedEmployeeListWidgetState
-    extends State<NotSelectedEmployeeListWidget> {
-  static final List<EmployeeEntity> listEmployee = [];
+class _NotSelectedBarbersListWidgetState
+    extends State<NotSelectedBarbersListWidget> {
+  static final List<BarberEntity> listBarbers = [];
 
   @override
-  void didUpdateWidget(covariant NotSelectedEmployeeListWidget oldWidget) {
-    final newListLen = widget.listEmployee.length;
-    if (newListLen != listEmployee.length) {
+  void didUpdateWidget(covariant NotSelectedBarbersListWidget oldWidget) {
+    final newListLen = widget.listBarbers.length;
+    if (newListLen != listBarbers.length) {
       initialize();
     }
     super.didUpdateWidget(oldWidget);
@@ -34,13 +34,13 @@ class _NotSelectedEmployeeListWidgetState
   }
 
   void initialize() {
-    listEmployee.clear();
+    listBarbers.clear();
 
-    final List<EmployeeEntity> employeeListData = widget.listEmployee
+    final List<BarberEntity> employeeListData = widget.listBarbers
         .where((element) => element.inTimeTable == false)
         .toList();
 
-    listEmployee.addAll(employeeListData);
+    listBarbers.addAll(employeeListData);
   }
 
   @override
@@ -57,16 +57,16 @@ class _NotSelectedEmployeeListWidgetState
             bottomLeft: Radius.circular(12),
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: ListView(
+          // mainAxisSize: MainAxisSize.max,
+          // mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // const SizedBox(height: 20),
-            ...List.generate(listEmployee.length, (index) {
-              final el = listEmployee[index];
+            ...List.generate(listBarbers.length, (index) {
+              final el = listBarbers[index];
               return GestureDetector(
                 onTap: () {
-                  listEmployee.remove(el);
+                  listBarbers.remove(el);
                   widget.onTap.call(el.id);
                 },
                 child: Padding(

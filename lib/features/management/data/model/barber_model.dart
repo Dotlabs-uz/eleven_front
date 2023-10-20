@@ -1,11 +1,14 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:flutter/cupertino.dart';
+
 import '../../../../core/entities/field_entity.dart';
 import '../../../products/data/model/filial_model.dart';
 import '../../domain/entity/barber_entity.dart';
-import '../../domain/entity/employee_entity.dart';
-import 'employee_schedule_model.dart';
 
+@immutable
 class BarberModel extends BarberEntity {
-  const BarberModel({
+  BarberModel({
     required super.id,
     required super.firstName,
     required super.lastName,
@@ -13,6 +16,7 @@ class BarberModel extends BarberEntity {
     required super.filial,
     required super.password,
     required super.login,
+    required super.inTimeTable,
   });
 
   List<MobileFieldEntity> getFieldsAndValues() {
@@ -56,9 +60,10 @@ class BarberModel extends BarberEntity {
       firstName: json['firstName'],
       lastName: json['lastName'],
       phone: json['phone'],
-      filial:FilialModel.fromJson(json['filial']),
+      filial: FilialModel.fromJson(json['filial']),
       login: json['login'],
-      password:  "",
+      inTimeTable: json['inTimeTable'] ?? false,
+      password: "",
     );
   }
 
@@ -71,6 +76,7 @@ class BarberModel extends BarberEntity {
       filial: entity.filial,
       password: entity.password,
       login: entity.login,
+      inTimeTable: entity.inTimeTable,
     );
   }
 
@@ -83,6 +89,7 @@ class BarberModel extends BarberEntity {
     data['filial'] = filial.id;
     data['login'] = login;
     data['password'] = password;
+    data['inTimeTable'] = inTimeTable;
     return data;
   }
 }

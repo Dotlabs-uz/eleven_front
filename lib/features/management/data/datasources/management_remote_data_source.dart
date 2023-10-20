@@ -235,8 +235,14 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
   @override
   Future<BarberModel> saveBarber(BarberModel data) async {
-    final response =
-        await _client.post(ApiConstants.barbers, params: data.toJson());
+    dynamic response;
+    if (data.id.isEmpty) {
+      response =
+      await _client.post(ApiConstants.barbers, params: data.toJson());
+    } else {
+      response = await _client.patch('${ApiConstants.barbers}/${data.id}/',
+          params: data.toJson());
+    }
     final results = BarberModel.fromJson(response);
 
     return results;

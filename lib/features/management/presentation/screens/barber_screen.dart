@@ -85,7 +85,7 @@ class _ContentWidgetState extends State<ContentWidget> {
 
   void _saveData() {
     BlocProvider.of<BarberCubit>(context)
-        .save(customer: BarberEntity.fromFields());
+        .save(barber: BarberEntity.fromFields());
   }
 
   void _deleteData(BarberEntity customerEntity) async {

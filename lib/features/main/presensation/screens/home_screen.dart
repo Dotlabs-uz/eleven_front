@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/core/api/api_constants.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
-import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
+import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
+import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -12,8 +12,8 @@ import '../../../../core/components/not_selected_employee_list_widget.dart';
 import '../../../../core/components/responsive_builder.dart';
 import '../../../../get_it/locator.dart';
 import '../../../auth/data/datasources/authentication_local_data_source.dart';
-import '../../../management/domain/entity/employee_entity.dart';
-import '../../../management/presentation/cubit/employee/employee_cubit.dart';
+import '../../../products/domain/entity/service_product_category_entity.dart';
+import '../../../products/domain/entity/service_product_entity.dart';
 import '../../domain/entity/order_entity.dart';
 import '../cubit/data_form/data_form_cubit.dart';
 import '../cubit/order/not_working_hours/not_working_hours_cubit.dart';
@@ -31,12 +31,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late NotWorkingHoursCubit notWorkingHoursCubit;
-  late EmployeeCubit employeeCubit;
+  late BarberCubit barberCubit;
 
   @override
   void initState() {
     notWorkingHoursCubit = locator();
-    employeeCubit = locator();
+    barberCubit = locator();
     super.initState();
   }
 
@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => notWorkingHoursCubit),
-        BlocProvider(create: (context) => employeeCubit..load()),
+        BlocProvider(create: (context) => barberCubit..load("")),
       ],
       child: const _ContentWidget(),
     );
@@ -83,22 +83,23 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     isFormVisible = false;
 
+
+    listBarbers.clear();
     _setWidgetTop();
-    listenSockets();
+    // listenSockets();
 
     await localDataSource.saveSessionId(
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJ1c2VySWQiOiI2NTMxNDNmNzI2OTUyYjYxOWJlYmZhZjYiLCJwYXRoIjoibWFuYWdlcnMiLCJpYXQiOjE2OTc3Mjc0NzksImV4cCI6MTY5NzgxMzg3OSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwianRpIjoiYzljNjQzMWMtZDY1ZS00NmFlLTlmYTQtYmQwNGIyMzA3NTYyIn0.lQNpJZKK3jhsoQ3YPihxyBr_laxyJ4BVFd0GQYZGBF0",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJ1c2VySWQiOiI2NTMxNDNmNzI2OTUyYjYxOWJlYmZhZjYiLCJwYXRoIjoibWFuYWdlcnMiLCJpYXQiOjE2OTc3NzcwNzQsImV4cCI6MTY5Nzg2MzQ3NCwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwianRpIjoiNmM3Mzk0MmUtMzE5NS00N2RiLWE0ZWYtZjQ5MmU1NzdmMWFiIn0.TN0nGXrTQjmCxngfusVCIC6YII5HIgwbvdTmDa7-KSA",
     );
   }
 
-  listenSockets() {
-    final webSocketStream =
-        WebSocketsService().getResponse;
-
-    webSocketStream.listen((event) {
-      print("Socket event");
-    });
-  }
+  // listenSockets() {
+  //   final webSocketStream = WebSocketsService().getResponse;
+  //
+  //   webSocketStream.listen((event) {
+  //     print("Socket event");
+  //   });
+  // }
 
   _setWidgetTop() {
     // final Map<String, dynamic> filtr = {};
@@ -111,23 +112,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
             _editOrder(activeData);
           },
           icon: const Icon(Icons.add_box_rounded),
-        ), MyIconButton(
-          onPressed: () {
-            final order = {
-              "barber": "652ec04ce43481d1861b7a73",
-            "services": ["652a8b0e4843eccbd6fa2f99", "652a7d70db588849046e07£6"] ,
-            "filial": "65242469aea337a1e52af793",
-            "orderStart": "2023-10-18T16:57:02.897Z" ,
-            "client": "652a9ae6cc5ce9ea4769¢756",
-            "payments": "cash"
-          };
-            
-          },
-          icon: const Icon(Icons.add_box_rounded),
         ),
         MyIconButton(
           onPressed: () {
-            BlocProvider.of<EmployeeCubit>(context).load();
+            listBarbers.clear();
+            BlocProvider.of<BarberCubit>(context).load("");
           },
           icon: const Icon(Icons.refresh),
         ),
@@ -167,7 +156,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   int selectedValue = 0;
 
-  List<EmployeeEntity> listEmployee = [
+  List<BarberEntity> listBarbers = [
     // EmployeeEntity(
     //   id: "1",
     //   firstName: "Sam",
@@ -199,83 +188,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     // ),
   ];
 
-  // final List<EmployeeEntity> listEmployee = [
-  //   EmployeeEntity(
-  //     id: "1",
-  //     firstName: "Sam",
-  //     lastName: "Satt",
-  //     password: "Satt",
-  //     login: "Satt",
-  //     phoneNumber: 99,
-  //     role: "manager",
-  //     schedule: [
-  //       EmployeeScheduleEntity(
-  //         date: DateTime.now().toIso8601String(),
-  //         status: 1,
-  //       ),
-  //     ],
-  //   ),
-  //   EmployeeEntity(
-  //     id: "2",
-  //     firstName: "Alex",
-  //     lastName: "Satt",
-  //     password: "Satt",
-  //     login: "Satt",
-  //     phoneNumber: 99,
-  //     role: "manager",
-  //     schedule: [
-  //       EmployeeScheduleEntity(
-  //         date: DateTime.now().add(const Duration(days: 1)).toIso8601String(),
-  //         status: 1,
-  //       ),
-  //     ],
-  //   ),
-  //   EmployeeEntity(
-  //     id: "3",
-  //     firstName: "FFF",
-  //     lastName: "Satt",
-  //     phoneNumber: 99,
-  //     password: "Satt",
-  //     login: "Satt",
-  //     role: "manager",
-  //     schedule: [
-  //       EmployeeScheduleEntity(
-  //         date: DateTime.now().add(const Duration(days: 2)).toIso8601String(),
-  //         status: 1,
-  //       ),
-  //     ],
-  //   ),
-  //   EmployeeEntity(
-  //     id: "4",
-  //     firstName: "Alex",
-  //     lastName: "Satt",
-  //     password: "Satt",
-  //     login: "Satt",
-  //     phoneNumber: 99,
-  //     role: "manager",
-  //     schedule: [
-  //       EmployeeScheduleEntity(
-  //         date: DateTime.now().add(const Duration(days: 3)).toIso8601String(),
-  //         status: 1,
-  //       ),
-  //     ],
-  //   ),
-  //   EmployeeEntity(
-  //     id: "5",
-  //     firstName: "Alex",
-  //     lastName: "Satt",
-  //     password: "Satt",
-  //     login: "Satt",
-  //     phoneNumber: 99,
-  //     role: "manager",
-  //     schedule: [
-  //       EmployeeScheduleEntity(
-  //         date: DateTime.now().add(const Duration(days: 4)).toIso8601String(),
-  //         status: 1,
-  //       ),
-  //     ],
-  //   ),
-  // ];
+
 
   _dateTimeWidget() {
     final now = DateTime.now();
@@ -308,27 +221,99 @@ class _ContentWidgetState extends State<_ContentWidget> {
   //   ),
   // ];
 
+  final List<OrderEntity> orders = [
+    OrderEntity(
+      orderStart: DateTime(2023, 10, 7, 9, 10),
+      orderEnd: DateTime(2023, 10, 7, 9, 30),
+      price: 30,
+      barberId: "6531612da3b411c75df5e944",
+      services: [
+        ServiceProductEntity(
+          id: "id",
+          name: "name",
+          price: 30,
+          duration: 30,
+          category: ServiceProductCategoryEntity.empty(),
+          sex: "man",
+        ),
+      ],
+      discount: 2,
+      discountPercent: 2,
+      clientId: "333",
+      paymentType: OrderPayment.cash,
+      id: '',
+    ),
+    OrderEntity(
+      discount: 2,
+      discountPercent: 2,
+      clientId: "333",
+      paymentType: OrderPayment.cash,
+      orderStart: DateTime(2023, 10, 7, 12),
+      orderEnd: DateTime(2023, 10, 7, 13, 30),
+      price: 30,
+      barberId: "3",
+      services: [],
+      id: '',
+    ),
+    OrderEntity(
+      discount: 2,
+      discountPercent: 2,
+      clientId: "333",
+      paymentType: OrderPayment.cash,
+      orderStart: DateTime(2023, 10, 7, 20, 30),
+      orderEnd: DateTime(2023, 10, 7, 21, 0),
+      price: 30,
+      barberId: "3",
+      services: [],
+      id: '',
+    ),
+    OrderEntity(
+      discount: 2,
+      discountPercent: 2,
+      clientId: "333",
+      paymentType: OrderPayment.cash,
+      orderStart: DateTime(2023, 10, 7, 20, 15),
+      orderEnd: DateTime(2023, 10, 7, 21, 30),
+      price: 30,
+      barberId: "4",
+      services: [],
+      id: '',
+    ),
+    OrderEntity(
+      discount: 2,
+      discountPercent: 2,
+      clientId: "333",
+      paymentType: OrderPayment.cash,
+      orderStart: DateTime(2023, 10, 7, 10, 0),
+      orderEnd: DateTime(2023, 10, 7, 11, 5),
+      price: 30,
+      barberId: "1",
+      services: [],
+      id: '',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: MultiBlocListener(
         listeners: [
-          BlocListener<EmployeeCubit, EmployeeState>(
+          BlocListener<BarberCubit, BarberState>(
             listener: (context, state) {
-              if (state is EmployeeLoaded) {
+              if (state is BarberLoaded) {
                 if (mounted) {
                   Future.delayed(
                     Duration.zero,
                     () {
                       setState(() {
-                        listEmployee = state.data;
+                        listBarbers = state.data.results;
                       });
                     },
                   );
                 }
 
-                BlocProvider.of<EmployeeCubit>(context).init();
+                BlocProvider.of<BarberCubit>(context).init();
               }
             },
           ),
@@ -336,8 +321,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            listEmployee.isEmpty
-                ? Expanded(child: EmptyWidget())
+            listBarbers.isEmpty
+                ? const Expanded(child: EmptyWidget())
                 : Expanded(
                     child: Column(
                       children: [
@@ -373,23 +358,32 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
                               Expanded(
                                 flex: 2,
-                                child: TimeTableWidget(
-                                  listEmployee: listEmployee,
-                                  onDeleteEmployeeFromTable: (employeeId) {
-                                    _employeeFromTimeTableCardAction(
-                                        employeeId, false);
-                                  },
-                                  onTimeConfirm: (
-                                    DateTime from,
-                                    DateTime to,
-                                    String employeeId,
-                                  ) {
-                                    BlocProvider.of<NotWorkingHoursCubit>(
-                                      context,
-                                    ).save(
-                                      dateFrom: from,
-                                      dateTo: to,
-                                      employeeId: employeeId,
+                                child: BlocBuilder<OrderCubit, OrderState>(
+                                  builder: (context, state) {
+                                    if (state is OrderSaved) {
+                                      print(
+                                          "Orders saved state ${state.order.id}");
+                                      orders.add(state.order);
+                                    }
+                                    return TimeTableWidget(
+                                      listBarbers: listBarbers,
+                                      onDeleteEmployeeFromTable: (employeeId) {
+                                        _barberFromTimeTableCardAction(
+                                          employeeId,
+                                          false,
+                                        );
+                                      },
+                                      onTimeConfirm: (DateTime from,
+                                          DateTime to, String employeeId) {
+                                        BlocProvider.of<NotWorkingHoursCubit>(
+                                          context,
+                                        ).save(
+                                          dateFrom: from,
+                                          dateTo: to,
+                                          employeeId: employeeId,
+                                        );
+                                      },
+                                      listOrders: orders,
                                     );
                                   },
                                 ),
@@ -397,15 +391,17 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
                               if (!isFormVisible) const SizedBox(width: 5),
                               if (!isFormVisible)
-                                BlocBuilder<EmployeeCubit, EmployeeState>(
+                                BlocBuilder<BarberCubit, BarberState>(
                                   builder: (context, state) {
-                                    return NotSelectedEmployeeListWidget(
-                                      listEmployee: listEmployee,
-                                      onTap: (String employeeId) {
-                                        print("Select employee $employeeId");
+                                    return NotSelectedBarbersListWidget(
+                                      listBarbers: listBarbers,
+                                      onTap: (String barberId) {
+                                        print("Select employee $barberId");
                                         setState(() {});
-                                        _employeeFromTimeTableCardAction(
-                                            employeeId, true);
+                                        _barberFromTimeTableCardAction(
+                                          barberId,
+                                          true,
+                                        );
                                       },
                                     );
                                   },
@@ -422,6 +418,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 child: SingleChildScrollView(
                   child: DataOrderForm(
                     fields: activeData.getFields(),
+                    saveData: _saveOrder,
                     closeForm: () => setState(() => isFormVisible = false),
                   ),
                 ),
@@ -432,14 +429,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
     );
   }
 
-  _employeeFromTimeTableCardAction(String employeeId, bool hasInTimeTable) {
-    final employee =
-        listEmployee.firstWhere((element) => element.id == employeeId);
+  _barberFromTimeTableCardAction(String employeeId, bool hasInTimeTable) {
+    final barber =
+        listBarbers.firstWhere((element) => element.id == employeeId);
 
-    employee.inTimeTable = hasInTimeTable;
+    barber.inTimeTable = hasInTimeTable;
 
     print("in time table $hasInTimeTable");
 
-    BlocProvider.of<EmployeeCubit>(context).save(employee: employee);
+    BlocProvider.of<BarberCubit>(context).save(barber: barber);
   }
 }

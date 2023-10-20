@@ -28,8 +28,7 @@ class BarberLoaded extends BarberState {
   const BarberLoaded(this.data);
   @override
   List<Object> get props => [
-        data.count,
-        data.results.length,
+        data.results,
       ];
 }
 

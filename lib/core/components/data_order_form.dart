@@ -19,12 +19,12 @@ import 'role_field_widget.dart';
 
 class DataOrderForm extends StatefulWidget {
   final Map<String, FieldEntity> fields;
-  final Function()? saveData;
+  final Function()  saveData;
   final Function() closeForm;
 
   const DataOrderForm({
     Key? key,
-    this.saveData,
+   required this.saveData,
     required this.closeForm,
     required this.fields,
   }) : super(key: key);
@@ -37,67 +37,73 @@ class DataOrderFormState extends State<DataOrderForm> {
   List<ServiceProductEntity> selectedProducts = [];
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: widget.closeForm,
-                  child: Text(
-                    'close'.tr(),
-                    style: GoogleFonts.nunito(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            ClientFieldWidget(
-              fieldEntity: widget.fields['clientId']!,
-            ),
-            BarberFieldWidget(
-              fieldEntity: widget.fields['barberId']!,
-            ),
-            DataIntFieldWidget(
-              fieldEntity: widget.fields['price']!,
-            ),
-            DataDoubleFieldWidget(
-              fieldEntity: widget.fields['discountPercent']!,
-            ),
-            DataDoubleFieldWidget(
-              fieldEntity: widget.fields['discount']!,
-            ),
-            DateTimeFieldWidget(
-              fieldEntity: widget.fields['orderStart']!,
-            ),
-            DateTimeFieldWidget(
-              fieldEntity: widget.fields['orderEnd']!,
-            ),
+    return Container(
 
-            PaymentTypeFieldWidget(
-              fieldEntity: widget.fields['paymentType']!,
-            ),
-            ServicesWithCategoriesWidget(
-              onSelect: (entity) {
-                selectedProducts.add(entity);
-              },
-              selectedItems: selectedProducts,
-            ),
-            const SizedBox(height: 10),
-            ButtonWidget(
-              text: "save".tr(),
-              onPressed: () {
-                widget.saveData?.call();
-              },
-            ),
-          ],
+      constraints: const BoxConstraints(
+        maxWidth:600,
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: widget.closeForm,
+                    child: Text(
+                      'close'.tr(),
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              ClientFieldWidget(
+                fieldEntity: widget.fields['client']!,
+              ),
+              BarberFieldWidget(
+                fieldEntity: widget.fields['barber']!,
+              ),
+              DataIntFieldWidget(
+                fieldEntity: widget.fields['price']!,
+              ),
+              // DataDoubleFieldWidget(
+              //   fieldEntity: widget.fields['discountPercent']!,
+              // ),
+              // DataDoubleFieldWidget(
+              //   fieldEntity: widget.fields['discount']!,
+              // ),
+              DateTimeFieldWidget(
+                fieldEntity: widget.fields['orderStart']!,
+                withTime: true,
+              ),
+              DateTimeFieldWidget(
+                fieldEntity: widget.fields['orderEnd']!,
+                withTime: true,
+              ),
+              PaymentTypeFieldWidget(
+                fieldEntity: widget.fields['paymentType']!,
+              ),
+              // ServicesWithCategoriesWidget(
+              //   onSelect: (entity) {
+              //     selectedProducts.add(entity);
+              //   },
+              //   selectedItems: selectedProducts,
+              // ),
+              const SizedBox(height: 10),
+              ButtonWidget(
+                text: "save".tr(),
+                onPressed:
+                  widget.saveData,
+              ),
+            ],
+          ),
         ),
       ),
     );

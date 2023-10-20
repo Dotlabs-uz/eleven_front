@@ -23,6 +23,12 @@ class _ServicesWithCategoriesWidgetState
   List<ServiceProductCategoryEntity> serviceCategory = [];
 
   @override
+  void initState() {
+    BlocProvider.of<ServiceProductCategoryCubit>(context).load("");
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<ServiceProductCategoryCubit,
         ServiceProductCategoryState>(
@@ -71,13 +77,14 @@ class _ServiceProductCategoryItemsWidgetState
     return Column(
       children: [
         Container(
+          width: MediaQuery.of(context).size.width,
           color: Colors.orange,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Text(
             widget.entity.name,
             style: const TextStyle(
-              color: Colors.black,
-              fontSize: 24,
+              color: Colors.white,
+              fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
           ),

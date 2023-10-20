@@ -639,5 +639,7 @@
   "removeFromTimeTable": "Kalendardan olib tashlang",
   "serviceProductCategoryFieldHintText": "Xizmat toifasi",
   "serviceProductCategoryFieldLabelText": "Xizmat toifasi",
-  "managers": "Menejerlar"
+  "managers": "Menejerlar",
+  "selectTimeFrom": "Vaqtni tanlang dan",
+  "selectTimeTo": "Vaqtni tanlang oldin"
 }

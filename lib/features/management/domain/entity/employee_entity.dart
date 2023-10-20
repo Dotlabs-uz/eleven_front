@@ -10,7 +10,6 @@ import '../../../../core/entities/field_entity.dart';
 import 'employee_schedule_entity.dart';
 import 'not_working_hours_entity.dart';
 
-@immutable
 class EmployeeEntity extends Equatable {
   final String id;
   final String firstName;
@@ -18,12 +17,11 @@ class EmployeeEntity extends Equatable {
   final String login;
   final String password;
   final String role;
-  bool inTimeTable;
   final int phoneNumber;
   final List<NotWorkingHoursEntity> notWorkingHours;
   final List<EmployeeScheduleEntity> schedule;
 
-  EmployeeEntity({
+const  EmployeeEntity({
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -31,7 +29,6 @@ class EmployeeEntity extends Equatable {
     required this.login,
     required this.role,
     required this.phoneNumber,
-    required this.inTimeTable,
     required this.notWorkingHours,
     required this.schedule,
   });
@@ -122,7 +119,6 @@ class EmployeeEntity extends Equatable {
       login: row.cells["login"]?.value,
       role: row.cells["role"]?.value,
       schedule: [],
-      inTimeTable: false,
       notWorkingHours: [],
     );
   }
@@ -250,13 +246,12 @@ class EmployeeEntity extends Equatable {
       login: fields["login"]?.val,
       role: fields["role"]?.val,
       schedule: [],
-      inTimeTable: false,
       notWorkingHours: [],
     );
   }
 
   factory EmployeeEntity.empty() {
-    return   EmployeeEntity(
+    return   const EmployeeEntity(
       id: "",
       firstName: "",
       lastName: "",
@@ -265,7 +260,6 @@ class EmployeeEntity extends Equatable {
       phoneNumber: 99,
       role: "",
       schedule: [],
-      inTimeTable: false,
       notWorkingHours: [],
     );
   }

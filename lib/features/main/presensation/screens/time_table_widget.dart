@@ -1,32 +1,31 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/features/main/presensation/widget/calendar_ruler_widget.dart';
-import 'package:eleven_crm/features/products/domain/entity/service_product_category_entity.dart';
-import 'package:eleven_crm/features/products/domain/entity/service_product_entity.dart';
+import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:collection/collection.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/dialogs.dart';
 import '../../../../core/utils/int_helper.dart';
-import '../../../management/domain/entity/employee_entity.dart';
 import '../../../management/domain/entity/not_working_hours_entity.dart';
 import '../../domain/entity/order_entity.dart';
 
 // ignore: must_be_immutable
 
 class TimeTableWidget extends StatefulWidget {
-  final List<EmployeeEntity> listEmployee;
+  final List<BarberEntity> listBarbers;
+  final List<OrderEntity> listOrders;
   final Function(DateTime from, DateTime to, String employeeId) onTimeConfirm;
   final Function(String employee)? onDeleteEmployeeFromTable;
 
   const TimeTableWidget({
     Key? key,
-    required this.listEmployee,
+    required this.listBarbers,
     required this.onTimeConfirm,
     this.onDeleteEmployeeFromTable,
+    required this.listOrders,
   }) : super(key: key);
 
   @override
@@ -38,12 +37,15 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
   final DateTime from = DateTime(2023, 10, 7, 8);
   final DateTime to = DateTime(2023, 10, 7, 22);
 
-  static final List<EmployeeEntity> listEmployee = [];
+  static final List<BarberEntity> listEmployee = [];
+  static final List<OrderEntity> listOrders = [];
 
   @override
   void didUpdateWidget(covariant TimeTableWidget oldWidget) {
-    final newListLen = widget.listEmployee.length;
-    if (newListLen != listEmployee.length) {
+    final newListEmployeeLen = widget.listBarbers.length;
+    final newListOrdersLen = widget.listOrders.length;
+    if (newListEmployeeLen != listEmployee.length ||
+        newListOrdersLen != listOrders.length) {
       initialize();
     }
     super.didUpdateWidget(oldWidget);
@@ -57,85 +59,15 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
 
   void initialize() {
     listEmployee.clear();
+    listOrders.clear();
 
-    final List<EmployeeEntity> employeeListData =  widget.listEmployee.where((element) => element.inTimeTable == true).toList();
-
-
+    final List<BarberEntity> employeeListData = widget.listBarbers
+        .where((element) => element.inTimeTable == true)
+        .toList();
 
     listEmployee.addAll(employeeListData);
+    listOrders.addAll(widget.listOrders);
   }
-
-  final List<OrderEntity> orders = [
-    OrderEntity(
-      orderStart: DateTime(2023, 10, 7, 9, 10),
-      orderEnd: DateTime(2023, 10, 7, 9, 30),
-      price: 30,
-      barberId: "2",
-      services: [
-        ServiceProductEntity(
-          id: "id",
-          name: "name",
-          price: 30,
-          duration: 30,
-          category: ServiceProductCategoryEntity.empty(),
-          sex: "man",
-        ),
-      ],
-      discount: 2,
-      discountPercent: 2,
-      clientId: "333",
-      paymentType: OrderPayment.cash,
-      id: '',
-    ),
-    OrderEntity(
-      discount: 2,
-      discountPercent: 2,
-      clientId: "333",
-      paymentType: OrderPayment.cash,
-      orderStart: DateTime(2023, 10, 7, 12),
-      orderEnd: DateTime(2023, 10, 7, 13, 30),
-      price: 30,
-      barberId: "3",
-      services: [],
-      id: '',
-    ),
-    OrderEntity(
-      discount: 2,
-      discountPercent: 2,
-      clientId: "333",
-      paymentType: OrderPayment.cash,
-      orderStart: DateTime(2023, 10, 7, 20, 30),
-      orderEnd: DateTime(2023, 10, 7, 21, 0),
-      price: 30,
-      barberId: "3",
-      services: [],
-      id: '',
-    ),
-    OrderEntity(
-      discount: 2,
-      discountPercent: 2,
-      clientId: "333",
-      paymentType: OrderPayment.cash,
-      orderStart: DateTime(2023, 10, 7, 20, 15),
-      orderEnd: DateTime(2023, 10, 7, 21, 30),
-      price: 30,
-      barberId: "4",
-      services: [],
-      id: '',
-    ),
-    OrderEntity(
-      discount: 2,
-      discountPercent: 2,
-      clientId: "333",
-      paymentType: OrderPayment.cash,
-      orderStart: DateTime(2023, 10, 7, 10, 0),
-      orderEnd: DateTime(2023, 10, 7, 11, 5),
-      price: 30,
-      barberId: "1",
-      services: [],
-      id: '',
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +88,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                       (index) {
                         final el = listEmployee[index];
                         return Expanded(
-                          child: _employeeCardWidget(el),
+                          child: _barberUpperCardWidget(el),
                         );
                       },
                     ),
@@ -184,10 +116,11 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
 
                               final employee = listEmployee[index];
 
-                              localOrders = orders
-                                  .where((element) =>
-                                      employee.id == element.barberId)
-                                  .toList();
+                              localOrders = widget.listOrders.where(
+                                (element) {
+                                  return employee.id == element.barberId;
+                                },
+                              ).toList();
 
                               return Expanded(
                                 child: Padding(
@@ -389,7 +322,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
     return height;
   }
 
-  _employeeCardWidget(EmployeeEntity entity) {
+  _barberUpperCardWidget(BarberEntity entity) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(

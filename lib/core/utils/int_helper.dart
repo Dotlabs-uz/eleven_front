@@ -4,7 +4,6 @@ class IntHelper {
     DateTime to,
   ) {
     final result = from.difference(to).inHours;
-    print("Result ${result * -1}");
     return result * -1 ;
   }
 }

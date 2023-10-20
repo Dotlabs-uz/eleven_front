@@ -15,9 +15,9 @@ class BarberCubit extends Cubit<BarberState> {
       : super(BarberInitial());
 
   init() => emit(BarberInitial());
-  void save({required BarberEntity customer}) async {
+  void save({required BarberEntity barber}) async {
     emit(BarberLoading());
-    var save = await saveData(customer);
+    var save = await saveData(barber);
     save.fold((error) => emit(BarberError(message: error.errorMessage)),
         (data) => emit(BarberSaved(data)));
   }

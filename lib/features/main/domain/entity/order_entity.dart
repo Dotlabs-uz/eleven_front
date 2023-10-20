@@ -95,7 +95,7 @@ class OrderEntity extends Equatable {
       isForm: true,
       val: DateTime.now(),
     ),
-    "barberId": FieldEntity<String>(
+    "barber": FieldEntity<String>(
       label: "barberId",
       hintText: "barberId",
       type: Types.barber,
@@ -103,7 +103,7 @@ class OrderEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "clientId": FieldEntity<String>(
+    "client": FieldEntity<String>(
       label: "clientId",
       hintText: "clientId",
       type: Types.client,
@@ -129,8 +129,8 @@ class OrderEntity extends Equatable {
         "orderStart": orderStart,
         "orderEnd": orderEnd,
         "price": price,
-        "barberId": barberId,
-        "clientId": clientId,
+        "barber": barberId,
+        "client": clientId,
       }[key];
 
   factory OrderEntity.fromRow(PlutoRow row) {
@@ -142,8 +142,8 @@ class OrderEntity extends Equatable {
       orderStart: row.cells["orderStart"]?.value,
       orderEnd: row.cells["orderEnd"]?.value,
       price: row.cells["price"]?.value,
-      barberId: row.cells["barberId"]?.value,
-      clientId: row.cells["clientId"]?.value,
+      barberId: row.cells["barber"]?.value,
+      clientId: row.cells["client"]?.value,
       services: const [],
     );
   }
@@ -158,8 +158,8 @@ class OrderEntity extends Equatable {
       'orderStart': PlutoCell(value: e.orderStart),
       'orderEnd': PlutoCell(value: e.orderEnd),
       'price': PlutoCell(value: e.price),
-      'barberId': PlutoCell(value: e.barberId),
-      'clientId': PlutoCell(value: e.clientId),
+      'barber': PlutoCell(value: e.barberId),
+      'client': PlutoCell(value: e.clientId),
     });
   }
 
@@ -172,8 +172,8 @@ class OrderEntity extends Equatable {
       orderStart: fields["orderStart"]?.val,
       orderEnd: fields["orderEnd"]?.val,
       price: fields["price"]?.val,
-      barberId: fields["barberId"]?.val,
-      clientId: fields["clientId"]?.val,
+      barberId: fields["barber"]?.val,
+      clientId: fields["client"]?.val,
       services: const [],
     );
   }

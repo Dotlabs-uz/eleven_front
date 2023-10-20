@@ -649,6 +649,8 @@
   "serviceProductCategoryFieldHintText": "Категория сервиса",
   "serviceProductCategoryFieldLabelText": "Категория сервиса",
   "managers": "Менеджеры",
+  "selectTimeFrom": "Выберите вермя от",
+  "selectTimeTo": "Выберите время до",
   "data": "data",
   "data": "data",
   "data": "data"

@@ -29,7 +29,7 @@ class OrderModel extends OrderEntity {
       paymentType: json['paymentType'],
       discountPercent: json['discountPer'],
       discount: json['discount'],
-      clientId: json['clientId'],
+      clientId: json['client'],
       services: json['services'],
     );
   }
@@ -50,16 +50,16 @@ class OrderModel extends OrderEntity {
   }
 
   Map<String, dynamic> toJson() {
+
     final data = <String, dynamic>{};
-    // data['_id'] = id;
-    data['orderStart'] = orderStart;
-    data['orderEnd'] = orderEnd;
+    data['orderStart'] = orderStart.toIso8601String();
+    data['orderEnd'] = orderEnd.toIso8601String();
     data['price'] = price;
-    data['barberId'] = barberId;
-    data['paymentType'] = paymentType;
-    data['discountPercent'] = discountPercent;
-    data['discount'] = discount;
-    data['clientId'] = clientId;
+    data['barber'] = barberId;
+    data['payments'] = paymentType.name;
+    // data['discountPercent'] = discountPercent;
+    // data['discount'] = discount;
+    data['client'] = clientId;
     data['services'] = services.map((e) => e.id).toList();
     return data;
   }

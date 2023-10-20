@@ -6,7 +6,7 @@ import 'employee_schedule_model.dart';
 import 'not_working_hours_model.dart';
 
 class EmployeeModel extends EmployeeEntity {
-    EmployeeModel({
+  const EmployeeModel({
     required super.id,
     required super.firstName,
     required super.lastName,
@@ -15,7 +15,6 @@ class EmployeeModel extends EmployeeEntity {
     required super.schedule,
     required super.password,
     required super.login,
-    required super.inTimeTable,
     required super.notWorkingHours,
   });
 
@@ -58,14 +57,15 @@ class EmployeeModel extends EmployeeEntity {
       role: json['role'],
       login: "",
       password: "",
-      schedule: json['schedule'] != null && List.from(json['schedule']).isNotEmpty
-          ? List.from(json['schedule'])
-              .map((e) =>
-                  EmployeeScheduleModel.fromJson(e, json['_id'].toString()))
-              .toList()
-          : [],
-      inTimeTable: json['inTimeTable'] ?? false,
-      notWorkingHours: json['notWorkingHours'] != null && List.from(json['notWorkingHours']).isNotEmpty
+      schedule:
+          json['schedule'] != null && List.from(json['schedule']).isNotEmpty
+              ? List.from(json['schedule'])
+                  .map((e) =>
+                      EmployeeScheduleModel.fromJson(e, json['_id'].toString()))
+                  .toList()
+              : [],
+      notWorkingHours: json['notWorkingHours'] != null &&
+              List.from(json['notWorkingHours']).isNotEmpty
           ? List.from(json['notWorkingHours'])
               .map((e) => NotWorkingHoursModel.fromJson(e))
               .toList()
@@ -83,7 +83,7 @@ class EmployeeModel extends EmployeeEntity {
       schedule: entity.schedule,
       login: entity.login,
       password: entity.password,
-      inTimeTable: entity.inTimeTable, notWorkingHours: entity.notWorkingHours,
+      notWorkingHours: entity.notWorkingHours,
     );
   }
 
@@ -95,7 +95,6 @@ class EmployeeModel extends EmployeeEntity {
     data['role'] = role;
     data['login'] = login;
     data['password'] = password;
-    data['inTimeTable'] = inTimeTable;
     // data['workTime'] =
     //     schedule.map((e) => EmployeeScheduleModel.fromEntity(e).toJson());
     return data;

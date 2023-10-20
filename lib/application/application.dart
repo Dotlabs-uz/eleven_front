@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class _ApplicationState extends State<Application> {
   late TopMenuCubit _topMenuCubit;
   late DataFormCubit _dataFormCubit;
   late ServiceProductCategoryCubit _serviceProductCategoryCubit;
+  late OrderCubit _orderCubit;
   @override
   void initState() {
     _loginCubit = locator();
@@ -33,6 +35,7 @@ class _ApplicationState extends State<Application> {
     _topMenuCubit = locator();
     _dataFormCubit = locator();
     _serviceProductCategoryCubit = locator();
+    _orderCubit = locator();
     super.initState();
   }
   @override
@@ -44,6 +47,7 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: _topMenuCubit),
         BlocProvider.value(value: _dataFormCubit),
         BlocProvider.value(value: _serviceProductCategoryCubit),
+        BlocProvider.value(value: _orderCubit),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

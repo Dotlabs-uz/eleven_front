@@ -12,6 +12,7 @@ import '../model/order_model.dart';
 
 abstract class MainRemoteDataSource {
   Future<CurrentUserModel> getCurrentUser();
+  Future<bool> saveOrder(OrderModel model);
   Future<bool> saveNotWorkingHours(
       DateTime from, DateTime to, String employeeId);
   Future<List<OrderModel>> getOrders();
@@ -54,10 +55,14 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
       "from": from.toIso8601String(),
       "to": to.toIso8601String(),
       "employee": employeeId,
-    }
+    });
+    return true;
+  }
 
-        // TODO employee changed
-        );
+  @override
+  Future<bool> saveOrder(OrderModel model) async {
+    await _client.post(ApiConstants.order, params: model.toJson());
+
     return true;
   }
 }

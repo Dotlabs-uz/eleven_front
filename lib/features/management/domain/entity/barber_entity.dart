@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,8 @@ import '../../../../core/entities/field_entity.dart';
 import '../../../products/domain/entity/filial_entity.dart';
 import 'employee_schedule_entity.dart';
 
+
+@immutable
 class BarberEntity extends Equatable {
   final String id;
   final String firstName;
@@ -15,15 +19,17 @@ class BarberEntity extends Equatable {
   final String password;
   final String login;
   final int phone;
+   bool inTimeTable;
   final FilialEntity filial;
 
-  const BarberEntity({
+  BarberEntity({
     required this.id,
     required this.firstName,
     required this.lastName,
     required this.password,
     required this.login,
     required this.phone,
+    required this.inTimeTable,
     required this.filial,
   });
 
@@ -112,7 +118,7 @@ class BarberEntity extends Equatable {
       filial: row.cells["filial"]?.value,
       // password: row.cells["password"]?.value,
       password: "",
-      login: row.cells["login"]?.value,
+      login: row.cells["login"]?.value, inTimeTable: false,
     );
   }
 
@@ -205,7 +211,7 @@ class BarberEntity extends Equatable {
       phone: fields["phone"]?.val,
       filial: fields["filial"]?.val,
       login: fields["login"]?.val,
-      password: fields["password"]?.val,
+      password: fields["password"]?.val, inTimeTable: false,
     );
   }
 
@@ -217,7 +223,7 @@ class BarberEntity extends Equatable {
       phone: 99,
       filial: FilialEntity.empty(),
       password: "",
-      login: "",
+      login: "", inTimeTable: false,
     );
   }
 
