@@ -169,31 +169,35 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                         ),
                                       ),
                                       ...localOrders.map(
-                                        (e) {
+                                        (orderEntity) {
                                           return Positioned(
                                             // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
-                                            top: _getTopPosition(e),
+                                            top: TimeTableHelper
+                                                .getTopPositionForOrder(
+                                              orderEntity,
+                                            ),
                                             child: GestureDetector(
-                                              onDoubleTap: () =>
-                                                  widget.onOrderClick?.call(e),
+                                              onDoubleTap: () => widget
+                                                  .onOrderClick
+                                                  ?.call(orderEntity),
                                               child: Draggable<OrderEntity>(
-                                                data: e,
+                                                data: orderEntity,
                                                 childWhenDragging:
                                                     OrderCardWidget(
-                                                  order: e,
+                                                  order: orderEntity,
                                                   isDragging: true,
                                                 ),
                                                 feedback: Opacity(
                                                   opacity: 0.6,
                                                   child: Material(
                                                     child: OrderCardWidget(
-                                                      order: e,
+                                                      order: orderEntity,
                                                       isDragging: false,
                                                     ),
                                                   ),
                                                 ),
                                                 child: OrderCardWidget(
-                                                  order: e,
+                                                  order: orderEntity,
                                                   isDragging: false,
                                                 ),
                                               ),
@@ -202,14 +206,15 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                         },
                                       ),
                                       ...barber.notWorkingHours.map(
-                                        (e) {
+                                        (notWorkingHoursEntity) {
                                           return Positioned(
-                                            // top: Constants.timeTableItemHeight,
-                                            top:
-                                                _getTopPositionForNotWorkingHours(
-                                                    e),
+                                            top: TimeTableHelper
+                                                .getTopPositionForNotWorkingHours(
+                                              notWorkingHoursEntity,
+                                            ),
                                             child: NotWorkingHoursCard(
-                                              notWorkingHoursEntity: e,
+                                              notWorkingHoursEntity:
+                                                  notWorkingHoursEntity,
                                             ),
                                           );
                                         },
@@ -228,57 +233,6 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
               ),
             ],
           );
-  }
-
-  double _getTopPosition(OrderEntity order) {
-    if (order.orderStart.hour == Constants.startWork) {
-      final result = (order.orderStart.minute).toDouble();
-
-      return result * Constants.sizeTimeTableFieldPerMinuteRound;
-    }
-
-    double top = Constants.startWork;
-
-    top -= order.orderStart.hour;
-
-    final formatted = top / -1;
-
-    double height = 0;
-
-    for (var i = 0; i < formatted; i++) {
-      height += Constants.timeTableItemHeight;
-    }
-
-    height +=
-        order.orderStart.minute * Constants.sizeTimeTableFieldPerMinuteRound;
-
-    return height;
-  }
-
-  double _getTopPositionForNotWorkingHours(NotWorkingHoursEntity entity) {
-    if (entity.dateFrom.hour == Constants.startWork) {
-      return 0;
-    }
-
-    double top = Constants.startWork;
-
-    top -= entity.dateFrom.hour;
-
-    final formatted = top / -1;
-
-    // print("Differense $formatted");
-
-    double height = 0;
-
-    // if((order.to.hour == order.from.hour && order.to.day == order.from.day) == false) {
-    for (var i = 0; i < formatted; i++) {
-      height += Constants.timeTableItemHeight;
-    }
-    // }
-
-    // height += entity.dateFrom.minute;
-
-    return height;
   }
 
   _barberUpperCardWidget(BarberEntity entity) {
@@ -342,22 +296,23 @@ class NotWorkingHoursCard extends StatefulWidget {
 }
 
 class _NotWorkingHoursCardState extends State<NotWorkingHoursCard> {
-  double _getCardHeight() {
-    final from = widget.notWorkingHoursEntity.dateFrom;
-    final to = widget.notWorkingHoursEntity.dateTo;
-    if (from.hour == to.hour) {
-      return (from.minute + to.minute).toDouble();
-    }
-
-    return Constants.timeTableItemHeight + (from.minute) - to.minute;
-  }
+  // double _getCardHeight() {
+  //   final from = widget.notWorkingHoursEntity.dateFrom;
+  //   final to = widget.notWorkingHoursEntity.dateTo;
+  //   if (from.hour == to.hour) {
+  //     return (from.minute + to.minute).toDouble();
+  //   }
+  //
+  //   return Constants.timeTableItemHeight + (from.minute) - to.minute;
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      constraints: BoxConstraints(
-        maxHeight: _getCardHeight(),
+      height: TimeTableHelper.getCardHeight(
+        widget.notWorkingHoursEntity.dateFrom,
+        widget.notWorkingHoursEntity.dateTo,
       ),
       color: Colors.brown.withOpacity(0.5),
       child: const SizedBox.expand(),
@@ -402,7 +357,9 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
       // height: _getCardHeight(),
       height: TimeTableHelper.getCardHeight(
           widget.order.orderStart, widget.order.orderEnd),
-      color: widget.isDragging ? Colors.grey.shade400 : AppColors.timeTableCard,
+      color: widget.isDragging
+          ? Colors.grey.shade400.withOpacity(0.3)
+          : AppColors.timeTableCard,
       child: !widget.isDragging
           ? Column(
               mainAxisAlignment: MainAxisAlignment.start,

@@ -339,8 +339,20 @@ class _ContentWidgetState extends State<_ContentWidget> {
                               phone: 12,
                               notWorkingHours: [
                                 NotWorkingHoursEntity(
-                                  dateFrom: DateTime.now().copyWith(hour: 16),
-                                  dateTo: DateTime.now().copyWith(hour: 17, minute:30),
+                                  dateFrom: DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day,
+                                    16,
+                                    15
+                                  ),
+                                  dateTo: DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day,
+                                    17,
+                                    45,
+                                  ),
                                 )
                               ],
                               inTimeTable: true,
