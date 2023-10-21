@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/features/main/presensation/widget/calendar_ruler_widget.dart';
@@ -9,6 +11,7 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/dialogs.dart';
 import '../../../../core/utils/int_helper.dart';
+import '../../../../core/utils/time_table_helper.dart';
 import '../../../management/domain/entity/not_working_hours_entity.dart';
 import '../../domain/entity/order_entity.dart';
 
@@ -151,53 +154,12 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                               (index) {
                                                 final hour = from.hour + index;
 
-                                                return DragTarget<OrderEntity>(
-                                                  builder: (context,
-                                                      candidateData,
-                                                      rejectedData) {
-                                                    return FieldCardWidget(
-                                                      isFirstSection:
-                                                          barberIndex == 0,
-                                                      hour: hour,
-                                                      highlighted: candidateData
-                                                          .isNotEmpty,
-                                                    );
-                                                  },
-                                                  onAccept: (data) {
-                                                    print(
-                                                      "Accept field target $data hour $hour",
-                                                    );
-
-                                                    final orderFrom =
-                                                        data.orderStart;
-                                                    final orderTo =
-                                                        data.orderEnd;
-
-                                                    data.orderStart = DateTime(
-                                                      orderFrom.year,
-                                                      orderFrom.month,
-                                                      orderFrom.day,
-                                                      hour,
-                                                      orderFrom.minute,
-                                                    );
-
-                                                    final int
-                                                        differenceFromAndTo =
-                                                        (orderFrom.hour -
-                                                                data.orderStart
-                                                                    .hour) ~/
-                                                            -1;
-
-                                                    data.orderEnd = DateTime(
-                                                      orderTo.year,
-                                                      orderTo.month,
-                                                      orderTo.day,
-                                                      data.orderEnd.hour +
-                                                          differenceFromAndTo,
-                                                      orderTo.minute,
-                                                    );
-                                                    data.barberId = barber.id;
-
+                                                return FieldCardWidget(
+                                                  isFirstSection:
+                                                      barberIndex == 0,
+                                                  hour: hour,
+                                                  barberId: barber.id,
+                                                  onPositionChanged: () {
                                                     setState(() {});
                                                   },
                                                 );
@@ -206,56 +168,6 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                           ],
                                         ),
                                       ),
-                                      // DragTarget<Order>(
-                                      //   builder:
-                                      //       (context, candidateData, rejectedData) {
-                                      //     // return Container(
-                                      //     //   height: Constants.timeTableItemHeight,
-                                      //     //   color: candidateData.isNotEmpty ? Colors.orange:  Colors.green,
-                                      //     // );
-                                      //
-                                      //     // Order? candidate;
-                                      //     //
-                                      //     // if (candidateData.isNotEmpty) {
-                                      //     //   candidate = candidateData.first;
-                                      //     // }
-                                      //
-                                      //     return Column(
-                                      //       children: [
-                                      //         ...List.generate(
-                                      //           IntHelper
-                                      //               .getCountOfCardByWorkingHours(
-                                      //                   from, to),
-                                      //           (index) {
-                                      //             final hour = from.hour + index;
-                                      //
-                                      //             return FieldCardWidget(
-                                      //               hour: hour,
-                                      //               // highlighted: false,
-                                      //               // highlighted: (candidate !=
-                                      //               //         null) &&
-                                      //               //     candidate.from.hour == hour,
-                                      //               highlighted: candidateData.isNotEmpty,
-                                      //             );
-                                      //           },
-                                      //         ),
-                                      //       ],
-                                      //     );
-                                      //   },
-                                      //   // onMove: (details) {
-                                      //   //   print("Details");
-                                      //   // },
-                                      //
-                                      //   onLeave: (data) {
-                                      //     print("Data leave");
-                                      //   },
-                                      //   onAccept: (data) {
-                                      //     // if(data != null) {
-                                      //     print("Accept $data");
-                                      //
-                                      //     // }
-                                      //   },
-                                      // ),
                                       ...localOrders.map(
                                         (e) {
                                           return Positioned(
@@ -292,11 +204,11 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                       ...barber.notWorkingHours.map(
                                         (e) {
                                           return Positioned(
-                                            // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
+                                            // top: Constants.timeTableItemHeight,
                                             top:
                                                 _getTopPositionForNotWorkingHours(
                                                     e),
-                                            child: _NotWorkingHoursCard(
+                                            child: NotWorkingHoursCard(
                                               notWorkingHoursEntity: e,
                                             ),
                                           );
@@ -320,8 +232,9 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
 
   double _getTopPosition(OrderEntity order) {
     if (order.orderStart.hour == Constants.startWork) {
-      // return Constants.timeTableItemHeight;
-      return 0;
+      final result = (order.orderStart.minute).toDouble();
+
+      return result * Constants.sizeTimeTableFieldPerMinuteRound;
     }
 
     double top = Constants.startWork;
@@ -332,20 +245,18 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
 
     double height = 0;
 
-    // if((order.to.hour == order.from.hour && order.to.day == order.from.day) == false) {
     for (var i = 0; i < formatted; i++) {
       height += Constants.timeTableItemHeight;
     }
-    // }
 
-    height += order.orderStart.minute;
+    height +=
+        order.orderStart.minute * Constants.sizeTimeTableFieldPerMinuteRound;
 
     return height;
   }
 
   double _getTopPositionForNotWorkingHours(NotWorkingHoursEntity entity) {
     if (entity.dateFrom.hour == Constants.startWork) {
-      // return Constants.timeTableItemHeight;
       return 0;
     }
 
@@ -355,6 +266,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
 
     final formatted = top / -1;
 
+    // print("Differense $formatted");
+
     double height = 0;
 
     // if((order.to.hour == order.from.hour && order.to.day == order.from.day) == false) {
@@ -363,7 +276,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
     }
     // }
 
-    height += entity.dateFrom.minute;
+    // height += entity.dateFrom.minute;
 
     return height;
   }
@@ -419,36 +332,35 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
   }
 }
 
-class _NotWorkingHoursCard extends StatefulWidget {
+class NotWorkingHoursCard extends StatefulWidget {
   final NotWorkingHoursEntity notWorkingHoursEntity;
-  const _NotWorkingHoursCard({Key? key, required this.notWorkingHoursEntity})
+  const NotWorkingHoursCard({Key? key, required this.notWorkingHoursEntity})
       : super(key: key);
 
   @override
-  State<_NotWorkingHoursCard> createState() => _NotWorkingHoursCardState();
+  State<NotWorkingHoursCard> createState() => _NotWorkingHoursCardState();
 }
 
-class _NotWorkingHoursCardState extends State<_NotWorkingHoursCard> {
+class _NotWorkingHoursCardState extends State<NotWorkingHoursCard> {
   double _getCardHeight() {
-    if (widget.notWorkingHoursEntity.dateFrom.hour ==
-        widget.notWorkingHoursEntity.dateTo.hour) {
-      return widget.notWorkingHoursEntity.dateTo.minute *
-          Constants.onTimetableFieldItem;
+    final from = widget.notWorkingHoursEntity.dateFrom;
+    final to = widget.notWorkingHoursEntity.dateTo;
+    if (from.hour == to.hour) {
+      return (from.minute + to.minute).toDouble();
     }
 
-    return Constants.timeTableItemHeight +
-        (widget.notWorkingHoursEntity.dateTo.minute *
-            Constants.onTimetableFieldItem) -
-        widget.notWorkingHoursEntity.dateFrom.minute;
+    return Constants.timeTableItemHeight + (from.minute) - to.minute;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: _getCardHeight(),
+      constraints: BoxConstraints(
+        maxHeight: _getCardHeight(),
+      ),
       color: Colors.brown.withOpacity(0.5),
-      child: const SizedBox.shrink(),
+      child: const SizedBox.expand(),
     );
   }
 }
@@ -465,22 +377,31 @@ class OrderCardWidget extends StatefulWidget {
 }
 
 class _OrderCardWidgetState extends State<OrderCardWidget> {
-  double _getCardHeight() {
-    if (widget.order.orderStart.hour == widget.order.orderEnd.hour) {
-      return widget.order.orderEnd.minute * Constants.onTimetableFieldItemRound;
-    }
-
-    return Constants.timeTableItemHeight +
-        (widget.order.orderEnd.minute * Constants.onTimetableFieldItemRound) -
-        widget.order.orderStart.minute;
-  }
+  // double _getCardHeight() {
+  //   final dateFrom = widget.order.orderStart;
+  //   final dateTo = widget.order.orderEnd;
+  //
+  //     print("order: ${widget.order.id}, order Start $dateFrom order end $dateTo diff ${dateFrom.difference(dateTo).inHours } ");
+  //
+  //   final differenceInMinutes = dateFrom.difference(dateTo).inMinutes.abs();
+  //   print("Diff ${differenceInMinutes}");
+  //   if (dateFrom.hour == dateTo.hour) {
+  //     return (dateFrom.minute + dateTo.minute).toDouble();
+  //   } else if ( differenceInMinutes <= 60) {
+  //     return Constants.timeTableItemHeight;
+  //   }
+  //
+  //   return 200;
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: MediaQuery.of(context).size.width  ,
+      // width: MediaQuery.of(context).size.width,
       width: Constants.timeTableItemWidth,
-      height: _getCardHeight(),
+      // height: _getCardHeight(),
+      height: TimeTableHelper.getCardHeight(
+          widget.order.orderStart, widget.order.orderEnd),
       color: widget.isDragging ? Colors.grey.shade400 : AppColors.timeTableCard,
       child: !widget.isDragging
           ? Column(
@@ -494,7 +415,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                     child: Row(
                       children: [
                         Text(
-                          "${DateFormat('hh:mm').format(widget.order.orderStart)} / ${DateFormat('hh:mm').format(widget.order.orderEnd)}",
+                          "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
                           style: GoogleFonts.nunito(
                             color: Colors.white,
                             fontSize: 12,
@@ -505,19 +426,18 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 3),
                 ...widget.order.services.map(
-                  (e) => Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          "${e.name} ${e.price}сум. ${e.duration}м.",
-                          style: GoogleFonts.nunito(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
+                  (e) => Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 3),
+                      child: Text(
+                        "${e.name} ${e.price}сум. ${e.duration}м.",
+                        style: GoogleFonts.nunito(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
@@ -533,13 +453,15 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
 class FieldCardWidget extends StatefulWidget {
   final int hour;
   final bool isFirstSection;
-  final bool highlighted;
+  final String barberId;
+  final Function() onPositionChanged;
 
   const FieldCardWidget({
     super.key,
     required this.hour,
-    required this.highlighted,
     required this.isFirstSection,
+    required this.onPositionChanged,
+    required this.barberId,
   });
 
   @override
@@ -569,36 +491,117 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
               minute = 0; // Convert 60 to 0
             }
             return Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: widget.highlighted ? Colors.orange : Colors.white,
-                  border: Border.all(
-                    width: 0.3,
-                    color: Colors.black26,
-                  ),
-                ),
-
-                width: double.infinity,
-                child: widget.isFirstSection
-                    ? const SizedBox()
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 4, top: 2),
-                            child: Text(
-                              "${widget.hour}:${minute == 0? "00": minute}",
-                              style: TextStyle(
-                                color: Colors.grey.shade400,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          )
-                        ],
+              child: DragTarget<OrderEntity>(
+                onAccept: (order) {
+                  TimeTableHelper.onAccept(
+                    order,
+                    widget.hour,
+                    minute,
+                    widget.barberId,
+                    widget.onPositionChanged,
+                  );
+                },
+                // onAccept: (order) {
+                //   print(
+                //     "Accept field target $order hour ${widget.hour}",
+                //   );
+                //
+                //   final orderFrom = order.orderStart;
+                //   final orderTo = order.orderEnd;
+                //
+                //   order.orderStart = DateTime(
+                //     orderFrom.year,
+                //     orderFrom.month,
+                //     orderFrom.day,
+                //     widget.hour,
+                //     minute,
+                //   );
+                //
+                //   final newHour = order.orderStart.hour;
+                //   final newMinute = order.orderStart.minute;
+                //
+                //   final oldHour = orderFrom.hour;
+                //   final oldMinute = orderFrom.minute;
+                //
+                //   final int hourDiff = newHour - oldHour;
+                //   final int minuteDiff = newMinute - oldMinute;
+                //
+                //
+                //
+                //
+                //
+                //
+                //   if (oldHour < newHour) {
+                //     // order.orderEnd = DateTime(
+                //     //   orderTo.year,
+                //     //   orderTo.month,
+                //     //   orderTo.day,
+                //     //   orderTo.hour + hourDiff,
+                //     //   orderTo.minute + minuteDiff,
+                //     // );
+                //
+                //     log("bottom nav $hourDiff $minuteDiff ");
+                //   } else {
+                //     // order.orderEnd = DateTime(
+                //     //   orderTo.year,
+                //     //   orderTo.month,
+                //     //   orderTo.day,
+                //     //   orderTo.hour - hourDiff,
+                //     //   orderTo.minute - minuteDiff,
+                //     // );
+                //     log("top nav $hourDiff $minuteDiff");
+                //   }
+                //
+                //
+                //
+                //
+                //   //
+                //   // data.orderEnd = DateTime(
+                //   //   orderTo.year,
+                //   //   orderTo.month,
+                //   //   orderTo.day,
+                //   //   data.orderEnd.hour + differenceFromAndTo,
+                //   //   orderTo.minute,
+                //   // );
+                //   order.barberId = widget.barberId;
+                //
+                //   widget.onPositionChanged.call();
+                // },
+                builder: (context, candidateData, rejectedData) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: candidateData.isNotEmpty
+                          ? Colors.orange
+                          : Colors.white,
+                      border: Border.all(
+                        width: 0.3,
+                        color: Colors.black26,
                       ),
-                // child: Text((index +1).toString()),
+                    ),
+
+                    width: double.infinity,
+                    child: widget.isFirstSection
+                        ? const SizedBox()
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4, top: 2),
+                                child: Text(
+                                  "${widget.hour}:${minute == 0 ? "00" : minute}",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade400,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                    // child: Text((index +1).toString()),
+                  );
+                },
               ),
             );
           },

@@ -222,8 +222,29 @@ class _ContentWidgetState extends State<_ContentWidget> {
   // ];
 
   final List<OrderEntity> orders = [
+    // OrderEntity(
+    //   orderStart: DateTime(2023, 10, 7, 9, 10),
+    //   orderEnd: DateTime(2023, 10, 7, 9, 30),
+    //   price: 30,
+    //   barberId: "6531612da3b411c75df5e944",
+    //   services: [
+    //     ServiceProductEntity(
+    //       id: "id",
+    //       name: "name",
+    //       price: 30,
+    //       duration: 30,
+    //       category: ServiceProductCategoryEntity.empty(),
+    //       sex: "man",
+    //     ),
+    //   ],
+    //   discount: 2,
+    //   discountPercent: 2,
+    //   clientId: "333",
+    //   paymentType: OrderPayment.cash,
+    //   id: '',
+    // ),
     OrderEntity(
-      orderStart: DateTime(2023, 10, 7, 9, 10),
+      orderStart: DateTime(2023, 10, 7, 9),
       orderEnd: DateTime(2023, 10, 7, 9, 30),
       price: 30,
       barberId: "6531612da3b411c75df5e944",
@@ -249,9 +270,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
       clientId: "333",
       paymentType: OrderPayment.cash,
       orderStart: DateTime(2023, 10, 7, 12),
-      orderEnd: DateTime(2023, 10, 7, 13, 30),
+      orderEnd: DateTime(2023, 10, 7, 13),
       price: 30,
-      barberId: "3",
+      barberId: "6531612da3b411c75df5e944",
       services: [],
       id: '',
     ),
@@ -263,7 +284,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
       orderStart: DateTime(2023, 10, 7, 20, 30),
       orderEnd: DateTime(2023, 10, 7, 21, 0),
       price: 30,
-      barberId: "3",
+      barberId: "6531612da3b411c75df5e944",
       services: [],
       id: '',
     ),
@@ -272,10 +293,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
       discountPercent: 2,
       clientId: "333",
       paymentType: OrderPayment.cash,
-      orderStart: DateTime(2023, 10, 7, 20, 15),
-      orderEnd: DateTime(2023, 10, 7, 21, 30),
+      orderStart: DateTime(2023, 10, 7, 16, 0),
+      orderEnd: DateTime(2023, 10, 7, 17, 30),
       price: 30,
-      barberId: "4",
+      barberId: "6531612da3b411c75df5e944",
       services: [],
       id: '',
     ),
@@ -318,10 +339,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                               phone: 12,
                               notWorkingHours: [
                                 NotWorkingHoursEntity(
-                                  dateFrom: DateTime.now(),
-                                  dateTo: DateTime.now().add(
-                                    const Duration(hours: 1),
-                                  ),
+                                  dateFrom: DateTime.now().copyWith(hour: 16),
+                                  dateTo: DateTime.now().copyWith(hour: 17, minute:30),
                                 )
                               ],
                               inTimeTable: true,
