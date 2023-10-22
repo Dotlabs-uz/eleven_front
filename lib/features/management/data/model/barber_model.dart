@@ -69,7 +69,7 @@ class BarberModel extends BarberEntity {
       notWorkingHours: json['notWorkingHours'] != null &&
           List.from(json['notWorkingHours']).isNotEmpty
           ? List.from(json['notWorkingHours'])
-          .map((e) => NotWorkingHoursModel.fromJson(e))
+          .map((e) => NotWorkingHoursModel.fromJson(e, json["_id"]))
           .toList()
           : [],
     );

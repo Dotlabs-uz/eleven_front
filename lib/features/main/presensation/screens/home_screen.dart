@@ -23,7 +23,7 @@ import '../cubit/order/not_working_hours/not_working_hours_cubit.dart';
 import '../cubit/order/order_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../widget/my_icon_button.dart';
-import 'time_table_widget.dart';
+import '../widget/time_table_widget/time_table_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -344,7 +344,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     DateTime.now().month,
                                     DateTime.now().day,
                                     16,
-                                    15
+                                    15,
                                   ),
                                   dateTo: DateTime(
                                     DateTime.now().year,
@@ -353,6 +353,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     17,
                                     45,
                                   ),
+                                  barberId: 'id',
                                 )
                               ],
                               inTimeTable: true,
