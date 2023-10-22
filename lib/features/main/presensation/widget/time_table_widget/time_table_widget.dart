@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
-import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/calendar_ruler_widget.dart';
+import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/time_table_ruler_widget.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -113,7 +113,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CalendarRulerWidget(
+                          TimeTableRulerWidget(
                             timeFrom: from,
                             timeTo: to,
                           ),

@@ -1,11 +1,11 @@
 import 'package:eleven_crm/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class CalendarRulerWidget extends StatelessWidget {
+class TimeTableRulerWidget extends StatelessWidget {
   final DateTime timeFrom;
   final DateTime timeTo;
 
-  const CalendarRulerWidget(
+  const TimeTableRulerWidget(
       {Key? key, required this.timeFrom, required this.timeTo})
       : super(key: key);
 
