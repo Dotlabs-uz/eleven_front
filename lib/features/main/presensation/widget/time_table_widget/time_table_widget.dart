@@ -77,6 +77,10 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
     listOrders.addAll(widget.listOrders);
   }
 
+  _onOrderSize() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return listBarber.isEmpty
@@ -185,12 +189,16 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                               onDoubleTap: () => widget
                                                   .onOrderClick
                                                   ?.call(orderEntity),
-                                              child: Draggable<OrderEntity>(
-                                                data: orderEntity,
+                                              child: Draggable<DragOrder>(
+                                                data: DragOrder(
+                                                  isResizing: false,
+                                                  orderEntity: orderEntity,
+                                                ),
                                                 childWhenDragging:
                                                     OrderCardWidget(
                                                   order: orderEntity,
                                                   isDragging: true,
+                                                  onOrderSize: _onOrderSize,
                                                 ),
                                                 feedback: Opacity(
                                                   opacity: 0.6,
@@ -198,12 +206,14 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                     child: OrderCardWidget(
                                                       order: orderEntity,
                                                       isDragging: false,
+                                                      onOrderSize: _onOrderSize,
                                                     ),
                                                   ),
                                                 ),
                                                 child: OrderCardWidget(
                                                   order: orderEntity,
                                                   isDragging: false,
+                                                  onOrderSize: _onOrderSize,
                                                 ),
                                               ),
                                             ),

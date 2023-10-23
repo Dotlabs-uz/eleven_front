@@ -1,11 +1,10 @@
-import 'package:confirm_dialog/confirm_dialog.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/time_table_helper.dart';
 import '../../../../management/domain/entity/not_working_hours_entity.dart';
 import '../../../domain/entity/order_entity.dart';
+import 'order_card_widget.dart';
 
 class FieldCardWidget extends StatefulWidget {
   final int hour;
@@ -73,32 +72,47 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
               minute = 0; // Convert 60 to 0
             }
             return Expanded(
-              child: DragTarget<OrderEntity>(
-                onAccept: (order) async {
-                  if (true) {
-
-                    // TODO Add Not working hours logic
+              child: DragTarget<DragOrder>(
+                onAcceptWithDetails: (details) {
+                  print(
+                      "On Accept With details ${details.data}, Offset ${details.offset}");
+                },
+                onWillAccept: (data) {
+                  print("Will accept $data");
+                  return true;
+                },
+                onAccept: (dragOrder) async {
+                  if (dragOrder.isResizing == false) {
                     TimeTableHelper.onAccept(
-                      order,
+                      dragOrder.orderEntity,
                       widget.hour,
                       minute,
                       widget.barberId,
                       widget.onPositionChanged,
                     );
-                  } else {
-                    await confirm(
-                      context,
-                      title: const Text('confirming').tr(),
-                      content: const Text('deleteConfirm').tr(),
-                      textOK: const Text('yes').tr(),
-                    );
                   }
+
+                  // if (true) {
+                  //
+                  //   TODO Add Not working hours logic
+                  //
+                  // } else {
+                  //   await confirm(
+                  //     context,
+                  //     title: const Text('confirming').tr(),
+                  //     content: const Text('deleteConfirm').tr(),
+                  //     textOK: const Text('yes').tr(),
+                  //   );
+                  // }
                 },
                 builder: (context, candidateData, rejectedData) {
                   return Container(
                     decoration: BoxDecoration(
                       color: candidateData.isNotEmpty
-                          ? Colors.orange
+                          ? candidateData.first != null &&
+                                  candidateData.first!.isResizing == true
+                              ? Colors.transparent
+                              : Colors.orange
                           : Colors.white,
                       border: Border.all(
                         width: 0.3,
