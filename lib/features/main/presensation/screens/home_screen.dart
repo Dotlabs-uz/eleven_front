@@ -418,6 +418,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     }
                                     return TimeTableWidget(
                                       listBarbers: listBarbers,
+                                      onFieldTap: (hour, minute) {
+                                        activeData = OrderEntity.empty(hour: hour,minute: minute,);
+                                        _editOrder(activeData);
+                                      },
                                       onOrderClick: (entity) =>
                                           _editOrder(entity),
                                       onDeleteEmployeeFromTable: (employeeId) {

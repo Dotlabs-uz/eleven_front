@@ -10,6 +10,7 @@ class FieldCardWidget extends StatefulWidget {
   final int hour;
   final bool isFirstSection;
   final String barberId;
+  final Function(int hour ,int minute) onFieldTap;
   final Function() onPositionChanged;
   final List<NotWorkingHoursEntity> notWorkingHours;
 
@@ -18,6 +19,7 @@ class FieldCardWidget extends StatefulWidget {
     required this.hour,
     required this.isFirstSection,
     required this.onPositionChanged,
+    required this.onFieldTap,
     required this.barberId,
     required this.notWorkingHours,
   });
@@ -102,39 +104,42 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                   // }
                 },
                 builder: (context, candidateData, rejectedData) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: candidateData.isNotEmpty
-                          ? candidateData.first != null &&
-                                  candidateData.first!.isResizing == true
-                              ? Colors.transparent
-                              : Colors.orange
-                          : Colors.white,
-                      border: Border.all(
-                        width: 0.3,
-                        color: Colors.black26,
+                  return InkWell(
+                    onTap: () =>widget.onFieldTap.call (widget.hour, minute) ,
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        color: candidateData.isNotEmpty
+                            ? candidateData.first != null &&
+                                    candidateData.first!.isResizing == true
+                                ? Colors.transparent
+                                : Colors.orange
+                            : Colors.white,
+                        border: Border.all(
+                          width: 0.3,
+                          color: Colors.black26,
+                        ),
                       ),
-                    ),
-                    width: double.infinity,
-                    child: widget.isFirstSection
-                        ? const SizedBox()
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 4, top: 2),
-                                child: Text(
-                                  "${widget.hour}:${minute == 0 ? "00" : minute}",
-                                  style: TextStyle(
-                                    color: Colors.grey.shade400,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w400,
+                      width: double.infinity,
+                      child: widget.isFirstSection
+                          ? const SizedBox()
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4, top: 2),
+                                  child: Text(
+                                    "${widget.hour}:${minute == 0 ? "00" : minute}",
+                                    style: TextStyle(
+                                      color: Colors.grey.shade400,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
+                                )
+                              ],
+                            ),
+                    ),
                   );
                 },
               ),

@@ -15,7 +15,7 @@ enum OrderPayment {
 
 @immutable
 class OrderEntity extends Equatable {
-  final String id ;
+  final String id;
   final double discount;
   final double discountPercent;
   final OrderPayment paymentType;
@@ -178,13 +178,13 @@ class OrderEntity extends Equatable {
     );
   }
 
-  factory OrderEntity.empty() {
+  factory OrderEntity.empty({int? hour, int? minute}) {
     return OrderEntity(
       id: "",
       discount: 0,
       discountPercent: 0,
       paymentType: OrderPayment.cash,
-      orderStart: DateTime.now(),
+      orderStart: DateTime.now().copyWith(hour: hour, minute: minute),
       orderEnd: DateTime.now().add(const Duration(hours: 1)),
       price: 10,
       barberId: "",

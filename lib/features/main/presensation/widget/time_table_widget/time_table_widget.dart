@@ -26,12 +26,14 @@ class TimeTableWidget extends StatefulWidget {
   final Function(DateTime from, DateTime to, String employeeId) onTimeConfirm;
   final Function(String employee)? onDeleteEmployeeFromTable;
   final Function(OrderEntity)? onOrderClick;
+  final Function(int hour, int minute)? onFieldTap;
 
   const TimeTableWidget({
     Key? key,
     required this.listBarbers,
     required this.onTimeConfirm,
     this.onDeleteEmployeeFromTable,
+    this.onFieldTap,
     this.onOrderClick,
     required this.listOrders,
   }) : super(key: key);
@@ -170,7 +172,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                     setState(() {});
                                                   },
                                                   notWorkingHours:
-                                                      barber.notWorkingHours,
+                                                      barber.notWorkingHours, onFieldTap: (hour, minute) => widget.onFieldTap?.call(hour,minute),
                                                 );
                                               },
                                             ),
