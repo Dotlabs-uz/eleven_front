@@ -86,7 +86,10 @@ class DataManagerFormState extends State<DataManagerForm> {
               onPressed: () {
                 AnimatedNavigation.push(
                   context: context,
-                  page:   EmployeeProfileScreen(employeeId: widget.fields['id']!.val!,),
+                  page: EmployeeProfileScreen(
+                    employeeId: widget.fields['id']!.val!,
+                    employeeName: widget.fields['firstName']?.val + " "+ widget.fields['lastname']?.val   ?? "",
+                  ),
                 );
               },
             ),

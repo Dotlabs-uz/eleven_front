@@ -20,7 +20,8 @@ import '../cubit/employee/employee_cubit.dart';
 
 class EmployeeProfileScreen extends StatefulWidget {
   final String employeeId;
-  const EmployeeProfileScreen({Key? key, required this.employeeId})
+  final String employeeName;
+  const EmployeeProfileScreen({Key? key, required this.employeeId, required this.employeeName})
       : super(key: key);
 
   @override
@@ -46,6 +47,7 @@ class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
       ],
       child: ContentWidget(
         employeeCubit: employeeCubit,
+        employeeName: widget.employeeName,
         employeeId: widget.employeeId,
       ),
     );
@@ -56,11 +58,12 @@ class ContentWidget extends StatefulWidget {
   final EmployeeCubit employeeCubit;
 
   final String employeeId;
+  final String employeeName;
 
   const ContentWidget({
     Key? key,
     required this.employeeCubit,
-    required this.employeeId,
+    required this.employeeId, required this.employeeName,
   }) : super(key: key);
 
   @override
@@ -88,6 +91,8 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   init() async {
+
+    print(widget.employeeName.toString());
     BlocProvider.of<EmployeeCubit>(context).load();
   }
 
@@ -104,7 +109,7 @@ class _ContentWidgetState extends State<ContentWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.employeeId)),
+      appBar: AppBar(title: Text(widget.employeeName)),
       body: SingleChildScrollView(
         child: BlocListener<EmployeeCubit, EmployeeState>(
           listener: (context, state) {
@@ -198,127 +203,17 @@ class _ContentWidgetState extends State<ContentWidget> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Container(
-                    constraints: BoxConstraints(
-                      maxWidth: Responsive.isDesktop(context)
-                          ? 600
-                          : MediaQuery.of(context).size.width,
-                    ),
-                    child: Column(
-                      children: [
-                        TextFormFieldWidget(
-                          label: "firstName".tr(),
-                          controller: controllerFirstName,
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormFieldWidget(
-                          label: "lastName".tr(),
-                          controller: controllerLastName,
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormFieldWidget(
-                          label: "shopName".tr(),
-                          controller: controllerFilial,
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormFieldWidget(
-                          label: "phone".tr(),
-                          controller: controllerPhoneNumber,
-                          textInputFormatter: FieldMasks.phoneMaskFormatter,
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormFieldWidget(
-                          label: "role".tr(),
-                          controller: controllerRole,
-                          enabled: false,
-                        ),
-                        const SizedBox(height: 15),
-                        CleanCalendar(
-                          enableDenseViewForDates: true,
-                          enableDenseSplashForDates: true,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _bodyWidget(),
 
-                          dateSelectionMode: DatePickerSelectionMode.disable,
-                          startWeekday: WeekDay.monday,
+                        const SizedBox(width: 20),
 
-                          headerProperties: HeaderProperties(
-                            monthYearDecoration: MonthYearDecoration(
-                              monthYearTextColor: Colors.black,
-                              monthYearTextStyle: const TextStyle(
-                                color: Colors.black,
-                                fontFamily: "Nunito",
-                                fontSize: 16,
-                              ),
-                            ),
-                            navigatorDecoration: NavigatorDecoration(
-                              navigateLeftButtonIcon: const Icon(
-                                Icons.chevron_left_rounded,
-                                color: Colors.black,
-                              ),
-                              navigateRightButtonIcon: const Icon(
-                                Icons.chevron_right_rounded,
-                                color: Colors.black,
-                              ),
-                              navigatorResetButtonIcon: const Icon(
-                                Icons.date_range_rounded,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-
-                          selectedDatesProperties: DatesProperties(
-                            datesDecoration: DatesDecoration(
-                              datesBackgroundColor: Colors.amber,
-                              datesBorderRadius: 6,
-                              datesBorderColor: Colors.transparent,
-                              datesTextStyle: const TextStyle(
-                                fontFamily: "Nunito",
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          leadingTrailingDatesProperties: DatesProperties(
-                              datesDecoration: DatesDecoration(
-                            datesBorderRadius: 6,
-                            datesBorderColor: Colors.black26,
-                            datesBackgroundColor: Colors.black26,
-                            datesTextColor: Colors.black26,
-                          )),
-                          // selectedDatesProperties: ,
-                          generalDatesProperties: DatesProperties(
-                            datesDecoration: DatesDecoration(
-                              // datesBackgroundColor: const Color(0xff1A1A1A),
-                              datesBorderColor: Colors.transparent,
-                              datesBackgroundColor: Colors.transparent,
-                              datesTextColor: Colors.black,
-                              // datesTextStyle: const TextStyle(
-                              //   fontFamily: "Nunito",
-                              //   color: Colors.white,
-                              // )
-                            ),
-                          ),
-
-                          weekdaysProperties: WeekdaysProperties(
-                            generalWeekdaysDecoration: WeekdaysDecoration(
-                                weekdayTextColor: Colors.black,
-                                weekdayTextStyle: GoogleFonts.nunito(
-                                  color: Colors.black,
-                                )),
-                          ),
-                          selectedDates: [DateTime.now()],
-                          onCalendarViewDate: (DateTime calendarViewDate) {
-                            // debugPrint(calendarViewDate);
-                          },
-                          onSelectedDates: (List<DateTime> value) {},
-                        ),
-                        const SizedBox(height: 25),
-                        ButtonWidget(
-                          text: "save".tr(),
-                          onPressed: () {
-                            _saveData();
-                          },
-                        ),
-                        const SizedBox(height: 25),
-
+                        _calendarWidget(),
                       ],
                     ),
                   ),
@@ -327,6 +222,143 @@ class _ContentWidgetState extends State<ContentWidget> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  _bodyWidget() {
+    return  Container(
+      constraints: BoxConstraints(
+        maxWidth: Responsive.isDesktop(context)
+            ? 400
+            : MediaQuery.of(context).size.width,
+      ),
+      child: Column(
+        children: [
+          TextFormFieldWidget(
+            label: "firstName".tr(),
+            controller: controllerFirstName,
+          ),
+          const SizedBox(height: 15),
+          TextFormFieldWidget(
+            label: "lastName".tr(),
+            controller: controllerLastName,
+          ),
+          const SizedBox(height: 15),
+          TextFormFieldWidget(
+            label: "shopName".tr(),
+            controller: controllerFilial,
+          ),
+          const SizedBox(height: 15),
+          TextFormFieldWidget(
+            label: "phone".tr(),
+            controller: controllerPhoneNumber,
+            textInputFormatter: FieldMasks.phoneMaskFormatter,
+          ),
+          const SizedBox(height: 15),
+          TextFormFieldWidget(
+            label: "role".tr(),
+            controller: controllerRole,
+            enabled: false,
+          ),
+          const SizedBox(height: 15),
+
+          const SizedBox(height: 25),
+          ButtonWidget(
+            text: "save".tr(),
+            onPressed: () {
+              _saveData();
+            },
+          ),
+          const SizedBox(height: 25),
+
+        ],
+      ),
+    );
+  }
+  _calendarWidget() {
+    return    Container(
+      constraints: BoxConstraints(
+        maxWidth: Responsive.isDesktop(context)
+            ? 500
+            : MediaQuery.of(context).size.width,
+      ),
+      child: CleanCalendar(
+        enableDenseViewForDates: true,
+        enableDenseSplashForDates: true,
+
+        dateSelectionMode: DatePickerSelectionMode.disable,
+        startWeekday: WeekDay.monday,
+
+        headerProperties: HeaderProperties(
+          monthYearDecoration: MonthYearDecoration(
+            monthYearTextColor: Colors.black,
+            monthYearTextStyle: const TextStyle(
+              color: Colors.black,
+              fontFamily: "Nunito",
+              fontSize: 16,
+            ),
+          ),
+          navigatorDecoration: NavigatorDecoration(
+            navigateLeftButtonIcon: const Icon(
+              Icons.chevron_left_rounded,
+              color: Colors.black,
+            ),
+            navigateRightButtonIcon: const Icon(
+              Icons.chevron_right_rounded,
+              color: Colors.black,
+            ),
+            navigatorResetButtonIcon: const Icon(
+              Icons.date_range_rounded,
+              color: Colors.black,
+            ),
+          ),
+        ),
+
+        selectedDatesProperties: DatesProperties(
+          datesDecoration: DatesDecoration(
+            datesBackgroundColor: Colors.amber,
+            datesBorderRadius: 6,
+            datesBorderColor: Colors.transparent,
+            datesTextStyle: const TextStyle(
+              fontFamily: "Nunito",
+              color: Colors.black,
+            ),
+          ),
+        ),
+        leadingTrailingDatesProperties: DatesProperties(
+            datesDecoration: DatesDecoration(
+              datesBorderRadius: 6,
+              datesBorderColor: Colors.black26,
+              datesBackgroundColor: Colors.black26,
+              datesTextColor: Colors.black26,
+            )),
+        // selectedDatesProperties: ,
+        generalDatesProperties: DatesProperties(
+          datesDecoration: DatesDecoration(
+            // datesBackgroundColor: const Color(0xff1A1A1A),
+            datesBorderColor: Colors.transparent,
+            datesBackgroundColor: Colors.transparent,
+            datesTextColor: Colors.black,
+            // datesTextStyle: const TextStyle(
+            //   fontFamily: "Nunito",
+            //   color: Colors.white,
+            // )
+          ),
+        ),
+
+        weekdaysProperties: WeekdaysProperties(
+          generalWeekdaysDecoration: WeekdaysDecoration(
+              weekdayTextColor: Colors.black,
+              weekdayTextStyle: GoogleFonts.nunito(
+                color: Colors.black,
+              )),
+        ),
+        selectedDates: [DateTime.now()],
+        onCalendarViewDate: (DateTime calendarViewDate) {
+          // debugPrint(calendarViewDate);
+        },
+        onSelectedDates: (List<DateTime> value) {},
       ),
     );
   }
