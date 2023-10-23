@@ -77,10 +77,6 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                   print(
                       "On Accept With details ${details.data}, Offset ${details.offset}");
                 },
-                onWillAccept: (data) {
-                  print("Will accept $data");
-                  return true;
-                },
                 onAccept: (dragOrder) async {
                   if (dragOrder.isResizing == false) {
                     TimeTableHelper.onAccept(

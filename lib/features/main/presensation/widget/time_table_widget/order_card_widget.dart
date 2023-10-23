@@ -130,7 +130,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                       color: Colors.transparent,
                     ),
                     child: MouseRegion(
-                      cursor: SystemMouseCursors.resizeUp,
+                      cursor: SystemMouseCursors.resizeUpDown,
                       child: Container(
                         height: 5,
                         width: MediaQuery.of(context).size.width,
@@ -153,7 +153,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                       color: Colors.transparent,
                     ),
                     child: MouseRegion(
-                      cursor: SystemMouseCursors.resizeDown,
+                      cursor: SystemMouseCursors.resizeUpDown,
                       child: Container(
                         height: 5,
                         width: MediaQuery.of(context).size.width,
