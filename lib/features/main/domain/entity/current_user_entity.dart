@@ -5,6 +5,7 @@ class CurrentUserEntity extends Equatable {
   final String firstName;
   final String lastName;
   final String phoneNumber;
+  final String avatar;
   final String password;
   final String login;
   final String role;
@@ -13,11 +14,25 @@ class CurrentUserEntity extends Equatable {
     required this.id,
     required this.firstName,
     required this.lastName,
+    required this.avatar,
     required this.phoneNumber,
     required this.password,
     required this.login,
     required this.role,
   });
+
+  factory CurrentUserEntity.empty() {
+    return const CurrentUserEntity(
+      id: "",
+      firstName: "",
+      lastName: "",
+      avatar: "",
+      phoneNumber: "",
+      password: "",
+      login: "",
+      role: "managers",
+    );
+  }
 
   @override
   List<Object?> get props => [id];

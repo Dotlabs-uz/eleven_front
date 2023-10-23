@@ -28,17 +28,9 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     final response = await _client.get(ApiConstants.getCurrentUser);
 
     print("Response $response");
-    final model = CurrentUserModel.fromJson(response['results'][0]);
+    final model = CurrentUserModel.fromJson(response);
 
-    return const CurrentUserModel(
-      id: "id",
-      firstName: "firstName",
-      lastName: "lastName",
-      phoneNumber: "phoneNumber",
-      password: "password",
-      login: "login",
-      role: "role",
-    );
+    return model;
   }
 
   @override

@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/utils/app_colors.dart';
 import '../core/utils/route_constants.dart';
 import '../core/utils/routes.dart';
+import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import '../features/main/presensation/cubit/menu/menu_cubit.dart';
 import '../features/main/presensation/widget/fade_page_route_builder.dart';
 import '../get_it/locator.dart';
@@ -28,6 +29,7 @@ class _ApplicationState extends State<Application> {
   late DataFormCubit _dataFormCubit;
   late ServiceProductCategoryCubit _serviceProductCategoryCubit;
   late OrderCubit _orderCubit;
+  late CurrentUserCubit currentUserCubit;
   @override
   void initState() {
     _loginCubit = locator();
@@ -36,6 +38,7 @@ class _ApplicationState extends State<Application> {
     _dataFormCubit = locator();
     _serviceProductCategoryCubit = locator();
     _orderCubit = locator();
+    currentUserCubit = locator();
     super.initState();
   }
   @override
@@ -48,6 +51,7 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: _dataFormCubit),
         BlocProvider.value(value: _serviceProductCategoryCubit),
         BlocProvider.value(value: _orderCubit),
+        BlocProvider.value(value: currentUserCubit),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -66,7 +70,7 @@ class _ApplicationState extends State<Application> {
           ),
         ),
         // scrollBehavior: CustomScrollBehaviour(),
-        initialRoute: RouteList.home, // TODO Change to login
+        initialRoute: RouteList.login, // TODO Change to login
         // home: const LoginScreen(),
         onGenerateRoute: (RouteSettings settings) {
           final Map<String, WidgetBuilder> routes =
@@ -77,6 +81,7 @@ class _ApplicationState extends State<Application> {
           // } else {
           //   builder = routes["login"]!;
           // }
+
 
           return FadePageRouteBuilder(
             builder: routes[settings.name]!,

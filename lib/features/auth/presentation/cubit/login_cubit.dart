@@ -30,13 +30,16 @@ class LoginCubit extends Cubit<LoginState> {
     emit(LoginInitial());
   }
 
-
   void login(
-    String phoneNumber,
-    String code,
+    String login,
+    String password,
   ) async {
     log("Sign in method");
-    final model = RequestTokenModel(phoneNumber: phoneNumber, code: code);
+    final model = RequestTokenModel(
+      login: login,
+      password: password,
+      role: 'managers',
+    );
     final eitherResponse = await loginUser(model);
 
     eitherResponse.fold(
@@ -53,11 +56,8 @@ class LoginCubit extends Cubit<LoginState> {
       (r) async {
         debugPrint("Login Success $r");
         if (r) {
-
           emit(LoginSuccess());
         }
-
-
       },
     );
   }

@@ -3,16 +3,19 @@
 import '../../../../core/api/api_constants.dart';
 
 class RequestTokenModel {
-  final String phoneNumber;
-  final String code;
+  final String login;
+  final String password;
+  final String role;
 
   RequestTokenModel({
-    required this.phoneNumber,
-    required this.code,
+    required this.login,
+    required this.password,
+    required this.role,
   });
 
   Map<String, dynamic> toJson() => {
-    // 'phone': phoneNumber,
-    'code': code,
+    'login': login,
+    'password': password,
+    'role': role,
   };
 }

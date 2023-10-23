@@ -1,5 +1,9 @@
 import 'package:clean_calendar/clean_calendar.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/features/main/domain/entity/current_user_entity.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/app_colors.dart';
@@ -17,8 +21,6 @@ class FloatingMenuEntity {
     required this.key,
     required this.index,
   });
-
-
 }
 
 class FloatingMenuWidget extends StatefulWidget {
@@ -43,90 +45,111 @@ class FloatingMenuWidget extends StatefulWidget {
 class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
   static bool isOpen = true;
   String version = "";
+  static CurrentUserEntity currentUserEntity = CurrentUserEntity.empty();
 
   @override
   void initState() {
+    BlocProvider.of<CurrentUserCubit>(context).load();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: isOpen ? 300 : 100,
-      height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-        color: AppColors.sideMenu,
+    return BlocListener<CurrentUserCubit, CurrentUserState>(
+      listener: (context, state) {
+        if (state is CurrentUserLoaded) {
+          if (mounted) {
+            Future.delayed(
+              Duration.zero,
+              () {
+                setState(() {
+                  currentUserEntity = state.entity;
+                });
+              },
+            );
+          }
+        }
+      },
+      child: Container(
+        width: isOpen ? 300 : 100,
+        height: MediaQuery.of(context).size.height,
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          color: AppColors.sideMenu,
 
-        // color: AppColor.menuBgColor,
-        // borderRadius: BorderRadius.circular(15),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            const SizedBox(height: 10),
+          // color: AppColor.menuBgColor,
+          // borderRadius: BorderRadius.circular(15),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const SizedBox(height: 10),
 
-            Padding(
-              padding:
-                  // !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
-                  const EdgeInsets.only(left: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundImage: _image(""),
-                    // child: Container(
-                    //   child: Center(
-                    //     child: avatar.isNotEmpty
-                    //         ? Image.network(avatar)
-                    //         : Image.asset(
-                    //             Assets.tAvatarPlaceHolder,
-                    //             fit: BoxFit.fill,
-                    //           ),
-                    //   ),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "User name",
-                        style: TextStyle(
-                          fontFamily: "Nunito",
-                          fontSize: 16,
-                          color: Colors.white,
+              Padding(
+                padding:
+                    // !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
+                    const EdgeInsets.only(left: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      radius: 25,
+
+                      // backgroundImage: _image(""),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: Center(
+                          child: currentUserEntity.avatar.isNotEmpty
+                              ? Image.network(currentUserEntity.avatar)
+                              : Image.asset(
+                                  Assets.tAvatarPlaceHolder,
+                                  fit: BoxFit.fill,
+                                ),
                         ),
                       ),
-                      SizedBox(height: 3),
-                      Text(
-                        "Парикмахер",
-                        style: TextStyle(
-                          fontFamily: "Nunito",
-                          fontSize: 14,
-                          color: Colors.white,
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${currentUserEntity.firstName} ${currentUserEntity.lastName}",
+                          style: TextStyle(
+                            fontFamily: "Nunito",
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        SizedBox(height: 3),
+                        Text(
+                          currentUserEntity.role.tr(),
+                          style: TextStyle(
+                            fontFamily: "Nunito",
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 30),
-            ...List.generate(widget.listEntity.length, (index) {
-              return FloatingMenuItemWidget(
-                entity: widget.listEntity[index],
-                currentIndex: widget.selectedIndex,
-                onTap: (value) => widget.onChanged?.call(value),
-                isOpen: isOpen,
-              );
-            }),
-            //
-            const SizedBox(height: 40),
-            const CalendarWidget(),
-          ],
+              const SizedBox(height: 30),
+              ...List.generate(widget.listEntity.length, (index) {
+                return FloatingMenuItemWidget(
+                  entity: widget.listEntity[index],
+                  currentIndex: widget.selectedIndex,
+                  onTap: (value) => widget.onChanged?.call(value),
+                  isOpen: isOpen,
+                );
+              }),
+              //
+              const SizedBox(height: 40),
+              const CalendarWidget(),
+            ],
+          ),
         ),
       ),
     );
@@ -154,7 +177,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     return CleanCalendar(
       enableDenseViewForDates: true,
       enableDenseSplashForDates: true,
-
 
       dateSelectionMode: DatePickerSelectionMode.disable,
       startWeekday: WeekDay.monday,

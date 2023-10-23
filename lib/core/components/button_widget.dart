@@ -8,13 +8,14 @@ class ButtonWidget extends StatelessWidget {
   final Function() onPressed;
   final bool isEnabled;
   final Color? color;
+  final BorderRadius? borderRadius;
 
   const ButtonWidget({
     Key? key,
     required this.text,
     required this.onPressed,
     this.color,
-    this.isEnabled = true,
+    this.isEnabled = true,   this.borderRadius,
   }) : super(key: key);
 
   @override
@@ -44,7 +45,7 @@ class ButtonWidget extends StatelessWidget {
                   ? [Colors.blueGrey.shade300, Colors.blueGrey.shade200]
                   : [Colors.grey, Colors.grey],
             ),
-            borderRadius: const BorderRadius.all(
+            borderRadius: borderRadius ?? const BorderRadius.all(
               Radius.circular(6),
             ),
           ),
