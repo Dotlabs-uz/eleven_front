@@ -133,7 +133,7 @@ class SideMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
-        Navigator.pushNamed(context, RouteList.login);
+        Navigator.pushNamedAndRemoveUntil(context, RouteList.login,(route) => false,);
       },
       child: BlocBuilder<MenuCubit, int>(
         builder: (context, state) {
@@ -163,34 +163,32 @@ class SideMenuWidget extends StatelessWidget {
                 title: "product".tr(),
                 index: 2,
               ),
-              FloatingMenuEntity(
-                key: RouteList.configs,
-                icon: EvaIcons.settingsOutline,
-                title: "config".tr(),
-                index: 3,
-              ),
+              // FloatingMenuEntity(
+              //   key: RouteList.configs,
+              //   icon: EvaIcons.settingsOutline,
+              //   title: "config".tr(),
+              //   index: 3,
+              // ),
               // FloatingMenuEntity(
               //   key: RouteList.settings,
               //   icon: EvaIcons.barChart2,
               //   title: "settings".tr(),
               //   index: 4,
               // ),
-              FloatingMenuEntity(
-                key: RouteList.logout,
-                icon: EvaIcons.logOutOutline,
-                title: "signOut".tr(),
-                index: 5,
-              ),
+              // FloatingMenuEntity(
+              //   key: RouteList.logout,
+              //   icon: EvaIcons.logOutOutline,
+              //   title: "signOut".tr(),
+              //   index: 5,
+              // ),
             ],
-            onTapProfil: () {},
+            onProfileTap: () {
+              BlocProvider.of<MenuCubit>(context).setMenu(3); // Profile
+              Navigator.pushNamed(context, RouteList.configs);
+
+            },
             onChanged: (value) {
               if (value.key == RouteList.logout) {
-                Dialogs.exitDialog(
-                  context: context,
-                  onExit: () {
-                    BlocProvider.of<LoginCubit>(context).logout();
-                  },
-                );
               } else {
                 BlocProvider.of<MenuCubit>(context).setMenu(value.index);
                 Navigator.pushNamed(context, value.key);
@@ -277,34 +275,35 @@ class _ContentWidgetState extends State<ContentWidget> {
             ),
           ),
         ),
-     if(widget.menus.length > 1)   PopupMenuButton<SubMenu>(
-          padding: const EdgeInsets.only(right: 15),
-          icon: const Icon(
-            Icons.more_horiz_rounded,
-            color: AppColors.background,
-          ),
-          initialValue: page,
-          // Callback that sets the selected popup menu item.
-          onSelected: (SubMenu item) {
-            setState(() => page = item);
-          },
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<SubMenu>>[
-            ...widget.menus.map((data) {
-              var title = data.text.tr();
-              return PopupMenuItem<SubMenu>(
-                value: data,
-                child: Text(
-                  '${title[0].toUpperCase()}${title.substring(1)}',
-                  style: GoogleFonts.nunito(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
+        if (widget.menus.length > 1)
+          PopupMenuButton<SubMenu>(
+            padding: const EdgeInsets.only(right: 15),
+            icon: const Icon(
+              Icons.more_horiz_rounded,
+              color: AppColors.background,
+            ),
+            initialValue: page,
+            // Callback that sets the selected popup menu item.
+            onSelected: (SubMenu item) {
+              setState(() => page = item);
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<SubMenu>>[
+              ...widget.menus.map((data) {
+                var title = data.text.tr();
+                return PopupMenuItem<SubMenu>(
+                  value: data,
+                  child: Text(
+                    '${title[0].toUpperCase()}${title.substring(1)}',
+                    style: GoogleFonts.nunito(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-              );
-            })
-          ],
-        ),
+                );
+              })
+            ],
+          ),
       ],
     );
   }

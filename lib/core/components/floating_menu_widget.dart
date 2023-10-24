@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../features/auth/presentation/cubit/login_cubit.dart';
 import '../utils/app_colors.dart';
 import '../utils/assets.dart';
+import '../utils/dialogs.dart';
 
 class FloatingMenuEntity {
   final String title;
@@ -27,14 +29,14 @@ class FloatingMenuWidget extends StatefulWidget {
   final Function(FloatingMenuEntity)? onChanged;
 
   final int selectedIndex;
-  final Function() onTapProfil;
   final List<FloatingMenuEntity> listEntity;
+  final Function() onProfileTap;
 
   const FloatingMenuWidget({
     Key? key,
     this.onChanged,
     required this.listEntity,
-    required this.onTapProfil,
+    required this.onProfileTap,
     required this.selectedIndex,
   }) : super(key: key);
 
@@ -93,45 +95,74 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                     const EdgeInsets.only(left: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      radius: 25,
+                    GestureDetector(
+                      onTap: () => widget.onProfileTap.call(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 25,
 
-                      // backgroundImage: _image(""),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Center(
-                          child: currentUserEntity.avatar.isNotEmpty
-                              ? Image.network(currentUserEntity.avatar)
-                              : Image.asset(
-                                  Assets.tAvatarPlaceHolder,
-                                  fit: BoxFit.fill,
+                            // backgroundImage: _image(""),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: Center(
+                                child: currentUserEntity.avatar.isNotEmpty
+                                    ? Image.network(currentUserEntity.avatar)
+                                    : Image.asset(
+                                        Assets.tAvatarPlaceHolder,
+                                        fit: BoxFit.fill,
+                                      ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${currentUserEntity.firstName} ${currentUserEntity.lastName}",
+                                style: const TextStyle(
+                                  fontFamily: "Nunito",
+                                  fontSize: 16,
+                                  color: Colors.white,
                                 ),
-                        ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                currentUserEntity.role.tr(),
+                                style: const TextStyle(
+                                  fontFamily: "Nunito",
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${currentUserEntity.firstName} ${currentUserEntity.lastName}",
-                          style: TextStyle(
-                            fontFamily: "Nunito",
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          currentUserEntity.role.tr(),
-                          style: TextStyle(
-                            fontFamily: "Nunito",
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                    const Spacer(),
+                    IconButton(
+                      splashColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      onPressed: () {
+                        Dialogs.exitDialog(
+                          context: context,
+                          onExit: () {
+                            BlocProvider.of<LoginCubit>(context).logout();
+                          },
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.exit_to_app,
+                        color: Colors.white,
+                      ),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
                   ],
                 ),
