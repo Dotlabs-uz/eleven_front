@@ -207,7 +207,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                   child: Material(
                                                     child: OrderCardWidget(
                                                       order: orderEntity,
-                                                      isDragging: false,
+                                                      isDragging: true,
                                                       onOrderSize: _onOrderSize,
                                                     ),
                                                   ),

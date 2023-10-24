@@ -72,6 +72,7 @@ class _NotSelectedBarbersListWidgetState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
                         height: 60,
@@ -82,10 +83,13 @@ class _NotSelectedBarbersListWidgetState
                         ),
                       ),
                       const SizedBox(height: 5),
-                      Text(
-                        "${el.firstName} ${el.lastName}",
-                        style: const TextStyle(
-                          color: Colors.black,
+                      Center(
+                        child: Text(
+                          "${el.firstName} ${el.lastName}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ],

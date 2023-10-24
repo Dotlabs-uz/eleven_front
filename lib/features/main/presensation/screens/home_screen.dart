@@ -473,8 +473,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     ),
                   ),
             if (isFormVisible)
-              Expanded(
-                flex: 1,
+              Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 300,
+                ),
                 child: SingleChildScrollView(
                   child: DataOrderForm(
                     fields: activeData.getFields(),

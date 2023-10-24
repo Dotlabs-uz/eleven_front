@@ -18,9 +18,9 @@ class CurrentUserModel extends CurrentUserEntity {
       firstName: json['firstName'],
       lastName: json['lastName'],
       avatar: json['avatar'] ?? "",
-      phoneNumber: json['phoneNumber'],
-      password: json['password'],
-      login: json['login'],
+      phoneNumber: json['phone'],
+      password: "",
+      login: json['login'] ?? "",
       role: json['role'],
     );
   }

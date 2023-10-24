@@ -57,6 +57,7 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
     return Container(
       constraints: BoxConstraints(
         maxHeight: Constants.timeTableItemHeight,
+        minWidth: 100,
       ),
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(width: 1, color: Colors.black26)),
