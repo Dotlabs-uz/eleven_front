@@ -105,7 +105,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 final entity = state.entity;
                 controllerFirstName.text = entity.firstName;
                 controllerLastName.text = entity.lastName;
-                controllerPhoneNumber.text = entity.phoneNumber;
+                controllerPhoneNumber.text = entity.phoneNumber.toString();
                 controllerUsername.text = entity.login;
                 controllerRole.text = entity.role;
               }

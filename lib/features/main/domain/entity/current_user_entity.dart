@@ -4,7 +4,7 @@ class CurrentUserEntity extends Equatable {
   final String id;
   final String firstName;
   final String lastName;
-  final String phoneNumber;
+  final int phoneNumber;
   final String avatar;
   final String password;
   final String login;
@@ -27,7 +27,7 @@ class CurrentUserEntity extends Equatable {
       firstName: "",
       lastName: "",
       avatar: "",
-      phoneNumber: "",
+      phoneNumber: 99,
       password: "",
       login: "",
       role: "managers",

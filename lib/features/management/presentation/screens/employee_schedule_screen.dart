@@ -195,6 +195,8 @@ class _ContentWidgetState extends State<ContentWidget> {
     // ),
   ];
 
+  List<FieldSchedule> selectedFields = [];
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -275,6 +277,14 @@ class _ContentWidgetState extends State<ContentWidget> {
                                     .save(listData: listFields);
                               },
                               listEmployee: listEmployee,
+                              onMultiSelect: (field) {
+                                if (selectedFields.contains(field)) {
+                                  selectedFields.remove(field);
+                                } else {
+                                  selectedFields.add(field);
+                                }
+                              },
+                              selectedFields: selectedFields,
                             );
                           },
                         ),

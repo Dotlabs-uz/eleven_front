@@ -378,26 +378,26 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     child: Column(
                       children: [
                         const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            // CupertinoSlidingSegmentedControl<int>(
-                            //   backgroundColor: CupertinoColors.white,
-                            //   thumbColor: Colors.grey,
-                            //   padding: const EdgeInsets.symmetric(horizontal: 15),
-                            //   groupValue: selectedValue,
-                            //   children: children,
-                            //   onValueChanged: (value) {
-                            //     if (value != null) {
-                            //       setState(() {
-                            //         selectedValue = value;
-                            //       });
-                            //     }
-                            //   },
-                            // ),
-                            Expanded(child: _dateTimeWidget()),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
+                        // Row(
+                        //   children: [
+                        //     CupertinoSlidingSegmentedControl<int>(
+                        //       backgroundColor: CupertinoColors.white,
+                        //       thumbColor: Colors.grey,
+                        //       padding: const EdgeInsets.symmetric(horizontal: 15),
+                        //       groupValue: selectedValue,
+                        //       children: children,
+                        //       onValueChanged: (value) {
+                        //         if (value != null) {
+                        //           setState(() {
+                        //             selectedValue = value;
+                        //           });
+                        //         }
+                        //       },
+                        //     ),
+                        // Expanded(child: _dateTimeWidget()),
+                        // ],
+                        // ),
+                        // const SizedBox(height: 10),
                         Expanded(
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,7 +419,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     return TimeTableWidget(
                                       listBarbers: listBarbers,
                                       onFieldTap: (hour, minute) {
-                                        activeData = OrderEntity.empty(hour: hour,minute: minute,);
+                                        activeData = OrderEntity.empty(
+                                          hour: hour,
+                                          minute: minute,
+                                        );
                                         _editOrder(activeData);
                                       },
                                       onOrderClick: (entity) =>

@@ -31,11 +31,15 @@ class EmployeeScheduleWidget extends StatefulWidget {
   final Function(int)? onMonthChanged;
   final List<EmployeeEntity> listEmployee;
   final Function(List<FieldSchedule>)? onSave;
+  final Function(FieldSchedule) onMultiSelect;
+  final List<FieldSchedule> selectedFields;
   const EmployeeScheduleWidget({
     Key? key,
     this.onMonthChanged,
     this.onSave,
     required this.listEmployee,
+    required this.onMultiSelect,
+    required this.selectedFields,
   }) : super(key: key);
 
   @override
@@ -47,6 +51,25 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
   int currentYear = DateTime.now().year;
 
   List<FieldSchedule> submittedFields = [];
+  static List<FieldSchedule> selectedFields = [];
+
+  @override
+  void didUpdateWidget(covariant EmployeeScheduleWidget oldWidget) {
+    if (selectedFields.length != widget.selectedFields.length) {
+      initialize();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  initialize() {
+    selectedFields = widget.selectedFields;
+  }
+
+  @override
+  void initState() {
+    initialize();
+    super.initState();
+  }
 
   onMonthChanged(int val) {
     setState(() {
@@ -90,6 +113,7 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
 
                 submittedFields.add(entity);
               },
+              selectedFields: selectedFields,
             ),
           ),
           const SizedBox(height: 20),
@@ -117,6 +141,7 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
   final EmployeeEntity employeeEntity;
   final int currentMonth;
   final int currentYear;
+  final List<FieldSchedule> selectedFields;
   final Function(int day, int month, int year, int status, String employee)
       onFieldEdit;
 
@@ -126,6 +151,7 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
     required this.currentMonth,
     required this.currentYear,
     required this.onFieldEdit,
+    required this.selectedFields,
   }) : super(key: key);
 
   @override
@@ -153,6 +179,10 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
               return startDate.difference(targetDate).inDays == 0;
             });
 
+            final dateTime = DateTime(year, currentMonth, day);
+            final fieldSchedule =
+                FieldSchedule(dateTime, employeeEntity.id, entity?.status ?? 0);
+
             return _EmployeeScheduleFieldWidget(
               day: day,
               month: currentMonth,
@@ -160,6 +190,7 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
               onFieldChange: onFieldEdit,
               employeeId: employeeEntity.id,
               fieldStatus: entity?.status ?? 0,
+              isSelected: selectedFields.contains(fieldSchedule),
             );
           },
         ),
@@ -218,6 +249,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
   final int year;
   final int month;
   final String employeeId;
+  final bool isSelected;
   final Function(int day, int month, int year, int status, String employee)
       onFieldChange;
   const _EmployeeScheduleFieldWidget({
@@ -228,6 +260,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
     required this.month,
     required this.onFieldChange,
     required this.employeeId,
+    required this.isSelected,
   }) : super(key: key);
 
   @override
@@ -285,21 +318,42 @@ class _EmployeeScheduleFieldWidgetState
 
     return GestureDetector(
       onTap: () => changeState(),
-      child: Container(
-        width: 35,
-        height: 35,
-        decoration: BoxDecoration(
-          color: ColorHelper.getColorForScheduleByStatus(status),
-          border: Border.all(width: 1, color: Colors.grey.shade200),
+      onForcePressUpdate: (details) {
+        print("Forse $details");
+      },
+      child: Draggable<FieldSchedule>(
+        data: FieldSchedule(
+          DateTime(widget.year, widget.month, widget.day),
+          widget.employeeId,
+          status,
         ),
-        child: Center(
-          child: Text(
-            StringHelper.getTitleForScheduleByStatus(status),
-            style: const TextStyle(
-              color: Colors.white,
-              fontFamily: "Nunito",
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
+        feedback: Container(
+          width: 35,
+          height: 35,
+          color: Colors.red,
+        ),
+        child: Container(
+          width: 35,
+          height: 35,
+          decoration: BoxDecoration(
+            color: widget.isSelected
+                ? Colors.blue.withOpacity(0.4)
+                : ColorHelper.getColorForScheduleByStatus(status),
+            border: Border.all(
+                width: 1,
+                color: widget.isSelected
+                    ? Colors.blue.shade400
+                    : Colors.grey.shade200),
+          ),
+          child: Center(
+            child: Text(
+              StringHelper.getTitleForScheduleByStatus(status),
+              style: const TextStyle(
+                color: Colors.white,
+                fontFamily: "Nunito",
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+              ),
             ),
           ),
         ),
