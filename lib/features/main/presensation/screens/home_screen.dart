@@ -18,6 +18,7 @@ import '../../../products/domain/entity/filial_entity.dart';
 import '../../../products/domain/entity/service_product_category_entity.dart';
 import '../../../products/domain/entity/service_product_entity.dart';
 import '../../domain/entity/order_entity.dart';
+import '../../domain/entity/top_menu_entity.dart';
 import '../cubit/data_form/data_form_cubit.dart';
 import '../cubit/order/not_working_hours/not_working_hours_cubit.dart';
 import '../cubit/order/order_cubit.dart';
@@ -107,22 +108,24 @@ class _ContentWidgetState extends State<_ContentWidget> {
     // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-      [
-        MyIconButton(
-          onPressed: () {
-            activeData = OrderEntity.empty();
-            _editOrder(activeData);
-          },
-          icon: const Icon(Icons.add_box_rounded),
-        ),
-        MyIconButton(
-          onPressed: () {
-            listBarbers.clear();
-            BlocProvider.of<BarberCubit>(context).load("");
-          },
-          icon: const Icon(Icons.refresh),
-        ),
-      ],
+        TopMenuEntity.empty(),
+      // TopMenuEntity(searchCubit: null, iconList: [
+      //   MyIconButton(
+      //     onPressed: () {
+      //       activeData = OrderEntity.empty();
+      //       _editOrder(activeData);
+      //     },
+      //     icon: const Icon(Icons.add_box_rounded),
+      //   ),
+      //   MyIconButton(
+      //     onPressed: () {
+      //       listBarbers.clear();
+      //       BlocProvider.of<BarberCubit>(context).load("");
+      //     },
+      //     icon: const Icon(Icons.refresh),
+      //   ),
+      // ]),
+
     );
   }
 

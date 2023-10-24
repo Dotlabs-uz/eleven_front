@@ -16,6 +16,7 @@ import '../../../../core/components/search_field.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/hive_box_keys_constants.dart';
 import '../../../../get_it/locator.dart';
+import '../../../main/domain/entity/top_menu_entity.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
@@ -138,7 +139,7 @@ class _ContentWidgetState extends State<ContentWidget> {
     activeData = EmployeeEntity.empty();
     customers = [];
 
-    BlocProvider.of<EmployeeCubit>(context).load();
+    BlocProvider.of<EmployeeCubit>(context).load("");
     _setWidgetTop();
   }
 
@@ -146,37 +147,37 @@ class _ContentWidgetState extends State<ContentWidget> {
     // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-      [
-        MyIconButton(
-          onPressed: () => setState(() => isSearch = !isSearch),
-          icon: const Icon(Icons.search),
-        ),
-        MyIconButton(
-          onPressed: () {
-            activeData = EmployeeEntity.empty();
-            _editData(activeData);
-          },
-          icon: const Icon(Icons.add_box_rounded),
-        ),
-        MyIconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.filter_alt,
-          ),
-        ),
-        MyIconButton(
+      TopMenuEntity(
+        searchCubit: widget.employeeCubit,
+        iconList: [
+
+          MyIconButton(
             onPressed: () {
-              BlocProvider.of<EmployeeCubit>(context).load();
+              activeData = EmployeeEntity.empty();
+              _editData(activeData);
             },
-            icon: const Icon(Icons.refresh)),
-      ],
+            icon: const Icon(Icons.add_box_rounded),
+          ),
+          MyIconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.filter_alt,
+            ),
+          ),
+          MyIconButton(
+              onPressed: () {
+                BlocProvider.of<EmployeeCubit>(context).load("");
+              },
+              icon: const Icon(Icons.refresh)),
+        ],
+      ),
     );
   }
 
   fetch(
     int page,
   ) async {
-    BlocProvider.of<EmployeeCubit>(context).load(search: "", page: page);
+    BlocProvider.of<EmployeeCubit>(context).load("",page: page);
   }
 
   initCubit() {
@@ -194,9 +195,8 @@ class _ContentWidgetState extends State<ContentWidget> {
             child: isSearch
                 ? SearchField(
                     onSearch: (value) {
-                      BlocProvider.of<EmployeeCubit>(context).load(
-                        search: value,
-                      );
+                      BlocProvider.of<EmployeeCubit>(context).load(value);
+
                     },
                   )
                 : const SizedBox(),
@@ -303,10 +303,8 @@ class _ContentWidgetState extends State<ContentWidget> {
                         child: PageSelectorWidget(
                           pageCount: pageCount,
                           onChanged: (value) {
-                            BlocProvider.of<EmployeeCubit>(context).load(
-                              search: "",
-                              page: value,
-                            );
+                            BlocProvider.of<EmployeeCubit>(context).load("", page: value);
+
                           },
                         ),
                       ),

@@ -17,6 +17,7 @@ import '../../../../core/components/search_field.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/hive_box_keys_constants.dart';
 import '../../../../get_it/locator.dart';
+import '../../../main/domain/entity/top_menu_entity.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
@@ -24,7 +25,6 @@ import '../../../main/presensation/widget/my_icon_button.dart';
 import 'package:collection/collection.dart';
 
 import '../cubit/manager/manager_cubit.dart';
-
 
 class ManagerScreen extends StatefulWidget {
   const ManagerScreen({Key? key}) : super(key: key);
@@ -138,7 +138,7 @@ class _ContentWidgetState extends State<ContentWidget> {
     activeData = ManagerEntity.empty();
     customers = [];
 
-    BlocProvider.of<ManagerCubit>(context).load();
+    BlocProvider.of<ManagerCubit>(context).load("");
     _setWidgetTop();
   }
 
@@ -146,37 +146,37 @@ class _ContentWidgetState extends State<ContentWidget> {
     // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-      [
-        MyIconButton(
-          onPressed: () => setState(() => isSearch = !isSearch),
-          icon: const Icon(Icons.search),
-        ),
-        MyIconButton(
-          onPressed: () {
-            activeData = ManagerEntity.empty();
-            _editData(activeData);
-          },
-          icon: const Icon(Icons.add_box_rounded),
-        ),
-        MyIconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.filter_alt,
-          ),
-        ),
-        MyIconButton(
+      TopMenuEntity(
+        searchCubit: widget.managerCubit,
+        iconList: [
+          MyIconButton(
             onPressed: () {
-              BlocProvider.of<ManagerCubit>(context).load();
+              activeData = ManagerEntity.empty();
+              _editData(activeData);
             },
-            icon: const Icon(Icons.refresh)),
-      ],
+            icon: const Icon(Icons.add_box_rounded),
+          ),
+          MyIconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.filter_alt,
+            ),
+          ),
+          MyIconButton(
+            onPressed: () {
+              BlocProvider.of<ManagerCubit>(context).load("");
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
     );
   }
 
   fetch(
     int page,
   ) async {
-    BlocProvider.of<ManagerCubit>(context).load(search: "", page: page);
+    BlocProvider.of<ManagerCubit>(context).load( "", page: page);
   }
 
   initCubit() {
@@ -189,18 +189,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            child: isSearch
-                ? SearchField(
-                    onSearch: (value) {
-                      BlocProvider.of<ManagerCubit>(context).load(
-                        search: value,
-                      );
-                    },
-                  )
-                : const SizedBox(),
-          ),
+
           BlocConsumer<ManagerCubit, ManagerState>(
             listener: (context, state) {
               if (state is ManagerLoaded) {
@@ -303,10 +292,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                         child: PageSelectorWidget(
                           pageCount: pageCount,
                           onChanged: (value) {
-                            BlocProvider.of<ManagerCubit>(context).load(
-                              search: "",
-                              page: value,
-                            );
+                            BlocProvider.of<ManagerCubit>(context).load("", page: value);
                           },
                         ),
                       ),

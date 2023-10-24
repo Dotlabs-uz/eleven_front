@@ -1,4 +1,3 @@
-
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ import '../../../../core/components/search_field.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/hive_box_keys_constants.dart';
 import '../../../../get_it/locator.dart';
+import '../../../main/domain/entity/top_menu_entity.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
@@ -96,7 +96,8 @@ class _ContentWidgetState extends State<ContentWidget> {
       textCancel: const Text('cancel').tr(),
     )) {
       // ignore: use_build_context_synchronously
-      BlocProvider.of<ServiceProductCubit>(context).delete(entity: customerEntity);
+      BlocProvider.of<ServiceProductCubit>(context)
+          .delete(entity: customerEntity);
     }
   }
 
@@ -135,37 +136,35 @@ class _ContentWidgetState extends State<ContentWidget> {
     _setWidgetTop();
   }
 
-
   _setWidgetTop() {
     // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-      [
-        MyIconButton(
-          onPressed: () => setState(() => isSearch = !isSearch),
-          icon: const Icon(Icons.search),
-        ),
-        MyIconButton(
-          onPressed: () {
-            activeData = ServiceProductEntity.empty();
-            _editData(activeData);
-          },
-          icon: const Icon(Icons.add_box_rounded),
-        ),
-        MyIconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.filter_alt,
-          ),
-        ),
-        MyIconButton(
+      TopMenuEntity(
+        searchCubit: widget.serviceProductCubit,
+        iconList: [
+          MyIconButton(
             onPressed: () {
-              BlocProvider.of<ServiceProductCubit>(context).load(
-                "",
-              );
+              activeData = ServiceProductEntity.empty();
+              _editData(activeData);
             },
-            icon: const Icon(Icons.refresh)),
-      ],
+            icon: const Icon(Icons.add_box_rounded),
+          ),
+          MyIconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.filter_alt,
+            ),
+          ),
+          MyIconButton(
+              onPressed: () {
+                BlocProvider.of<ServiceProductCubit>(context).load(
+                  "",
+                );
+              },
+              icon: const Icon(Icons.refresh)),
+        ],
+      ),
     );
   }
 
@@ -214,7 +213,6 @@ class _ContentWidgetState extends State<ContentWidget> {
                       .show(context);
                 }
               }
-
             },
             builder: (context, state) {
               if (state is ServiceProductLoading) {
@@ -236,7 +234,8 @@ class _ContentWidgetState extends State<ContentWidget> {
                   var id = state.id;
                   isFormVisible = false;
 
-                  var ind = serviceProducts.indexWhere((element) => element.id == id);
+                  var ind =
+                      serviceProducts.indexWhere((element) => element.id == id);
                   if (ind >= 0) {
                     serviceProducts.removeWhere((element) => element.id == id);
                   }
@@ -263,7 +262,8 @@ class _ContentWidgetState extends State<ContentWidget> {
                     onTap: (data) {
                       if (data != null) {
                         selectedRow = data!;
-                        final entity = ServiceProductEntity.fromRow(selectedRow);
+                        final entity =
+                            ServiceProductEntity.fromRow(selectedRow);
                         activeData = entity;
                         _editData(entity);
                       }

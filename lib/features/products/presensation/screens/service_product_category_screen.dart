@@ -1,4 +1,3 @@
-
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ import '../../../../core/components/search_field.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/hive_box_keys_constants.dart';
 import '../../../../get_it/locator.dart';
+import '../../../main/domain/entity/top_menu_entity.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
@@ -24,15 +24,16 @@ import 'package:collection/collection.dart';
 import '../../domain/entity/service_product_category_entity.dart';
 import '../cubit/service_product_category/service_product_category_cubit.dart';
 
-
 class ServiceProductCategoryScreen extends StatefulWidget {
   const ServiceProductCategoryScreen({Key? key}) : super(key: key);
 
   @override
-  State<ServiceProductCategoryScreen> createState() => _ServiceProductCategoryScreenState();
+  State<ServiceProductCategoryScreen> createState() =>
+      _ServiceProductCategoryScreenState();
 }
 
-class _ServiceProductCategoryScreenState extends State<ServiceProductCategoryScreen> {
+class _ServiceProductCategoryScreenState
+    extends State<ServiceProductCategoryScreen> {
   late ServiceProductCategoryCubit serviceProductCategoryCubit;
 
   @override
@@ -97,7 +98,8 @@ class _ContentWidgetState extends State<ContentWidget> {
       textCancel: const Text('cancel').tr(),
     )) {
       // ignore: use_build_context_synchronously
-      BlocProvider.of<ServiceProductCategoryCubit>(context).delete(entity: customerEntity);
+      BlocProvider.of<ServiceProductCategoryCubit>(context)
+          .delete(entity: customerEntity);
     }
   }
 
@@ -136,37 +138,35 @@ class _ContentWidgetState extends State<ContentWidget> {
     _setWidgetTop();
   }
 
-
   _setWidgetTop() {
     // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-      [
-        MyIconButton(
-          onPressed: () => setState(() => isSearch = !isSearch),
-          icon: const Icon(Icons.search),
-        ),
-        MyIconButton(
-          onPressed: () {
-            activeData = ServiceProductCategoryEntity.empty();
-            _editData(activeData);
-          },
-          icon: const Icon(Icons.add_box_rounded),
-        ),
-        MyIconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.filter_alt,
-          ),
-        ),
-        MyIconButton(
+      TopMenuEntity(
+        searchCubit: widget.serviceProductCategoryCubit,
+        iconList: [
+          MyIconButton(
             onPressed: () {
-              BlocProvider.of<ServiceProductCategoryCubit>(context).load(
-                "",
-              );
+              activeData = ServiceProductCategoryEntity.empty();
+              _editData(activeData);
             },
-            icon: const Icon(Icons.refresh)),
-      ],
+            icon: const Icon(Icons.add_box_rounded),
+          ),
+          MyIconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.filter_alt,
+            ),
+          ),
+          MyIconButton(
+              onPressed: () {
+                BlocProvider.of<ServiceProductCategoryCubit>(context).load(
+                  "",
+                );
+              },
+              icon: const Icon(Icons.refresh)),
+        ],
+      ),
     );
   }
 
@@ -191,14 +191,16 @@ class _ContentWidgetState extends State<ContentWidget> {
             child: isSearch
                 ? SearchField(
                     onSearch: (value) {
-                      BlocProvider.of<ServiceProductCategoryCubit>(context).load(
+                      BlocProvider.of<ServiceProductCategoryCubit>(context)
+                          .load(
                         value,
                       );
                     },
                   )
                 : const SizedBox(),
           ),
-          BlocConsumer<ServiceProductCategoryCubit, ServiceProductCategoryState>(
+          BlocConsumer<ServiceProductCategoryCubit,
+              ServiceProductCategoryState>(
             listener: (context, state) {
               if (state is ServiceProductCategoryLoaded) {
                 serviceProducts = state.data;
@@ -215,7 +217,6 @@ class _ContentWidgetState extends State<ContentWidget> {
                       .show(context);
                 }
               }
-
             },
             builder: (context, state) {
               if (state is ServiceProductCategoryLoading) {
@@ -237,7 +238,8 @@ class _ContentWidgetState extends State<ContentWidget> {
                   var id = state.id;
                   isFormVisible = false;
 
-                  var ind = serviceProducts.indexWhere((element) => element.id == id);
+                  var ind =
+                      serviceProducts.indexWhere((element) => element.id == id);
                   if (ind >= 0) {
                     serviceProducts.removeWhere((element) => element.id == id);
                   }
@@ -264,7 +266,8 @@ class _ContentWidgetState extends State<ContentWidget> {
                     onTap: (data) {
                       if (data != null) {
                         selectedRow = data!;
-                        final entity = ServiceProductCategoryEntity.fromRow(selectedRow);
+                        final entity =
+                            ServiceProductCategoryEntity.fromRow(selectedRow);
                         activeData = entity;
                         _editData(entity);
                       }
@@ -300,7 +303,9 @@ class _ContentWidgetState extends State<ContentWidget> {
                         child: PageSelectorWidget(
                           pageCount: pageCount,
                           onChanged: (value) {
-                            BlocProvider.of<ServiceProductCategoryCubit>(context).load(
+                            BlocProvider.of<ServiceProductCategoryCubit>(
+                                    context)
+                                .load(
                               "",
                               page: value,
                             );

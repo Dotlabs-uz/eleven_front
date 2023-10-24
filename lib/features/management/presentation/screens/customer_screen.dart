@@ -17,6 +17,7 @@ import '../../../../core/components/search_field.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/hive_box_keys_constants.dart';
 import '../../../../get_it/locator.dart';
+import '../../../main/domain/entity/top_menu_entity.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
@@ -140,7 +141,7 @@ class _ContentWidgetState extends State<ContentWidget> {
     // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-      [
+      TopMenuEntity(searchCubit: widget.customerCubit, iconList:      [
         MyIconButton(
           onPressed: () => setState(() => isSearch = !isSearch),
           icon: const Icon(Icons.search),
@@ -166,6 +167,8 @@ class _ContentWidgetState extends State<ContentWidget> {
             },
             icon: const Icon(Icons.refresh)),
       ],
+      ) ,
+
     );
   }
 

@@ -7,18 +7,34 @@ class SearchField extends StatefulWidget {
   const SearchField({
     this.onSearch,
     this.hintText,
+    this.controller,
     Key? key,
   }) : super(key: key);
 
   final Function(String value)? onSearch;
   final String? hintText;
+  final TextEditingController? controller;
 
   @override
   State<SearchField> createState() => _SearchFieldState();
 }
 
 class _SearchFieldState extends State<SearchField> {
-  final controller = TextEditingController();
+   TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    initialize();
+    super.initState();
+  }
+
+  initialize() {
+
+    if(widget.controller != null) {
+      controller= widget.controller!;
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +42,9 @@ class _SearchFieldState extends State<SearchField> {
       controller: controller,
       decoration: InputDecoration(
         prefixIcon: const Icon(EvaIcons.search),
+        border:  InputBorder.none,
+        enabledBorder:  InputBorder.none,
+        focusedBorder:  InputBorder.none,
         // enabledBorder: OutlineInputBorder(
         //   borderSide: const BorderSide(width: .1),
         //   // borderRadius: BorderRadius.zero

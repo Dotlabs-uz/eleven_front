@@ -44,7 +44,7 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     );
   }
 
-  load({String search = "", int page = 0}) async {
+  load(String search, { int page = 0}) async {
     //loadingCubit.show();
     emit(EmployeeLoading());
     final data = await getData(GetEmployeeParams(

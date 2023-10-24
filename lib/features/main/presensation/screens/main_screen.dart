@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/search_field.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,7 @@ import '../../../../core/utils/dialogs.dart';
 import '../../../../core/utils/menu_constants.dart';
 import '../../../../core/utils/route_constants.dart';
 import '../../../auth/presentation/cubit/login_cubit.dart';
+import '../../domain/entity/top_menu_entity.dart';
 import '../cubit/menu/menu_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../widget/my_icon_button.dart';
@@ -236,8 +238,7 @@ class _ContentWidgetState extends State<ContentWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _topMenu(),
-
-
+          _searchAndActionsMenu(),
           Expanded(
             child: page.page,
           ),
@@ -296,154 +297,39 @@ class _ContentWidgetState extends State<ContentWidget> {
         ],
       ),
     );
-    return Row(
-      children: [
-        if (!ResponsiveBuilder.isDesktop(context))
-          IconButton(
-            onPressed: widget.openDrawer,
-            enableFeedback: true,
-            icon: const Icon(Icons.menu, color: AppColors.background),
-          ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Text(
-            page.text.tr().toUpperCase(),
-            style: GoogleFonts.nunito(
-              color: const Color(0xff0c2556),
-              fontSize: 14,
-              height: 1.8,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: BlocBuilder<TopMenuCubit, List<IconButtonImpl>>(
-              builder: (context, listWidget) {
-                if (listWidget.isEmpty) return const SizedBox();
-                return IconButtonBar(
-                  childSize: const Size(48, 48),
-                  children: listWidget,
-                );
-              },
-            ),
-          ),
-        ),
-        if (widget.menus.length > 1)
-          PopupMenuButton<SubMenu>(
-            padding: const EdgeInsets.only(right: 15),
-            icon: const Icon(
-              Icons.more_horiz_rounded,
-              color: AppColors.background,
-            ),
-            initialValue: page,
-            // Callback that sets the selected popup menu item.
-            onSelected: (SubMenu item) {
-              setState(() => page = item);
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<SubMenu>>[
-              ...widget.menus.map((data) {
-                var title = data.text.tr();
-                return PopupMenuItem<SubMenu>(
-                  value: data,
-                  child: Text(
-                    '${title[0].toUpperCase()}${title.substring(1)}',
-                    style: GoogleFonts.nunito(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                    ),
-                  ),
-                );
-              })
-            ],
-          ),
-      ],
-    );
   }
-  _searchAndActionsMenu() {
-    return Row(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: BlocBuilder<TopMenuCubit, List<IconButtonImpl>>(
-            builder: (context, listWidget) {
-              if (listWidget.isEmpty) return const SizedBox();
-              return IconButtonBar(
-                childSize: const Size(48, 48),
-                children: listWidget,
-              );
-            },
-          ),
-        ),
 
-      ],
-    );
-    return Row(
-      children: [
-        if (!ResponsiveBuilder.isDesktop(context))
-          IconButton(
-            onPressed: widget.openDrawer,
-            enableFeedback: true,
-            icon: const Icon(Icons.menu, color: AppColors.background),
-          ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Text(
-            page.text.tr().toUpperCase(),
-            style: GoogleFonts.nunito(
-              color: const Color(0xff0c2556),
-              fontSize: 14,
-              height: 1.8,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: BlocBuilder<TopMenuCubit, List<IconButtonImpl>>(
-              builder: (context, listWidget) {
-                if (listWidget.isEmpty) return const SizedBox();
-                return IconButtonBar(
-                  childSize: const Size(48, 48),
-                  children: listWidget,
-                );
-              },
-            ),
-          ),
-        ),
-        if (widget.menus.length > 1)
-          PopupMenuButton<SubMenu>(
-            padding: const EdgeInsets.only(right: 15),
-            icon: const Icon(
-              Icons.more_horiz_rounded,
-              color: AppColors.background,
-            ),
-            initialValue: page,
-            // Callback that sets the selected popup menu item.
-            onSelected: (SubMenu item) {
-              setState(() => page = item);
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<SubMenu>>[
-              ...widget.menus.map((data) {
-                var title = data.text.tr();
-                return PopupMenuItem<SubMenu>(
-                  value: data,
-                  child: Text(
-                    '${title[0].toUpperCase()}${title.substring(1)}',
-                    style: GoogleFonts.nunito(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                    ),
+  _searchAndActionsMenu() {
+    final TextEditingController textEditingController = TextEditingController();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: BlocBuilder<TopMenuCubit, TopMenuEntity>(
+        builder: (context, data) {
+          if (data.iconList.isEmpty) {
+            return const SizedBox();
+          } else {
+            textEditingController.clear();
+          }
+          return SizedBox(
+            height: 50,
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              children: [
+                Expanded(
+                  child: SearchField(
+                    onSearch: data.searchCubit == null
+                        ? null
+                        : (value) {
+                            data.searchCubit.load(value);
+                          },
                   ),
-                );
-              })
-            ],
-          ),
-      ],
+                ),
+                ...data.iconList,
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 

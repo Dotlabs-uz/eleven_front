@@ -8,6 +8,7 @@ import '../../../../core/components/data_form.dart';
 import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../get_it/locator.dart';
+import '../../../main/domain/entity/top_menu_entity.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
 import '../../domain/entity/employee_entity.dart';
@@ -85,33 +86,38 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   init() {
-    BlocProvider.of<EmployeeCubit>(context).load();
+    BlocProvider.of<EmployeeCubit>(context).load("");
     _setWidgetTop();
   }
 
   _setWidgetTop() {
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-      [
-        MyIconButton(
-          onPressed: () => setState(() => isSearch = !isSearch),
-          icon: const Icon(Icons.search),
-        ),
-        MyIconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.add_box_rounded),
-        ),
-        MyIconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.filter_alt,
-          ),
-        ),
-        MyIconButton(
-            onPressed: () {
-              BlocProvider.of<EmployeeCubit>(context).load();
-            },
-            icon: const Icon(Icons.refresh)),
-      ],
+      TopMenuEntity.empty(),
+      // TopMenuEntity(
+      //   searchCubit: widget.employeeScheduleCubit,
+      //   iconList: [
+      //     MyIconButton(
+      //       onPressed: () => setState(() => isSearch = !isSearch),
+      //       icon: const Icon(Icons.search),
+      //     ),
+      //     MyIconButton(
+      //       onPressed: () {},
+      //       icon: const Icon(Icons.add_box_rounded),
+      //     ),
+      //     MyIconButton(
+      //       onPressed: () {},
+      //       icon: const Icon(
+      //         Icons.filter_alt,
+      //       ),
+      //     ),
+      //     MyIconButton(
+      //       onPressed: () {
+      //         BlocProvider.of<EmployeeCubit>(context).load();
+      //       },
+      //       icon: const Icon(Icons.refresh),
+      //     ),
+      //   ],
+      // ),
     );
   }
 
@@ -274,10 +280,10 @@ class _ContentWidgetState extends State<ContentWidget> {
                                 //       "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employeeId}");
                                 // }
 
-
-                                if(listFields.isNotEmpty) {
-                                  BlocProvider.of<EmployeeScheduleCubit>(context)
-                                    .save(listData: listFields);
+                                if (listFields.isNotEmpty) {
+                                  BlocProvider.of<EmployeeScheduleCubit>(
+                                          context)
+                                      .save(listData: listFields);
 
                                   listFields.clear();
                                 }

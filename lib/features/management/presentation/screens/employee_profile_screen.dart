@@ -93,13 +93,13 @@ class _ContentWidgetState extends State<ContentWidget> {
   init() async {
 
     print(widget.employeeName.toString());
-    BlocProvider.of<EmployeeCubit>(context).load();
+    BlocProvider.of<EmployeeCubit>(context).load("");
   }
 
   fetch(
     int page,
   ) async {
-    BlocProvider.of<EmployeeCubit>(context).load(search: "", page: page);
+    BlocProvider.of<EmployeeCubit>(context).load("", page: page);
   }
 
   initCubit() {

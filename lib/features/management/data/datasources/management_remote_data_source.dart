@@ -131,7 +131,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     String searchText,
   ) async {
     final response = await _client.get(
-        '${ApiConstants.employee}?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}');
+        '${ApiConstants.employee}?page=$page${searchText.isNotEmpty ? "&firstName=$searchText" : ""}');
     final results = EmployeeResultsModel.fromJson(response);
 
     return results;
@@ -195,7 +195,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
   Future<BarberResultsModel> getBarber(
       int page, String searchText, String? ordering) async {
     final response = await _client.get(
-      "${ApiConstants.barbers}?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}${ordering ?? ""}",
+      "${ApiConstants.barbers}?page=$page${searchText.isNotEmpty ? "&firstName=$searchText" : ""}${ordering ?? ""}",
     );
     final results = BarberResultsModel.fromJson(response);
 
@@ -266,7 +266,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
   @override
   Future<ManagerResultsModel> getManager(int page, String searchText) async {
     final response = await _client.get(
-      "${ApiConstants.managers}?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}",
+      "${ApiConstants.managers}?page=$page${searchText.isNotEmpty ? "&firstName=$searchText" : ""}",
     );
     final results = ManagerResultsModel.fromJson(response);
 

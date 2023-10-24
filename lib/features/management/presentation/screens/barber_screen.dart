@@ -15,6 +15,7 @@ import '../../../../core/components/search_field.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/hive_box_keys_constants.dart';
 import '../../../../get_it/locator.dart';
+import '../../../main/domain/entity/top_menu_entity.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
@@ -140,32 +141,32 @@ class _ContentWidgetState extends State<ContentWidget> {
     // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-      [
-        MyIconButton(
-          onPressed: () => setState(() => isSearch = !isSearch),
-          icon: const Icon(Icons.search),
-        ),
-        MyIconButton(
-          onPressed: () {
-            activeData = BarberEntity.empty();
-            _editData(activeData);
-          },
-          icon: const Icon(Icons.add_box_rounded),
-        ),
-        MyIconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.filter_alt,
+      TopMenuEntity(
+        searchCubit: widget.barberCubit,
+        iconList: [
+          MyIconButton(
+            onPressed: () {
+              activeData = BarberEntity.empty();
+              _editData(activeData);
+            },
+            icon: const Icon(Icons.add_box_rounded),
           ),
-        ),
-        MyIconButton(
+          MyIconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.filter_alt,
+            ),
+          ),
+          MyIconButton(
             onPressed: () {
               BlocProvider.of<BarberCubit>(context).load(
                 "",
               );
             },
-            icon: const Icon(Icons.refresh)),
-      ],
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
     );
   }
 
