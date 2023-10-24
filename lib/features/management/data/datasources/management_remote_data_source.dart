@@ -238,7 +238,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     dynamic response;
     if (data.id.isEmpty) {
       response =
-      await _client.post(ApiConstants.barbers, params: data.toJson());
+          await _client.post(ApiConstants.barbers, params: data.toJson());
     } else {
       response = await _client.patch('${ApiConstants.barbers}/${data.id}/',
           params: data.toJson());
@@ -250,7 +250,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
   @override
   Future<bool> saveEmployeeSchedule(List<FieldSchedule> data) async {
-    await _client.post(ApiConstants.barbers,
+    await _client.post(ApiConstants.employeeSchedule,
         params: {"schedule": data.map((e) => e.toJson()).toList()});
 
     return true;

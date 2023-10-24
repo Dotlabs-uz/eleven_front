@@ -15,6 +15,7 @@ class BarberModel extends BarberEntity {
     required super.lastName,
     required super.phone,
     required super.filial,
+    required super.avatar,
     required super.password,
     required super.login,
     required super.inTimeTable,
@@ -71,7 +72,7 @@ class BarberModel extends BarberEntity {
           ? List.from(json['notWorkingHours'])
           .map((e) => NotWorkingHoursModel.fromJson(e, json["_id"]))
           .toList()
-          : [],
+          : [], avatar: json['avatar'] ?? "",
     );
   }
 
@@ -85,7 +86,7 @@ class BarberModel extends BarberEntity {
       password: entity.password,
       login: entity.login,
       inTimeTable: entity.inTimeTable,
-      notWorkingHours: [],
+      notWorkingHours: [], avatar: entity.avatar,
     );
   }
 

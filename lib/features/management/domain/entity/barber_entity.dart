@@ -18,6 +18,7 @@ class BarberEntity extends Equatable {
   final String firstName;
   final String lastName;
   final String password;
+  final String avatar;
   final String login;
   final int phone;
    bool inTimeTable;
@@ -28,6 +29,7 @@ class BarberEntity extends Equatable {
     required this.id,
     required this.firstName,
     required this.lastName,
+    required this.avatar,
     required this.password,
     required this.login,
     required this.phone,
@@ -121,7 +123,7 @@ class BarberEntity extends Equatable {
       filial: row.cells["filial"]?.value,
       // password: row.cells["password"]?.value,
       password: "",
-      login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: [],
+      login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: [], avatar: '',
     );
   }
 
@@ -214,7 +216,7 @@ class BarberEntity extends Equatable {
       phone: fields["phone"]?.val,
       filial: fields["filial"]?.val,
       login: fields["login"]?.val,
-      password: fields["password"]?.val, inTimeTable: false, notWorkingHours: [],
+      password: fields["password"]?.val, inTimeTable: false, notWorkingHours: [], avatar: '',
     );
   }
 
@@ -226,7 +228,7 @@ class BarberEntity extends Equatable {
       phone: 99,
       filial: FilialEntity.empty(),
       password: "",
-      login: "", inTimeTable: false, notWorkingHours: [],
+      login: "", inTimeTable: false, notWorkingHours: [], avatar: '',
     );
   }
 

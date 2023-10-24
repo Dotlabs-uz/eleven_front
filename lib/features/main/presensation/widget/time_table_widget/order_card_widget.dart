@@ -66,7 +66,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.isDragging ? 100 : MediaQuery.of(context).size.width,
+      width: widget.isDragging ? Constants.timeTableItemWidth : MediaQuery.of(context).size.width,
       height: TimeTableHelper.getCardHeight(
         widget.order.orderStart,
         widget.order.orderEnd,

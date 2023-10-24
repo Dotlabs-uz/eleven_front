@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../features/management/domain/entity/barber_entity.dart';
+import '../utils/assets.dart';
 
 class NotSelectedBarbersListWidget extends StatefulWidget {
   final List<BarberEntity> listBarbers;
@@ -78,8 +79,15 @@ class _NotSelectedBarbersListWidgetState
                         height: 60,
                         width: 60,
                         decoration: const BoxDecoration(
-                          color: Colors.grey,
                           shape: BoxShape.circle,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: el.avatar.isNotEmpty
+                              ? Image.network(el.avatar)
+                              : Image.asset(
+                                  Assets.tAvatarPlaceHolder,
+                                ),
                         ),
                       ),
                       const SizedBox(height: 5),

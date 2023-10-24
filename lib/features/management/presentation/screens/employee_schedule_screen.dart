@@ -243,6 +243,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                               } else if (state is EmployeeScheduleError) {
                                 ErrorFlushBar("change_error"
                                     .tr(args: [state.message])).show(context);
+                                selectedFields.clear();
                               }
                             },
                           ),
@@ -266,15 +267,20 @@ class _ContentWidgetState extends State<ContentWidget> {
 
                             return EmployeeScheduleWidget(
                               onSave: (listFields) {
-                                debugPrint("List fields ${listFields.length}");
+                                // debugPrint("List fields ${listFields.length}");
+                                //
+                                // for (var element in listFields) {
+                                //   debugPrint(
+                                //       "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employeeId}");
+                                // }
 
-                                for (var element in listFields) {
-                                  debugPrint(
-                                      "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employeeId}");
-                                }
 
-                                BlocProvider.of<EmployeeScheduleCubit>(context)
+                                if(listFields.isNotEmpty) {
+                                  BlocProvider.of<EmployeeScheduleCubit>(context)
                                     .save(listData: listFields);
+
+                                  listFields.clear();
+                                }
                               },
                               listEmployee: listEmployee,
                               onMultiSelect: (field) {

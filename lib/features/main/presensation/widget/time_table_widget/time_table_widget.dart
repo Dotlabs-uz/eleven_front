@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../core/utils/app_colors.dart';
+import '../../../../../core/utils/assets.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/dialogs.dart';
 import '../../../../../core/utils/int_helper.dart';
@@ -172,7 +173,10 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                     setState(() {});
                                                   },
                                                   notWorkingHours:
-                                                      barber.notWorkingHours, onFieldTap: (hour, minute) => widget.onFieldTap?.call(hour,minute),
+                                                      barber.notWorkingHours,
+                                                  onFieldTap: (hour, minute) =>
+                                                      widget.onFieldTap
+                                                          ?.call(hour, minute),
                                                 );
                                               },
                                             ),
@@ -266,7 +270,16 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                 height: 60,
                 width: 60,
                 decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: Colors.grey),
+                  shape: BoxShape.circle,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: entity.avatar.isNotEmpty
+                      ? Image.network(entity.avatar)
+                      : Image.asset(
+                    Assets.tAvatarPlaceHolder,
+                  ),
+                ),
               ),
               const SizedBox(height: 5),
               Text("${entity.firstName} ${entity.lastName}"),

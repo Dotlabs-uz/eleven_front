@@ -331,33 +331,35 @@ class _ContentWidgetState extends State<_ContentWidget> {
                         listBarbers = state.data.results;
                         listBarbers.add(
                           BarberModel(
-                              id: "id",
-                              firstName: "firstName",
-                              lastName: "lastName",
-                              password: "password",
-                              login: "",
-                              phone: 12,
-                              notWorkingHours: [
-                                NotWorkingHoursEntity(
-                                  dateFrom: DateTime(
-                                    DateTime.now().year,
-                                    DateTime.now().month,
-                                    DateTime.now().day,
-                                    16,
-                                    15,
-                                  ),
-                                  dateTo: DateTime(
-                                    DateTime.now().year,
-                                    DateTime.now().month,
-                                    DateTime.now().day,
-                                    17,
-                                    45,
-                                  ),
-                                  barberId: 'id',
-                                )
-                              ],
-                              inTimeTable: true,
-                              filial: FilialEntity.empty()),
+                            id: "id",
+                            firstName: "firstName",
+                            lastName: "lastName",
+                            password: "password",
+                            login: "",
+                            phone: 12,
+                            notWorkingHours: [
+                              NotWorkingHoursEntity(
+                                dateFrom: DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                  16,
+                                  15,
+                                ),
+                                dateTo: DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                  17,
+                                  45,
+                                ),
+                                barberId: 'id',
+                              )
+                            ],
+                            inTimeTable: true,
+                            filial: FilialEntity.empty(),
+                            avatar: '',
+                          ),
                         );
                       });
                     },

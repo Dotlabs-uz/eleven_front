@@ -133,7 +133,11 @@ class SideMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
-        Navigator.pushNamedAndRemoveUntil(context, RouteList.login,(route) => false,);
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RouteList.login,
+          (route) => false,
+        );
       },
       child: BlocBuilder<MenuCubit, int>(
         builder: (context, state) {
@@ -185,7 +189,6 @@ class SideMenuWidget extends StatelessWidget {
             onProfileTap: () {
               BlocProvider.of<MenuCubit>(context).setMenu(3); // Profile
               Navigator.pushNamed(context, RouteList.configs);
-
             },
             onChanged: (value) {
               if (value.key == RouteList.logout) {
@@ -230,8 +233,11 @@ class _ContentWidgetState extends State<ContentWidget> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _topMenu(),
+
+
           Expanded(
             child: page.page,
           ),
@@ -241,6 +247,139 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   _topMenu() {
+    return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ...List.generate(
+            widget.menus.length,
+            (index) => InkWell(
+              onTap: () => setState(() => page = widget.menus[index]),
+              child: Ink(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  decoration: BoxDecoration(
+                    border: page == widget.menus[index]
+                        ? Border(
+                            bottom: BorderSide(
+                              width: 1.0,
+                              color: Colors.lightBlue.shade900,
+                            ),
+                          )
+                        : null,
+                  ),
+                  child: Container(
+                    height: 35,
+                    margin: const EdgeInsets.only(
+                      left: 12,
+                      top: 4,
+                      right: 12,
+                      bottom: 0,
+                    ),
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Text(
+                      widget.menus[index].text.tr().toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontFamily: "Nunito",
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+    return Row(
+      children: [
+        if (!ResponsiveBuilder.isDesktop(context))
+          IconButton(
+            onPressed: widget.openDrawer,
+            enableFeedback: true,
+            icon: const Icon(Icons.menu, color: AppColors.background),
+          ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Text(
+            page.text.tr().toUpperCase(),
+            style: GoogleFonts.nunito(
+              color: const Color(0xff0c2556),
+              fontSize: 14,
+              height: 1.8,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: BlocBuilder<TopMenuCubit, List<IconButtonImpl>>(
+              builder: (context, listWidget) {
+                if (listWidget.isEmpty) return const SizedBox();
+                return IconButtonBar(
+                  childSize: const Size(48, 48),
+                  children: listWidget,
+                );
+              },
+            ),
+          ),
+        ),
+        if (widget.menus.length > 1)
+          PopupMenuButton<SubMenu>(
+            padding: const EdgeInsets.only(right: 15),
+            icon: const Icon(
+              Icons.more_horiz_rounded,
+              color: AppColors.background,
+            ),
+            initialValue: page,
+            // Callback that sets the selected popup menu item.
+            onSelected: (SubMenu item) {
+              setState(() => page = item);
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<SubMenu>>[
+              ...widget.menus.map((data) {
+                var title = data.text.tr();
+                return PopupMenuItem<SubMenu>(
+                  value: data,
+                  child: Text(
+                    '${title[0].toUpperCase()}${title.substring(1)}',
+                    style: GoogleFonts.nunito(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                );
+              })
+            ],
+          ),
+      ],
+    );
+  }
+  _searchAndActionsMenu() {
+    return Row(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: BlocBuilder<TopMenuCubit, List<IconButtonImpl>>(
+            builder: (context, listWidget) {
+              if (listWidget.isEmpty) return const SizedBox();
+              return IconButtonBar(
+                childSize: const Size(48, 48),
+                children: listWidget,
+              );
+            },
+          ),
+        ),
+
+      ],
+    );
     return Row(
       children: [
         if (!ResponsiveBuilder.isDesktop(context))
