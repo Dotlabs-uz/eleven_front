@@ -106,18 +106,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                           CircleAvatar(
                             radius: 25,
 
-                            // backgroundImage: _image(""),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: Center(
-                                child: currentUserEntity.avatar.isNotEmpty
-                                    ? Image.network(currentUserEntity.avatar)
-                                    : Image.asset(
-                                        Assets.tAvatarPlaceHolder,
-                                        fit: BoxFit.fill,
-                                      ),
-                              ),
-                            ),
+                            backgroundImage: _image(currentUserEntity.avatar),
                           ),
                           const SizedBox(width: 10),
                           Column(
