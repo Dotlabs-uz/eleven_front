@@ -43,11 +43,17 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   Future<bool> saveNotWorkingHours(
       DateTime from, DateTime to, String employeeId) async {
     log("From ${from.toIso8601String()} to ${to.toIso8601String()}");
-    await _client.post(ApiConstants.notWorkingHours, params: {
+    final map = {
       "from": from.toIso8601String(),
       "to": to.toIso8601String(),
       "employee": employeeId,
-    });
+    };
+
+    print("map data $map");
+    await _client.post(
+      ApiConstants.notWorkingHours,
+      params: map,
+    );
     return true;
   }
 

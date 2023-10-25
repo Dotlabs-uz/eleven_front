@@ -1,3 +1,4 @@
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
@@ -108,7 +109,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-        TopMenuEntity.empty(),
+      TopMenuEntity.empty(),
       // TopMenuEntity(searchCubit: null, iconList: [
       //   MyIconButton(
       //     onPressed: () {
@@ -125,12 +126,32 @@ class _ContentWidgetState extends State<_ContentWidget> {
       //     icon: const Icon(Icons.refresh),
       //   ),
       // ]),
-
     );
   }
 
   void _saveOrder() {
     BlocProvider.of<OrderCubit>(context).save(order: OrderEntity.fromFields());
+  }
+
+  void _onDeleteNotWorkingHours(
+      NotWorkingHoursEntity entity, BarberEntity barberEntity) async {
+    if (await confirm(
+      super.context,
+      title: const Text('confirming').tr(),
+      content: const Text('deleteConfirm').tr(),
+      textOK: const Text('yes').tr(),
+      textCancel: const Text('cancel').tr(),
+    )) {
+      debugPrint(
+          "Barber not working len before ${barberEntity.notWorkingHours.length}");
+
+      barberEntity.notWorkingHours.remove(entity);
+      debugPrint(
+          "Barber not working len after ${barberEntity.notWorkingHours.length}");
+
+      // ignore: use_build_context_synchronously
+      BlocProvider.of<BarberCubit>(context).save(barber: barberEntity);
+    }
   }
 
   void _editOrder(OrderEntity data) {
@@ -423,6 +444,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     }
                                     return TimeTableWidget(
                                       listBarbers: listBarbers,
+                                      onTapNotWorkingHour:
+                                          _onDeleteNotWorkingHours,
                                       onFieldTap: (hour, minute) {
                                         activeData = OrderEntity.empty(
                                           hour: hour,
@@ -438,7 +461,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           false,
                                         );
                                       },
-                                      onTimeConfirm: (
+                                      onNotWorkingHoursCreate: (
                                         DateTime from,
                                         DateTime to,
                                         String employeeId,

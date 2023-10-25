@@ -24,18 +24,20 @@ import 'order_card_widget.dart';
 class TimeTableWidget extends StatefulWidget {
   final List<BarberEntity> listBarbers;
   final List<OrderEntity> listOrders;
-  final Function(DateTime from, DateTime to, String employeeId) onTimeConfirm;
+  final Function(DateTime from, DateTime to, String employeeId) onNotWorkingHoursCreate;
   final Function(String employee)? onDeleteEmployeeFromTable;
   final Function(OrderEntity)? onOrderClick;
   final Function(int hour, int minute)? onFieldTap;
+  final Function(NotWorkingHoursEntity, BarberEntity)? onTapNotWorkingHour;
 
   const TimeTableWidget({
     Key? key,
     required this.listBarbers,
-    required this.onTimeConfirm,
+    required this.onNotWorkingHoursCreate,
     this.onDeleteEmployeeFromTable,
     this.onFieldTap,
     this.onOrderClick,
+    this.onTapNotWorkingHour,
     required this.listOrders,
   }) : super(key: key);
 
@@ -89,174 +91,174 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
     return listBarber.isEmpty
         ? const EmptyWidget()
         : Column(
-          children: [
-            Container(
-              color: Colors.white,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: Constants.rulerWidth,
-                  ),
-                  Container(width: 10),
-                  ...List.generate(
-                    listBarber.length,
-                    (index) {
-                      final el = listBarber[index];
-                      return Expanded(
-                        child: _barberUpperCardWidget(el),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.zero,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                color: Colors.white,
+                child: Row(
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TimeTableRulerWidget(
-                          timeFrom: from,
-                          timeTo: to,
-                        ),
-                        ...List.generate(
-                          listBarber.length,
-                          (barberIndex) {
-                            List<OrderEntity> localOrders = [];
-
-                            final barber = listBarber[barberIndex];
-
-                            localOrders = widget.listOrders.where(
-                              (element) {
-                                return barber.id == element.barberId;
-                              },
-                            ).toList();
-
-                            return Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 24),
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey.shade400,
-                                          ),
-                                          top: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey.shade400,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          ...List.generate(
-                                            IntHelper
-                                                .getCountOfCardByWorkingHours(
-                                                    from, to),
-                                            (index) {
-                                              final hour =
-                                                  from.hour + index;
-
-                                              return FieldCardWidget(
-                                                isFirstSection:
-                                                    barberIndex == 0,
-                                                hour: hour,
-                                                barberId: barber.id,
-                                                onPositionChanged: () {
-                                                  setState(() {});
-                                                },
-                                                notWorkingHours:
-                                                    barber.notWorkingHours,
-                                                onFieldTap: (hour,
-                                                        minute) =>
-                                                    widget.onFieldTap?.call(
-                                                        hour, minute),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    ...localOrders.map(
-                                      (orderEntity) {
-                                        return Positioned(
-                                          // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
-                                          top: TimeTableHelper
-                                              .getTopPositionForOrder(
-                                            orderEntity,
-                                          ),
-                                          child: GestureDetector(
-                                            onDoubleTap: () => widget
-                                                .onOrderClick
-                                                ?.call(orderEntity),
-                                            child: Draggable<DragOrder>(
-                                              data: DragOrder(
-                                                isResizing: false,
-                                                orderEntity: orderEntity,
-                                              ),
-                                              childWhenDragging:
-                                                  OrderCardWidget(
-                                                order: orderEntity,
-                                                isDragging: true,
-                                                onOrderSize: _onOrderSize,
-                                              ),
-                                              feedback: Opacity(
-                                                opacity: 0.6,
-                                                child: Material(
-                                                  child: OrderCardWidget(
-                                                    order: orderEntity,
-                                                    isDragging: true,
-                                                    onOrderSize:
-                                                        _onOrderSize,
-                                                  ),
-                                                ),
-                                              ),
-                                              child: OrderCardWidget(
-                                                order: orderEntity,
-                                                isDragging: false,
-                                                onOrderSize: _onOrderSize,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    ...barber.notWorkingHours.map(
-                                      (notWorkingHoursEntity) {
-                                        return Positioned(
-                                          top: TimeTableHelper
-                                              .getTopPositionForNotWorkingHours(
-                                            notWorkingHoursEntity,
-                                          ),
-                                          child: NotWorkingHoursCard(
-                                            notWorkingHoursEntity:
-                                                notWorkingHoursEntity,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                    SizedBox(
+                      width: Constants.rulerWidth,
+                    ),
+                    Container(width: 10),
+                    ...List.generate(
+                      listBarber.length,
+                      (index) {
+                        final el = listBarber[index];
+                        return Expanded(
+                          child: _barberUpperCardWidget(el),
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
-        );
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TimeTableRulerWidget(
+                            timeFrom: from,
+                            timeTo: to,
+                          ),
+                          ...List.generate(
+                            listBarber.length,
+                            (barberIndex) {
+                              List<OrderEntity> localOrders = [];
+
+                              final barber = listBarber[barberIndex];
+
+                              localOrders = widget.listOrders.where(
+                                (element) {
+                                  return barber.id == element.barberId;
+                                },
+                              ).toList();
+
+                              return Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 24),
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey.shade400,
+                                            ),
+                                            top: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey.shade400,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            ...List.generate(
+                                              IntHelper
+                                                  .getCountOfCardByWorkingHours(
+                                                      from, to),
+                                              (index) {
+                                                final hour = from.hour + index;
+
+                                                return FieldCardWidget(
+                                                  isFirstSection:
+                                                      barberIndex == 0,
+                                                  hour: hour,
+                                                  barberId: barber.id,
+                                                  onPositionChanged: () {
+                                                    setState(() {});
+                                                  },
+                                                  notWorkingHours:
+                                                      barber.notWorkingHours,
+                                                  onFieldTap: (hour, minute) =>
+                                                      widget.onFieldTap
+                                                          ?.call(hour, minute),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      ...localOrders.map(
+                                        (orderEntity) {
+                                          return Positioned(
+                                            // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
+                                            top: TimeTableHelper
+                                                .getTopPositionForOrder(
+                                              orderEntity,
+                                            ),
+                                            child: GestureDetector(
+                                              onDoubleTap: () => widget
+                                                  .onOrderClick
+                                                  ?.call(orderEntity),
+                                              child: Draggable<DragOrder>(
+                                                data: DragOrder(
+                                                  isResizing: false,
+                                                  orderEntity: orderEntity,
+                                                ),
+                                                childWhenDragging:
+                                                    OrderCardWidget(
+                                                  order: orderEntity,
+                                                  isDragging: true,
+                                                  onOrderSize: _onOrderSize,
+                                                ),
+                                                feedback: Opacity(
+                                                  opacity: 0.6,
+                                                  child: Material(
+                                                    child: OrderCardWidget(
+                                                      order: orderEntity,
+                                                      isDragging: true,
+                                                      onOrderSize: _onOrderSize,
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: OrderCardWidget(
+                                                  order: orderEntity,
+                                                  isDragging: false,
+                                                  onOrderSize: _onOrderSize,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ...barber.notWorkingHours.map(
+                                        (notWorkingHoursEntity) {
+                                          return Positioned(
+                                            top: TimeTableHelper
+                                                .getTopPositionForNotWorkingHours(
+                                              notWorkingHoursEntity,
+                                            ),
+                                            child: NotWorkingHoursCard(
+                                              notWorkingHoursEntity:
+                                                  notWorkingHoursEntity,
+                                              onDoubleTap: (entity) => widget
+                                                  .onTapNotWorkingHour
+                                                  ?.call(entity, barber),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
   }
 
   _barberUpperCardWidget(BarberEntity entity) {
@@ -295,7 +297,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
               Dialogs.timeTableEmployeeDialog(
                 context: context,
                 onTimeConfirm: (timeFrom, timeTo) {
-                  widget.onTimeConfirm.call(
+                  widget.onNotWorkingHoursCreate.call(
                     timeFrom,
                     timeTo,
                     entity.id,
