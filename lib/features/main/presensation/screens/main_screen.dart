@@ -316,13 +316,13 @@ class _ContentWidgetState extends State<ContentWidget> {
             child: Row(
               children: [
                 Expanded(
-                  child: SearchField(
+                  child:data.enableSearch ? SearchField(
                     onSearch: data.searchCubit == null
                         ? null
                         : (value) {
                             data.searchCubit.load(value);
                           },
-                  ),
+                  ): const SizedBox.shrink(),
                 ),
                 ...data.iconList,
               ],
