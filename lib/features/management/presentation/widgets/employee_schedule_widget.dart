@@ -310,6 +310,7 @@ class _EmployeeScheduleFieldWidgetState
           width: 35,
           height: 35,
           decoration: BoxDecoration(
+            color: DateTime.now().day  == widget.day ? Colors.blue.withOpacity(0.2) : Colors.white,
             border: Border.all(width: 1, color: Colors.grey.shade200),
           ),
         ),
