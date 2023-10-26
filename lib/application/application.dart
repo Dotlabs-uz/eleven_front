@@ -12,6 +12,7 @@ import '../core/utils/route_constants.dart';
 import '../core/utils/routes.dart';
 import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import '../features/main/presensation/cubit/menu/menu_cubit.dart';
+import '../features/main/presensation/cubit/order/orders/orders_cubit.dart';
 import '../features/main/presensation/widget/fade_page_route_builder.dart';
 import '../get_it/locator.dart';
 
@@ -29,6 +30,7 @@ class _ApplicationState extends State<Application> {
   late DataFormCubit _dataFormCubit;
   late ServiceProductCategoryCubit _serviceProductCategoryCubit;
   late OrderCubit _orderCubit;
+  late OrdersCubit _ordersCubit;
   late CurrentUserCubit currentUserCubit;
   @override
   void initState() {
@@ -38,9 +40,11 @@ class _ApplicationState extends State<Application> {
     _dataFormCubit = locator();
     _serviceProductCategoryCubit = locator();
     _orderCubit = locator();
+    _ordersCubit = locator();
     currentUserCubit = locator();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -52,6 +56,7 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: _serviceProductCategoryCubit),
         BlocProvider.value(value: _orderCubit),
         BlocProvider.value(value: currentUserCubit),
+        BlocProvider.value(value: _ordersCubit),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -70,18 +75,16 @@ class _ApplicationState extends State<Application> {
           ),
         ),
         // scrollBehavior: CustomScrollBehaviour(),
-        initialRoute: RouteList.login, // TODO Change to login
+        initialRoute: RouteList.login,
         // home: const LoginScreen(),
         onGenerateRoute: (RouteSettings settings) {
-          final Map<String, WidgetBuilder> routes =
-          Routes.getRoutes(settings);
+          final Map<String, WidgetBuilder> routes = Routes.getRoutes(settings);
           // final WidgetBuilder builder;
           // if (settings.name != null) {
           //   builder = routes[settings.name]!;
           // } else {
           //   builder = routes["login"]!;
           // }
-
 
           return FadePageRouteBuilder(
             builder: routes[settings.name]!,
@@ -90,7 +93,5 @@ class _ApplicationState extends State<Application> {
         },
       ),
     );
-
   }
 }
-

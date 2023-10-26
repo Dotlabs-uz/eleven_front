@@ -2,6 +2,7 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/order/orders/orders_cubit.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/not_working_hours_entity.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
@@ -65,7 +66,6 @@ class _ContentWidget extends StatefulWidget {
 }
 
 class _ContentWidgetState extends State<_ContentWidget> {
-  late AuthenticationLocalDataSource localDataSource;
   late OrderEntity activeData;
   late bool isFormVisible;
 
@@ -74,8 +74,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   @override
   void initState() {
-    localDataSource = locator();
-
     initialize();
 
     super.initState();
@@ -90,11 +88,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     listBarbers.clear();
     _setWidgetTop();
-    // listenSockets();
 
-    await localDataSource.saveSessionId(
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJ1c2VySWQiOiI2NTMxNDNmNzI2OTUyYjYxOWJlYmZhZjYiLCJwYXRoIjoibWFuYWdlcnMiLCJpYXQiOjE2OTc3OTIwOTUsImV4cCI6MTY5Nzg3ODQ5NSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsImlzcyI6ImZlYXRoZXJzIiwianRpIjoiNWNlYzUwZDMtYWM0OS00ZWI5LWFiMmEtNDAwMDlhMmE4MzNlIn0.glVdrSB3u4vco7t-BdUhkdmCfstsfNHSHmHjS671b_8",
-    );
+    BlocProvider.of<OrdersCubit>(context).load();
+
+    // listenSockets();
   }
 
   // listenSockets() {
@@ -109,28 +106,45 @@ class _ContentWidgetState extends State<_ContentWidget> {
     // final Map<String, dynamic> filtr = {};
 
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-      TopMenuEntity.empty(),
-      // TopMenuEntity(searchCubit: null, iconList: [
-      //   MyIconButton(
-      //     onPressed: () {
-      //       activeData = OrderEntity.empty();
-      //       _editOrder(activeData);
-      //     },
-      //     icon: const Icon(Icons.add_box_rounded),
-      //   ),
-      //   MyIconButton(
-      //     onPressed: () {
-      //       listBarbers.clear();
-      //       BlocProvider.of<BarberCubit>(context).load("");
-      //     },
-      //     icon: const Icon(Icons.refresh),
-      //   ),
-      // ]),
+      // TopMenuEntity.empty(),
+      TopMenuEntity(searchCubit: null, iconList: [
+        MyIconButton(
+          onPressed: () {
+            activeData = OrderEntity(
+              id: "",
+              discount: 0,
+              discountPercent: 0,
+              paymentType: OrderPayment.cash,
+              orderStart: DateTime.now().copyWith(hour: 16),
+              orderEnd: DateTime.now().copyWith(hour: 17),
+              price: 30,
+              barberId: "6531612da3b411c75df5e944",
+              clientId: "65316125a3b411c75df5e938",
+              services: [
+                ServiceProductEntity(
+                  id: "652a8270523968b4b942b123",
+                  name: "",
+                  price: 30,
+                  duration: 10,
+                  category: ServiceProductCategoryEntity.empty(),
+                  sex: 'women',
+                )
+              ],
+            );
+            _saveOrderLocal(activeData);
+          },
+          icon: const Icon(Icons.add_box_rounded),
+        ),
+      ]),
     );
   }
 
   void _saveOrder() {
     BlocProvider.of<OrderCubit>(context).save(order: OrderEntity.fromFields());
+  }
+
+  void _saveOrderLocal(OrderEntity entity) {
+    BlocProvider.of<OrderCubit>(context).save(order: entity);
   }
 
   void _onDeleteNotWorkingHours(
@@ -236,15 +250,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
     );
   }
 
-  // List<Order> orders = [
-  //   Order(
-  //     id: '1',
-  //     startTime: DateTime(2023, 10, 7, 9, 0), // Начало заказа
-  //     endTime: DateTime(2023, 10, 7, 10, 30), // Конец заказа
-  //     title: 'Заказ 1', // Имя клиента или другой заголовок
-  //   ),
-  // ];
-
   final List<OrderEntity> orders = [
     // OrderEntity(
     //   orderStart: DateTime(2023, 10, 7, 9, 10),
@@ -338,6 +343,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
     ),
   ];
 
+  _loadOrders(Stream<OrderEntity> streamOrders) {
+    streamOrders.asBroadcastStream().listen((oder) => orders.add(oder));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -391,6 +400,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 }
 
                 BlocProvider.of<BarberCubit>(context).init();
+              }
+            },
+          ),
+          BlocListener<OrdersCubit, Stream<OrderEntity>>(
+            listener: (context, stream) {
+              if (stream.isEmpty == false) {
+                _loadOrders(stream);
               }
             },
           ),

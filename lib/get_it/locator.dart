@@ -1,3 +1,4 @@
+import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/features/auth/domain/usecases/change_password.dart';
 import 'package:eleven_crm/features/main/domain/usecases/current_user.dart';
 import 'package:eleven_crm/features/main/domain/usecases/not_working_hours.dart';
@@ -5,6 +6,7 @@ import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_
 import 'package:eleven_crm/features/main/presensation/cubit/menu/menu_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/not_working_hours/not_working_hours_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/order/orders/orders_cubit.dart';
 import 'package:eleven_crm/features/management/data/datasources/management_remote_data_source.dart';
 import 'package:eleven_crm/features/management/domain/repositories/management_repository.dart';
 import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
@@ -106,6 +108,7 @@ void setup() {
   // Order
 
   locator.registerFactory(() => OrderCubit(locator(),));
+  locator.registerFactory(() => OrdersCubit(locator(),));
 
   // ================ UseCases ================ //
 
@@ -242,6 +245,8 @@ void setup() {
       .registerLazySingleton<ApiClient>(() => ApiClient(locator(), locator()));
 
   locator.registerLazySingleton<StorageService>(() => StorageService());
+
+  locator.registerLazySingleton<WebSocketsService>(() => WebSocketsService());
 
   // ================ External ================ //
 

@@ -61,6 +61,8 @@ class OrderModel extends OrderEntity {
     // data['discount'] = discount;
     data['client'] = clientId;
     data['services'] = services.map((e) => e.id).toList();
+
+    print("Services $services");
     return data;
   }
 }

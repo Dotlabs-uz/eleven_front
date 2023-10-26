@@ -15,7 +15,7 @@ import 'selections.dart';
 import 'string_helper.dart';
 
 class Dialogs {
-  static exitDialog({
+  static  exitDialog({
     required BuildContext context,
     required Function() onExit,
   }) {

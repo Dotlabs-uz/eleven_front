@@ -5,15 +5,11 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class WebSocketsService {
+  WebSocketsService();
 
-  WebSocketsService() {
-    initialize();
-  }
   final _socketResponse = StreamController<dynamic>();
 
-
-
-  void Function(dynamic) get addResponse => _socketResponse.sink.add;
+  void addData(dynamic data) => _socketResponse.sink.add(data);
 
   Stream<dynamic> get getResponse => _socketResponse.stream;
 
@@ -21,12 +17,16 @@ class WebSocketsService {
     _socketResponse.close();
   }
 
-  initialize() {
-    IO.Socket socket = IO.io(ApiConstants.ordersWebSocket,
-        OptionBuilder().setTransports(['websocket']).build());
+  Stream<dynamic> connect(String url) async* {
+    IO.Socket socket =
+        IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
     socket.onConnect((_) {});
 
-    socket.on('event', (data) => addResponse);
+    socket.on('event', (data) => addData(data));
+
+    await for (var data in getResponse) {
+      yield data;
+    }
   }
 }
