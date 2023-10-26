@@ -195,6 +195,7 @@ class OrderEntity extends Equatable {
 
   @override
   List<Object?> get props => [
+    id,
         discount,
         discountPercent,
         paymentType,

@@ -2,11 +2,13 @@ import 'package:clean_calendar/clean_calendar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/main/domain/entity/current_user_entity.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/current_user/current_user_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/order/orders/orders_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../features/auth/presentation/cubit/login_cubit.dart';
+import '../../features/main/domain/entity/order_entity.dart';
 import '../utils/app_colors.dart';
 import '../utils/assets.dart';
 import '../utils/dialogs.dart';
@@ -105,7 +107,6 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                         children: [
                           CircleAvatar(
                             radius: 25,
-
                             backgroundImage: _image(currentUserEntity.avatar),
                           ),
                           const SizedBox(width: 10),
@@ -167,7 +168,13 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
               }),
               //
               const SizedBox(height: 40),
-              const CalendarWidget(),
+              BlocBuilder<OrdersCubit, Stream<OrderEntity>>(
+                builder: (context, stream) {
+                  return _CalendarWidget(
+                    stream: stream,
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -184,14 +191,29 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
   }
 }
 
-class CalendarWidget extends StatefulWidget {
-  const CalendarWidget({Key? key}) : super(key: key);
+class _CalendarWidget extends StatefulWidget {
+  final Stream<OrderEntity> stream;
+  const _CalendarWidget({Key? key, required this.stream}) : super(key: key);
 
   @override
-  State<CalendarWidget> createState() => _CalendarWidgetState();
+  State<_CalendarWidget> createState() => _CalendarWidgetState();
 }
 
-class _CalendarWidgetState extends State<CalendarWidget> {
+class _CalendarWidgetState extends State<_CalendarWidget> {
+  final List<OrderEntity> orders = [];
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  initialize() {
+    widget.stream.map((order) {
+      if (orders.contains(order) == false) {
+        orders.add(order);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return CleanCalendar(

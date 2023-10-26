@@ -3,10 +3,13 @@ import 'package:eleven_crm/core/components/barber_field_widget.dart';
 import 'package:eleven_crm/core/components/client_field_widget.dart';
 import 'package:eleven_crm/core/components/data_double_field_widget.dart';
 import 'package:eleven_crm/core/components/date_time_field_widget.dart';
+import 'package:eleven_crm/core/components/select_services_widget.dart';
 import 'package:eleven_crm/features/main/presensation/widget/services_by_category_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../features/main/presensation/cubit/select_services/show_select_services_cubit.dart';
 import '../../features/management/presentation/screens/employee_profile_screen.dart';
 import '../../features/products/domain/entity/service_product_entity.dart';
 import '../entities/field_entity.dart';
@@ -19,12 +22,12 @@ import 'role_field_widget.dart';
 
 class DataOrderForm extends StatefulWidget {
   final Map<String, FieldEntity> fields;
-  final Function()  saveData;
+  final Function() saveData;
   final Function() closeForm;
 
   const DataOrderForm({
     Key? key,
-   required this.saveData,
+    required this.saveData,
     required this.closeForm,
     required this.fields,
   }) : super(key: key);
@@ -38,9 +41,8 @@ class DataOrderFormState extends State<DataOrderForm> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
       constraints: const BoxConstraints(
-        maxWidth:600,
+        maxWidth: 600,
       ),
       child: SingleChildScrollView(
         child: Padding(
@@ -90,17 +92,15 @@ class DataOrderFormState extends State<DataOrderForm> {
               PaymentTypeFieldWidget(
                 fieldEntity: widget.fields['paymentType']!,
               ),
-              // ServicesWithCategoriesWidget(
-              //   onSelect: (entity) {
-              //     selectedProducts.add(entity);
-              //   },
-              //   selectedItems: selectedProducts,
-              // ),
+              SelectServicesWidget(
+                onTap: () {
+                  BlocProvider.of<ShowSelectServicesCubit>(context).enable();
+                },
+              ),
               const SizedBox(height: 10),
               ButtonWidget(
                 text: "save".tr(),
-                onPressed:
-                  widget.saveData,
+                onPressed: widget.saveData,
               ),
             ],
           ),
