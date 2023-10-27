@@ -7,7 +7,7 @@ import 'package:eleven_crm/features/main/presensation/cubit/menu/menu_cubit.dart
 import 'package:eleven_crm/features/main/presensation/cubit/order/not_working_hours/not_working_hours_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/orders/orders_cubit.dart';
-import 'package:eleven_crm/features/main/presensation/cubit/select_services/show_select_services_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/select_services/select_services_cubit.dart';
 import 'package:eleven_crm/features/management/data/datasources/management_remote_data_source.dart';
 import 'package:eleven_crm/features/management/domain/repositories/management_repository.dart';
 import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
@@ -39,6 +39,7 @@ import 'package:get_it/get_it.dart';
 
 import '../features/main/domain/usecases/order.dart';
 import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
+import '../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
 import '../features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../features/management/data/repositories/management_repository_impl.dart';
 import '../features/management/domain/usecases/customer.dart';
@@ -91,6 +92,7 @@ void setup() {
       () => ServiceProductCategoryCubit(locator(), locator(), locator()));
 
   locator.registerFactory(() => ShowSelectServicesCubit());
+  locator.registerFactory(() => SelectServicesCubit());
 
 
   // Barber

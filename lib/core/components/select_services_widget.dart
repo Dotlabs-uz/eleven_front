@@ -1,26 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/core/components/barber_field_widget.dart';
-import 'package:eleven_crm/core/components/client_field_widget.dart';
-import 'package:eleven_crm/core/components/data_double_field_widget.dart';
-import 'package:eleven_crm/core/components/date_time_field_widget.dart';
-import 'package:eleven_crm/features/main/presensation/widget/services_by_category_widget.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/select_services/select_services_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../features/management/presentation/screens/employee_profile_screen.dart';
+import '../../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
 import '../../features/products/domain/entity/service_product_entity.dart';
 import '../entities/field_entity.dart';
-import '../utils/animated_navigation.dart';
-import 'button_widget.dart';
-import 'data_int_field_widget.dart';
-import 'data_text_field_widget.dart';
-import 'payment_type_field_widget.dart';
-import 'role_field_widget.dart';
 
 class SelectServicesWidget extends StatefulWidget {
-  final Function( ) onTap;
+  final FieldEntity fieldEntity;
+  final Function(List<ServiceProductEntity>) onChanged;
   const SelectServicesWidget({
-    Key? key, required this.onTap,
+    Key? key,
+    required this.onChanged,
+    required this.fieldEntity,
   }) : super(key: key);
 
   @override
@@ -28,41 +21,131 @@ class SelectServicesWidget extends StatefulWidget {
 }
 
 class SelectServicesWidgetState extends State<SelectServicesWidget> {
+  final List<ServiceProductEntity> selectedServices = [];
+
+  doSelectServiceActionByState(SelectServicesHelper state) {
+    if (mounted) {
+      Future.delayed(
+        Duration.zero,
+        () {
+          final data = state.data;
+          final action = state.action;
+
+          if (action == SelectedServicesAction.remove) {
+            if (data != null) {
+              selectedServices.remove(data);
+            }
+          } else if (action == SelectedServicesAction.add && data != null) {
+            selectedServices.add(data);
+          }
+
+          // widget.onChanged.call(selectedServices);
+          widget.fieldEntity.val = selectedServices;
+
+          print("Selcted services ${selectedServices.length}");
+
+          setState(() {});
+          BlocProvider.of<SelectServicesCubit>(context).init();
+        },
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    initialize();
+    super.initState();
+  }
+
+  initialize() {
+    print("Widget field entity ${widget.fieldEntity.val}");
+    selectedServices.addAll(widget.fieldEntity.val);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-            onTap: widget.onTap,
-              child: Container(
-                constraints: const BoxConstraints(
-                  maxWidth: 600,
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 10),
+      child: BlocBuilder<SelectServicesCubit, SelectServicesHelper>(
+        builder: (context, state) {
+          if (state.data != null) {
+            doSelectServiceActionByState(state);
+          }
 
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: Colors.blueGrey, width: 1),
-                ),
-                child: Center(
-                  child: Text(
-                    "select".tr(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+          return Column(
+            children: [
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    print("Selected services len ${selectedServices.length}");
+                    BlocProvider.of<ShowSelectServicesCubit>(context)
+                      .enable(selectedServices);
+                  },
+                  child: Container(
+                    constraints: const BoxConstraints(
+                      maxWidth: 600,
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.blueGrey.shade300,
+                          Colors.blueGrey.shade200
+                        ],
+                      ),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(6),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "selectServices".tr(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ],
+              const SizedBox(height: 10),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  alignment: WrapAlignment.start,
+                  children: List.generate(selectedServices.length, (index) {
+                    final service = selectedServices[index];
+
+                    return _serviceSelectedItem(service);
+                  }),
+                ),
+              )
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  _serviceSelectedItem(ServiceProductEntity serviceProductEntity) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      margin: const EdgeInsets.only(right: 6, bottom: 6),
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Text(
+        "${serviceProductEntity.name} ${"sex".tr()}:${serviceProductEntity.sex.tr()}",
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

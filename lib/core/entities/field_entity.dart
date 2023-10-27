@@ -16,6 +16,7 @@ enum Types {
   client,
   sex,
   role,
+  choseServices,
 }
 
 class FieldEntity<T> {

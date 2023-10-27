@@ -111,6 +111,14 @@ class OrderEntity extends Equatable {
       isForm: true,
       val: "",
     ),
+    "services": FieldEntity<List<ServiceProductEntity>>(
+      label: "services",
+      hintText: "services",
+      type: Types.choseServices,
+      isRequired: true,
+      isForm: true,
+      val: [],
+    ),
   };
 
   Map<String, FieldEntity> getFields() {
@@ -131,6 +139,7 @@ class OrderEntity extends Equatable {
         "price": price,
         "barber": barberId,
         "client": clientId,
+        "services": services,
       }[key];
 
   factory OrderEntity.fromRow(PlutoRow row) {
@@ -144,7 +153,7 @@ class OrderEntity extends Equatable {
       price: row.cells["price"]?.value,
       barberId: row.cells["barber"]?.value,
       clientId: row.cells["client"]?.value,
-      services: const [],
+      services: row.cells["services"]?.value,
     );
   }
 
@@ -160,10 +169,12 @@ class OrderEntity extends Equatable {
       'price': PlutoCell(value: e.price),
       'barber': PlutoCell(value: e.barberId),
       'client': PlutoCell(value: e.clientId),
+      'services': PlutoCell(value: e.services),
     });
   }
 
   factory OrderEntity.fromFields() {
+    print("Factory Fields services ${List.from(fields["services"]?.val)}");
     return OrderEntity(
       id: fields["id"]?.val,
       discount: fields["discount"]?.val,
@@ -174,7 +185,7 @@ class OrderEntity extends Equatable {
       price: fields["price"]?.val,
       barberId: fields["barber"]?.val,
       clientId: fields["client"]?.val,
-      services: const [],
+      services: List.from(fields["services"]?.val),
     );
   }
 
@@ -195,7 +206,7 @@ class OrderEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-    id,
+        id,
         discount,
         discountPercent,
         paymentType,
@@ -203,6 +214,5 @@ class OrderEntity extends Equatable {
         orderEnd,
         price,
         barberId,
-        services,
       ];
 }

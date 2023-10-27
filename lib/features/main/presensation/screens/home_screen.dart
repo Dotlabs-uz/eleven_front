@@ -4,7 +4,6 @@ import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/core/components/select_services_widget.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/orders/orders_cubit.dart';
-import 'package:eleven_crm/features/main/presensation/cubit/select_services/show_select_services_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/widget/select_service_dialog_widget.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/not_working_hours_entity.dart';
@@ -27,6 +26,8 @@ import '../../domain/entity/top_menu_entity.dart';
 import '../cubit/data_form/data_form_cubit.dart';
 import '../cubit/order/not_working_hours/not_working_hours_cubit.dart';
 import '../cubit/order/order_cubit.dart';
+import '../cubit/select_services/select_services_cubit.dart';
+import '../cubit/show_select_services/show_select_services_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../widget/my_icon_button.dart';
 import '../widget/time_table_widget/time_table_widget.dart';
@@ -42,11 +43,13 @@ class _HomeScreenState extends State<HomeScreen> {
   late NotWorkingHoursCubit notWorkingHoursCubit;
   late BarberCubit barberCubit;
   late ShowSelectServicesCubit showSelectServicesCubit;
+  late SelectServicesCubit selectServicesCubit;
 
   @override
   void initState() {
     notWorkingHoursCubit = locator();
     showSelectServicesCubit = locator();
+    selectServicesCubit = locator();
     barberCubit = locator();
     super.initState();
   }
@@ -57,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
       providers: [
         BlocProvider(create: (context) => showSelectServicesCubit),
         BlocProvider(create: (context) => notWorkingHoursCubit),
+        BlocProvider(create: (context) => selectServicesCubit),
         BlocProvider(create: (context) => barberCubit..load("")),
       ],
       child: _ContentWidget(
@@ -376,38 +380,38 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     () {
                       setState(() {
                         listBarbers = state.data.results;
-                        listBarbers.add(
-                          BarberModel(
-                            id: "id",
-                            firstName: "firstName",
-                            lastName: "lastName",
-                            password: "password",
-                            login: "",
-                            phone: 12,
-                            notWorkingHours: [
-                              NotWorkingHoursEntity(
-                                dateFrom: DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
-                                  16,
-                                  15,
-                                ),
-                                dateTo: DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
-                                  17,
-                                  45,
-                                ),
-                                barberId: 'id',
-                              )
-                            ],
-                            inTimeTable: true,
-                            filial: FilialEntity.empty(),
-                            avatar: '',
-                          ),
-                        );
+                        // listBarbers.add(
+                        //   BarberModel(
+                        //     id: "id",
+                        //     firstName: "firstName",
+                        //     lastName: "lastName",
+                        //     password: "password",
+                        //     login: "",
+                        //     phone: 12,
+                        //     notWorkingHours: [
+                        //       NotWorkingHoursEntity(
+                        //         dateFrom: DateTime(
+                        //           DateTime.now().year,
+                        //           DateTime.now().month,
+                        //           DateTime.now().day,
+                        //           16,
+                        //           15,
+                        //         ),
+                        //         dateTo: DateTime(
+                        //           DateTime.now().year,
+                        //           DateTime.now().month,
+                        //           DateTime.now().day,
+                        //           17,
+                        //           45,
+                        //         ),
+                        //         barberId: 'id',
+                        //       )
+                        //     ],
+                        //     inTimeTable: true,
+                        //     filial: FilialEntity.empty(),
+                        //     avatar: '',
+                        //   ),
+                        // );
                       });
                     },
                   );
@@ -422,14 +426,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
               _loadOrders(stream);
             },
           ),
-          BlocListener<ShowSelectServicesCubit, bool>(
+          BlocListener<ShowSelectServicesCubit, ShowSelectedServiceHelper>(
             listener: (context, state) {
               if (mounted) {
                 Future.delayed(
                   Duration.zero,
-                  () {
-                    setState(() => showSelectServices = state);
-                  },
+                  () => setState(() => showSelectServices = state.show),
                 );
               }
             },
@@ -545,7 +547,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                           ],
                         ),
                         showSelectServices
-                            ? const SelectServiceDialogWidget()
+                            ? const SelectServiceDialogWidget(
+                              )
                             : const SizedBox(),
                       ],
                     ),

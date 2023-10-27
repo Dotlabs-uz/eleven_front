@@ -60,9 +60,9 @@ class OrderModel extends OrderEntity {
     // data['discountPercent'] = discountPercent;
     // data['discount'] = discount;
     data['client'] = clientId;
+    print("Services $services");
     data['services'] = services.map((e) => e.id).toList();
 
-    print("Services $services");
     return data;
   }
 }

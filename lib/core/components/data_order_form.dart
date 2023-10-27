@@ -1,24 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/barber_field_widget.dart';
 import 'package:eleven_crm/core/components/client_field_widget.dart';
-import 'package:eleven_crm/core/components/data_double_field_widget.dart';
 import 'package:eleven_crm/core/components/date_time_field_widget.dart';
 import 'package:eleven_crm/core/components/select_services_widget.dart';
-import 'package:eleven_crm/features/main/presensation/widget/services_by_category_widget.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/select_services/select_services_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../features/main/presensation/cubit/select_services/show_select_services_cubit.dart';
-import '../../features/management/presentation/screens/employee_profile_screen.dart';
 import '../../features/products/domain/entity/service_product_entity.dart';
 import '../entities/field_entity.dart';
-import '../utils/animated_navigation.dart';
 import 'button_widget.dart';
 import 'data_int_field_widget.dart';
-import 'data_text_field_widget.dart';
 import 'payment_type_field_widget.dart';
-import 'role_field_widget.dart';
 
 class DataOrderForm extends StatefulWidget {
   final Map<String, FieldEntity> fields;
@@ -93,8 +87,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                 fieldEntity: widget.fields['paymentType']!,
               ),
               SelectServicesWidget(
-                onTap: () {
-                  BlocProvider.of<ShowSelectServicesCubit>(context).enable();
+                fieldEntity: widget.fields["services"]!,
+                onChanged: (listData) {
+                  // widget.fields['services']!.val = listData;
                 },
               ),
               const SizedBox(height: 10),
