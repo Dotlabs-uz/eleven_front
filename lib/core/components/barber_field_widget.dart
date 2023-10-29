@@ -304,11 +304,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
               onChanged: (BarberEntity? data) {
                 log("Data $data");
 
-                if (data != null) {
-                  widget.fieldEntity.val = data.id;
+                if(data != null) {
+                  widget.fieldEntity.val = data .id;
 
                   widget.onChange?.call(data);
+                }else {
+                  print("Data == null");
                 }
+
               },
             );
           },

@@ -263,13 +263,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
               onChanged: (CustomerEntity? data) {
                 log("Data $data");
 
-                if (data != null) {
-                  if (widget.fieldEntity != null) {
-                    widget.fieldEntity!.val = data.id;
-                  }
+                if(data != null) {
+                  widget.fieldEntity!.val = data.id;
 
                   widget.onChange?.call(data);
                 }
+
+
               },
             );
           },

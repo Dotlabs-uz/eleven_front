@@ -151,7 +151,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   void _saveOrder(List<ServiceProductEntity> selectedServices) {
-    BlocProvider.of<OrderCubit>(context).save(order: OrderEntity.fromFields(selectedServices: selectedServices));
+    BlocProvider.of<OrderCubit>(context).save(
+        order: OrderEntity.fromFields(selectedServices: selectedServices));
   }
 
   // void _saveOrderLocal(OrderEntity entity) {
@@ -419,20 +420,20 @@ class _ContentWidgetState extends State<_ContentWidget> {
               _loadOrders(stream);
             },
           ),
-          BlocListener<ShowSelectServicesCubit, ShowSelectedServiceHelper>(
-            listener: (context, state) {
-              if (mounted) {
-                Future.delayed(
-                  Duration.zero,
-                  () {
-                    setState(() {
-                      showSelectServices = state.show;
-                    });
-                  },
-                );
-              }
-            },
-          ),
+          // BlocListener<ShowSelectServicesCubit, ShowSelectedServiceHelper>(
+          //   listener: (context, state) {
+          //     if (mounted) {
+          //       Future.delayed(
+          //         Duration.zero,
+          //         () {
+          //           setState(() {
+          //             showSelectServices = state.show;
+          //           });
+          //         },
+          //       );
+          //     }
+          //   },
+          // ),
         ],
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -542,7 +543,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
                         ),
                       ],
                     ),
-                    if (showSelectServices) const SelectServiceDialogWidget()
+                    BlocBuilder<ShowSelectServicesCubit,
+                        ShowSelectedServiceHelper>(
+                      builder: (context, state) {
+                        return state.show
+                            ? const SelectServiceDialogWidget()
+                            : const SizedBox();
+                      },
+                    ),
                   ],
                 ),
               ),

@@ -68,9 +68,15 @@ class DataOrderFormState extends State<DataOrderForm> {
               ),
               ClientFieldWidget(
                 fieldEntity: widget.fields['client']!,
+                onChange: (client) {
+                  widget.fields['client']!.val = client.id;
+                },
               ),
               BarberFieldWidget(
                 fieldEntity: widget.fields['barber']!,
+                onChange: (barber) {
+                  widget.fields['barber']!.val = barber.id;
+                },
               ),
               DataIntFieldWidget(
                 fieldEntity: widget.fields['price']!,
@@ -100,7 +106,6 @@ class DataOrderFormState extends State<DataOrderForm> {
                   selectedProducts = listData;
                   widget.fields['services']!.val = listData;
                   print("Selected services ${widget.fields['services']!.val}");
-                  setState(() {});
                 },
               ),
               const SizedBox(height: 10),
