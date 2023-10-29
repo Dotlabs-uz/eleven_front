@@ -70,12 +70,9 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
   int currentYear = DateTime.now().year;
 
   List<FieldSchedule> submittedFields = [];
-  final selectedFieldsProvider = SelectedFieldsProvider();
 
   @override
   Widget build(BuildContext context) {
-    final selectedFieldsProvider = Provider.of<SelectedFieldsProvider>(context);
-
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -108,8 +105,7 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
 
                 submittedFields.add(entity);
               },
-              selectedFieldsProvider: selectedFieldsProvider,
-              selectedFields: selectedFieldsProvider.selectedFields,
+              selectedFields: submittedFields,
             ),
           ),
           const SizedBox(height: 20),
@@ -135,7 +131,6 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
   final EmployeeEntity employeeEntity;
   final int currentMonth;
   final int currentYear;
-  final SelectedFieldsProvider selectedFieldsProvider;
   final List<FieldSchedule> selectedFields;
   final Function(int day, int month, int year, int status, String employee)
       onFieldEdit;
@@ -147,7 +142,6 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
     required this.selectedFields,
     required this.currentYear,
     required this.onFieldEdit,
-    required this.selectedFieldsProvider,
   }) : super(key: key);
 
   @override
@@ -178,21 +172,14 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
             final fieldSchedule =
                 FieldSchedule(dateTime, employeeEntity.id, entity?.status ?? 0);
 
-            return GestureDetector(
-              onTap: () {
-                selectedFieldsProvider.toggleSelectedField(fieldSchedule);
-              },
-              child: _EmployeeScheduleFieldWidget(
-                day: day,
-                month: currentMonth,
-                year: year,
-                selectedFields: selectedFields,
-                onFieldChange: onFieldEdit,
-                employeeId: employeeEntity.id,
-                fieldStatus: entity?.status ?? 0,
-                isSelected: selectedFieldsProvider.selectedFields
-                    .contains(fieldSchedule),
-              ),
+            return _EmployeeScheduleFieldWidget(
+              day: day,
+              month: currentMonth,
+              year: year,
+              selectedFields: selectedFields,
+              onFieldChange: onFieldEdit,
+              employeeId: employeeEntity.id,
+              fieldStatus: entity?.status ?? 0,
             );
           },
         ),
@@ -251,7 +238,6 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
   final int year;
   final int month;
   final String employeeId;
-  final bool isSelected;
   final List<FieldSchedule> selectedFields;
   final Function(int day, int month, int year, int status, String employee)
       onFieldChange;
@@ -265,7 +251,6 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
     required this.onFieldChange,
     required this.selectedFields,
     required this.employeeId,
-    required this.isSelected,
   }) : super(key: key);
 
   @override
@@ -309,16 +294,16 @@ class _EmployeeScheduleFieldWidgetState
   @override
   Widget build(BuildContext context) {
     if (status == 0) {
-      return GestureDetector(
+      return InkWell(
         onTap: () => changeState(),
-        child: Container(
+        child: Ink(
           width: 35,
           height: 35,
           decoration: BoxDecoration(
-            color: widget.selectedFields.contains(FieldSchedule(
-                    DateTime(widget.year, widget.day, widget.month),
-                    widget.employeeId,
-                    status))
+            color: widget.selectedFields.contains(
+              FieldSchedule(DateTime(widget.year, widget.day, widget.month),
+                  widget.employeeId, status),
+            )
                 ? Colors.red
                 : DateTime.now().day == widget.day
                     ? Colors.blue.withOpacity(0.1)
@@ -329,45 +314,26 @@ class _EmployeeScheduleFieldWidgetState
       );
     }
 
-    return GestureDetector(
+    return InkWell(
       onTap: () => changeState(),
-      onForcePressUpdate: (details) {
-        print("Forse $details");
-      },
-      child: Draggable<FieldSchedule>(
-        data: FieldSchedule(
-          DateTime(widget.year, widget.month, widget.day),
-          widget.employeeId,
-          status,
-        ),
-        feedback: Container(
-          width: 35,
-          height: 35,
-          color: Colors.red,
-        ),
-        child: Container(
-          width: 35,
-          height: 35,
-          decoration: BoxDecoration(
-            color: widget.isSelected
-                ? Colors.blue.withOpacity(0.4)
-                : ColorHelper.getColorForScheduleByStatus(status),
-            border: Border.all(
-              width: 1,
-              color: widget.isSelected
-                  ? Colors.blue.shade400
-                  : Colors.grey.shade200,
-            ),
+      child: Ink(
+        width: 35,
+        height: 35,
+        decoration: BoxDecoration(
+          color: ColorHelper.getColorForScheduleByStatus(status),
+          border: Border.all(
+            width: 1,
+            color: Colors.grey.shade200,
           ),
-          child: Center(
-            child: Text(
-              StringHelper.getTitleForScheduleByStatus(status),
-              style: const TextStyle(
-                color: Colors.white,
-                fontFamily: "Nunito",
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-              ),
+        ),
+        child: Center(
+          child: Text(
+            StringHelper.getTitleForScheduleByStatus(status),
+            style: const TextStyle(
+              color: Colors.white,
+              fontFamily: "Nunito",
+              fontWeight: FontWeight.w700,
+              fontSize: 16,
             ),
           ),
         ),
