@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
@@ -356,7 +358,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
   ];
 
   _loadOrders(Stream<OrderEntity> streamOrders) {
-    streamOrders.asBroadcastStream().listen((oder) => orders.add(oder));
+    streamOrders.map((order) {
+      log("Order websocket ${order.id} ${order.orderStart} ${order.orderEnd}");
+      orders.add(order);
+    });
+    setState(() {
+
+    });
   }
 
   @override

@@ -13,11 +13,12 @@ class OrdersCubit extends Cubit<Stream<OrderEntity>> {
   OrdersCubit(this._webSocketsService) : super(const Stream.empty());
 
   load() {
-    _webSocketsService.connect(ApiConstants.ordersWebSocket);
 
-    final orderWebSocket = _webSocketsService.getResponse.map(
-      (event) => OrderModel.fromJson(event),
-    );
+    print("Orders load ");
+    final orderWebSocket =
+        _webSocketsService.connect(ApiConstants.ordersWebSocket).map(
+              (event) => OrderModel.fromJson(event),
+            );
 
     emit(orderWebSocket);
   }

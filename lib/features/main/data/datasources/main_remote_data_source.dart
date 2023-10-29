@@ -27,7 +27,6 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   Future<CurrentUserModel> getCurrentUser() async {
     final response = await _client.get(ApiConstants.getCurrentUser);
 
-    print("Response $response");
     final model = CurrentUserModel.fromJson(response);
 
     return model;

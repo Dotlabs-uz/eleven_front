@@ -21,7 +21,9 @@ class WebSocketsService {
     IO.Socket socket =
         IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
-    socket.onConnect((_) {});
+    socket.onConnect((_) {
+      print("websocket connected $_");
+    });
 
     socket.on('event', (data) => addData(data));
 
