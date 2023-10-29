@@ -197,7 +197,7 @@ class OrderEntity extends Equatable {
       paymentType: OrderPayment.cash,
       orderStart: DateTime.now().copyWith(hour: hour, minute: minute),
       orderEnd: DateTime.now().add(const Duration(hours: 1)),
-      price: 10,
+      price: 0,
       barberId: "",
       clientId: "",
       services: const [],

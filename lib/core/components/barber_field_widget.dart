@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../features/management/domain/entity/barber_entity.dart';
 import '../../get_it/locator.dart';
 import '../entities/field_entity.dart';
+import '../utils/assets.dart';
 
 class BarberFieldWidget extends StatefulWidget {
   const BarberFieldWidget({
@@ -141,9 +142,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
               listData.removeWhere((element) => element.inTimeTable == false);
               if (widget.fieldEntity.val != null) {
-                selectedItem = listData.firstWhereOrNull(
-                        (e) => e.id == widget.fieldEntity.val) ??
-                    listData.first;
+                selectedItem = listData
+                    .firstWhereOrNull((e) => e.id == widget.fieldEntity.val);
 
                 if (selectedItem != null) {
                   widget.fieldEntity.val = selectedItem!.id;
@@ -198,12 +198,52 @@ class _ContentWidgetState extends State<_ContentWidget> {
                       left: 10,
                       top: 5,
                     ),
-                    child: Text(
-                      "${item.firstName} ${item.lastName}",
-                      style: GoogleFonts.nunito(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 34,
+                          width: 34,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey,
+                          ),
+                          child: Center(
+                            child: item.avatar.isEmpty
+                                ? Image.asset(
+                                    Assets.tAvatarPlaceHolder,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.network(
+                                    item.avatar,
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${item.firstName} ${item.lastName}",
+                              style: GoogleFonts.nunito(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              "${item.phone}",
+                              style: GoogleFonts.nunito(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   );
                 },

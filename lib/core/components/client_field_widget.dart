@@ -138,22 +138,20 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
               if (widget.fieldEntity != null) {
                 if (widget.fieldEntity!.val != null) {
-                  selectedItem = listData.firstWhereOrNull(
-                          (e) => e.id == widget.fieldEntity!.val) ??
-                      listData.first;
+                  selectedItem = listData
+                      .firstWhereOrNull((e) => e.id == widget.fieldEntity!.val);
 
-                  if(selectedItem != null) {
+                  if (selectedItem != null) {
                     widget.fieldEntity!.val = selectedItem!.id;
                     Future.delayed(
                       Duration.zero,
-                          () {
+                      () {
                         if (mounted) {
                           widget.onChange?.call(selectedItem!);
                         }
                       },
                     );
                   }
-
                 }
               }
 

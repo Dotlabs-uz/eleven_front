@@ -50,7 +50,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                    onPressed:() {
+                    onPressed: () {
                       widget.closeForm.call();
                       BlocProvider.of<ShowSelectServicesCubit>(context)
                           .disable();
@@ -84,10 +84,12 @@ class DataOrderFormState extends State<DataOrderForm> {
                 fieldEntity: widget.fields['orderStart']!,
                 withTime: true,
               ),
+              const SizedBox(height: 10),
               DateTimeFieldWidget(
                 fieldEntity: widget.fields['orderEnd']!,
                 withTime: true,
               ),
+
               PaymentTypeFieldWidget(
                 fieldEntity: widget.fields['paymentType']!,
               ),
