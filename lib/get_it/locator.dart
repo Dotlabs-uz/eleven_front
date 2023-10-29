@@ -113,7 +113,7 @@ void setup() {
 
   // Order
 
-  locator.registerFactory(() => OrderCubit(locator(),));
+  locator.registerFactory(() => OrderCubit(locator(),locator(),));
   locator.registerFactory(() => OrdersCubit(locator(),));
 
 
@@ -188,6 +188,7 @@ void setup() {
 
   // Order
   locator.registerLazySingleton<SaveOrder>(() => SaveOrder(locator()));
+  locator.registerLazySingleton<DeleteOrder>(() => DeleteOrder(locator()));
 
 
   // ================ Repository / Datasource ================ //

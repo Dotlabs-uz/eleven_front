@@ -292,7 +292,6 @@ class _ContentWidgetState extends State<ContentWidget> {
                                   selectedFields.add(field);
                                 }
                               },
-                              selectedFields: selectedFields,
                             );
                           },
                         ),

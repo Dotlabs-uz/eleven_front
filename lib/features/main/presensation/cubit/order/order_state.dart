@@ -8,6 +8,7 @@ class OrderInitial extends OrderState {
   @override
   List<Object> get props => [];
 }
+
 class OrderError extends OrderState {
   final String message;
 
@@ -15,10 +16,12 @@ class OrderError extends OrderState {
   @override
   List<Object> get props => [];
 }
+
 class OrderLoading extends OrderState {
   @override
   List<Object> get props => [];
 }
+
 class OrderSaved extends OrderState {
   final OrderEntity order;
 
@@ -27,10 +30,12 @@ class OrderSaved extends OrderState {
   @override
   List<Object> get props => [order];
 }
-class OrderDeleted extends OrderState {
-  final String id ;
 
-  const OrderDeleted(this.id);
+class OrderDeleted extends OrderState {
+  final String orderId;
+
+  const OrderDeleted(this.orderId);
+
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [orderId];
 }

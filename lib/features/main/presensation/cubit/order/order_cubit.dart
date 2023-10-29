@@ -10,13 +10,13 @@ part 'order_state.dart';
 
 class OrderCubit extends Cubit<OrderState> {
   final SaveOrder saveOrder;
-  OrderCubit(this.saveOrder) : super(OrderInitial());
+  final DeleteOrder deleteOrder;
+  OrderCubit(this.saveOrder, this.deleteOrder) : super(OrderInitial());
 
   void save({
     required OrderEntity order,
   }) async {
     emit(OrderLoading());
-
 
     print("Order $order");
     var save = await saveOrder(order);
@@ -27,4 +27,16 @@ class OrderCubit extends Cubit<OrderState> {
     );
   }
 
+  void delete({
+    required String orderId,
+  }) async {
+    emit(OrderLoading());
+
+    var save = await deleteOrder(orderId);
+
+    save.fold(
+      (error) => emit(OrderError(message: error.errorMessage)),
+      (data) => emit(OrderDeleted(orderId)),
+    );
+  }
 }

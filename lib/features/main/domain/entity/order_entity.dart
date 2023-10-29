@@ -16,25 +16,21 @@ enum OrderPayment {
 @immutable
 class OrderEntity extends Equatable {
   final String id;
-  final double discount;
-  final double discountPercent;
   final OrderPayment paymentType;
-  final int price;
   DateTime orderStart;
   DateTime orderEnd;
   String barberId;
   final String clientId;
+  bool isNew;
   final List<ServiceProductEntity> services;
 
   OrderEntity({
     required this.id,
-    required this.discount,
-    required this.discountPercent,
     required this.paymentType,
     required this.orderStart,
     required this.orderEnd,
-    required this.price,
     required this.barberId,
+    required this.isNew,
     required this.clientId,
     required this.services,
   });
@@ -47,22 +43,22 @@ class OrderEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "discount": FieldEntity<double>(
-      label: "discount",
-      hintText: "discount",
-      type: Types.double,
-      isRequired: true,
-      isForm: true,
-      val: 0,
-    ),
-    "discountPercent": FieldEntity<double>(
-      label: "discountPercent",
-      hintText: "discountPercent",
-      type: Types.double,
-      isRequired: true,
-      isForm: true,
-      val: 0,
-    ),
+    // "discount": FieldEntity<double>(
+    //   label: "discount",
+    //   hintText: "discount",
+    //   type: Types.double,
+    //   isRequired: true,
+    //   isForm: true,
+    //   val: 0,
+    // ),
+    // "discountPercent": FieldEntity<double>(
+    //   label: "discountPercent",
+    //   hintText: "discountPercent",
+    //   type: Types.double,
+    //   isRequired: true,
+    //   isForm: true,
+    //   val: 0,
+    // ),
     "paymentType": FieldEntity<OrderPayment>(
       label: "paymentType",
       hintText: "paymentType",
@@ -119,6 +115,14 @@ class OrderEntity extends Equatable {
       isForm: true,
       val: [],
     ),
+    "isNew": FieldEntity<bool>(
+      label: "isNew",
+      hintText: "isNew",
+      type: Types.bool,
+      isRequired: false,
+      isForm: false,
+      val: true,
+    ),
   };
 
   Map<String, FieldEntity> getFields() {
@@ -131,29 +135,31 @@ class OrderEntity extends Equatable {
 
   dynamic getProp(String key) => <String, dynamic>{
         "id": id,
-        "discount": discount,
-        "discountPercent": discountPercent,
+        // "discount": discount,
+        // "discountPercent": discountPercent,
         "paymentType": paymentType,
         "orderStart": orderStart,
         "orderEnd": orderEnd,
-        "price": price,
+        // "price": price,
         "barber": barberId,
         "client": clientId,
         "services": services,
+        "isNew": isNew,
       }[key];
 
   factory OrderEntity.fromRow(PlutoRow row) {
     return OrderEntity(
       id: row.cells["id"]?.value,
-      discount: row.cells["discount"]?.value,
-      discountPercent: row.cells["discountPercent"]?.value,
+      // discount: row.cells["discount"]?.value,
+      // discountPercent: row.cells["discountPercent"]?.value,
       paymentType: row.cells["paymentType"]?.value,
       orderStart: row.cells["orderStart"]?.value,
       orderEnd: row.cells["orderEnd"]?.value,
-      price: row.cells["price"]?.value,
+      // price: row.cells["price"]?.value,
       barberId: row.cells["barber"]?.value,
       clientId: row.cells["client"]?.value,
       services: row.cells["services"]?.value,
+      isNew: row.cells["isNew"]?.value,
     );
   }
 
@@ -161,15 +167,16 @@ class OrderEntity extends Equatable {
     return PlutoRow(cells: {
       'delete': PlutoCell(value: "Delete"),
       'id': PlutoCell(value: e.id),
-      'discount': PlutoCell(value: e.discount),
-      'discountPercent': PlutoCell(value: e.discountPercent),
+      // 'discount': PlutoCell(value: e.discount),
+      // 'discountPercent': PlutoCell(value: e.discountPercent),
       'paymentType': PlutoCell(value: e.paymentType),
       'orderStart': PlutoCell(value: e.orderStart),
       'orderEnd': PlutoCell(value: e.orderEnd),
-      'price': PlutoCell(value: e.price),
+      // 'price': PlutoCell(value: e.price),
       'barber': PlutoCell(value: e.barberId),
       'client': PlutoCell(value: e.clientId),
       'services': PlutoCell(value: e.services),
+      'isNew': PlutoCell(value: e.isNew),
     });
   }
 
@@ -178,14 +185,15 @@ class OrderEntity extends Equatable {
     print("Factory Fields services ${List.from(fields["services"]?.val)}");
     return OrderEntity(
       id: fields["id"]?.val,
-      discount: fields["discount"]?.val,
-      discountPercent: fields["discountPercent"]?.val,
+      // discount: fields["discount"]?.val,
+      // discountPercent: fields["discountPercent"]?.val,
       paymentType: fields["paymentType"]?.val,
       orderStart: fields["orderStart"]?.val,
       orderEnd: fields["orderEnd"]?.val,
-      price: fields["price"]?.val,
+      // price: fields["price"]?.val,
       barberId: fields["barber"]?.val,
       clientId: fields["client"]?.val,
+      isNew: fields["isNew"]?.val,
       services: selectedServices ?? List.from(fields["services"]?.val),
     );
   }
@@ -193,14 +201,15 @@ class OrderEntity extends Equatable {
   factory OrderEntity.empty({int? hour, int? minute}) {
     return OrderEntity(
       id: "",
-      discount: 0,
-      discountPercent: 0,
+      // discount: 0,
+      // discountPercent: 0,
       paymentType: OrderPayment.cash,
       orderStart: DateTime.now().copyWith(hour: hour, minute: minute),
       orderEnd: DateTime.now().add(const Duration(hours: 1)),
-      price: 0,
+      // price: 0,
       barberId: "",
       clientId: "",
+      isNew: true,
       services: const [],
     );
   }

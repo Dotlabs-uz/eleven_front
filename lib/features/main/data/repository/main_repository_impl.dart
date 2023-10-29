@@ -76,4 +76,22 @@ class MainRepositoryImpl extends MainRepository {
       return const Left(AppError(appErrorType: AppErrorType.api));
     }
   }
+
+  @override
+  Future<Either<AppError, bool>> deleteOrder(String orderId)async  {
+    try {
+      final entity = await _mainRemoteDataSource.deleteOrder(orderId);
+
+      return Right(entity);
+    } on SocketException {
+      return const Left(AppError(appErrorType: AppErrorType.network));
+    } on UnauthorisedException {
+      return const Left(AppError(appErrorType: AppErrorType.unauthorised));
+    } on ExceptionWithMessage catch (e) {
+      return Left(AppError(
+          appErrorType: AppErrorType.msgError, errorMessage: e.message));
+    } on Exception {
+      return const Left(AppError(appErrorType: AppErrorType.api));
+    }
+  }
 }

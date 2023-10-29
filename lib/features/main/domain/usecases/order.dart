@@ -7,7 +7,7 @@ import '../../../../core/usecases/usecase.dart';
 import '../entity/current_user_entity.dart';
 import '../repository/main_repository.dart';
 
-class SaveOrder extends UseCase<bool,OrderEntity> {
+class SaveOrder extends UseCase<bool, OrderEntity> {
   final MainRepository repository;
 
   SaveOrder(this.repository);
@@ -15,5 +15,16 @@ class SaveOrder extends UseCase<bool,OrderEntity> {
   @override
   Future<Either<AppError, bool>> call(OrderEntity params) async {
     return await repository.saveOrder(params);
+  }
+}
+
+class DeleteOrder extends UseCase<bool, String> {
+  final MainRepository repository;
+
+  DeleteOrder(this.repository);
+
+  @override
+  Future<Either<AppError, bool>> call(String params) async {
+    return await repository.deleteOrder(params);
   }
 }

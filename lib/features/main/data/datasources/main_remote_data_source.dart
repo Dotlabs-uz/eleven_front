@@ -13,6 +13,7 @@ import '../model/order_model.dart';
 abstract class MainRemoteDataSource {
   Future<CurrentUserModel> getCurrentUser();
   Future<bool> saveOrder(OrderModel model);
+  Future<bool> deleteOrder(String orderId);
   Future<bool> saveNotWorkingHours(
       DateTime from, DateTime to, String employeeId);
   Future<List<OrderModel>> getOrders();
@@ -61,5 +62,14 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     await _client.post(ApiConstants.order, params: model.toJson());
 
     return true;
+  }
+
+  @override
+  Future<bool> deleteOrder(String orderId) async {
+  await _client.deleteWithBody(
+      "${ApiConstants.order}/$orderId",
+    );
+
+    return  true;
   }
 }

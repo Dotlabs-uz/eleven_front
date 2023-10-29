@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/entities/field_entity.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../core/utils/app_colors.dart';
@@ -66,7 +68,9 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.isDragging ? Constants.timeTableItemWidth : MediaQuery.of(context).size.width,
+      width: widget.isDragging
+          ? Constants.timeTableItemWidth
+          : MediaQuery.of(context).size.width,
       height: TimeTableHelper.getCardHeight(
         widget.order.orderStart,
         widget.order.orderEnd,
@@ -86,6 +90,8 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
@@ -94,6 +100,21 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
                               ),
+                            ),
+                            const SizedBox(width: 10),
+                            GestureDetector(
+                              child: const MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                  size: 14,
+                                ),
+                              ),
+                              onTap: () {
+                                BlocProvider.of<OrderCubit>(context)
+                                    .delete(orderId: widget.order.id);
+                              },
                             ),
                           ],
                         ),

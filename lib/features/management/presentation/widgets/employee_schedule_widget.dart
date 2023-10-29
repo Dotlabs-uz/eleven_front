@@ -3,11 +3,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/utils/dialogs.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/utils/color_helper.dart';
 import '../../../../core/utils/string_helper.dart';
 import '../../domain/entity/employee_entity.dart';
 import 'month_selector_with_dates_widget.dart';
+
+import 'package:flutter/material.dart';
 
 class FieldSchedule {
   final DateTime dateTime;
@@ -18,12 +21,30 @@ class FieldSchedule {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-
     data['date'] = dateTime.toIso8601String();
     data['employee'] = employeeId;
     data['status'] = status;
-
     return data;
+  }
+}
+
+class SelectedFieldsProvider with ChangeNotifier {
+  final List<FieldSchedule> _selectedFields = [];
+
+  List<FieldSchedule> get selectedFields => _selectedFields;
+
+  void toggleSelectedField(FieldSchedule field) {
+    if (_selectedFields.contains(field)) {
+      _selectedFields.remove(field);
+    } else {
+      _selectedFields.add(field);
+    }
+    notifyListeners();
+  }
+
+  void clearSelectedFields() {
+    _selectedFields.clear();
+    notifyListeners();
   }
 }
 
@@ -32,14 +53,12 @@ class EmployeeScheduleWidget extends StatefulWidget {
   final List<EmployeeEntity> listEmployee;
   final Function(List<FieldSchedule>)? onSave;
   final Function(FieldSchedule) onMultiSelect;
-  final List<FieldSchedule> selectedFields;
   const EmployeeScheduleWidget({
     Key? key,
     this.onMonthChanged,
     this.onSave,
     required this.listEmployee,
     required this.onMultiSelect,
-    required this.selectedFields,
   }) : super(key: key);
 
   @override
@@ -51,36 +70,12 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
   int currentYear = DateTime.now().year;
 
   List<FieldSchedule> submittedFields = [];
-   List<FieldSchedule> selectedFields = [];
-
-  @override
-  void didUpdateWidget(covariant EmployeeScheduleWidget oldWidget) {
-    if (selectedFields.length != widget.selectedFields.length) {
-      initialize();
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  initialize() {
-    selectedFields = widget.selectedFields;
-  }
-
-  @override
-  void initState() {
-    initialize();
-    super.initState();
-  }
-
-  onMonthChanged(int val) {
-    setState(() {
-      currentMonth = val;
-    });
-
-    widget.onMonthChanged?.call(val);
-  }
+  final selectedFieldsProvider = SelectedFieldsProvider();
 
   @override
   Widget build(BuildContext context) {
+    final selectedFieldsProvider = Provider.of<SelectedFieldsProvider>(context);
+
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -91,7 +86,7 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
             children: [
               const SizedBox(width: 200),
               MonthSelectorWithDatesWidget(
-                onMonthChanged: (val) => onMonthChanged(val),
+                onMonthChanged: (val) => widget.onMonthChanged?.call(val),
                 currentMonth: currentMonth,
               ),
             ],
@@ -113,7 +108,8 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
 
                 submittedFields.add(entity);
               },
-              selectedFields: selectedFields,
+              selectedFieldsProvider: selectedFieldsProvider,
+              selectedFields: selectedFieldsProvider.selectedFields,
             ),
           ),
           const SizedBox(height: 20),
@@ -125,9 +121,7 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
                   widget.onSave?.call(submittedFields);
                   submittedFields.clear();
                 },
-                child: Text(
-                  "save".tr(),
-                ),
+                child: Text("save".tr()),
               ),
             ],
           ),
@@ -141,6 +135,7 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
   final EmployeeEntity employeeEntity;
   final int currentMonth;
   final int currentYear;
+  final SelectedFieldsProvider selectedFieldsProvider;
   final List<FieldSchedule> selectedFields;
   final Function(int day, int month, int year, int status, String employee)
       onFieldEdit;
@@ -149,9 +144,10 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
     Key? key,
     required this.employeeEntity,
     required this.currentMonth,
+    required this.selectedFields,
     required this.currentYear,
     required this.onFieldEdit,
-    required this.selectedFields,
+    required this.selectedFieldsProvider,
   }) : super(key: key);
 
   @override
@@ -161,7 +157,6 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
         SizedBox(
           height: 35,
           width: 200,
-          // color: Colors.red,
           child: _card(),
         ),
         ...List.generate(
@@ -183,14 +178,21 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
             final fieldSchedule =
                 FieldSchedule(dateTime, employeeEntity.id, entity?.status ?? 0);
 
-            return _EmployeeScheduleFieldWidget(
-              day: day,
-              month: currentMonth,
-              year: year,
-              onFieldChange: onFieldEdit,
-              employeeId: employeeEntity.id,
-              fieldStatus: entity?.status ?? 0,
-              isSelected: selectedFields.contains(fieldSchedule),
+            return GestureDetector(
+              onTap: () {
+                selectedFieldsProvider.toggleSelectedField(fieldSchedule);
+              },
+              child: _EmployeeScheduleFieldWidget(
+                day: day,
+                month: currentMonth,
+                year: year,
+                selectedFields: selectedFields,
+                onFieldChange: onFieldEdit,
+                employeeId: employeeEntity.id,
+                fieldStatus: entity?.status ?? 0,
+                isSelected: selectedFieldsProvider.selectedFields
+                    .contains(fieldSchedule),
+              ),
             );
           },
         ),
@@ -250,8 +252,10 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
   final int month;
   final String employeeId;
   final bool isSelected;
+  final List<FieldSchedule> selectedFields;
   final Function(int day, int month, int year, int status, String employee)
       onFieldChange;
+
   const _EmployeeScheduleFieldWidget({
     Key? key,
     required this.fieldStatus,
@@ -259,6 +263,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
     required this.year,
     required this.month,
     required this.onFieldChange,
+    required this.selectedFields,
     required this.employeeId,
     required this.isSelected,
   }) : super(key: key);
@@ -280,25 +285,25 @@ class _EmployeeScheduleFieldWidgetState
   }
 
   changeState() {
-    Dialogs.scheduleField(
-      context: context,
-      onConfirm: (val) {
-        setState(() {
-          status = val;
-        });
-
-        widget.onFieldChange.call(
-          widget.day,
-          widget.month,
-          widget.year,
-          status,
-          widget.employeeId,
-        );
-      },
-      day: widget.day,
-      month: widget.month,
-      year: widget.year,
-    );
+    // Dialogs.scheduleField(
+    //   context: context,
+    //   onConfirm: (val) {
+    //     setState(() {
+    //       status = val;
+    //     });
+    //
+    //     widget.onFieldChange.call(
+    //       widget.day,
+    //       widget.month,
+    //       widget.year,
+    //       status,
+    //       widget.employeeId,
+    //     );
+    //   },
+    //   day: widget.day,
+    //   month: widget.month,
+    //   year: widget.year,
+    // );
   }
 
   @override
@@ -310,7 +315,14 @@ class _EmployeeScheduleFieldWidgetState
           width: 35,
           height: 35,
           decoration: BoxDecoration(
-            color: DateTime.now().day  == widget.day ? Colors.blue.withOpacity(0.2) : Colors.white,
+            color: widget.selectedFields.contains(FieldSchedule(
+                    DateTime(widget.year, widget.day, widget.month),
+                    widget.employeeId,
+                    status))
+                ? Colors.red
+                : DateTime.now().day == widget.day
+                    ? Colors.blue.withOpacity(0.1)
+                    : Colors.white,
             border: Border.all(width: 1, color: Colors.grey.shade200),
           ),
         ),
@@ -341,10 +353,11 @@ class _EmployeeScheduleFieldWidgetState
                 ? Colors.blue.withOpacity(0.4)
                 : ColorHelper.getColorForScheduleByStatus(status),
             border: Border.all(
-                width: 1,
-                color: widget.isSelected
-                    ? Colors.blue.shade400
-                    : Colors.grey.shade200),
+              width: 1,
+              color: widget.isSelected
+                  ? Colors.blue.shade400
+                  : Colors.grey.shade200,
+            ),
           ),
           child: Center(
             child: Text(
