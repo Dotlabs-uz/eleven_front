@@ -40,8 +40,8 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
             }
           }
 
-          // widget.onChanged.call(selectedServices);
-          widget.fieldEntity.val = selectedServices;
+          widget.onChanged.call(selectedServices);
+          // widget.fieldEntity.val = selectedServices;
 
 
           setState(() {});

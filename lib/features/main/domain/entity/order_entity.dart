@@ -173,7 +173,8 @@ class OrderEntity extends Equatable {
     });
   }
 
-  factory OrderEntity.fromFields() {
+  factory OrderEntity.fromFields(
+      {List<ServiceProductEntity>? selectedServices}) {
     print("Factory Fields services ${List.from(fields["services"]?.val)}");
     return OrderEntity(
       id: fields["id"]?.val,
@@ -185,7 +186,7 @@ class OrderEntity extends Equatable {
       price: fields["price"]?.val,
       barberId: fields["barber"]?.val,
       clientId: fields["client"]?.val,
-      services: List.from(fields["services"]?.val),
+      services: selectedServices ?? List.from(fields["services"]?.val),
     );
   }
 
@@ -207,12 +208,5 @@ class OrderEntity extends Equatable {
   @override
   List<Object?> get props => [
         id,
-        discount,
-        discountPercent,
-        paymentType,
-        orderStart,
-        orderEnd,
-        price,
-        barberId,
       ];
 }

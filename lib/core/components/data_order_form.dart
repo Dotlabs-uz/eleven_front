@@ -17,7 +17,7 @@ import 'payment_type_field_widget.dart';
 
 class DataOrderForm extends StatefulWidget {
   final Map<String, FieldEntity> fields;
-  final Function() saveData;
+  final Function(List<ServiceProductEntity> selectedServices) saveData;
   final Function() closeForm;
 
   const DataOrderForm({
@@ -33,6 +33,7 @@ class DataOrderForm extends StatefulWidget {
 
 class DataOrderFormState extends State<DataOrderForm> {
   List<ServiceProductEntity> selectedProducts = [];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -96,13 +97,16 @@ class DataOrderFormState extends State<DataOrderForm> {
               SelectServicesWidget(
                 fieldEntity: widget.fields["services"]!,
                 onChanged: (listData) {
-                  // widget.fields['services']!.val = listData;
+                  selectedProducts = listData;
+                  widget.fields['services']!.val = listData;
+                  print("Selected services ${widget.fields['services']!.val}");
+                  setState(() {});
                 },
               ),
               const SizedBox(height: 10),
               ButtonWidget(
                 text: "save".tr(),
-                onPressed: widget.saveData,
+                onPressed: () => widget.saveData.call(selectedProducts),
               ),
             ],
           ),

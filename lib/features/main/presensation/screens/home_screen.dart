@@ -150,8 +150,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
     );
   }
 
-  void _saveOrder() {
-    BlocProvider.of<OrderCubit>(context).save(order: OrderEntity.fromFields());
+  void _saveOrder(List<ServiceProductEntity> selectedServices) {
+    BlocProvider.of<OrderCubit>(context).save(order: OrderEntity.fromFields(selectedServices: selectedServices));
   }
 
   // void _saveOrderLocal(OrderEntity entity) {
