@@ -51,7 +51,7 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
   int currentYear = DateTime.now().year;
 
   List<FieldSchedule> submittedFields = [];
-  static List<FieldSchedule> selectedFields = [];
+   List<FieldSchedule> selectedFields = [];
 
   @override
   void didUpdateWidget(covariant EmployeeScheduleWidget oldWidget) {

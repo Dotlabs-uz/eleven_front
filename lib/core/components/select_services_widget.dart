@@ -31,18 +31,18 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
           final data = state.data;
           final action = state.action;
 
-          if (action == SelectedServicesAction.remove) {
-            if (data != null) {
+          if (data != null) {
+            if (action == SelectedServicesAction.remove) {
               selectedServices.remove(data);
             }
-          } else if (action == SelectedServicesAction.add && data != null) {
-            selectedServices.add(data);
+            if (action == SelectedServicesAction.add) {
+              selectedServices.add(data);
+            }
           }
 
           // widget.onChanged.call(selectedServices);
           widget.fieldEntity.val = selectedServices;
 
-          print("Selcted services ${selectedServices.length}");
 
           setState(() {});
           BlocProvider.of<SelectServicesCubit>(context).init();
@@ -80,7 +80,7 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
                   onTap: () {
                     print("Selected services len ${selectedServices.length}");
                     BlocProvider.of<ShowSelectServicesCubit>(context)
-                      .enable(selectedServices);
+                        .enable(selectedServices);
                   },
                   child: Container(
                     constraints: const BoxConstraints(

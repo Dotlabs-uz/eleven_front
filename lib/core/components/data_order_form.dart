@@ -4,6 +4,7 @@ import 'package:eleven_crm/core/components/client_field_widget.dart';
 import 'package:eleven_crm/core/components/date_time_field_widget.dart';
 import 'package:eleven_crm/core/components/select_services_widget.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/select_services/select_services_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -49,7 +50,11 @@ class DataOrderFormState extends State<DataOrderForm> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                    onPressed: widget.closeForm,
+                    onPressed:() {
+                      widget.closeForm.call();
+                      BlocProvider.of<ShowSelectServicesCubit>(context)
+                          .disable();
+                    },
                     child: Text(
                       'close'.tr(),
                       style: GoogleFonts.nunito(

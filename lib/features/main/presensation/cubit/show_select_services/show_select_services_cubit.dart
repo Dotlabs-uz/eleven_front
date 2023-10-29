@@ -1,20 +1,28 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../products/domain/entity/service_product_entity.dart';
 
-class ShowSelectedServiceHelper {
+class ShowSelectedServiceHelper extends Equatable {
   final bool show;
   final List<ServiceProductEntity> selectedServices;
 
-  ShowSelectedServiceHelper({
+  const ShowSelectedServiceHelper({
     required this.show,
     required this.selectedServices,
   });
+
+  @override
+  List<Object?> get props => [show, selectedServices.length];
 }
 
 class ShowSelectServicesCubit extends Cubit<ShowSelectedServiceHelper> {
   ShowSelectServicesCubit()
-      : super(ShowSelectedServiceHelper(show: false, selectedServices: []));
+      : super(
+            const ShowSelectedServiceHelper(show: false, selectedServices: []));
+
+  // init({bool show = false}) =>
+  //     emit(ShowSelectedServiceHelper(show: show, selectedServices: const []));
 
   enable(List<ServiceProductEntity> selectedServices) => emit(
         ShowSelectedServiceHelper(
@@ -24,7 +32,7 @@ class ShowSelectServicesCubit extends Cubit<ShowSelectedServiceHelper> {
       );
 
   disable() => emit(
-        ShowSelectedServiceHelper(
+        const ShowSelectedServiceHelper(
           show: false,
           selectedServices: [],
         ),

@@ -35,7 +35,7 @@ class SelectServicesCubit extends Cubit<SelectServicesHelper> {
     );
   }
 
-  remove({required ServiceProductEntity service}) {
+  Future<void> remove({required ServiceProductEntity service}) async {
     emit(
       SelectServicesHelper(
         data: service,

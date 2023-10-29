@@ -641,5 +641,6 @@
   "serviceProductCategoryFieldLabelText": "Xizmat toifasi",
   "managers": "Menejerlar",
   "selectTimeFrom": "Vaqtni tanlang dan",
-  "selectTimeTo": "Vaqtni tanlang oldin"
+  "selectTimeTo": "Vaqtni tanlang oldin",
+  "selectServices": "Xizmatlarni tanlang"
 }

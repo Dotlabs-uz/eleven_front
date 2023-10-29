@@ -42,13 +42,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late NotWorkingHoursCubit notWorkingHoursCubit;
   late BarberCubit barberCubit;
-  late ShowSelectServicesCubit showSelectServicesCubit;
   late SelectServicesCubit selectServicesCubit;
 
   @override
   void initState() {
     notWorkingHoursCubit = locator();
-    showSelectServicesCubit = locator();
     selectServicesCubit = locator();
     barberCubit = locator();
     super.initState();
@@ -58,22 +56,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => showSelectServicesCubit),
         BlocProvider(create: (context) => notWorkingHoursCubit),
         BlocProvider(create: (context) => selectServicesCubit),
         BlocProvider(create: (context) => barberCubit..load("")),
       ],
-      child: _ContentWidget(
-        selectServicesCubit: showSelectServicesCubit,
-      ),
+      child: const _ContentWidget(),
     );
   }
 }
 
 class _ContentWidget extends StatefulWidget {
-  final ShowSelectServicesCubit selectServicesCubit;
-  const _ContentWidget({Key? key, required this.selectServicesCubit})
-      : super(key: key);
+  const _ContentWidget({Key? key}) : super(key: key);
 
   @override
   State<_ContentWidget> createState() => _ContentWidgetState();
@@ -431,7 +424,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
               if (mounted) {
                 Future.delayed(
                   Duration.zero,
-                  () => setState(() => showSelectServices = state.show),
+                  () {
+                    setState(() {
+                      showSelectServices = state.show;
+                    });
+                  },
                 );
               }
             },
@@ -440,119 +437,115 @@ class _ContentWidgetState extends State<_ContentWidget> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            listBarbers.isEmpty
-                ? const Expanded(child: EmptyWidget())
-                : Expanded(
-                    child: Stack(
+            if (listBarbers.isEmpty)
+              const Expanded(child: EmptyWidget())
+            else
+              Expanded(
+                child: Stack(
+                  children: [
+                    Column(
                       children: [
-                        Column(
-                          children: [
-                            const SizedBox(height: 10),
-                            // Row(
-                            //   children: [
-                            //     CupertinoSlidingSegmentedControl<int>(
-                            //       backgroundColor: CupertinoColors.white,
-                            //       thumbColor: Colors.grey,
-                            //       padding: const EdgeInsets.symmetric(horizontal: 15),
-                            //       groupValue: selectedValue,
-                            //       children: children,
-                            //       onValueChanged: (value) {
-                            //         if (value != null) {
-                            //           setState(() {
-                            //             selectedValue = value;
-                            //           });
-                            //         }
-                            //       },
-                            //     ),
-                            // Expanded(child: _dateTimeWidget()),
-                            // ],
-                            // ),
-                            // const SizedBox(height: 10),
-                            Expanded(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  // const Expanded(
-                                  //     child: CalendarWidget(
-                                  //   calendarsCount: 3,
-                                  // )),
+                        const SizedBox(height: 10),
+                        // Row(
+                        //   children: [
+                        //     CupertinoSlidingSegmentedControl<int>(
+                        //       backgroundColor: CupertinoColors.white,
+                        //       thumbColor: Colors.grey,
+                        //       padding: const EdgeInsets.symmetric(horizontal: 15),
+                        //       groupValue: selectedValue,
+                        //       children: children,
+                        //       onValueChanged: (value) {
+                        //         if (value != null) {
+                        //           setState(() {
+                        //             selectedValue = value;
+                        //           });
+                        //         }
+                        //       },
+                        //     ),
+                        // Expanded(child: _dateTimeWidget()),
+                        // ],
+                        // ),
+                        // const SizedBox(height: 10),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // const Expanded(
+                              //     child: CalendarWidget(
+                              //   calendarsCount: 3,
+                              // )),
 
-                                  Expanded(
-                                    flex: 2,
-                                    child: BlocBuilder<OrderCubit, OrderState>(
-                                      builder: (context, state) {
-                                        if (state is OrderSaved) {
-                                          orders.add(state.order);
-                                        }
-                                        return TimeTableWidget(
-                                          listBarbers: listBarbers,
-                                          onTapNotWorkingHour:
-                                              _onDeleteNotWorkingHours,
-                                          onFieldTap: (hour, minute) {
-                                            activeData = OrderEntity.empty(
-                                              hour: hour,
-                                              minute: minute,
-                                            );
-                                            _editOrder(activeData);
-                                          },
-                                          onOrderClick: (entity) =>
-                                              _editOrder(entity),
-                                          onDeleteEmployeeFromTable:
-                                              (employeeId) {
-                                            _barberFromTimeTableCardAction(
-                                              employeeId,
-                                              false,
-                                            );
-                                          },
-                                          onNotWorkingHoursCreate: (
-                                            DateTime from,
-                                            DateTime to,
-                                            String employeeId,
-                                          ) {
-                                            BlocProvider.of<
-                                                NotWorkingHoursCubit>(
-                                              context,
-                                            ).save(
-                                              dateFrom: from,
-                                              dateTo: to,
-                                              employeeId: employeeId,
-                                            );
-                                          },
-                                          listOrders: orders,
+                              Expanded(
+                                flex: 2,
+                                child: BlocBuilder<OrderCubit, OrderState>(
+                                  builder: (context, state) {
+                                    if (state is OrderSaved) {
+                                      orders.add(state.order);
+                                    }
+                                    return TimeTableWidget(
+                                      listBarbers: listBarbers,
+                                      onTapNotWorkingHour:
+                                          _onDeleteNotWorkingHours,
+                                      onFieldTap: (hour, minute) {
+                                        activeData = OrderEntity.empty(
+                                          hour: hour,
+                                          minute: minute,
+                                        );
+                                        _editOrder(activeData);
+                                      },
+                                      onOrderClick: (entity) =>
+                                          _editOrder(entity),
+                                      onDeleteEmployeeFromTable: (employeeId) {
+                                        _barberFromTimeTableCardAction(
+                                          employeeId,
+                                          false,
                                         );
                                       },
-                                    ),
-                                  ),
-
-                                  if (!isFormVisible) const SizedBox(width: 5),
-                                  if (!isFormVisible)
-                                    BlocBuilder<BarberCubit, BarberState>(
-                                      builder: (context, state) {
-                                        return NotSelectedBarbersListWidget(
-                                          listBarbers: listBarbers,
-                                          onTap: (String barberId) {
-                                            print("Select employee $barberId");
-                                            setState(() {});
-                                            _barberFromTimeTableCardAction(
-                                              barberId,
-                                              true,
-                                            );
-                                          },
+                                      onNotWorkingHoursCreate: (
+                                        DateTime from,
+                                        DateTime to,
+                                        String employeeId,
+                                      ) {
+                                        BlocProvider.of<NotWorkingHoursCubit>(
+                                          context,
+                                        ).save(
+                                          dateFrom: from,
+                                          dateTo: to,
+                                          employeeId: employeeId,
                                         );
                                       },
-                                    ),
-                                ],
+                                      listOrders: orders,
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+
+                              if (!isFormVisible) const SizedBox(width: 5),
+                              if (!isFormVisible)
+                                BlocBuilder<BarberCubit, BarberState>(
+                                  builder: (context, state) {
+                                    return NotSelectedBarbersListWidget(
+                                      listBarbers: listBarbers,
+                                      onTap: (String barberId) {
+                                        print("Select employee $barberId");
+                                        setState(() {});
+                                        _barberFromTimeTableCardAction(
+                                          barberId,
+                                          true,
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                            ],
+                          ),
                         ),
-                        showSelectServices
-                            ? const SelectServiceDialogWidget(
-                              )
-                            : const SizedBox(),
                       ],
                     ),
-                  ),
+                    if (showSelectServices) const SelectServiceDialogWidget()
+                  ],
+                ),
+              ),
             if (isFormVisible)
               Container(
                 constraints: const BoxConstraints(
@@ -562,7 +555,16 @@ class _ContentWidgetState extends State<_ContentWidget> {
                   child: DataOrderForm(
                     fields: activeData.getFields(),
                     saveData: _saveOrder,
-                    closeForm: () => setState(() => isFormVisible = false),
+                    closeForm: () {
+                      if (mounted) {
+                        Future.delayed(
+                          Duration.zero,
+                          () {
+                            setState(() => isFormVisible = false);
+                          },
+                        );
+                      }
+                    },
                   ),
                 ),
               ),

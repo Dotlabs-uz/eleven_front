@@ -1,17 +1,18 @@
-import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/products/domain/entity/service_product_category_entity.dart';
-import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 
 import '../../../../core/utils/assets.dart';
+import '../../../../get_it/locator.dart';
 import '../../../products/domain/entity/service_product_entity.dart';
+import '../../../products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 import '../cubit/select_services/select_services_cubit.dart';
 import '../cubit/show_select_services/show_select_services_cubit.dart';
 
 class SelectServiceDialogWidget extends StatefulWidget {
-  const SelectServiceDialogWidget({Key? key}) : super(key: key);
+  const SelectServiceDialogWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SelectServiceDialogWidget> createState() =>
@@ -19,7 +20,10 @@ class SelectServiceDialogWidget extends StatefulWidget {
 }
 
 class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
+  List<ServiceProductCategoryEntity> listServiceCategories = [];
   List<ServiceProductEntity> listSelectedServices = [];
+
+  late SelectServicesCubit selectServicesCubit;
 
   @override
   void initState() {
@@ -28,27 +32,28 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
   }
 
   initialize() {
+    selectServicesCubit = locator();
     BlocProvider.of<ServiceProductCategoryCubit>(context).load(
       "",
     );
+  }
+
+  addGlobalSelectedServicesToLocal(List<ServiceProductEntity> listData) {
+    if (mounted) {
+      Future.delayed(
+        Duration.zero,
+        () {
+          setState(() => listSelectedServices = listData);
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ShowSelectServicesCubit, ShowSelectedServiceHelper>(
       builder: (context, state) {
-        if (state.show == true) {
-          if (mounted) {
-            Future.delayed(
-              Duration.zero,
-              () {
-                setState(() {
-                  listSelectedServices.addAll(state.selectedServices);
-                });
-              },
-            );
-          }
-        }
+        addGlobalSelectedServicesToLocal(state.selectedServices);
 
         return Container(
           color: Colors.black.withOpacity(0.4),
@@ -73,10 +78,9 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                       MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: GestureDetector(
-                          onTap: () {
-                            BlocProvider.of<ShowSelectServicesCubit>(context)
-                                .disable();
-                          },
+                          onTap: () =>
+                              BlocProvider.of<ShowSelectServicesCubit>(context)
+                                  .disable(),
                           child: const Icon(
                             Icons.close,
                             color: Colors.black,
@@ -87,24 +91,71 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                   ),
                   const SizedBox(height: 10),
                   Expanded(
-                    child: BlocBuilder<ServiceProductCategoryCubit,
+                    child: BlocListener<ServiceProductCategoryCubit,
                         ServiceProductCategoryState>(
-                      builder: (context, state) {
+                      listener: (context, state) {
                         if (state is ServiceProductCategoryLoaded) {
-                          final listData = state.data;
-                          return ListView.builder(
-                            physics: const ClampingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              final category = listData[index];
-
-                              // return const SizedBox();
-                              return _serviceCategoryWidgetServices(category);
-                            },
-                            itemCount: listData.length,
-                          );
+                          if (mounted) {
+                            Future.delayed(
+                              Duration.zero,
+                              () {
+                                setState(() {
+                                  listServiceCategories = state.data;
+                                });
+                              },
+                            );
+                          }
                         }
-                        return const LoadingCircle();
                       },
+                      child: ListView.builder(
+                        physics: const ClampingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final category = listServiceCategories[index];
+
+                          // return const SizedBox();
+                          return Column(
+                            children: [
+                              _serviceProductCategoryCard(category.name),
+                              const SizedBox(height: 10),
+                              GridView.count(
+                                shrinkWrap: true,
+                                crossAxisCount: 2,
+                                children: List.generate(
+                                    category.services.length, (index) {
+                                  final service = category.services[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      if (listSelectedServices
+                                          .contains(service)) {
+                                        BlocProvider.of<SelectServicesCubit>(
+                                          context,
+                                        ).remove(service: service);
+                                      } else {
+                                        BlocProvider.of<SelectServicesCubit>(
+                                          context,
+                                        ).save(service: service);
+                                      }
+                                      setState(() {});
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 10, right: 10),
+                                      child: _ServiceProductCard(
+                                        isSelected: listSelectedServices
+                                            .contains(service),
+                                        color: Colors.blue,
+                                        item: service,
+                                        image: Assets.tLogo,
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ],
+                          );
+                        },
+                        itemCount: listServiceCategories.length,
+                      ),
                     ),
                   ),
                 ],
@@ -113,51 +164,6 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
           ),
         );
       },
-    );
-  }
-
-  _serviceCategoryWidgetServices(
-      ServiceProductCategoryEntity productCategoryEntity) {
-    return Column(
-      children: [
-        _serviceProductCategoryCard(productCategoryEntity.name),
-        const SizedBox(height: 10),
-        GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            childAspectRatio: 4 / 3,
-            crossAxisSpacing: 10,
-          ),
-          shrinkWrap: true,
-          itemCount: productCategoryEntity.services.length,
-          itemBuilder: (BuildContext context, int index) {
-            final item = productCategoryEntity.services[index];
-            return GestureDetector(
-              onTap: () {
-                if (listSelectedServices.contains(item)) {
-                  BlocProvider.of<SelectServicesCubit>(context).remove(
-                    service: item,
-                  );
-                  listSelectedServices.remove(item);
-                } else {
-                  BlocProvider.of<SelectServicesCubit>(context).save(
-                    service: item,
-                  );
-                  listSelectedServices.add(item);
-                }
-                setState(() {});
-              },
-              child: _ServiceProductCard(
-                color: Colors.blue,
-                item: item,
-                image: Assets.tLogo,
-                isSelected: listSelectedServices.contains(item),
-              ),
-            );
-          },
-        ),
-      ],
     );
   }
 
@@ -200,12 +206,26 @@ class _ServiceProductCard extends StatefulWidget {
 }
 
 class _ServiceProductCardState extends State<_ServiceProductCard> {
+  static bool isSelected = false;
+
+  @override
+  void didUpdateWidget(covariant _ServiceProductCard oldWidget) {
+    if (isSelected != widget.isSelected) {
+      isSelected = widget.isSelected;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color:
-            widget.isSelected ? Colors.black45.withOpacity(0.4) : widget.color,
+        color: isSelected ? Colors.black45.withOpacity(0.4) : widget.color,
         borderRadius: BorderRadius.circular(8),
         image: DecorationImage(
           opacity: 0.1,
