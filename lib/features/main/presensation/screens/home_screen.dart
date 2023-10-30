@@ -426,139 +426,110 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 // ),
               ],
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (listBarbers.isEmpty)
-                    const Expanded(child: EmptyWidget())
-                  else
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          Column(
-                            children: [
-                              const SizedBox(height: 10),
-                              // Row(
-                              //   children: [
-                              //     CupertinoSlidingSegmentedControl<int>(
-                              //       backgroundColor: CupertinoColors.white,
-                              //       thumbColor: Colors.grey,
-                              //       padding: const EdgeInsets.symmetric(horizontal: 15),
-                              //       groupValue: selectedValue,
-                              //       children: children,
-                              //       onValueChanged: (value) {
-                              //         if (value != null) {
-                              //           setState(() {
-                              //             selectedValue = value;
-                              //           });
-                              //         }
-                              //       },
-                              //     ),
-                              // Expanded(child: _dateTimeWidget()),
-                              // ],
-                              // ),
-                              // const SizedBox(height: 10),
-                              Expanded(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    // const Expanded(
-                                    //     child: CalendarWidget(
-                                    //   calendarsCount: 3,
-                                    // )),
+                  if (listBarbers.isEmpty) const Expanded(child: EmptyWidget()),
+                  Expanded(
+                    child: Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // const Expanded(
+                            //     child: CalendarWidget(
+                            //   calendarsCount: 3,
+                            // )),
 
-                                    Expanded(
-                                      flex: 2,
-                                      child:
-                                          BlocBuilder<OrderCubit, OrderState>(
-                                        builder: (context, state) {
-                                          return TimeTableWidget(
-                                            listBarbers: listBarbers,
-                                            onTapNotWorkingHour:
-                                                _onDeleteNotWorkingHours,
-                                            onFieldTap: (hour, minute) {
-                                              activeData = OrderEntity.empty(
-                                                hour: hour,
-                                                minute: minute,
-                                              );
-                                              _editOrder(activeData);
-                                            },
-                                            onOrderClick: (entity) =>
-                                                _editOrder(entity),
-                                            onDeleteEmployeeFromTable:
-                                                (employeeId) {
-                                              _barberFromTimeTableCardAction(
-                                                employeeId,
-                                                false,
-                                              );
-                                            },
-                                            onNotWorkingHoursCreate: (
-                                              DateTime from,
-                                              DateTime to,
-                                              String employeeId,
-                                            ) {
-                                              BlocProvider.of<
-                                                  NotWorkingHoursCubit>(
-                                                context,
-                                              ).save(
-                                                dateFrom: from,
-                                                dateTo: to,
-                                                employeeId: employeeId,
-                                              );
-                                            },
-                                            listOrders: orders,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    BlocBuilder<HomeScreenOrderFormCubit,
-                                        HomeScreenOrderFormHelper>(
-                                      builder: (context, state) {
-                                        return AnimatedSwitcher(
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          child: state.show == false
-                                              ? Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 5),
-                                                  child: BlocBuilder<
-                                                      BarberCubit, BarberState>(
-                                                    builder: (context, state) {
-                                                      return NotSelectedBarbersListWidget(
-                                                        listBarbers:
-                                                            listBarbers,
-                                                        onTap:
-                                                            (String barberId) {
-                                                          setState(() {});
-                                                          _barberFromTimeTableCardAction(
-                                                            barberId,
-                                                            true,
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                  ),
-                                                )
-                                              : const SizedBox(),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+                            Expanded(
+                              flex: 2,
+                              child:
+                                  BlocBuilder<OrderCubit, OrderState>(
+                                builder: (context, state) {
+                                  return TimeTableWidget(
+                                    listBarbers: listBarbers,
+                                    onTapNotWorkingHour:
+                                        _onDeleteNotWorkingHours,
+                                    onFieldTap: (hour, minute) {
+                                      activeData = OrderEntity.empty(
+                                        hour: hour,
+                                        minute: minute,
+                                      );
+                                      _editOrder(activeData);
+                                    },
+                                    onOrderClick: (entity) =>
+                                        _editOrder(entity),
+                                    onDeleteEmployeeFromTable:
+                                        (employeeId) {
+                                      _barberFromTimeTableCardAction(
+                                        employeeId,
+                                        false,
+                                      );
+                                    },
+                                    onNotWorkingHoursCreate: (
+                                      DateTime from,
+                                      DateTime to,
+                                      String employeeId,
+                                    ) {
+                                      BlocProvider.of<
+                                          NotWorkingHoursCubit>(
+                                        context,
+                                      ).save(
+                                        dateFrom: from,
+                                        dateTo: to,
+                                        employeeId: employeeId,
+                                      );
+                                    },
+                                    listOrders: orders,
+                                  );
+                                },
                               ),
-                            ],
-                          ),
-                          BlocBuilder<ShowSelectServicesCubit,
-                              ShowSelectedServiceHelper>(
-                            builder: (context, state) {
-                              return state.show
-                                  ? const SelectServiceDialogWidget()
-                                  : const SizedBox();
-                            },
-                          ),
-                        ],
-                      ),
+                            ),
+                            BlocBuilder<HomeScreenOrderFormCubit,
+                                HomeScreenOrderFormHelper>(
+                              builder: (context, state) {
+                                return AnimatedSwitcher(
+                                  duration:
+                                      const Duration(milliseconds: 300),
+                                  child: state.show == false
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(
+                                                  left: 5),
+                                          child: BlocBuilder<
+                                              BarberCubit, BarberState>(
+                                            builder: (context, state) {
+                                              return NotSelectedBarbersListWidget(
+                                                listBarbers:
+                                                    listBarbers,
+                                                onTap:
+                                                    (String barberId) {
+                                                  setState(() {});
+                                                  _barberFromTimeTableCardAction(
+                                                    barberId,
+                                                    true,
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        BlocBuilder<ShowSelectServicesCubit,
+                            ShowSelectedServiceHelper>(
+                          builder: (context, state) {
+                            return state.show
+                                ? const SelectServiceDialogWidget()
+                                : const SizedBox();
+                          },
+                        ),
+                      ],
                     ),
+                  ),
                   BlocBuilder<HomeScreenOrderFormCubit,
                       HomeScreenOrderFormHelper>(
                     builder: (context, state) {

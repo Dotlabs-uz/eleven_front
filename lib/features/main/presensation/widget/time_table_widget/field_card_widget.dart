@@ -10,7 +10,7 @@ class FieldCardWidget extends StatefulWidget {
   final int hour;
   final bool isFirstSection;
   final String barberId;
-  final Function(int hour ,int minute) onFieldTap;
+  final Function(int hour, int minute) onFieldTap;
   final Function() onPositionChanged;
   final List<NotWorkingHoursEntity> notWorkingHours;
 
@@ -60,7 +60,11 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
         minWidth: 100,
       ),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(width: 1, color: Colors.black26)),
+        border: Border(
+            bottom: BorderSide(
+          width: 1,
+          color: Colors.black26,
+        )),
         // border: Border.all(width: 1),
       ),
       child: Column(
@@ -106,7 +110,7 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                 },
                 builder: (context, candidateData, rejectedData) {
                   return InkWell(
-                    onTap: () =>widget.onFieldTap.call (widget.hour, minute) ,
+                    onTap: () => widget.onFieldTap.call(widget.hour, minute),
                     child: Ink(
                       decoration: BoxDecoration(
                         color: candidateData.isNotEmpty
@@ -128,7 +132,8 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 4, top: 2),
+                                  padding:
+                                      const EdgeInsets.only(left: 4, top: 2),
                                   child: Text(
                                     "${widget.hour}:${minute == 0 ? "00" : minute}",
                                     style: TextStyle(
