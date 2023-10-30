@@ -34,6 +34,23 @@ class DataOrderForm extends StatefulWidget {
 class DataOrderFormState extends State<DataOrderForm> {
   List<ServiceProductEntity> selectedProducts = [];
 
+  double price = 0;
+  double duration = 0;
+
+  getPriceAndDuration(List<ServiceProductEntity> listData) {
+    price = 0;
+    duration = 0;
+
+    for (var e in selectedProducts) {
+      price += e.price;
+      duration += e.duration;
+      print("Price ${e.price}");
+      print("Duration ${e.duration}");
+    }
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -87,7 +104,6 @@ class DataOrderFormState extends State<DataOrderForm> {
                 fieldEntity: widget.fields['orderEnd']!,
                 withTime: true,
               ),
-
               PaymentTypeFieldWidget(
                 fieldEntity: widget.fields['paymentType']!,
               ),
@@ -96,13 +112,79 @@ class DataOrderFormState extends State<DataOrderForm> {
                 onChanged: (listData) {
                   selectedProducts = listData;
                   widget.fields['services']!.val = listData;
-                  print("Selected services ${widget.fields['services']!.val}");
+                  print("Selected services $selectedProducts");
+                  getPriceAndDuration(selectedProducts);
+
                 },
               ),
               const SizedBox(height: 10),
               ButtonWidget(
                 text: "save".tr(),
                 onPressed: () => widget.saveData.call(selectedProducts),
+              ),
+              const SizedBox(height: 30),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 10),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "${'price'.tr()}:",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const TextSpan(text: " "),
+                            TextSpan(
+                              text: price.toString(),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "${'duration'.tr()}:",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const TextSpan(text: " "),
+                            TextSpan(
+                              text: duration.toString(),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
