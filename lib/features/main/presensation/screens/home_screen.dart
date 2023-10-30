@@ -7,6 +7,7 @@ import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/core/components/select_services_widget.dart';
 import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/home_screen_form/home_screen_order_form_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/orders/orders_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/widget/select_service_dialog_widget.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
@@ -79,7 +80,6 @@ class _ContentWidget extends StatefulWidget {
 
 class _ContentWidgetState extends State<_ContentWidget> {
   late OrderEntity activeData;
-  late bool isFormVisible;
   late bool showSelectServices;
 
   late PlutoRow selectedRow;
@@ -97,7 +97,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     activeData = OrderEntity.empty();
 
-    isFormVisible = false;
     showSelectServices = false;
 
     listBarbers.clear();
@@ -186,7 +185,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
         ),
       );
     } else {
-      setState(() => isFormVisible = true);
+      BlocProvider.of<HomeScreenOrderFormCubit>(context).enable();
     }
   }
 
@@ -388,38 +387,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
                           () {
                             setState(() {
                               listBarbers = state.data.results;
-                              // listBarbers.add(
-                              //   BarberModel(
-                              //     id: "id",
-                              //     firstName: "firstName",
-                              //     lastName: "lastName",
-                              //     password: "password",
-                              //     login: "",
-                              //     phone: 12,
-                              //     notWorkingHours: [
-                              //       NotWorkingHoursEntity(
-                              //         dateFrom: DateTime(
-                              //           DateTime.now().year,
-                              //           DateTime.now().month,
-                              //           DateTime.now().day,
-                              //           16,
-                              //           15,
-                              //         ),
-                              //         dateTo: DateTime(
-                              //           DateTime.now().year,
-                              //           DateTime.now().month,
-                              //           DateTime.now().day,
-                              //           17,
-                              //           45,
-                              //         ),
-                              //         barberId: 'id',
-                              //       )
-                              //     ],
-                              //     inTimeTable: true,
-                              //     filial: FilialEntity.empty(),
-                              //     avatar: '',
-                              //   ),
-                              // );
                             });
                           },
                         );
@@ -543,26 +510,39 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         },
                                       ),
                                     ),
-
-                                    if (!isFormVisible)
-                                      const SizedBox(width: 5),
-                                    if (!isFormVisible)
-                                      BlocBuilder<BarberCubit, BarberState>(
-                                        builder: (context, state) {
-                                          return NotSelectedBarbersListWidget(
-                                            listBarbers: listBarbers,
-                                            onTap: (String barberId) {
-                                              print(
-                                                  "Select employee $barberId");
-                                              setState(() {});
-                                              _barberFromTimeTableCardAction(
-                                                barberId,
-                                                true,
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
+                                    BlocBuilder<HomeScreenOrderFormCubit,
+                                        HomeScreenOrderFormHelper>(
+                                      builder: (context, state) {
+                                        return AnimatedSwitcher(
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          child: state.show == false
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5),
+                                                  child: BlocBuilder<
+                                                      BarberCubit, BarberState>(
+                                                    builder: (context, state) {
+                                                      return NotSelectedBarbersListWidget(
+                                                        listBarbers:
+                                                            listBarbers,
+                                                        onTap:
+                                                            (String barberId) {
+                                                          setState(() {});
+                                                          _barberFromTimeTableCardAction(
+                                                            barberId,
+                                                            true,
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
+                                                )
+                                              : const SizedBox(),
+                                        );
+                                      },
+                                    ),
                                   ],
                                 ),
                               ),
@@ -579,28 +559,32 @@ class _ContentWidgetState extends State<_ContentWidget> {
                         ],
                       ),
                     ),
-                  if (isFormVisible)
-                    Container(
-                      constraints: const BoxConstraints(
-                        maxWidth: 300,
-                      ),
-                      child: SingleChildScrollView(
-                        child: DataOrderForm(
-                          fields: activeData.getFields(),
-                          saveData: _saveOrder,
-                          closeForm: () {
-                            if (mounted) {
-                              Future.delayed(
-                                Duration.zero,
-                                () {
-                                  setState(() => isFormVisible = false);
-                                },
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ),
+                  BlocBuilder<HomeScreenOrderFormCubit,
+                      HomeScreenOrderFormHelper>(
+                    builder: (context, state) {
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: state.show
+                            ? Container(
+                                constraints: const BoxConstraints(
+                                  maxWidth: 300,
+                                ),
+                                child: SingleChildScrollView(
+                                  child: DataOrderForm(
+                                    fields: activeData.getFields(),
+                                    saveData: _saveOrder,
+                                    closeForm: () {
+                                      BlocProvider.of<HomeScreenOrderFormCubit>(
+                                              context)
+                                          .disable();
+                                    },
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                      );
+                    },
+                  ),
                 ],
               ),
             );
