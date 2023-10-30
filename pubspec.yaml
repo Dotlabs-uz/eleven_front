@@ -54,7 +54,9 @@ dependencies:
     git:
       url: https://github.com/Samir-Sattarov/flutter-widgets.git
 #      path: /syncfusion_flutter_calendar/
-  clean_calendar: ^1.1.0
+  clean_calendar:
+    git:
+      url: https://github.com/Samir-Sattarov/clean_calendar.git
   image_picker: ^1.0.4
   image_cropper: ^4.0.1
   cached_network_image: ^3.2.3

@@ -199,13 +199,14 @@ class OrderEntity extends Equatable {
   }
 
   factory OrderEntity.empty({int? hour, int? minute}) {
+    final dateTime = DateTime.now().copyWith(hour: hour, minute: minute);
     return OrderEntity(
       id: "",
       // discount: 0,
       // discountPercent: 0,
       paymentType: OrderPayment.cash,
-      orderStart: DateTime.now().copyWith(hour: hour, minute: minute),
-      orderEnd: DateTime.now().add(const Duration(hours: 1)),
+      orderStart: dateTime,
+      orderEnd: dateTime.add(const Duration(hours: 1)),
       // price: 0,
       barberId: "",
       clientId: "",

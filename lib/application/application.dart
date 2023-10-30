@@ -3,6 +3,7 @@ import 'package:eleven_crm/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/home_screen_form/home_screen_order_form_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class _ApplicationState extends State<Application> {
   late CurrentUserCubit currentUserCubit;
   late ShowSelectServicesCubit showSelectServicesCubit;
   late HomeScreenOrderFormCubit homeScreenOrderFormCubit;
+  late OrderFilterCubit orderFilterCubit;
   @override
   void initState() {
     _loginCubit = locator();
@@ -48,6 +50,7 @@ class _ApplicationState extends State<Application> {
     _ordersCubit = locator();
     currentUserCubit = locator();
     showSelectServicesCubit = locator();
+    orderFilterCubit = locator();
     super.initState();
   }
 
@@ -65,6 +68,8 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: _ordersCubit),
         BlocProvider.value(value: showSelectServicesCubit),
         BlocProvider.value(value: homeScreenOrderFormCubit),
+        BlocProvider.value(value: orderFilterCubit),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

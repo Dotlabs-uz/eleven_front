@@ -231,10 +231,13 @@ class ApiClient {
     };
 
     if (sessionId != '') {
-      userHeader.addAll({'Authorization': '$sessionId'});
+      userHeader.addAll({'Authorization': sessionId});
     }
+
+    final pth =  getPath(path, null);
+    print("Path $pth");
     final response = await _client.patch(
-      getPath(path, null),
+      pth,
       body: jsonEncode(params),
       headers: userHeader,
     );

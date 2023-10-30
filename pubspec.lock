@@ -84,10 +84,11 @@ packages:
   clean_calendar:
     dependency: "direct main"
     description:
-      name: clean_calendar
-      sha256: "236a1082a38425ee5af43142e4dfe1c22dd07ed3832061cb2fd13c12a5ce0fb3"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: b9fa16983e1ca9783b4477742df8ae94b5ab90b1
+      url: "https://github.com/Samir-Sattarov/clean_calendar.git"
+    source: git
     version: "1.1.0"
   clock:
     dependency: transitive

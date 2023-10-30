@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../features/auth/presentation/cubit/login_cubit.dart';
 import '../../features/main/domain/entity/order_entity.dart';
+import '../../features/main/presensation/cubit/order_filter_cubit.dart';
 import '../utils/app_colors.dart';
 import '../utils/assets.dart';
 import '../utils/dialogs.dart';
@@ -220,7 +221,8 @@ class _CalendarWidgetState extends State<_CalendarWidget> {
       enableDenseViewForDates: true,
       enableDenseSplashForDates: true,
 
-      dateSelectionMode: DatePickerSelectionMode.disable,
+      dateSelectionMode: DatePickerSelectionMode.singleOrMultiple,
+
       startWeekday: WeekDay.monday,
 
       headerProperties: HeaderProperties(
@@ -291,7 +293,10 @@ class _CalendarWidgetState extends State<_CalendarWidget> {
       onCalendarViewDate: (DateTime calendarViewDate) {
         // debugPrint(calendarViewDate);
       },
-      onSelectedDates: (List<DateTime> value) {},
+      onSelectedDates: (List<DateTime> value) {
+        print("FIlter ${value} ${value.first}");
+        BlocProvider.of<OrderFilterCubit>(context).setFilter(query: "");
+      },
     );
   }
 }

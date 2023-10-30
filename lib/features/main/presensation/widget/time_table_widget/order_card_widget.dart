@@ -22,11 +22,16 @@ class OrderCardWidget extends StatefulWidget {
   final OrderEntity order;
   final bool isDragging;
   final Function() onOrderSize;
+  final Function(OrderEntity order) onTopOrderEnd;
+  final Function(OrderEntity order) onBottomOrderEnd;
+
   const OrderCardWidget({
     Key? key,
     required this.order,
     required this.isDragging,
     required this.onOrderSize,
+    required this.onTopOrderEnd,
+    required this.onBottomOrderEnd,
   }) : super(key: key);
 
   @override
@@ -147,7 +152,12 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                       orderEntity: widget.order,
                     ),
                     onDragUpdate: onDragTopUpdate,
-                    onDragEnd: (details) => topPosition = 0,
+
+                    onDragEnd: (details) {
+                      // widget.onTopOrderEnd.call(widget.order);
+                      topPosition = 0;
+                    },
+
                     feedback: Container(
                       height: 5,
                       color: Colors.transparent,
@@ -170,7 +180,12 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                       orderEntity: widget.order,
                     ),
                     onDragUpdate: onDragBottomUpdate,
-                    onDragEnd: (details) => bottomPosition = 0,
+                    onDragEnd: (details) {
+                      // widget.onBottomOrderEnd.call(widget.order);
+                      bottomPosition = 0;
+                    },
+
+
                     feedback: Container(
                       height: 5,
                       color: Colors.transparent,

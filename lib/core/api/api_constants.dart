@@ -16,5 +16,5 @@ class ApiConstants {
   static const String filial = "filials";
   static const String employee = "employee";
   static const String ordersWebSocket = "http://localhost:3030/";
-  static const String order = "orders";
+  static const String orders = "orders";
 }
