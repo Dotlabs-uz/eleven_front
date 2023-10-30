@@ -18,8 +18,8 @@ class WebSocketsService {
   }
 
   Stream<dynamic> connect(String url) async* {
-    IO.Socket socket = IO.io("http://localhost:3030/",
-        OptionBuilder().setTransports(['websocket']).build());
+    IO.Socket socket =
+        IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
     socket.onConnect((_) {
       print("websocket connected");
@@ -33,8 +33,6 @@ class WebSocketsService {
     });
 
     getResponse.map((event) => print(event));
-    // socket.emit("fetched", "test");
-    // print(socket.acks);
 
     await for (var data in getResponse) {
       yield data;

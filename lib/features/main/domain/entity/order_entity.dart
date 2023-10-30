@@ -67,14 +67,14 @@ class OrderEntity extends Equatable {
       isForm: true,
       val: OrderPayment.cash,
     ),
-    "price": FieldEntity<int>(
-      label: "price",
-      hintText: "price",
-      type: Types.int,
-      isRequired: true,
-      isForm: true,
-      val: 0,
-    ),
+    // "price": FieldEntity<int>(
+    //   label: "price",
+    //   hintText: "price",
+    //   type: Types.int,
+    //   isRequired: false,
+    //   isForm: false,
+    //   val: 0,
+    // ),
     "orderStart": FieldEntity<DateTime>(
       label: "orderStart",
       hintText: "orderStart",
@@ -91,7 +91,7 @@ class OrderEntity extends Equatable {
       isForm: true,
       val: DateTime.now(),
     ),
-    "barber": FieldEntity<String>(
+    "barberId": FieldEntity<String>(
       label: "barberId",
       hintText: "barberId",
       type: Types.barber,
@@ -99,7 +99,7 @@ class OrderEntity extends Equatable {
       isForm: true,
       val: "",
     ),
-    "client": FieldEntity<String>(
+    "clientId": FieldEntity<String>(
       label: "clientId",
       hintText: "clientId",
       type: Types.client,
@@ -141,8 +141,8 @@ class OrderEntity extends Equatable {
         "orderStart": orderStart,
         "orderEnd": orderEnd,
         // "price": price,
-        "barber": barberId,
-        "client": clientId,
+        "barberId": barberId,
+        "clientId": clientId,
         "services": services,
         "isNew": isNew,
       }[key];
@@ -156,8 +156,8 @@ class OrderEntity extends Equatable {
       orderStart: row.cells["orderStart"]?.value,
       orderEnd: row.cells["orderEnd"]?.value,
       // price: row.cells["price"]?.value,
-      barberId: row.cells["barber"]?.value,
-      clientId: row.cells["client"]?.value,
+      barberId: row.cells["barberId"]?.value,
+      clientId: row.cells["clientId"]?.value,
       services: row.cells["services"]?.value,
       isNew: row.cells["isNew"]?.value,
     );
@@ -173,8 +173,8 @@ class OrderEntity extends Equatable {
       'orderStart': PlutoCell(value: e.orderStart),
       'orderEnd': PlutoCell(value: e.orderEnd),
       // 'price': PlutoCell(value: e.price),
-      'barber': PlutoCell(value: e.barberId),
-      'client': PlutoCell(value: e.clientId),
+      'barberId': PlutoCell(value: e.barberId),
+      'clientId': PlutoCell(value: e.clientId),
       'services': PlutoCell(value: e.services),
       'isNew': PlutoCell(value: e.isNew),
     });
@@ -191,8 +191,8 @@ class OrderEntity extends Equatable {
       orderStart: fields["orderStart"]?.val,
       orderEnd: fields["orderEnd"]?.val,
       // price: fields["price"]?.val,
-      barberId: fields["barber"]?.val,
-      clientId: fields["client"]?.val,
+      barberId: fields["barberId"]?.val,
+      clientId: fields["clientId"]?.val,
       isNew: fields["isNew"]?.val,
       services: selectedServices ?? List.from(fields["services"]?.val),
     );

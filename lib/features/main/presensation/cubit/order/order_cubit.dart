@@ -13,6 +13,8 @@ class OrderCubit extends Cubit<OrderState> {
   final DeleteOrder deleteOrder;
   OrderCubit(this.saveOrder, this.deleteOrder) : super(OrderInitial());
 
+  init( )=>emit(OrderInitial());
+
   void save({
     required OrderEntity order,
   }) async {

@@ -22,7 +22,6 @@ class OrderModel extends OrderEntity {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
-    print("Json $json");
     return OrderModel(
       id: json['_id'] ?? "",
       orderStart: DateTime.parse(json['orderStart']),

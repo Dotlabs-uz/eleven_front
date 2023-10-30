@@ -67,26 +67,17 @@ class DataOrderFormState extends State<DataOrderForm> {
                 ],
               ),
               ClientFieldWidget(
-                fieldEntity: widget.fields['client']!,
+                fieldEntity: widget.fields['clientId']!,
                 onChange: (client) {
-                  widget.fields['client']!.val = client.id;
+                  widget.fields['clientId']!.val = client.id;
                 },
               ),
               BarberFieldWidget(
-                fieldEntity: widget.fields['barber']!,
+                fieldEntity: widget.fields['barberId']!,
                 onChange: (barber) {
-                  widget.fields['barber']!.val = barber.id;
+                  widget.fields['barberId']!.val = barber.id;
                 },
               ),
-              DataIntFieldWidget(
-                fieldEntity: widget.fields['price']!,
-              ),
-              // DataDoubleFieldWidget(
-              //   fieldEntity: widget.fields['discountPercent']!,
-              // ),
-              // DataDoubleFieldWidget(
-              //   fieldEntity: widget.fields['discount']!,
-              // ),
               DateTimeFieldWidget(
                 fieldEntity: widget.fields['orderStart']!,
                 withTime: true,

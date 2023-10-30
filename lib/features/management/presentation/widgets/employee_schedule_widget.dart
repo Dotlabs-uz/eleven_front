@@ -270,25 +270,25 @@ class _EmployeeScheduleFieldWidgetState
   }
 
   changeState() {
-    // Dialogs.scheduleField(
-    //   context: context,
-    //   onConfirm: (val) {
-    //     setState(() {
-    //       status = val;
-    //     });
-    //
-    //     widget.onFieldChange.call(
-    //       widget.day,
-    //       widget.month,
-    //       widget.year,
-    //       status,
-    //       widget.employeeId,
-    //     );
-    //   },
-    //   day: widget.day,
-    //   month: widget.month,
-    //   year: widget.year,
-    // );
+    Dialogs.scheduleField(
+      context: context,
+      onConfirm: (val) {
+        setState(() {
+          status = val;
+        });
+
+        widget.onFieldChange.call(
+          widget.day,
+          widget.month,
+          widget.year,
+          status,
+          widget.employeeId,
+        );
+      },
+      day: widget.day,
+      month: widget.month,
+      year: widget.year,
+    );
   }
 
   @override

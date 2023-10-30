@@ -260,7 +260,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     );
   }
 
-  final List<OrderEntity> orders = [
+  List<OrderEntity> orders = [
     // // OrderEntity(
     // //   orderStart: DateTime(2023, 10, 7, 9, 10),
     // //   orderEnd: DateTime(2023, 10, 7, 9, 30),
@@ -375,11 +375,16 @@ class _ContentWidgetState extends State<_ContentWidget> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final data = List.from(snapshot.data).map((e) {
-            return    OrderModel.fromJson(e);
+                return OrderModel.fromJson(e);
               }).toList();
 
-              orders.addAll(data);
+
+              final localOrders = orders;
+             localOrders.addAll(data);
+
+             orders = localOrders.toSet().toList();
             }
+
             return MultiBlocListener(
               listeners: [
                 BlocListener<BarberCubit, BarberState>(
@@ -432,11 +437,17 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     }
                   },
                 ),
-                // BlocListener<OrdersCubit, Stream<OrderEntity>>(
-                //   listener: (context, stream) {
-                //     _loadOrders(stream);
-                //   },
-                // ),
+                BlocListener<OrderCubit, OrderState>(
+                  listener: (context, state) {
+                    if (state is OrderDeleted) {
+                      final element = orders
+                          .firstWhere((element) => element.id == state.orderId);
+
+                      orders.remove(element);
+                      BlocProvider.of<OrderCubit>(context).init();
+                    }
+                  },
+                ),
                 // BlocListener<ShowSelectServicesCubit, ShowSelectedServiceHelper>(
                 //   listener: (context, state) {
                 //     if (mounted) {
@@ -498,9 +509,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       child:
                                           BlocBuilder<OrderCubit, OrderState>(
                                         builder: (context, state) {
-                                          if (state is OrderSaved) {
-                                            orders.add(state.order);
-                                          }
                                           return TimeTableWidget(
                                             listBarbers: listBarbers,
                                             onTapNotWorkingHour:
