@@ -104,14 +104,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
     _setWidgetTop();
 
     BlocProvider.of<OrdersCubit>(context).load();
-
-    // listenSockets();
-    WebSocketsService().connect(ApiConstants.ordersWebSocket);
   }
 
   _setWidgetTop() {
-    // final Map<String, dynamic> filtr = {};
-
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
       TopMenuEntity(searchCubit: null, enableSearch: false, iconList: [
         MyIconButton(
@@ -152,10 +147,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
     BlocProvider.of<OrderCubit>(context).save(
         order: OrderEntity.fromFields(selectedServices: selectedServices));
   }
-
-  // void _saveOrderLocal(OrderEntity entity) {
-  //   BlocProvider.of<OrderCubit>(context).save(order: entity);
-  // }
 
   void _onDeleteNotWorkingHours(
       NotWorkingHoursEntity entity, BarberEntity barberEntity) async {
@@ -374,15 +365,16 @@ class _ContentWidgetState extends State<_ContentWidget> {
           stream: WebSocketsService().connect(ApiConstants.ordersWebSocket),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              orders.clear();
               final data = List.from(snapshot.data).map((e) {
                 return OrderModel.fromJson(e);
               }).toList();
 
-
               final localOrders = orders;
-             localOrders.addAll(data);
+              localOrders.addAll(data);
 
-             orders = localOrders.toSet().toList();
+              print("Orders list ${localOrders.length}");
+              orders = localOrders.toSet().toList();
             }
 
             return MultiBlocListener(
@@ -444,6 +436,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
                           .firstWhere((element) => element.id == state.orderId);
 
                       orders.remove(element);
+                      BlocProvider.of<OrderCubit>(context).init();
+                    } else if (state is OrderSaved) {
+                      orders.add(state.order);
                       BlocProvider.of<OrderCubit>(context).init();
                     }
                   },
