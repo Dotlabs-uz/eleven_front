@@ -30,8 +30,8 @@ class TimeTableWidget extends StatefulWidget {
   final Function(OrderEntity)? onOrderClick;
   final Function(int hour, int minute)? onFieldTap;
   final Function(NotWorkingHoursEntity, BarberEntity)? onTapNotWorkingHour;
-  final Function(OrderEntity order) onTopOrderEnd;
-  final Function(OrderEntity order) onBottomOrderEnd;
+  final Function(OrderEntity order)? onTopOrderEnd;
+  final Function(OrderEntity order)? onBottomOrderEnd;
 
   const TimeTableWidget({
     Key? key,
@@ -42,8 +42,8 @@ class TimeTableWidget extends StatefulWidget {
     this.onOrderClick,
     this.onTapNotWorkingHour,
     required this.listOrders,
-    required this.onTopOrderEnd,
-    required this.onBottomOrderEnd,
+      this.onTopOrderEnd,
+      this.onBottomOrderEnd,
   }) : super(key: key);
 
   @override
@@ -212,10 +212,6 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                   order: orderEntity,
                                                   isDragging: true,
                                                   onOrderSize: _onOrderSize,
-                                                  onBottomOrderEnd:
-                                                      widget.onBottomOrderEnd,
-                                                  onTopOrderEnd:
-                                                      widget.onTopOrderEnd,
                                                 ),
                                                 feedback: Opacity(
                                                   opacity: 0.6,
@@ -224,10 +220,6 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                       order: orderEntity,
                                                       isDragging: true,
                                                       onOrderSize: _onOrderSize,
-                                                      onBottomOrderEnd: widget
-                                                          .onBottomOrderEnd,
-                                                      onTopOrderEnd:
-                                                          widget.onTopOrderEnd,
                                                     ),
                                                   ),
                                                 ),
@@ -235,6 +227,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                   order: orderEntity,
                                                   isDragging: false,
                                                   onOrderSize: _onOrderSize,
+
                                                   onBottomOrderEnd:
                                                       widget.onBottomOrderEnd,
                                                   onTopOrderEnd:

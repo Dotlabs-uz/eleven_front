@@ -140,7 +140,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
             if (state is BarberLoaded) {
               listData = state.data.results;
 
-              listData.removeWhere((element) => element.inTimeTable == false);
               if (widget.fieldEntity.val != null) {
                 selectedItem = listData
                     .firstWhereOrNull((e) => e.id == widget.fieldEntity.val);

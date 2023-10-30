@@ -327,6 +327,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 ),
                 BlocListener<OrderCubit, OrderState>(
                   listener: (context, state) {
+                    print("Orders state $state");
                     if (state is OrderDeleted) {
                       final element = orders
                           .firstWhere((element) => element.id == state.orderId);
@@ -386,8 +387,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       );
                                       _editOrder(activeData);
                                     },
-                                    onOrderClick: (entity) =>
-                                        _editOrder(entity),
+                                    onOrderClick: (entity) {
+                                      print("Entity $entity");
+                                      activeData = entity;
+                                      _editOrder(activeData);
+                                    },
                                     onDeleteEmployeeFromTable: (employeeId) {
                                       _barberFromTimeTableCardAction(
                                         employeeId,
@@ -409,20 +413,17 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     },
                                     listOrders: orders,
                                     onTopOrderEnd: (order) {
-                                      // print(
-                                      //     "Order start ${order.orderStart.toString()}");
-
+                                      print(
+                                          "Order start ${order.orderStart.toString()}");
                                       BlocProvider.of<OrderCubit>(context)
                                           .save(order: order);
-                                      BlocProvider.of<OrderCubit>(context).init();
+                                      // BlocProvider.of<OrderCubit>(context).init();
                                     },
                                     onBottomOrderEnd: (order) {
-                                      // print(
-                                      //     "Order bottom ${order.orderEnd.toString()}");
+                                      print(
+                                          "Order bottom ${order.orderEnd.toString()}");
                                       BlocProvider.of<OrderCubit>(context)
                                           .save(order: order);
-                                      BlocProvider.of<OrderCubit>(context).init();
-
                                     },
                                   );
                                 },

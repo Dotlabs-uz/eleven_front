@@ -137,21 +137,21 @@ class _ContentWidgetState extends State<_ContentWidget> {
               listData = state.data;
 
               if (widget.fieldEntity != null) {
-                if (widget.fieldEntity!.val != null) {
-                  selectedItem = listData
-                      .firstWhereOrNull((e) => e.id == widget.fieldEntity!.val);
+                selectedItem = listData
+                    .firstWhereOrNull((e) => e.id == widget.fieldEntity!.val);
+                print(listData ) ;
+                print("Selected ${widget.fieldEntity!.val} client $selectedItem");
 
-                  if (selectedItem != null) {
-                    widget.fieldEntity!.val = selectedItem!.id;
-                    Future.delayed(
-                      Duration.zero,
-                      () {
-                        if (mounted) {
-                          widget.onChange?.call(selectedItem!);
-                        }
-                      },
-                    );
-                  }
+                if (selectedItem != null) {
+                  widget.fieldEntity!.val = selectedItem!.id;
+                  Future.delayed(
+                    Duration.zero,
+                    () {
+                      if (mounted) {
+                        widget.onChange?.call(selectedItem!);
+                      }
+                    },
+                  );
                 }
               }
 
@@ -263,13 +263,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
               onChanged: (CustomerEntity? data) {
                 log("Data $data");
 
-                if(data != null) {
+                if (data != null) {
                   widget.fieldEntity!.val = data.id;
 
                   widget.onChange?.call(data);
                 }
-
-
               },
             );
           },
