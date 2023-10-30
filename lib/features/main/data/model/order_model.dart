@@ -25,7 +25,7 @@ class OrderModel extends OrderEntity {
     return OrderModel(
       id: json['_id'] ?? "",
       orderStart: DateTime.parse(json['orderStart']),
-      orderEnd: DateTime.parse(json['orderEnd']),
+      orderEnd: DateTime.parse(json['orderEnd'].toString().replaceAll("Z", "").replaceAll("z", "")),
       barberId: json['barber']['_id'],
       paymentType:
           json['payment'] == "cash" ? OrderPayment.card : OrderPayment.card,
