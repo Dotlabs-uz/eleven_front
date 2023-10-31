@@ -294,8 +294,8 @@ class _CalendarWidgetState extends State<_CalendarWidget> {
         // debugPrint(calendarViewDate);
       },
       onSelectedDates: (List<DateTime> value) {
-        print("FIlter ${value} ${value.first}");
-        BlocProvider.of<OrderFilterCubit>(context).setFilter(query: "");
+        print("FIlter ${value} ${value.first.toIso8601String()}");
+        BlocProvider.of<OrderFilterCubit>(context).setFilter(query:value.first.toIso8601String());
       },
     );
   }

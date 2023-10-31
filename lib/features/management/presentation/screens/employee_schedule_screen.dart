@@ -197,7 +197,6 @@ class _ContentWidgetState extends State<ContentWidget> {
     // ),
   ];
 
-  List<FieldSchedule> selectedFields = [];
 
   @override
   Widget build(BuildContext context) {
@@ -245,7 +244,6 @@ class _ContentWidgetState extends State<ContentWidget> {
                               } else if (state is EmployeeScheduleError) {
                                 ErrorFlushBar("change_error"
                                     .tr(args: [state.message])).show(context);
-                                selectedFields.clear();
                               }
                             },
                           ),
@@ -283,15 +281,15 @@ class _ContentWidgetState extends State<ContentWidget> {
 
                                   listFields.clear();
                                 }
+                              },onMultiSelectSave: (listMultiSelect) {
+                              if (listMultiSelect.isNotEmpty) {
+                                BlocProvider.of<EmployeeScheduleCubit>(
+                                    context)
+                                    .save(listData: listMultiSelect);
+
+                              }
                               },
                               listEmployee: listEmployee,
-                              onMultiSelect: (field) {
-                                if (selectedFields.contains(field)) {
-                                  selectedFields.remove(field);
-                                } else {
-                                  selectedFields.add(field);
-                                }
-                              },
                             );
                           },
                         ),

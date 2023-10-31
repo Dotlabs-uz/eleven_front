@@ -134,9 +134,9 @@ class Dialogs {
   static scheduleField({
     required BuildContext context,
     required Function(int) onConfirm,
-    required int day,
-    required int month,
-    required int year,
+      int? day,
+      int? month,
+      int? year,
   }) {
     return showDialog(
       context: context,
@@ -164,14 +164,14 @@ class Dialogs {
               ),
 
               const SizedBox(height: 5),
-              Text(
-                "$day ${StringHelper.monthName(month: month)} $year.",
+              day != null? Text(
+                "$day ${month != null ? StringHelper.monthName(month: month) : ""} $year.",
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                 ),
-              ),
+              ) : const SizedBox(),
               const SizedBox(height: 20),
 
               ...Selections.listStatus.map((element) {

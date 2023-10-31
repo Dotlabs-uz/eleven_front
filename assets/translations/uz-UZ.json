@@ -642,5 +642,6 @@
   "managers": "Menejerlar",
   "selectTimeFrom": "Vaqtni tanlang dan",
   "selectTimeTo": "Vaqtni tanlang oldin",
-  "selectServices": "Xizmatlarni tanlang"
+  "selectServices": "Xizmatlarni tanlang",
+  "selectStatusForSelected": "Tanlangan uchun holatni tanlang"
 }

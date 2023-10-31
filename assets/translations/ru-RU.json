@@ -652,6 +652,8 @@
   "selectTimeFrom": "Выберите вермя от",
   "selectTimeTo": "Выберите время до",
   "selectServices": "Выберите сервисы",
+  "selectStatusForSelected": "Выберите статус для выбранных",
+
   "data": "data",
   "data": "data"
 }

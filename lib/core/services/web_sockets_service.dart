@@ -21,6 +21,8 @@ class WebSocketsService {
     IO.Socket socket =
         IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
+    // print("Socket url $url");
+
     socket.onConnect((_) {
       print("websocket connected");
     });
@@ -32,7 +34,7 @@ class WebSocketsService {
       addData(data);
     });
 
-    getResponse.map((event) => print(event));
+    // getResponse.map((event) => print(event));
 
     await for (var data in getResponse) {
       yield data;
