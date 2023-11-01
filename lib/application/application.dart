@@ -14,7 +14,6 @@ import '../core/utils/route_constants.dart';
 import '../core/utils/routes.dart';
 import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import '../features/main/presensation/cubit/menu/menu_cubit.dart';
-import '../features/main/presensation/cubit/order/orders/orders_cubit.dart';
 import '../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
 import '../features/main/presensation/widget/fade_page_route_builder.dart';
 import '../get_it/locator.dart';
@@ -33,7 +32,6 @@ class _ApplicationState extends State<Application> {
   late DataFormCubit _dataFormCubit;
   late ServiceProductCategoryCubit _serviceProductCategoryCubit;
   late OrderCubit _orderCubit;
-  late OrdersCubit _ordersCubit;
   late CurrentUserCubit currentUserCubit;
   late ShowSelectServicesCubit showSelectServicesCubit;
   late HomeScreenOrderFormCubit homeScreenOrderFormCubit;
@@ -47,7 +45,6 @@ class _ApplicationState extends State<Application> {
     _serviceProductCategoryCubit = locator();
     homeScreenOrderFormCubit = locator();
     _orderCubit = locator();
-    _ordersCubit = locator();
     currentUserCubit = locator();
     showSelectServicesCubit = locator();
     orderFilterCubit = locator();
@@ -65,7 +62,6 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: _serviceProductCategoryCubit),
         BlocProvider.value(value: _orderCubit),
         BlocProvider.value(value: currentUserCubit),
-        BlocProvider.value(value: _ordersCubit),
         BlocProvider.value(value: showSelectServicesCubit),
         BlocProvider.value(value: homeScreenOrderFormCubit),
         BlocProvider.value(value: orderFilterCubit),

@@ -26,7 +26,7 @@ class OrderModel extends OrderEntity {
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     return OrderModel(
       id: json['_id'] ?? "",
-      orderStart: DateTime.parse(json['orderStart'] + "Z"),
+      orderStart: DateTime.parse(json['orderStart'] ),
       orderEnd: DateTime.parse(json['orderEnd']
 
           // .toString().replaceAll("Z", "").replaceAll("z", "")

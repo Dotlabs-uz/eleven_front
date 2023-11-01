@@ -7,7 +7,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-
   setup();
 
   runApp(
@@ -18,7 +17,7 @@ void main() async {
       ],
       fallbackLocale: const Locale('ru', 'RU'),
       path: 'assets/translations',
-      child:  const Application(),
+      child: const Application(),
     ),
   );
 }

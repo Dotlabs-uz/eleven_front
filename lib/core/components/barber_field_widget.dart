@@ -213,7 +213,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                             child: item.avatar.isEmpty
                                 ? Image.asset(
                                     Assets.tAvatarPlaceHolder,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.fill,
                                   )
                                 : Image.network(
                                     item.avatar,

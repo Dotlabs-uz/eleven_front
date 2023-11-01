@@ -8,7 +8,6 @@ import 'package:eleven_crm/core/components/select_services_widget.dart';
 import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/home_screen_form/home_screen_order_form_cubit.dart';
-import 'package:eleven_crm/features/main/presensation/cubit/order/orders/orders_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/widget/select_service_dialog_widget.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/not_working_hours_entity.dart';
@@ -86,6 +85,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
   late PlutoRow selectedRow;
   late PlutoGridStateManager stateManager;
 
+  late WebSocketsService webSocketService;
+
   @override
   void initState() {
     initialize();
@@ -97,13 +98,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
     print("Saved ");
 
     activeData = OrderEntity.empty();
+    webSocketService = WebSocketsService(ApiConstants.ordersWebSocket);
 
     showSelectServices = false;
 
     listBarbers.clear();
     _setWidgetTop();
-
-    BlocProvider.of<OrdersCubit>(context).load();
   }
 
   _setWidgetTop() {
@@ -289,11 +289,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: StreamBuilder<dynamic>(
-          stream: WebSocketsService().connect(ApiConstants.ordersWebSocket),
+          stream: WebSocketsService(ApiConstants.ordersWebSocket).connect(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               orders.clear();
-              final data = List.from(snapshot.data).map((e) {
+              final listSnapData = List.from(snapshot.data);
+              final data = listSnapData.map((e) {
                 return OrderModel.fromJson(e);
               }).toList();
 
@@ -301,7 +302,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
               localOrders.addAll(data);
 
               // print("Orders list ${localOrders.length}");
-              orders = localOrders.toSet().toList();
+              orders = localOrders.toList();
             }
 
             return MultiBlocListener(

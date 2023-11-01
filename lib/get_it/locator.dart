@@ -6,7 +6,6 @@ import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_
 import 'package:eleven_crm/features/main/presensation/cubit/menu/menu_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/not_working_hours/not_working_hours_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
-import 'package:eleven_crm/features/main/presensation/cubit/order/orders/orders_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/select_services/select_services_cubit.dart';
 import 'package:eleven_crm/features/management/data/datasources/management_remote_data_source.dart';
@@ -116,7 +115,6 @@ void setup() {
   // Order
 
   locator.registerFactory(() => OrderCubit(locator(),locator(),));
-  locator.registerFactory(() => OrdersCubit(locator(),));
   locator.registerFactory(() => HomeScreenOrderFormCubit());
   locator.registerFactory(() => OrderFilterCubit());
 
@@ -258,7 +256,6 @@ void setup() {
 
   locator.registerLazySingleton<StorageService>(() => StorageService());
 
-  locator.registerLazySingleton<WebSocketsService>(() => WebSocketsService());
 
   // ================ External ================ //
 

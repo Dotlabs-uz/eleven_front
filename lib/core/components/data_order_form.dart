@@ -36,8 +36,7 @@ class DataOrderFormState extends State<DataOrderForm> {
 
   double price = 0;
   double duration = 0;
-  DateTime? orderEnd;
-  DateTime? orderStart;
+  // DateTime? orderEnd;
 
   @override
   void initState() {
@@ -58,26 +57,12 @@ class DataOrderFormState extends State<DataOrderForm> {
       print("Duration ${e.duration}");
     }
 
-    calculateOrderEndFromServicesAndOrderStart(
-      listData,
-      DateTime.parse(widget.fields['orderStart']!.val.toString()),
-    );
 
     price = localPrice;
     duration = localDuration;
     setState(() {});
   }
 
-  calculateOrderEndFromServicesAndOrderStart(
-      List<ServiceProductEntity> listData, DateTime dateTime) {
-    if (listData.isEmpty) {
-      orderEnd = null;
-      return;
-    }
-    orderEnd = dateTime.add(
-      Duration(minutes: duration.toInt()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -218,33 +203,33 @@ class DataOrderFormState extends State<DataOrderForm> {
                             ],
                           ),
                           const SizedBox(height: 5),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                orderEnd != null
-                                    ? TextSpan(
-                                        text: 'almostOrderDateEnd'.tr(),
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      )
-                                    : const TextSpan(text: ""),
-                                orderEnd != null
-                                    ? TextSpan(
-                                        text: DateFormat("hh:mm")
-                                            .format(orderEnd!),
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      )
-                                    : const TextSpan(text: ""),
-                              ],
-                            ),
-                          ),
+                          // RichText(
+                          //   text: TextSpan(
+                          //     children: [
+                          //       orderEnd != null
+                          //           ? TextSpan(
+                          //               text: 'almostOrderDateEnd'.tr(),
+                          //               style: const TextStyle(
+                          //                 fontSize: 16,
+                          //                 color: Colors.black,
+                          //                 fontWeight: FontWeight.w500,
+                          //               ),
+                          //             )
+                          //           : const TextSpan(text: ""),
+                          //       orderEnd != null
+                          //           ? TextSpan(
+                          //               text: DateFormat("hh:mm")
+                          //                   .format(orderEnd!),
+                          //               style: const TextStyle(
+                          //                 fontSize: 16,
+                          //                 color: Colors.black,
+                          //                 fontWeight: FontWeight.w600,
+                          //               ),
+                          //             )
+                          //           : const TextSpan(text: ""),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                     ],

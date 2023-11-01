@@ -1,15 +1,29 @@
 import 'dart:async';
 
 import 'package:eleven_crm/core/api/api_constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class WebSocketsService {
-  WebSocketsService();
+  final String url;
+  WebSocketsService(this.url);
 
-  final _socketResponse = StreamController<dynamic>();
+  static final _socketResponse = StreamController<dynamic>();
+  static IO.Socket? socket;
 
   void addData(dynamic data) => _socketResponse.sink.add(data);
+
+  void addFilter(String filter) {
+    if (socket == null) {
+      return;
+    }
+
+    debugPrint("Add filter $filter");
+
+    socket!.onack({"filter": filter});
+    socket!.emit("getAll");
+  }
 
   Stream<dynamic> get getResponse => _socketResponse.stream;
 
@@ -17,21 +31,22 @@ class WebSocketsService {
     _socketResponse.close();
   }
 
-  Stream<dynamic> connect(String url) async* {
-    IO.Socket socket =
+  Stream<dynamic> connect() async* {
+    IO.Socket localSoket =
         IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
+    // socket = localSoket;
     // print("Socket url $url");
 
-    socket.onConnect((_) {
+    localSoket.onConnect((_) {
       print("websocket connected");
     });
 
-    socket.emit("getAll");
+    localSoket.emit("getAll");
 
-    socket.on('fetched', (data) {
-      print("Data ");
+    localSoket.on('fetched', (data) {
       addData(data);
+      print("Fetched data $data");
     });
 
     // getResponse.map((event) => print(event));
