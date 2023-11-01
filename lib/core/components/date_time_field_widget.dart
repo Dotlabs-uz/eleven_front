@@ -42,7 +42,7 @@ class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
   @override
   Widget build(BuildContext context) {
     final DateFormat f = widget.withTime
-        ? DateFormat('yyyy-MM-dd hh:mm')
+        ? DateFormat('yyyy-MM-dd HH:mm')
         : DateFormat('yyyy-MM-dd');
     textEditingController =
         TextEditingController(text: f.format(widget.fieldEntity.val));

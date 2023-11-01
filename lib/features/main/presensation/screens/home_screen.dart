@@ -251,39 +251,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     );
   }
 
-  List<OrderEntity> orders = [
-    // OrderEntity(
-    //   orderStart: DateTime(2023, 10, 7, 9),
-    //   orderEnd: DateTime(2023, 10, 7, 9, 30),
-    //   // price: 30,
-    //   barberId: "6531612da3b411c75df5e944",
-    //   services: [
-    //     ServiceProductEntity(
-    //       id: "id",
-    //       name: "name",
-    //       price: 30,
-    //       duration: 30,
-    //       category: ServiceProductCategoryEntity.empty(),
-    //       sex: "man",
-    //     ),
-    //   ],
-    //   // discount: 2,
-    //   // discountPercent: 2,
-    //   clientId: "333",
-    //   paymentType: OrderPayment.cash,
-    //   id: '',
-    //   isNew: false,
-    // ),
-  ];
-  //
-  // _loadOrders(Stream<OrderEntity> streamOrders) {
-  //   streamOrders.map((order) {
-  //     log("Order websocket ${order.id} ${order.orderStart} ${order.orderEnd}");
-  //     orders.add(order);
-  //   });
-  //   setState(() {});
-  // }
-
+  List<OrderEntity> orders =[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -292,16 +260,16 @@ class _ContentWidgetState extends State<_ContentWidget> {
           stream: WebSocketsService(ApiConstants.ordersWebSocket).connect(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              orders.clear();
               final listSnapData = List.from(snapshot.data);
               final data = listSnapData.map((e) {
                 return OrderModel.fromJson(e);
               }).toList();
 
+              orders.clear();
+
               final localOrders = orders;
               localOrders.addAll(data);
 
-              // print("Orders list ${localOrders.length}");
               orders = localOrders.toList();
             }
 
@@ -483,6 +451,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                 constraints: const BoxConstraints(
                                   maxWidth: 300,
                                 ),
+                                height: MediaQuery.of(context).size.height,
                                 child: SingleChildScrollView(
                                   child: DataOrderForm(
                                     fields: activeData.getFields(),

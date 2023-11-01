@@ -42,8 +42,8 @@ class TimeTableWidget extends StatefulWidget {
     this.onOrderClick,
     this.onTapNotWorkingHour,
     required this.listOrders,
-      this.onTopOrderEnd,
-      this.onBottomOrderEnd,
+    this.onTopOrderEnd,
+    this.onBottomOrderEnd,
   }) : super(key: key);
 
   @override
@@ -227,7 +227,6 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                   order: orderEntity,
                                                   isDragging: false,
                                                   onOrderSize: _onOrderSize,
-
                                                   onBottomOrderEnd:
                                                       widget.onBottomOrderEnd,
                                                   onTopOrderEnd:
@@ -284,15 +283,20 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
               Container(
                 height: 60,
                 width: 60,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: entity.avatar.isNotEmpty
-                      ? Image.network(entity.avatar)
-                      : Image.asset(
-                          Assets.tAvatarPlaceHolder,
+                  image: entity.avatar.isEmpty
+                      ? const DecorationImage(
+                          image: AssetImage(
+                            Assets.tAvatarPlaceHolder,
+                          ),
+                          fit: BoxFit.cover,
+                        )
+                      : DecorationImage(
+                          image: NetworkImage(
+                            entity.avatar,
+                          ),
+                          fit: BoxFit.cover,
                         ),
                 ),
               ),

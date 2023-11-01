@@ -35,7 +35,7 @@ class WebSocketsService {
     IO.Socket localSoket =
         IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
-    // socket = localSoket;
+    socket = localSoket;
     // print("Socket url $url");
 
     localSoket.onConnect((_) {

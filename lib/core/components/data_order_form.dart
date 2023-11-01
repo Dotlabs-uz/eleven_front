@@ -66,179 +66,172 @@ class DataOrderFormState extends State<DataOrderForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(
-        maxWidth: 600,
-      ),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      widget.closeForm.call();
-                      BlocProvider.of<ShowSelectServicesCubit>(context)
-                          .disable();
-                    },
-                    child: Text(
-                      'close'.tr(),
-                      style: GoogleFonts.nunito(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              ClientFieldWidget(
-                fieldEntity: widget.fields['clientId']!,
-                onChange: (client) {
-                  widget.fields['clientId']!.val = client.id;
+              TextButton(
+                onPressed: () {
+                  widget.closeForm.call();
+                  BlocProvider.of<ShowSelectServicesCubit>(context)
+                      .disable();
                 },
-              ),
-              BarberFieldWidget(
-                fieldEntity: widget.fields['barberId']!,
-                onChange: (barber) {
-                  widget.fields['barberId']!.val = barber.id;
-                },
-              ),
-              DateTimeFieldWidget(
-                fieldEntity: widget.fields['orderStart']!,
-                withTime: true,
-              ),
-              // const SizedBox(height: 10),
-              // DateTimeFieldWidget(
-              //   fieldEntity: widget.fields['orderEnd']!,
-              //   withTime: true,
-              // ),
-              PaymentTypeFieldWidget(
-                fieldEntity: widget.fields['paymentType']!,
-              ),
-              SelectServicesWidget(
-                fieldEntity: widget.fields["services"]!,
-                onChanged: (listData) {
-                  selectedProducts = listData;
-                  widget.fields['services']!.val = listData;
-                  print("Selected services $selectedProducts");
-                  getPriceAndDuration(selectedProducts);
-                },
-              ),
-              const SizedBox(height: 10),
-              ButtonWidget(
-                text: "save".tr(),
-                onPressed: () => widget.saveData.call(selectedProducts),
-              ),
-              const SizedBox(height: 30),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(width: 10),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "${'price'.tr()}:",
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    const TextSpan(text: " "),
-                                    TextSpan(
-                                      text: price.toString(),
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "${'duration'.tr()}:",
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    const TextSpan(text: " "),
-                                    TextSpan(
-                                      text: duration.toString(),
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          // RichText(
-                          //   text: TextSpan(
-                          //     children: [
-                          //       orderEnd != null
-                          //           ? TextSpan(
-                          //               text: 'almostOrderDateEnd'.tr(),
-                          //               style: const TextStyle(
-                          //                 fontSize: 16,
-                          //                 color: Colors.black,
-                          //                 fontWeight: FontWeight.w500,
-                          //               ),
-                          //             )
-                          //           : const TextSpan(text: ""),
-                          //       orderEnd != null
-                          //           ? TextSpan(
-                          //               text: DateFormat("hh:mm")
-                          //                   .format(orderEnd!),
-                          //               style: const TextStyle(
-                          //                 fontSize: 16,
-                          //                 color: Colors.black,
-                          //                 fontWeight: FontWeight.w600,
-                          //               ),
-                          //             )
-                          //           : const TextSpan(text: ""),
-                          //     ],
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ],
+                child: Text(
+                  'close'.tr(),
+                  style: GoogleFonts.nunito(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-              ),
+              )
             ],
           ),
-        ),
+          ClientFieldWidget(
+            fieldEntity: widget.fields['clientId']!,
+            onChange: (client) {
+              widget.fields['clientId']!.val = client.id;
+            },
+          ),
+          BarberFieldWidget(
+            fieldEntity: widget.fields['barberId']!,
+            onChange: (barber) {
+              widget.fields['barberId']!.val = barber.id;
+            },
+          ),
+          DateTimeFieldWidget(
+            fieldEntity: widget.fields['orderStart']!,
+            withTime: true,
+          ),
+          // const SizedBox(height: 10),
+          // DateTimeFieldWidget(
+          //   fieldEntity: widget.fields['orderEnd']!,
+          //   withTime: true,
+          // ),
+          PaymentTypeFieldWidget(
+            fieldEntity: widget.fields['paymentType']!,
+          ),
+          SelectServicesWidget(
+            fieldEntity: widget.fields["services"]!,
+            onChanged: (listData) {
+              selectedProducts = listData;
+              widget.fields['services']!.val = listData;
+              print("Selected services $selectedProducts");
+              getPriceAndDuration(selectedProducts);
+            },
+          ),
+          const SizedBox(height: 10),
+          ButtonWidget(
+            text: "save".tr(),
+            onPressed: () => widget.saveData.call(selectedProducts),
+          ),
+          const SizedBox(height: 30),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(width: 10),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "${'price'.tr()}:",
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const TextSpan(text: " "),
+                                TextSpan(
+                                  text: price.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "${'duration'.tr()}:",
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const TextSpan(text: " "),
+                                TextSpan(
+                                  text: duration.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 5),
+                      // RichText(
+                      //   text: TextSpan(
+                      //     children: [
+                      //       orderEnd != null
+                      //           ? TextSpan(
+                      //               text: 'almostOrderDateEnd'.tr(),
+                      //               style: const TextStyle(
+                      //                 fontSize: 16,
+                      //                 color: Colors.black,
+                      //                 fontWeight: FontWeight.w500,
+                      //               ),
+                      //             )
+                      //           : const TextSpan(text: ""),
+                      //       orderEnd != null
+                      //           ? TextSpan(
+                      //               text: DateFormat("hh:mm")
+                      //                   .format(orderEnd!),
+                      //               style: const TextStyle(
+                      //                 fontSize: 16,
+                      //                 color: Colors.black,
+                      //                 fontWeight: FontWeight.w600,
+                      //               ),
+                      //             )
+                      //           : const TextSpan(text: ""),
+                      //     ],
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

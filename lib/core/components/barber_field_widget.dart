@@ -205,18 +205,19 @@ class _ContentWidgetState extends State<_ContentWidget> {
                           height: 34,
                           width: 34,
                           clipBehavior: Clip.antiAlias,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.grey,
-                          ),
-                          child: Center(
-                            child: item.avatar.isEmpty
-                                ? Image.asset(
-                                    Assets.tAvatarPlaceHolder,
-                                    fit: BoxFit.fill,
-                                  )
-                                : Image.network(
-                                    item.avatar,
+                            image: item.avatar.isEmpty
+                                ? const DecorationImage(
+                                    image: AssetImage(
+                                      Assets.tAvatarPlaceHolder,
+                                    ),
+                                    fit: BoxFit.cover)
+                                : DecorationImage(
+                                    image: NetworkImage(
+                                      item.avatar,
+                                    ),
                                     fit: BoxFit.cover,
                                   ),
                           ),
@@ -303,14 +304,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
               onChanged: (BarberEntity? data) {
                 log("Data $data");
 
-                if(data != null) {
-                  widget.fieldEntity.val = data .id;
+                if (data != null) {
+                  widget.fieldEntity.val = data.id;
 
                   widget.onChange?.call(data);
-                }else {
+                } else {
                   print("Data == null");
                 }
-
               },
             );
           },

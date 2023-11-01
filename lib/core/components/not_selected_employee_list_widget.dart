@@ -78,16 +78,20 @@ class _NotSelectedBarbersListWidgetState
                       Container(
                         height: 60,
                         width: 60,
-                        decoration: const BoxDecoration(
+                        decoration:   BoxDecoration(
                           shape: BoxShape.circle,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: el.avatar.isNotEmpty
-                              ? Image.network(el.avatar)
-                              : Image.asset(
+                            image: el.avatar.isEmpty
+                                ? const DecorationImage(
+                                image: AssetImage(
                                   Assets.tAvatarPlaceHolder,
                                 ),
+                                fit: BoxFit.cover)
+                                : DecorationImage(
+                              image: NetworkImage(
+                                el.avatar,
+                              ),
+                              fit: BoxFit.cover,
+                        ),
                         ),
                       ),
                       const SizedBox(height: 5),
