@@ -12,13 +12,14 @@ class DateTimeFieldWidget extends StatefulWidget {
   final bool isEnabled;
   final bool withTime;
   final int maxLines;
-
+  final Function(DateTime)? onChanged;
   const DateTimeFieldWidget({
     Key? key,
     required this.fieldEntity,
     this.isEnabled = true,
     this.withTime = false,
     this.maxLines = 1,
+    this.onChanged,
     // required this.callback,
   }) : super(key: key);
 
@@ -28,11 +29,13 @@ class DateTimeFieldWidget extends StatefulWidget {
 
 class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
   late TextEditingController textEditingController;
+  bool isFirstInit = true;
 
   @override
   void initState() {
     textEditingController =
         TextEditingController(text: widget.fieldEntity.val.toString());
+    isFirstInit = true;
     super.initState();
   }
 
@@ -43,6 +46,11 @@ class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
         : DateFormat('yyyy-MM-dd');
     textEditingController =
         TextEditingController(text: f.format(widget.fieldEntity.val));
+
+    if (isFirstInit) {
+      widget.onChanged?.call(widget.fieldEntity.val);
+      isFirstInit = false;
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,6 +129,8 @@ class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
                   if (beginDate != null) {
                     try {
                       widget.fieldEntity.val = beginDate;
+                      widget.onChanged?.call(widget.fieldEntity.val);
+
                     } catch (e) {
                       log("Error $e");
                     }

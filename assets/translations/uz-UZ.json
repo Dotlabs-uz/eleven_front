@@ -643,5 +643,6 @@
   "selectTimeFrom": "Vaqtni tanlang dan",
   "selectTimeTo": "Vaqtni tanlang oldin",
   "selectServices": "Xizmatlarni tanlang",
-  "selectStatusForSelected": "Tanlangan uchun holatni tanlang"
+  "selectStatusForSelected": "Tanlangan uchun holatni tanlang",
+  "almostOrderDateEnd": "Taxminan tugash vaqti"
 }

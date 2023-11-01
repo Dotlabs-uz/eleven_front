@@ -30,8 +30,8 @@ class OrderCardWidget extends StatefulWidget {
     required this.order,
     required this.isDragging,
     required this.onOrderSize,
-      this.onTopOrderEnd,
-      this.onBottomOrderEnd,
+    this.onTopOrderEnd,
+    this.onBottomOrderEnd,
   }) : super(key: key);
 
   @override
@@ -44,9 +44,9 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
 
   void onDragTopUpdate(DragUpdateDetails details) {
     final minutesToChange =
-    (details.delta.dy / Constants.sizeTimeTableFieldPerMinuteRound).round();
+        (details.delta.dy / Constants.sizeTimeTableFieldPerMinuteRound).round();
     final newOrderStart =
-    widget.order.orderStart.add(Duration(minutes: minutesToChange));
+        widget.order.orderStart.add(Duration(minutes: minutesToChange));
 
     if (newOrderStart.isBefore(widget.order.orderEnd)) {
       widget.order.orderStart = newOrderStart;
@@ -58,9 +58,9 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
 
   void onDragBottomUpdate(DragUpdateDetails details) {
     final minutesToChange =
-    (details.delta.dy / Constants.sizeTimeTableFieldPerMinuteRound).round();
+        (details.delta.dy / Constants.sizeTimeTableFieldPerMinuteRound).round();
     final newOrderEnd =
-    widget.order.orderEnd.add(Duration(minutes: minutesToChange));
+        widget.order.orderEnd.add(Duration(minutes: minutesToChange));
 
     if (newOrderEnd.isAfter(widget.order.orderStart)) {
       widget.order.orderEnd = newOrderEnd;
@@ -80,125 +80,136 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
         widget.order.orderStart,
         widget.order.orderEnd,
       ),
-      color: widget.isDragging
-          ? Colors.grey.shade400.withOpacity(0.3)
-          : AppColors.timeTableCard,
+      decoration: BoxDecoration(
+        color: widget.isDragging
+            ? Colors.grey.shade400.withOpacity(0.3)
+            : AppColors.timeTableCard,
+        border: const Border(
+          left: BorderSide(
+            width: 1,
+            color: Colors.black26,
+          ),
+          right: BorderSide(
+            width: 1,
+            color: Colors.black26,
+          ),
+        ),
+      ),
       child: !widget.isDragging
           ? Stack(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                color: AppColors.timeTableCardAppBar,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
-                        style: GoogleFonts.nunito(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      color: AppColors.timeTableCardAppBar,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
+                              style: GoogleFonts.nunito(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            GestureDetector(
+                              child: const MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                  size: 14,
+                                ),
+                              ),
+                              onTap: () {
+                                BlocProvider.of<OrderCubit>(context)
+                                    .delete(orderId: widget.order.id);
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      GestureDetector(
-                        child: const MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                            size: 14,
+                    ),
+                    const SizedBox(height: 3),
+                    ...widget.order.services.map(
+                      (e) => Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 3),
+                          child: Text(
+                            "${e.name} ${e.price}сум. ${e.duration}м.",
+                            style: GoogleFonts.nunito(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
-                        onTap: () {
-                          BlocProvider.of<OrderCubit>(context)
-                              .delete(orderId: widget.order.id);
-                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 3),
-              ...widget.order.services.map(
-                    (e) => Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 3),
-                    child: Text(
-                      "${e.name} ${e.price}сум. ${e.duration}м.",
-                      style: GoogleFonts.nunito(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
+                Positioned(
+                  top: 0,
+                  child: Draggable<DragOrder>(
+                    data: DragOrder(
+                      isResizing: true,
+                      orderEntity: widget.order,
+                    ),
+                    onDragUpdate: onDragTopUpdate,
+                    onDragEnd: (details) {
+                      topPosition = 0;
+                      widget.onTopOrderEnd?.call(widget.order);
+                    },
+                    feedback: Container(
+                      height: 5,
+                      color: Colors.transparent,
+                    ),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.resizeUpDown,
+                      child: Container(
+                        height: 5,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: 0,
-            child: Draggable<DragOrder>(
-              data: DragOrder(
-                isResizing: true,
-                orderEntity: widget.order,
-              ),
-              onDragUpdate: onDragTopUpdate,
-              onDragEnd: (details) {
-                topPosition = 0;
-                widget.onTopOrderEnd?.call(widget.order);
-              },
-              feedback: Container(
-                height: 5,
-                color: Colors.transparent,
-              ),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.resizeUpDown,
-                child: Container(
-                  height: 5,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.transparent,
+                Positioned(
+                  bottom: 0,
+                  child: Draggable<DragOrder>(
+                    data: DragOrder(
+                      isResizing: true,
+                      orderEntity: widget.order,
+                    ),
+                    onDragUpdate: onDragBottomUpdate,
+                    onDragEnd: (details) {
+                      bottomPosition = 0;
+                      widget.onBottomOrderEnd?.call(widget.order);
+                    },
+                    feedback: Container(
+                      height: 5,
+                      color: Colors.transparent,
+                    ),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.resizeUpDown,
+                      child: Container(
+                        height: 5,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.transparent,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            child: Draggable<DragOrder>(
-              data: DragOrder(
-                isResizing: true,
-                orderEntity: widget.order,
-              ),
-              onDragUpdate: onDragBottomUpdate,
-              onDragEnd: (details) {
-                bottomPosition = 0;
-                widget.onBottomOrderEnd?.call(widget.order);
-
-              },
-              feedback: Container(
-                height: 5,
-                color: Colors.transparent,
-              ),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.resizeUpDown,
-                child: Container(
-                  height: 5,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.transparent,
-                ),
-              ),
-            ),
-          ),
-        ],
-      )
+              ],
+            )
           : const SizedBox.shrink(),
     );
   }

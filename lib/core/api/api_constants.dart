@@ -15,6 +15,6 @@ class ApiConstants {
   static const String serviceProductCategory = "categories";
   static const String filial = "filials";
   static const String employee = "employee";
-  static const String ordersWebSocket = "http://localhost:3030/";
+  static const String ordersWebSocket = baseApiUrl;
   static const String orders = "orders";
 }

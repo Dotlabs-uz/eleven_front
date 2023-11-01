@@ -21,6 +21,8 @@ class OrderEntity extends Equatable {
   DateTime orderEnd;
   String barberId;
   final String clientId;
+  num price;
+  num duration;
   bool isNew;
   final List<ServiceProductEntity> services;
 
@@ -33,6 +35,8 @@ class OrderEntity extends Equatable {
     required this.isNew,
     required this.clientId,
     required this.services,
+    required this.price,
+    required this.duration,
   });
 
   static Map<String, FieldEntity> fields = {
@@ -123,6 +127,22 @@ class OrderEntity extends Equatable {
       isForm: false,
       val: true,
     ),
+    "price": FieldEntity<int>(
+      label: "price",
+      hintText: "price",
+      type: Types.int,
+      isRequired: false,
+      isForm: false,
+      val: 0,
+    ),
+    "duration": FieldEntity<int>(
+      label: "duration",
+      hintText: "duration",
+      type: Types.int,
+      isRequired: false,
+      isForm: false,
+      val: 0,
+    ),
   };
 
   Map<String, FieldEntity> getFields() {
@@ -145,6 +165,8 @@ class OrderEntity extends Equatable {
         "clientId": clientId,
         "services": services,
         "isNew": isNew,
+        "duration": duration,
+        "price": price,
       }[key];
 
   factory OrderEntity.fromRow(PlutoRow row) {
@@ -160,6 +182,8 @@ class OrderEntity extends Equatable {
       clientId: row.cells["clientId"]?.value,
       services: row.cells["services"]?.value,
       isNew: row.cells["isNew"]?.value,
+      duration: row.cells["duration"]?.value,
+      price: row.cells["price"]?.value,
     );
   }
 
@@ -195,6 +219,7 @@ class OrderEntity extends Equatable {
       clientId: fields["clientId"]?.val,
       isNew: fields["isNew"]?.val,
       services: selectedServices ?? List.from(fields["services"]?.val),
+      price: fields["price"]?.val, duration: fields["duration"]?.val,
     );
   }
 
@@ -211,7 +236,7 @@ class OrderEntity extends Equatable {
       barberId: "",
       clientId: "",
       isNew: true,
-      services: const [],
+      services: const [], price: 0, duration: 0,
     );
   }
 

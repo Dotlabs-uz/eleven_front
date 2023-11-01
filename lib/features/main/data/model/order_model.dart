@@ -19,6 +19,8 @@ class OrderModel extends OrderEntity {
     required super.barberId,
     required super.services,
     required super.isNew,
+    required super.price,
+    required super.duration,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +41,8 @@ class OrderModel extends OrderEntity {
           .map((e) => ServiceProductModel.fromJson(e, false))
           .toList(),
       isNew: json['isNew'],
+      price: json['price'] ?? 0,
+      duration: json['duration'] ?? 0,
     );
   }
 
@@ -55,13 +59,15 @@ class OrderModel extends OrderEntity {
       clientId: entity.clientId,
       services: entity.services,
       isNew: entity.isNew,
+      duration: entity.duration,
+      price: entity.price,
     );
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['orderStart'] = orderStart.toLocal().toIso8601String();
-    data['orderEnd'] = orderEnd.toLocal().toIso8601String();
+    // data['orderEnd'] = orderEnd.toLocal().toIso8601String();
     // data['price'] = price;
     data['barber'] = barberId;
     data['payments'] = paymentType.name;

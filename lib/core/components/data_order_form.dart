@@ -36,19 +36,47 @@ class DataOrderFormState extends State<DataOrderForm> {
 
   double price = 0;
   double duration = 0;
+  DateTime? orderEnd;
+  DateTime? orderStart;
+
+  @override
+  void initState() {
+    price = widget.fields['price']?.val ?? 0;
+    duration = widget.fields['duration']?.val ?? 0;
+
+    super.initState();
+  }
 
   getPriceAndDuration(List<ServiceProductEntity> listData) {
-    price = 0;
-    duration = 0;
+    double localPrice = 0;
+    double localDuration = 0;
 
     for (var e in selectedProducts) {
-      price += e.price;
-      duration += e.duration;
+      localPrice += e.price;
+      localDuration += e.duration;
       print("Price ${e.price}");
       print("Duration ${e.duration}");
     }
 
+    calculateOrderEndFromServicesAndOrderStart(
+      listData,
+      DateTime.parse(widget.fields['orderStart']!.val.toString()),
+    );
+
+    price = localPrice;
+    duration = localDuration;
     setState(() {});
+  }
+
+  calculateOrderEndFromServicesAndOrderStart(
+      List<ServiceProductEntity> listData, DateTime dateTime) {
+    if (listData.isEmpty) {
+      orderEnd = null;
+      return;
+    }
+    orderEnd = dateTime.add(
+      Duration(minutes: duration.toInt()),
+    );
   }
 
   @override
@@ -62,7 +90,7 @@ class DataOrderFormState extends State<DataOrderForm> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,11 +127,11 @@ class DataOrderFormState extends State<DataOrderForm> {
                 fieldEntity: widget.fields['orderStart']!,
                 withTime: true,
               ),
-              const SizedBox(height: 10),
-              DateTimeFieldWidget(
-                fieldEntity: widget.fields['orderEnd']!,
-                withTime: true,
-              ),
+              // const SizedBox(height: 10),
+              // DateTimeFieldWidget(
+              //   fieldEntity: widget.fields['orderEnd']!,
+              //   withTime: true,
+              // ),
               PaymentTypeFieldWidget(
                 fieldEntity: widget.fields['paymentType']!,
               ),
@@ -114,7 +142,6 @@ class DataOrderFormState extends State<DataOrderForm> {
                   widget.fields['services']!.val = listData;
                   print("Selected services $selectedProducts");
                   getPriceAndDuration(selectedProducts);
-
                 },
               ),
               const SizedBox(height: 10),
@@ -135,52 +162,90 @@ class DataOrderFormState extends State<DataOrderForm> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(width: 10),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "${'price'.tr()}:",
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "${'price'.tr()}:",
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const TextSpan(text: " "),
+                                    TextSpan(
+                                      text: price.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const TextSpan(text: " "),
-                            TextSpan(
-                              text: price.toString(),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
+                              const SizedBox(width: 10),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "${'duration'.tr()}:",
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const TextSpan(text: " "),
+                                    TextSpan(
+                                      text: duration.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                orderEnd != null
+                                    ? TextSpan(
+                                        text: 'almostOrderDateEnd'.tr(),
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      )
+                                    : const TextSpan(text: ""),
+                                orderEnd != null
+                                    ? TextSpan(
+                                        text: DateFormat("hh:mm")
+                                            .format(orderEnd!),
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      )
+                                    : const TextSpan(text: ""),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "${'duration'.tr()}:",
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const TextSpan(text: " "),
-                            TextSpan(
-                              text: duration.toString(),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

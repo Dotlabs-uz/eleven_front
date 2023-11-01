@@ -64,7 +64,7 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
             bottom: BorderSide(
           width: 1,
           color: Colors.black26,
-        )),
+        ),),
         // border: Border.all(width: 1),
       ),
       child: Column(
