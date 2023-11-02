@@ -7,13 +7,11 @@ class TimeTableHelper {
     final differenceInMinutes =
         (to.difference(from).inHours * 60) + to.difference(from).inMinutes % 60;
 
-   print("diff $differenceInMinutes");
 
     if (differenceInMinutes <= 0) {
       return Constants.timeTableItemHeight;
     }
 
-    print("Cart h ${differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound}");
 
     return differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound;
   }
