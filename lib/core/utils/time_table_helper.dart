@@ -11,6 +11,8 @@ class TimeTableHelper {
       return Constants.timeTableItemHeight;
     }
 
+    print("Cart h ${differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound}");
+
     return differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound;
   }
 

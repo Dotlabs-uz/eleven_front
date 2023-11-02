@@ -31,7 +31,7 @@ class WebSocketsService {
     _socketResponse.close();
   }
 
-  Stream<dynamic> connect() async* {
+  Stream<dynamic> connect()  {
     IO.Socket localSoket =
         IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
@@ -46,13 +46,14 @@ class WebSocketsService {
 
     localSoket.on('fetched', (data) {
       addData(data);
-      print("Fetched data $data");
     });
 
     // getResponse.map((event) => print(event));
 
-    await for (var data in getResponse) {
-      yield data;
-    }
+    // await for (var data in getResponse) {
+    //   yield data;
+    // }
+
+    return getResponse;
   }
 }
