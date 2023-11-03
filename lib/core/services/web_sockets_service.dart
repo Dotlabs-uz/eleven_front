@@ -6,10 +6,12 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class WebSocketsService {
+
   final String url;
   WebSocketsService(this.url);
 
-  static final _socketResponse = StreamController<dynamic>();
+
+     final _socketResponse = StreamController<dynamic>();
   static IO.Socket? socket;
 
   void _addData(dynamic data) => _socketResponse.sink.add(data);
@@ -49,6 +51,8 @@ class WebSocketsService {
   Stream<dynamic> get getResponse => _socketResponse.stream;
 
   void dispose() {
+    socket = null;
+    _socketResponse.stream.drain();
     _socketResponse.close();
   }
 

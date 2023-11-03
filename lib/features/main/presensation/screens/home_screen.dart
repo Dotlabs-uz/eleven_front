@@ -246,6 +246,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
     activeData = OrderEntity.empty();
     showSelectServices = false;
 
+    webSocketService.dispose();
+
     super.dispose();
   }
 
