@@ -64,6 +64,22 @@ class TimeTableHelper {
     return height;
   }
 
+  static notWorkingHourCondition(DateTime dateTimeFrom, String query) {
+    if (query.isNotEmpty) {
+      final dt = DateTime.tryParse(query);
+
+      if (dt != null) {
+        if (dateTimeFrom.day == dt.day &&
+            dateTimeFrom.month == dt.month &&
+            dateTimeFrom.year == dt.year) {
+          print("Remove not working hours $dateTimeFrom");
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   static onAccept(OrderEntity order, int hour, int minute, String barberId,
       Function(OrderEntity) onAllChanged) {
     final orderFrom = order.orderStart;
