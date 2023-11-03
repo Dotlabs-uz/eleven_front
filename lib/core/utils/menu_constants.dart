@@ -25,6 +25,7 @@ class Menus {
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'homeScreen',
+      // page: const SizedBox(),
       page: const HomeScreen(),
     ),
     // SubMenu(

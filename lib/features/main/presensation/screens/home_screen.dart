@@ -99,9 +99,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     activeData = OrderEntity.empty();
 
+    webSocketService.connect();
     showSelectServices = false;
 
-    webSocketService.connect();
     listBarbers.clear();
     _setWidgetTop();
   }

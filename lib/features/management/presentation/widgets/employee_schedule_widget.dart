@@ -108,12 +108,12 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
 
                 editedFields.add(entity);
               },
-              onTap: (field) {
-                if (multiSelectedFields.contains(field)) {
-                  multiSelectedFields.remove(field);
-                } else {
+              onHoverDrag: (field) {
+                // if (multiSelectedFields.contains(field)) {
+                //   multiSelectedFields.remove(field);
+                // } else {
                   multiSelectedFields.add(field);
-                }
+                // }
               },
             ),
           ),
@@ -147,7 +147,7 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
   final EmployeeEntity employeeEntity;
   final int currentMonth;
   final int currentYear;
-  final Function(FieldSchedule) onTap;
+  final Function(FieldSchedule) onHoverDrag;
   final Function(int day, int month, int year, int status, String employee)
       onFieldEdit;
 
@@ -157,7 +157,7 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
     required this.currentMonth,
     required this.currentYear,
     required this.onFieldEdit,
-    required this.onTap,
+    required this.onHoverDrag,
   }) : super(key: key);
 
   @override
@@ -204,7 +204,7 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
             return _EmployeeScheduleFieldWidget(
               onFieldEdit: onFieldEdit,
               fieldSchedule: fieldSchedule,
-              onTap: onTap,
+              onHoverDrag: onHoverDrag,
               currentMonth: currentMonth,
             );
           },
@@ -261,7 +261,7 @@ class _EmployeeScheduleTableWidget extends StatelessWidget {
 class _EmployeeScheduleFieldWidget extends StatefulWidget {
   final FieldSchedule fieldSchedule;
   final int currentMonth;
-  final Function(FieldSchedule) onTap;
+  final Function(FieldSchedule) onHoverDrag;
   final Function(int day, int month, int year, int status, String employee)
       onFieldEdit;
 
@@ -270,7 +270,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
     required this.currentMonth,
     required this.onFieldEdit,
     required this.fieldSchedule,
-    required this.onTap,
+    required this.onHoverDrag,
   }) : super(key: key);
 
   @override
@@ -318,67 +318,70 @@ class _EmployeeScheduleFieldWidgetState
   @override
   Widget build(BuildContext context) {
     if (widget.fieldSchedule.dateTime == null) {
-      return InkWell(
-        onLongPress: () => changeState(),
-        onTap: () {
-          if (multiSelectedFields.contains(widget.fieldSchedule)) {
-            multiSelectedFields.remove(widget.fieldSchedule);
-          } else {
+      return GestureDetector(
+        onPanUpdate: (details) {
+          // if (multiSelectedFields.contains(widget.fieldSchedule)) {
+          //   multiSelectedFields.remove(widget.fieldSchedule);
+          // } else {
             multiSelectedFields.add(widget.fieldSchedule);
-          }
+          // }
 
           print(
             "Multi selected field local inside field ${multiSelectedFields.length}",
           );
-          widget.onTap.call(widget.fieldSchedule);
+          widget.onHoverDrag.call(widget.fieldSchedule);
           setState(() {});
         },
-        child: Ink(
-          width: 35,
-          height: 35,
-          decoration: BoxDecoration(
-            color: multiSelectedFields.contains(widget.fieldSchedule)
-                ? Colors.brown.shade200
-                : Colors.white,
-            // color: multiSelectedFields.contains(widget.fieldSchedule)
-            //     ? Colors.brown
-            //     : Colors.red,
-            border: Border.all(width: 1, color: Colors.grey.shade200),
-          ),
-        ),
-      );
-    } else {
-      if (status == 0) {
-        return InkWell(
-          onLongPress: () => changeState(),
-          onTap: () {
-            if (multiSelectedFields.contains(widget.fieldSchedule)) {
-              multiSelectedFields.remove(widget.fieldSchedule);
-            } else {
-              multiSelectedFields.add(widget.fieldSchedule);
-            }
+        child: InkWell(
+          onTap: () => changeState(),
 
-            print(
-              "Multi selected field local inside field ${multiSelectedFields.length}",
-            );
-            widget.onTap.call(widget.fieldSchedule);
-            setState(() {});
-          },
           child: Ink(
             width: 35,
             height: 35,
             decoration: BoxDecoration(
               color: multiSelectedFields.contains(widget.fieldSchedule)
                   ? Colors.brown.shade200
-                  : DateTime.now().day == widget.fieldSchedule.dateTime!.day &&
-                          widget.currentMonth ==
-                              widget.fieldSchedule.dateTime!.month
-                      ? Colors.blue.withOpacity(0.1)
-                      : Colors.white,
+                  : Colors.white,
               // color: multiSelectedFields.contains(widget.fieldSchedule)
               //     ? Colors.brown
               //     : Colors.red,
               border: Border.all(width: 1, color: Colors.grey.shade200),
+            ),
+          ),
+        ),
+      );
+    } else {
+      if (status == 0) {
+        return GestureDetector(
+          onPanUpdate: (details) {
+
+              multiSelectedFields.add(widget.fieldSchedule);
+
+            print(
+              "Multi selected field local inside field ${multiSelectedFields.length}",
+            );
+            widget.onHoverDrag.call(widget.fieldSchedule);
+            setState(() {});
+          },
+          child: InkWell(
+            onLongPress: () => changeState(),
+
+            child: Ink(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                color: multiSelectedFields.contains(widget.fieldSchedule)
+                    ? Colors.brown.shade200
+                    : DateTime.now().day == widget.fieldSchedule.dateTime!.day &&
+                            widget.currentMonth ==
+                                widget.fieldSchedule.dateTime!.month
+                        ? Colors.blue.withOpacity(0.1)
+                        : Colors.white,
+                // color: multiSelectedFields.contains(widget.fieldSchedule)
+                //     ? Colors.brown
+                //     : Colors.red,
+                border: Border.all(width: 1, color: Colors.grey.shade200),
+              ),
             ),
           ),
         );
@@ -386,7 +389,7 @@ class _EmployeeScheduleFieldWidgetState
     }
 
     return InkWell(
-      onTap: () => widget.onTap.call(widget.fieldSchedule),
+      onTap: () => widget.onHoverDrag.call(widget.fieldSchedule),
       onLongPress: () => changeState(),
       child: Ink(
         width: 35,
