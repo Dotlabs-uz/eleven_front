@@ -285,7 +285,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 BlocListener<OrderFilterCubit, OrderFilterHelper>(
                   listener: (context, state) {
                     if (state.query.isNotEmpty) {
-                      webSocketService.addFilter(state.query);
+                      webSocketService.addFilter({ "createdAt": state.query});
                       orders.clear();
                     } else {
                       webSocketService.addFilter("");

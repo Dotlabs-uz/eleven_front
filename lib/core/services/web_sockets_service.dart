@@ -32,7 +32,7 @@ class WebSocketsService {
       return;
     }
 
-    // debugPrint("Add filter $filter");
+    debugPrint("Add filter $filter");
 
     // socket!.onack({"filter": filter});
     socket!.emit("getAll" ,filter);
