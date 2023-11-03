@@ -12,7 +12,20 @@ class WebSocketsService {
   static final _socketResponse = StreamController<dynamic>();
   static IO.Socket? socket;
 
-  void addData(dynamic data) => _socketResponse.sink.add(data);
+  void _addData(dynamic data) => _socketResponse.sink.add(data);
+  void addDataToSocket(dynamic data) {
+    debugPrint("Add data to socket $data");
+
+     socket!.emit("create" ,data);
+
+
+
+  }
+  void deleteFromSocket(dynamic data) {
+
+    debugPrint("Delete from socket $data");
+    socket!.emit("delete" ,data);
+  }
 
   void addFilter(dynamic filter) {
     if (socket == null) {
@@ -32,6 +45,7 @@ class WebSocketsService {
   }
 
   Stream<dynamic> connect()  {
+
     IO.Socket localSoket =
         IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
@@ -45,7 +59,7 @@ class WebSocketsService {
     localSoket.emit("getAll");
 
     localSoket.on('fetched', (data) {
-      addData(data);
+      _addData(data);
     });
 
     // getResponse.map((event) => print(event));

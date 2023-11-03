@@ -1,3 +1,5 @@
+import 'package:confirm_dialog/confirm_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/constants.dart';
@@ -29,28 +31,16 @@ class FieldCardWidget extends StatefulWidget {
 }
 
 class _FieldCardWidgetState extends State<FieldCardWidget> {
-  // bool isCardAllowedToDrag(
-  //     OrderEntity order, List<NotWorkingHoursEntity> notWorkingHours) {
-  //   final orderStart = order.orderStart;
-  //   final orderEnd = order.orderEnd;
-  //
-  //   for (final notWorkingHour in notWorkingHours) {
-  //     final notWorkingHourStart = notWorkingHour.dateFrom;
-  //     final notWorkingHourEnd = notWorkingHour.dateTo;
-  //
-  //     final diffInMinutes =
-  //         (orderStart.difference(notWorkingHourStart).inHours * 60) +
-  //             (orderStart.difference(notWorkingHourStart).inMinutes % 60);
-  //
-  //     print("Not working hours start diff ${diffInMinutes}");
-  //
-  //     // if (orderEnd.difference(other)) {
-  //     //   return false; // Заказ пересекается с "Not Working Hours", не разрешаем перенос
-  //     // }
-  //   }
-  //
-  //   return true; // Время заказа не пересекается с "Not Working Hours" и занимает все время Field, разрешаем перенос
-  // }
+  bool isCardAllowedToDrag(
+      OrderEntity order, List<NotWorkingHoursEntity> notWorkingHours) {
+    final orderStart = order.orderStart;
+    final orderEnd = order.orderEnd;
+
+    orderStart;
+    orderEnd;
+
+    return true; // Время заказа не пересекается с "Not Working Hours" и занимает все время Field, разрешаем перенос
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +51,11 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
       ),
       decoration: const BoxDecoration(
         border: Border(
-            bottom: BorderSide(
-          width: 1,
-          color: Colors.black26,
-        ),),
+          bottom: BorderSide(
+            width: 1,
+            color: Colors.black26,
+          ),
+        ),
         // border: Border.all(width: 1),
       ),
       child: Column(
@@ -82,31 +73,28 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
               child: DragTarget<DragOrder>(
                 onAcceptWithDetails: (details) {
                   print(
-                      "On Accept With details ${details.data}, Offset ${details.offset}");
+                    "On Accept With details ${details.data}, Offset ${details.offset}",
+                  );
                 },
                 onAccept: (dragOrder) async {
                   if (dragOrder.isResizing == false) {
-                    TimeTableHelper.onAccept(
-                      dragOrder.orderEntity,
-                      widget.hour,
-                      minute,
-                      widget.barberId,
-                      widget.onPositionChanged,
-                    );
+                    if (isCardAllowedToDrag(dragOrder.orderEntity, widget.notWorkingHours)) {
+                      TimeTableHelper.onAccept(
+                        dragOrder.orderEntity,
+                        widget.hour,
+                        minute,
+                        widget.barberId,
+                        widget.onPositionChanged,
+                      );
+                    } else {
+                      await confirm(
+                        context,
+                        title: const Text('confirming').tr(),
+                        content: const Text('deleteConfirm').tr(),
+                        textOK: const Text('yes').tr(),
+                      );
+                    }
                   }
-
-                  // if (true) {
-                  //
-                  //   TODO Add Not working hours logic
-                  //
-                  // } else {
-                  //   await confirm(
-                  //     context,
-                  //     title: const Text('confirming').tr(),
-                  //     content: const Text('deleteConfirm').tr(),
-                  //     textOK: const Text('yes').tr(),
-                  //   );
-                  // }
                 },
                 builder: (context, candidateData, rejectedData) {
                   return InkWell(

@@ -28,6 +28,7 @@ class TimeTableWidget extends StatefulWidget {
   final Function(DateTime from, DateTime to, String employeeId)
       onNotWorkingHoursCreate;
   final Function(String employee)? onDeleteEmployeeFromTable;
+  final Function(String orderId)? onOrderDelete;
   final Function(OrderEntity)? onOrderClick;
   final Function(int hour, int minute)? onFieldTap;
   final Function(NotWorkingHoursEntity, BarberEntity)? onTapNotWorkingHour;
@@ -40,6 +41,7 @@ class TimeTableWidget extends StatefulWidget {
     required this.onNotWorkingHoursCreate,
     this.onDeleteEmployeeFromTable,
     this.onFieldTap,
+    this.onOrderDelete,
     this.onOrderClick,
     this.onTapNotWorkingHour,
     required this.listOrders,
@@ -53,8 +55,8 @@ class TimeTableWidget extends StatefulWidget {
 
 class _TimeTableWidgetState extends State<TimeTableWidget> {
   final double rightCellPadding = 5;
-  final DateTime from = DateTime(2023, 10, 7, 8);
-  final DateTime to = DateTime(2023, 10, 7, 22);
+  final DateTime from = DateTime(2023, 10, 7, Constants.startWork.toInt());
+  final DateTime to = DateTime(2023, 10, 7, Constants.endWork.toInt());
 
   static final List<BarberEntity> listBarber = [];
   static final List<OrderEntity> listOrders = [];
@@ -237,6 +239,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                             OrderCardWidget(
                                                           order: orderEntity,
                                                           isDragging: true,
+                                                          onOrderDelete: widget
+                                                              .onOrderDelete,
                                                           onOrderSize:
                                                               _onOrderSize,
                                                         ),
@@ -248,6 +252,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                               order:
                                                                   orderEntity,
                                                               isDragging: true,
+                                                              onOrderDelete: widget
+                                                                  .onOrderDelete,
                                                               onOrderSize:
                                                                   _onOrderSize,
                                                             ),
@@ -258,6 +264,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                           isDragging: false,
                                                           onOrderSize:
                                                               _onOrderSize,
+                                                          onOrderDelete: widget
+                                                              .onOrderDelete,
                                                           onBottomOrderEnd: widget
                                                               .onBottomOrderEnd,
                                                           onTopOrderEnd: widget

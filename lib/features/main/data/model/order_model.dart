@@ -25,14 +25,14 @@ class OrderModel extends OrderEntity {
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
 
-    print("Order form json ${DateTime.parse(json['orderEnd']).toString()}");
+    // print("Order form json ${DateTime.parse(json['orderEnd']).toString()}");
     return OrderModel(
       id: json['_id'] ?? "",
-      orderStart: DateTime.parse(json['orderStart'] ).toLocal(),
+      orderStart: DateTime.parse(json['orderStart'] ),
       orderEnd: DateTime.parse(json['orderEnd']
 
           // .toString().replaceAll("Z", "").replaceAll("z", "")
-          ).toLocal(),
+          ),
       barberId: json['barber']['_id'],
       paymentType:
           json['payment'] == "cash" ? OrderPayment.card : OrderPayment.card,
@@ -77,6 +77,7 @@ class OrderModel extends OrderEntity {
     // data['discountPercent'] = discountPercent;
     // data['discount'] = discount;
     data['client'] = clientId;
+    // data['filial'] = "6541c7a7dc28ae268a77572f";
     print("Services $services");
     data['services'] = services.map((e) => e.id).toList();
 

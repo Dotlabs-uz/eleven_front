@@ -7,11 +7,9 @@ class TimeTableHelper {
     final differenceInMinutes =
         (to.difference(from).inHours * 60) + to.difference(from).inMinutes % 60;
 
-
     if (differenceInMinutes <= 0) {
       return Constants.timeTableItemHeight;
     }
-
 
     return differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound;
   }
