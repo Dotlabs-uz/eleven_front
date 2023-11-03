@@ -14,15 +14,15 @@ class WebSocketsService {
 
   void addData(dynamic data) => _socketResponse.sink.add(data);
 
-  void addFilter(String filter) {
+  void addFilter(dynamic filter) {
     if (socket == null) {
       return;
     }
 
-    debugPrint("Add filter $filter");
+    // debugPrint("Add filter $filter");
 
-    socket!.onack({"filter": filter});
-    socket!.emit("getAll");
+    // socket!.onack({"filter": filter});
+    socket!.emit("getAll" ,filter);
   }
 
   Stream<dynamic> get getResponse => _socketResponse.stream;
@@ -39,7 +39,7 @@ class WebSocketsService {
     // print("Socket url $url");
 
     localSoket.onConnect((_) {
-      print("websocket connected");
+      // print("websocket connected");
     });
 
     localSoket.emit("getAll");

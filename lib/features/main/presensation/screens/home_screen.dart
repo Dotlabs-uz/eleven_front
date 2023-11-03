@@ -470,6 +470,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                           constraints: const BoxConstraints(
                             maxWidth: 300,
                           ),
+                          color: Colors.white,
                           height: MediaQuery.of(context).size.height,
                           child: SingleChildScrollView(
                             child: DataOrderForm(

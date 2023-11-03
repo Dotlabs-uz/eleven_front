@@ -59,12 +59,13 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<bool> saveOrder(OrderModel model) async {
+
+    print("Order model id ${model.id}");
     if (model.id.isEmpty) {
       await _client.post(ApiConstants.orders, params: model.toJson());
-
     } else {
-      await _client.patch("${ApiConstants.orders}/${model.id}/", params: model.toJson());
-
+      await _client.patch("${ApiConstants.orders}/${model.id}/",
+          params: model.toJson());
     }
     return true;
   }
