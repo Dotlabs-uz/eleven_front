@@ -13,14 +13,14 @@ class FieldCardWidget extends StatefulWidget {
   final bool isFirstSection;
   final String barberId;
   final Function(int hour, int minute) onFieldTap;
-  final Function() onPositionChanged;
+  final Function(OrderEntity) onAllChanged;
   final List<NotWorkingHoursEntity> notWorkingHours;
 
   const FieldCardWidget({
     super.key,
     required this.hour,
     required this.isFirstSection,
-    required this.onPositionChanged,
+    required this.onAllChanged,
     required this.onFieldTap,
     required this.barberId,
     required this.notWorkingHours,
@@ -84,8 +84,9 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                         widget.hour,
                         minute,
                         widget.barberId,
-                        widget.onPositionChanged,
+                        widget.onAllChanged,
                       );
+
                     } else {
                       await confirm(
                         context,

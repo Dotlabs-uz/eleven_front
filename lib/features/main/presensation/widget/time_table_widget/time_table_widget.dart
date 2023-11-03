@@ -30,6 +30,7 @@ class TimeTableWidget extends StatefulWidget {
   final Function(String employee)? onDeleteEmployeeFromTable;
   final Function(String orderId)? onOrderDelete;
   final Function(OrderEntity)? onOrderClick;
+  final Function(OrderEntity)? onOrderDragEnd;
   final Function(int hour, int minute)? onFieldTap;
   final Function(NotWorkingHoursEntity, BarberEntity)? onTapNotWorkingHour;
   final Function(OrderEntity order)? onTopOrderEnd;
@@ -42,6 +43,7 @@ class TimeTableWidget extends StatefulWidget {
     this.onDeleteEmployeeFromTable,
     this.onFieldTap,
     this.onOrderDelete,
+    this.onOrderDragEnd,
     this.onOrderClick,
     this.onTapNotWorkingHour,
     required this.listOrders,
@@ -191,9 +193,10 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                               barberIndex == 0,
                                                           hour: hour,
                                                           barberId: barber.id,
-                                                          onPositionChanged:
-                                                              () {
+                                                          onAllChanged:
+                                                              (order) {
                                                             setState(() {});
+                                                            widget.onOrderDragEnd?.call(order);
                                                           },
                                                           notWorkingHours: barber
                                                               .notWorkingHours,
@@ -208,14 +211,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                   ],
                                                 ),
                                               ),
-                                              ...List.generate(
-                                                IntHelper
-                                                    .getCountOfCardByWorkingHours(
-                                                        from, to),
-                                                (index) {
-                                                  return const PastTimeCardWidget();
-                                                },
-                                              ),
+
                                               ...localOrders.map(
                                                 (orderEntity) {
                                                   return Positioned(
@@ -293,6 +289,14 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                                   barber),
                                                     ),
                                                   );
+                                                },
+                                              ),
+                                              ...List.generate(
+                                                IntHelper
+                                                    .getCountOfCardByWorkingHours(
+                                                    from, to),
+                                                    (index) {
+                                                  return const PastTimeCardWidget();
                                                 },
                                               ),
                                             ],

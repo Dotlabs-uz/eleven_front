@@ -65,7 +65,7 @@ class TimeTableHelper {
   }
 
   static onAccept(OrderEntity order, int hour, int minute, String barberId,
-      Function() onAllChanged) {
+      Function(OrderEntity) onAllChanged) {
     final orderFrom = order.orderStart;
     final orderTo = order.orderEnd;
 
@@ -90,6 +90,6 @@ class TimeTableHelper {
     order.barberId = barberId;
 
     // Вызов колбэка для обновления позиции
-    onAllChanged.call();
+    onAllChanged.call(order);
   }
 }

@@ -21,6 +21,14 @@ class WebSocketsService {
 
 
   }
+  void sendData(String method,  dynamic data) {
+    debugPrint("Send data $method $data");
+
+     socket!.emit(method ,data);
+
+
+
+  }
   void deleteFromSocket(dynamic data) {
 
     debugPrint("Delete from socket $data");

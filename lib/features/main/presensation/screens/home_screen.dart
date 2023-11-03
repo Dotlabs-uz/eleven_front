@@ -102,6 +102,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
     webSocketService.connect();
     showSelectServices = false;
 
+
+
     listBarbers.clear();
     _setWidgetTop();
   }
@@ -368,6 +370,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       onTapNotWorkingHour:
                                           _onDeleteNotWorkingHours,
                                       onOrderDelete: _orderDelete,
+                                      onOrderDragEnd: (oder) {
+                                        webSocketService.sendData("update", OrderModel.fromEntity(oder).toJson());
+                                      },
                                       onFieldTap: (hour, minute) {
                                         activeData = OrderEntity.empty(
                                           hour: hour,
