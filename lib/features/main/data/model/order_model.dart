@@ -28,11 +28,11 @@ class OrderModel extends OrderEntity {
     // print("Order form json ${DateTime.parse(json['orderEnd']).toString()}");
     return OrderModel(
       id: json['_id'] ?? "",
-      orderStart: DateTime.parse(json['orderStart'] ),
+      orderStart: DateTime.parse(json['orderStart'] ).toLocal(),
       orderEnd: DateTime.parse(json['orderEnd']
 
           // .toString().replaceAll("Z", "").replaceAll("z", "")
-          ),
+      ).toLocal(),
       barberId: json['barber']['_id'],
       paymentType:
           json['payment'] == "cash" ? OrderPayment.card : OrderPayment.card,
@@ -69,7 +69,6 @@ class OrderModel extends OrderEntity {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['orderStart'] = orderStart.toIso8601String();
-    print(orderStart.toUtc().toIso8601String());
     // data['orderEnd'] = orderEnd.toLocal().toIso8601String();
     // data['price'] = price;
     data['barber'] = barberId;
