@@ -14,8 +14,8 @@ import 'month_selector_with_dates_widget.dart';
 
 import 'package:flutter/material.dart';
 
-class FieldSchedule  extends Equatable{
- final DateTime? dateTime;
+class FieldSchedule extends Equatable {
+  final DateTime? dateTime;
   final String employeeId;
   late int status;
 
@@ -33,11 +33,11 @@ class FieldSchedule  extends Equatable{
 
   @override
   List<Object?> get props => [
-    dateTime?.day,
-    dateTime?.month,
-    dateTime?.year,
-    employeeId,
-  ];
+        dateTime?.day,
+        dateTime?.month,
+        dateTime?.year,
+        employeeId,
+      ];
 }
 
 class EmployeeScheduleWidget extends StatefulWidget {
@@ -129,10 +129,9 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
                   editedFields.add(entity);
                 },
                 onHoverDrag: (field) {
-
                   print("Drag field ${field.dateTime}");
 
-                  if ( multiSelectedFields.contains(field) == false) {
+                  if (multiSelectedFields.contains(field) == false) {
                     // multiSelectedFields.remove(field);
                     multiSelectedFields.add(field);
                     print("Fild field $field");
@@ -154,12 +153,24 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
                   child: Text("save".tr()),
                 ),
                 const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    changeState(multiSelectedFields);
-                  },
-                  child: Text("selectStatusForSelected".tr()),
-                ),
+                if (multiSelectedFields.isNotEmpty)
+                  ElevatedButton(
+                    onPressed: () {
+                      changeState(multiSelectedFields);
+                    },
+                    child: Text("selectStatusForSelected".tr()),
+                  ),
+                const SizedBox(width: 10),
+                if (multiSelectedFields.isNotEmpty)
+                  ElevatedButton(
+                    onPressed: () {
+                      multiSelectedFields.clear();
+                      setState(() {});
+                    },
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    child: Text("clearSelected".tr()),
+                  ),
               ],
             ),
           ],
@@ -196,7 +207,6 @@ class _EmployeeScheduleTableWidget extends StatefulWidget {
 class _EmployeeScheduleTableWidgetState
     extends State<_EmployeeScheduleTableWidget> {
   Offset? startDragPosition;
-
 
   @override
   void initState() {
@@ -252,13 +262,13 @@ class _EmployeeScheduleTableWidgetState
                 widget.onHoverDrag.call(fieldSchedule);
               },
               child: _EmployeeScheduleFieldWidget(
-                key: Key((day+widget.currentMonth+year).toString()),
-
+                key: Key((day + widget.currentMonth + year).toString()),
                 onFieldEdit: widget.onFieldEdit,
                 fieldSchedule: fieldSchedule,
                 onHoverDrag: widget.onHoverDrag,
                 currentMonth: widget.currentMonth,
-                isFieldSElected: widget.listSelectedSchedule.contains(fieldSchedule),
+                isFieldSElected:
+                    widget.listSelectedSchedule.contains(fieldSchedule),
               ),
             );
           },
@@ -339,8 +349,6 @@ class _EmployeeScheduleFieldWidgetState
   int status = 0;
   bool isDragging = false;
 
-
-
   @override
   void initState() {
     status = widget.fieldSchedule.status;
@@ -381,9 +389,8 @@ class _EmployeeScheduleFieldWidgetState
           width: 35,
           height: 35,
           decoration: BoxDecoration(
-            color:widget.isFieldSElected
-                ? Colors.brown.shade200
-                : Colors.white,
+            color:
+                widget.isFieldSElected ? Colors.brown.shade200 : Colors.white,
             // color: multiSelectedFields.contains(widget.fieldSchedule)
             //     ? Colors.brown
             //     : Colors.red,
