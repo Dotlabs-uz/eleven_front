@@ -27,7 +27,7 @@ class TimeTableHelper {
       final diffDays = fromFormatted.difference(filterFormat).inDays;
 
 
-      print("filter ${filterFormat} from ${fromFormatted} diff in days $diffDays");
+      // print("filter ${filterFormat} from ${fromFormatted} diff in days $diffDays");
 
 
       if(diffDays.isNegative) {
@@ -122,7 +122,7 @@ class TimeTableHelper {
     return false;
   }
 
-  static onAccept(OrderEntity order, int hour, int minute, String barberId,
+  static OrderEntity onAccept(OrderEntity order, int hour, int minute, String barberId,
       Function(OrderEntity) onAllChanged) {
     final orderFrom = order.orderStart;
     final orderTo = order.orderEnd;
@@ -149,5 +149,7 @@ class TimeTableHelper {
 
     // Вызов колбэка для обновления позиции
     onAllChanged.call(order);
+
+    return order;
   }
 }

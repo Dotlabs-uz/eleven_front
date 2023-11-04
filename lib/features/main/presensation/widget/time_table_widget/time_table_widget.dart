@@ -209,12 +209,12 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                                     0,
                                                             hour: hour,
                                                             barberId: barber.id,
-                                                            onAllChanged:
-                                                                (order) {
+                                                            onDragEnded:
+                                                                (localOrder) {
                                                               setState(() {});
                                                               widget
                                                                   .onOrderDragEnd
-                                                                  ?.call(order);
+                                                                  ?.call(localOrder);
                                                             },
                                                             notWorkingHours: barber
                                                                 .notWorkingHours,

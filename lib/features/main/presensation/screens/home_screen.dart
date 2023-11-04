@@ -372,8 +372,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       onTapNotWorkingHour:
                                           _onDeleteNotWorkingHours,
                                       onOrderDelete: _orderDelete,
+
                                       orderFilterQuery: BlocProvider.of<OrderFilterCubit>(context).state.query,
                                       onOrderDragEnd: (oder) {
+                                        print("Order drag end");
                                         webSocketService.sendData("update", OrderModel.fromEntity(oder).toJson());
                                       },
                                       onFieldTap: (hour, minute) {

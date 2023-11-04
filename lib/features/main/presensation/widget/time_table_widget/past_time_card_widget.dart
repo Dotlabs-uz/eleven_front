@@ -35,7 +35,6 @@ class _PastTimeCardWidgetState extends State<PastTimeCardWidget> {
     if (endTime != widget.dateTime) {
       initialize();
 
-      print("End time changed");
     }
     super.didUpdateWidget(oldWidget);
   }

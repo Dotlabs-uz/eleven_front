@@ -13,14 +13,14 @@ class FieldCardWidget extends StatefulWidget {
   final bool isFirstSection;
   final String barberId;
   final Function(int hour, int minute) onFieldTap;
-  final Function(OrderEntity) onAllChanged;
+  final Function(OrderEntity) onDragEnded;
   final List<NotWorkingHoursEntity> notWorkingHours;
 
   const FieldCardWidget({
     super.key,
     required this.hour,
     required this.isFirstSection,
-    required this.onAllChanged,
+    required this.onDragEnded,
     required this.onFieldTap,
     required this.barberId,
     required this.notWorkingHours,
@@ -79,13 +79,16 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                 onAccept: (dragOrder) async {
                   if (dragOrder.isResizing == false) {
                     if (isCardAllowedToDrag(dragOrder.orderEntity, widget.notWorkingHours)) {
-                      TimeTableHelper.onAccept(
+                     TimeTableHelper.onAccept(
                         dragOrder.orderEntity,
                         widget.hour,
                         minute,
                         widget.barberId,
-                        widget.onAllChanged,
+                        (p0) {
+                        widget.onDragEnded.call(p0);
+                        },
                       );
+
 
                     } else {
                       await confirm(
