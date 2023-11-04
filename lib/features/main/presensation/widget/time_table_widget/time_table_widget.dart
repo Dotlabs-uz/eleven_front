@@ -347,7 +347,12 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                       .getCountOfCardByWorkingHours(
                                                           from, to),
                                                   (index) {
-                                                    return const PastTimeCardWidget();
+                                                    return PastTimeCardWidget(
+                                                      dateTime:
+                                                          DateTime.tryParse(
+                                                        widget.orderFilterQuery,
+                                                      ),
+                                                    );
                                                   },
                                                 ),
                                               ],

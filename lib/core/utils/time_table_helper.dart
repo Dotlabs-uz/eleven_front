@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../features/main/domain/entity/order_entity.dart';
 import '../../features/management/domain/entity/not_working_hours_entity.dart';
 import 'constants.dart';
@@ -12,6 +14,36 @@ class TimeTableHelper {
     }
 
     return differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound;
+  }
+
+  static double getPastTimeHeight(
+      DateTime from, DateTime to, DateTime? filter) {
+
+    if (filter != null) {
+      final diffDays = from.difference(filter).inDays;
+
+      print("From $from to $filter diff in days $diffDays");
+
+      if(diffDays.isNegative || diffDays == 0) {
+        return 0 ;
+      }
+
+      if (diffDays >= 1) {
+        return Constants.timeTableItemHeight * 14;
+      }
+
+
+    }
+
+    final differenceInMinutes =
+        (to.difference(from).inHours * 60) + to.difference(from).inMinutes % 60;
+
+    if (differenceInMinutes <= 0) {
+      return Constants.timeTableItemHeight;
+    }
+
+    final h = differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound;
+    return h > 1600 ? 1600 : h;
   }
 
   static double getTopPositionForOrder(OrderEntity order) {

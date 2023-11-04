@@ -45,15 +45,15 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
   double bottomPosition = 0;
 
 
-  @override
-  void initState() {
+  // @override
+  // void initState() {
 
-    print("Card h ${TimeTableHelper.getCardHeight(
-      widget.order.orderStart,
-      widget.order.orderEnd,
-    )}");
-    super.initState();
-  }
+    // print("Card h ${TimeTableHelper.getCardHeight(
+    //   widget.order.orderStart,
+    //   widget.order.orderEnd,
+    // )}");
+    // super.initState();
+  // }
   void onDragTopUpdate(DragUpdateDetails details) {
     final minutesToChange =
         (details.delta.dy / Constants.sizeTimeTableFieldPerMinuteRound).round();
