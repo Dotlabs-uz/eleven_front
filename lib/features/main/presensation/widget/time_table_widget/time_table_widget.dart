@@ -12,6 +12,7 @@ import '../../../../../core/utils/dialogs.dart';
 import '../../../../../core/utils/int_helper.dart';
 import '../../../../../core/utils/time_table_helper.dart';
 import '../../../../management/domain/entity/not_working_hours_entity.dart';
+import '../../../../management/presentation/cubit/employee/employee_cubit.dart';
 import '../../../domain/entity/order_entity.dart';
 import 'field_card_widget.dart';
 import 'no_working_hours_card_widget.dart';
@@ -109,7 +110,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       child: listBarber.isEmpty
           ? const EmptyWidget()
           : SingleChildScrollView(
@@ -214,7 +215,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                               setState(() {});
                                                               widget
                                                                   .onOrderDragEnd
-                                                                  ?.call(localOrder);
+                                                                  ?.call(
+                                                                      localOrder);
                                                             },
                                                             notWorkingHours: barber
                                                                 .notWorkingHours,

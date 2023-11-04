@@ -235,7 +235,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   _updateOrder(OrderEntity order) {
-    webSocketService.sendData("update", OrderModel.fromEntity(order).toJson());
+    webSocketService.sendData("update", OrderModel.fromEntity(order).toJsonUpdate());
 
   }
 

@@ -679,6 +679,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
+  region_detector:
+    dependency: "direct main"
+    description:
+      name: region_detector
+      sha256: b3785769caa9e84638cf06443d66dd178c135070673eca7c884a4a52e29111ed
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   rxdart:
     dependency: transitive
     description:
