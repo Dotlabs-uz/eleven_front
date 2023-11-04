@@ -197,7 +197,6 @@ class _ContentWidgetState extends State<ContentWidget> {
     // ),
   ];
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -241,6 +240,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                               if (state is EmployeeScheduleSaved) {
                                 SuccessFlushBar("change_success".tr())
                                     .show(context);
+                                BlocProvider.of<EmployeeCubit>(context).load("");
                               } else if (state is EmployeeScheduleError) {
                                 ErrorFlushBar("change_error"
                                     .tr(args: [state.message])).show(context);
@@ -281,13 +281,13 @@ class _ContentWidgetState extends State<ContentWidget> {
 
                                   listFields.clear();
                                 }
-                              },onMultiSelectSave: (listMultiSelect) {
-                              if (listMultiSelect.isNotEmpty) {
-                                BlocProvider.of<EmployeeScheduleCubit>(
-                                    context)
-                                    .save(listData: listMultiSelect);
-
-                              }
+                              },
+                              onMultiSelectSave: (listMultiSelect) {
+                                if (listMultiSelect.isNotEmpty) {
+                                  BlocProvider.of<EmployeeScheduleCubit>(
+                                          context)
+                                      .save(listData: listMultiSelect);
+                                }
                               },
                               listEmployee: listEmployee,
                             );
