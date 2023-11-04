@@ -213,7 +213,7 @@ class _EmployeeScheduleTableWidgetState
           width: 200,
           child: _card(),
         ),
-        Text(widget.listSelectedSchedule.length.toString()),
+        // Text(widget.listSelectedSchedule.length.toString()),
         ...List.generate(
           StringHelper.getDaysByMonthIndex(month: widget.currentMonth),
           (index) {
