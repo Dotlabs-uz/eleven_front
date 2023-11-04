@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../features/main/domain/entity/order_entity.dart';
@@ -20,17 +21,26 @@ class TimeTableHelper {
       DateTime from, DateTime to, DateTime? filter) {
 
     if (filter != null) {
-      final diffDays = from.difference(filter).inDays;
 
-      print("From $from to $filter diff in days $diffDays");
+      final fromFormatted  = DateTime.parse(DateFormat('yyyy-MM-dd').format(from));
+      final filterFormat  = DateTime.parse(DateFormat('yyyy-MM-dd').format(filter));
+      final diffDays = fromFormatted.difference(filterFormat).inDays;
 
-      if(diffDays.isNegative || diffDays == 0) {
-        return 0 ;
+
+      print("filter ${filterFormat} from ${fromFormatted} diff in days $diffDays");
+
+
+      if(diffDays.isNegative) {
+        return 0;
       }
 
-      if (diffDays >= 1) {
-        return Constants.timeTableItemHeight * 14;
+      if(diffDays >= 1 ) {
+        return Constants.timeTableItemHeight * 14 ;
       }
+
+
+
+
 
 
     }
