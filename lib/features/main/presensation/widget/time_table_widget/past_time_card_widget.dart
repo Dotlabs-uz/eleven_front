@@ -22,7 +22,20 @@ class PastTimeCardWidget extends StatefulWidget {
 
 class _PastTimeCardWidgetState extends State<PastTimeCardWidget> {
   final startTime = DateTime.now().copyWith(hour: Constants.startWork.toInt(), minute: 0).toLocal();
-  final endTime = DateTime.now().toLocal();
+  DateTime endTime =  DateTime.now();
+
+  @override
+  void initState() {
+
+    if(endTime.hour >= 22) {
+      endTime =  DateTime.now().copyWith(hour: 22,minute: 0).toLocal();
+    }
+    super.initState();
+  }
+
+
+
+
 
 
 
