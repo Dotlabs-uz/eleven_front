@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
         BlocProvider(create: (context) => selectServicesCubit),
         BlocProvider(create: (context) => barberCubit..load("")),
       ],
-      child: _ContentWidget(),
+      child: const _ContentWidget(),
     );
   }
 }
@@ -95,11 +95,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   initialize() async {
+    webSocketService.connect();
     print("Saved ");
 
     activeData = OrderEntity.empty();
 
-    webSocketService.connect();
     showSelectServices = false;
 
 
@@ -113,33 +113,16 @@ class _ContentWidgetState extends State<_ContentWidget> {
       TopMenuEntity(searchCubit: null, enableSearch: false, iconList: [
         MyIconButton(
           onPressed: () {
-            // activeData = OrderEntity(
-            //   id: "",
-            //   discount: 0,
-            //   discountPercent: 0,
-            //   paymentType: OrderPayment.cash,
-            //   orderStart: DateTime.now().copyWith(hour: 18),
-            //   orderEnd: DateTime.now().copyWith(hour: 18, minute: 30),
-            //   price: 30,
-            //   barberId: "6531612da3b411c75df5e944",
-            //   clientId: "65316125a3b411c75df5e938",
-            //   services: [
-            //     ServiceProductEntity(
-            //       id: "652a8270523968b4b942b123",
-            //       name: "",
-            //       price: 30,
-            //       duration: 10,
-            //       category: ServiceProductCategoryEntity.empty(),
-            //       sex: 'women',
-            //     )
-            //   ],
-            // );
-            // _saveOrderLocal(activeData);
-
             activeData = OrderEntity.empty();
             _editOrder(activeData);
           },
           icon: const Icon(Icons.add_box_rounded),
+        ),
+        MyIconButton(
+          onPressed: () {
+            webSocketService.refresh();
+          },
+          icon: const Icon(Icons.refresh),
         ),
       ]),
     );
@@ -249,6 +232,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
     webSocketService.dispose();
 
     super.dispose();
+  }
+
+  _updateOrder(OrderEntity order) {
+    webSocketService.sendData("update", OrderModel.fromEntity(order).toJson());
+
   }
 
   @override
@@ -374,10 +362,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       onOrderDelete: _orderDelete,
 
                                       orderFilterQuery: BlocProvider.of<OrderFilterCubit>(context).state.query,
-                                      onOrderDragEnd: (oder) {
-                                        print("Order drag end");
-                                        webSocketService.sendData("update", OrderModel.fromEntity(oder).toJson());
-                                      },
+
                                       onFieldTap: (hour, minute) {
                                         activeData = OrderEntity.empty(
                                           hour: hour,
@@ -410,18 +395,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         );
                                       },
                                       listOrders: orders,
-                                      onTopOrderEnd: (order) {
-                                        print(
-                                            "Order start ${order.orderStart.toString()}");
-                                        BlocProvider.of<OrderCubit>(context)
-                                            .save(order: order);
-                                        // BlocProvider.of<OrderCubit>(context).init();
-                                      },
-                                      onBottomOrderEnd: (order) {
-                                        print(
-                                            "Order bottom ${order.orderEnd.toString()}");
-                                        BlocProvider.of<OrderCubit>(context)
-                                            .save(order: order);
+                                      onOrderStartResizeEnd: (order) => _updateOrder(order),
+                                      onOrderEndResizeEnd: (order) => _updateOrder(order),
+                                      onOrderDragEnd: (order) {
+                                        print("Order drag end");
+                                        _updateOrder(order);
                                       },
                                     );
                                   },

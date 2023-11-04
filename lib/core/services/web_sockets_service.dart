@@ -23,6 +23,12 @@ class WebSocketsService {
 
 
   }
+
+  void refresh() {
+    if(socket == null) return ;
+
+    socket!.emit("getAll");
+  }
   void sendData(String method,  dynamic data) {
     debugPrint("Send data $method $data");
 

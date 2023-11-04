@@ -31,8 +31,8 @@ class TimeTableWidget extends StatefulWidget {
   final Function(OrderEntity)? onOrderDragEnd;
   final Function(int hour, int minute)? onFieldTap;
   final Function(NotWorkingHoursEntity, BarberEntity)? onTapNotWorkingHour;
-  final Function(OrderEntity order)? onTopOrderEnd;
-  final Function(OrderEntity order)? onBottomOrderEnd;
+  final Function(OrderEntity order)? onOrderStartResizeEnd;
+  final Function(OrderEntity order)? onOrderEndResizeEnd;
 
   const TimeTableWidget({
     Key? key,
@@ -46,8 +46,8 @@ class TimeTableWidget extends StatefulWidget {
     this.onOrderClick,
     this.onTapNotWorkingHour,
     required this.listOrders,
-    this.onTopOrderEnd,
-    this.onBottomOrderEnd,
+    this.onOrderStartResizeEnd,
+    this.onOrderEndResizeEnd,
   }) : super(key: key);
 
   @override
@@ -284,9 +284,9 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                             onOrderDelete: widget
                                                                 .onOrderDelete,
                                                             onBottomOrderEnd: widget
-                                                                .onBottomOrderEnd,
+                                                                .onOrderEndResizeEnd,
                                                             onTopOrderEnd: widget
-                                                                .onTopOrderEnd,
+                                                                .onOrderStartResizeEnd,
                                                           ),
                                                         ),
                                                       ),
