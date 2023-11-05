@@ -101,16 +101,20 @@ class TimeTableHelper {
   }
 
   static notWorkingHourCondition(DateTime dateTimeFrom, String query) {
+
+
     if (query.isNotEmpty) {
       final dt = DateTime.tryParse(query);
 
       if (dt != null) {
+        print("Date time dt$dt from $dateTimeFrom");
         if (dateTimeFrom.day == dt.day &&
             dateTimeFrom.month == dt.month &&
             dateTimeFrom.year == dt.year) {
           print("Remove not working hours $dateTimeFrom");
           return true;
         }
+        return false;
       }
     }
 
