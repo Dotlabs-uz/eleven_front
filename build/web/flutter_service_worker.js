@@ -4,9 +4,9 @@ const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
   "version.json": "dc5c22b2ec4f38a247611e8f930afb18",
-"index.html": "c366b1032a363641b60cd9e631df2b90",
-"/": "c366b1032a363641b60cd9e631df2b90",
-"main.dart.js": "336091bcd4993dd6c371a2f17ab8c5e8",
+"index.html": "5a2afb990affce2c2b25ba745235356c",
+"/": "5a2afb990affce2c2b25ba745235356c",
+"main.dart.js": "eb9325fb2feb823b732baea94fbfc1bf",
 "flutter.js": "1cfe996e845b3a8a33f57607e8b09ee4",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
@@ -51,8 +51,8 @@ const RESOURCES = {
 "assets/assets/fonts/nunito/Nunito-BlackItalic.ttf": "8bf9ce6e0c5434ca0ac97f90196d0c66",
 "assets/assets/fonts/nunito/Nunito-Italic.ttf": "380d3172fab0055a8d74ab12636f5a9b",
 "assets/assets/fonts/nunito/Nunito-LightItalic.ttf": "55032f4e811253da318f967e0db3d7e9",
-"assets/assets/translations/uz-UZ.json": "fb905e439413dc1f3d545adc08d23c67",
-"assets/assets/translations/ru-RU.json": "76c70128ebc239805a508eeeb84444c1",
+"assets/assets/translations/uz-UZ.json": "629236fb71cbf07cc0e6d132d5d12dd3",
+"assets/assets/translations/ru-RU.json": "d670a44ab226b18a687faa21ec59a24f",
 "canvaskit/canvaskit.js": "97937cb4c2c2073c968525a3e08c86a3",
 "canvaskit/profiling/canvaskit.js": "c21852696bc1cc82e8894d851c01921a",
 "canvaskit/profiling/canvaskit.wasm": "371bc4e204443b0d5e774d64a046eb99",

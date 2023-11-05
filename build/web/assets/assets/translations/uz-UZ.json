@@ -644,8 +644,13 @@
   "selectTimeTo": "Vaqtni tanlang oldin",
   "selectServices": "Xizmatlarni tanlang",
   "selectStatusForSelected": "Tanlangan uchun holatni tanlang",
-  "clearSelected": "Tanlanganni tozalash"
+  "clearSelected": "Tanlanganni tozalash",
   "almostOrderDateEnd": "Taxminan tugash vaqti",
   "youCantDrragOrder": "Buyurtmani o'tkaza olmaysiz",
-  "draggable": "Buyurtmani ko'chirish"
+  "draggable": "Buyurtmani ko'chirish",
+  "ok": "Ок",
+  "client": "Mijoz",
+  "pleaseSelectBarber": "Iltimos, sartaroshni tanlang",
+  "pleaseSelectClient": "Iltimos, mijoz tanlang",
+  "pleaseSelectServices": "Iltimos, xizmatlarni tanlang"
 }

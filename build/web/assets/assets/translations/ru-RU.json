@@ -658,6 +658,15 @@
   "clearSelected": "Очистить выбранные",
   "youCantDrragOrder": "Вы не можете перенести заказ",
   "draggable": "Перемещение заказа",
+  "ok": "Ок",
+  "client": "Клиент",
+  "pleaseSelectBarber": "Пожалуйста выберите барбера",
+  "pleaseSelectClient": "Пожалуйста выберите клиента",
+  "pleaseSelectServices": "Пожалуйста выберите сервисы",
+  "data": "data",
+  "data": "data",
+  "data": "data",
+  "data": "data",
   "data": "data",
   "data": "data"
 }
