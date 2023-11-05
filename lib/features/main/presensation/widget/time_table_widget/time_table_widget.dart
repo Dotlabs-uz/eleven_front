@@ -297,53 +297,56 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                 ),
                                                 ...listNotWorkingHours
                                                     .where(
-                                                      (notWorkingHoursEntity) =>
-                                                          TimeTableHelper
-                                                              .notWorkingHourCondition(
-                                                        notWorkingHoursEntity
-                                                            .dateFrom,
-                                                        widget.orderFilterQuery,
-                                                      ),
+                                                      (notWorkingHoursEntity) {
+                                                        return TimeTableHelper
+                                                            .notWorkingHourCondition(
+                                                          notWorkingHoursEntity
+                                                              .dateFrom,
+                                                          widget
+                                                              .orderFilterQuery,
+                                                        );
+                                                      },
                                                     )
                                                     .toList()
                                                     .map(
-                                                  (notWorkingHoursEntity) {
-                                                    // if (widget.orderFilterQuery
-                                                    //     .isNotEmpty) {
-                                                    //   final dt = DateTime
-                                                    //       .tryParse(widget
-                                                    //           .orderFilterQuery);
-                                                    //   if (dt != null &&( notWorkingHoursEntity
-                                                    //             .dateTo
-                                                    //             .difference(dt)
-                                                    //             .inDays >=
-                                                    //         1 )) {
-                                                    //
-                                                    //     listNotWorkingHours.clear();
-                                                    //
-                                                    //
-                                                    //     print("Remove not working hours $notWorkingHoursEntity");
-                                                    //     return const SizedBox();
-                                                    //   }
-                                                    // }
-                                                    return Positioned(
-                                                      top: TimeTableHelper
-                                                          .getTopPositionForNotWorkingHours(
-                                                        notWorkingHoursEntity,
-                                                      ),
-                                                      child:
-                                                          NotWorkingHoursCard(
-                                                        notWorkingHoursEntity:
+                                                      (notWorkingHoursEntity) {
+                                                        // if (widget.orderFilterQuery
+                                                        //     .isNotEmpty) {
+                                                        //   final dt = DateTime
+                                                        //       .tryParse(widget
+                                                        //           .orderFilterQuery);
+                                                        //   if (dt != null &&( notWorkingHoursEntity
+                                                        //             .dateTo
+                                                        //             .difference(dt)
+                                                        //             .inDays >=
+                                                        //         1 )) {
+                                                        //
+                                                        //     listNotWorkingHours.clear();
+                                                        //
+                                                        //
+                                                        //     print("Remove not working hours $notWorkingHoursEntity");
+                                                        //     return const SizedBox();
+                                                        //   }
+                                                        // }
+                                                        return Positioned(
+                                                          top: TimeTableHelper
+                                                              .getTopPositionForNotWorkingHours(
                                                             notWorkingHoursEntity,
-                                                        onDoubleTap: (entity) =>
-                                                            widget
-                                                                .onTapNotWorkingHour
-                                                                ?.call(entity,
-                                                                    barber),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
+                                                          ),
+                                                          child:
+                                                              NotWorkingHoursCard(
+                                                            notWorkingHoursEntity:
+                                                                notWorkingHoursEntity,
+                                                            onDoubleTap:
+                                                                (entity) => widget
+                                                                    .onTapNotWorkingHour
+                                                                    ?.call(
+                                                                        entity,
+                                                                        barber),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
                                                 ...List.generate(
                                                   IntHelper
                                                       .getCountOfCardByWorkingHours(

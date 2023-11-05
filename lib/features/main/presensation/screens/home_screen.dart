@@ -232,7 +232,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     super.dispose();
   }
 
-  _updateOrder(OrderEntity order, {bool withOrderEnd = true}) {
+  void _updateOrder(OrderEntity order, {bool withOrderEnd = true}) {
     webSocketService.sendData(
       "update",
       {

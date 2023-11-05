@@ -113,6 +113,14 @@ class TimeTableHelper {
         }
       }
     }
+
+    final nowDateTime = DateTime.now();
+    if (dateTimeFrom.day == nowDateTime.day &&
+        dateTimeFrom.month == nowDateTime.month &&
+        dateTimeFrom.year == nowDateTime.year) {
+      print("Remove not working hours $dateTimeFrom");
+      return true;
+    }
     return false;
   }
 

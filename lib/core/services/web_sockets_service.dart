@@ -55,7 +55,6 @@ class WebSocketsService {
 
   void dispose() {
     socket = null;
-    _socketResponse.stream.drain();
     _socketResponse.close();
   }
 

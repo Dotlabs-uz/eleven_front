@@ -91,7 +91,6 @@ class OrderModel extends OrderEntity {
     data['barber'] = barberId;
     data['payments'] = paymentType.name;
     if (withOrderEnd) {
-
       data['orderEnd'] =
           orderEnd.toIso8601String();
     }
