@@ -13,7 +13,7 @@ class FieldCardWidget extends StatefulWidget {
   final bool isFirstSection;
   final String barberId;
   final Function(int hour, int minute) onFieldTap;
-  final Function(OrderEntity) onDragEnded;
+  final Function(OrderEntity order, bool withConfirm) onDragEnded;
   final List<NotWorkingHoursEntity> notWorkingHours;
 
   const FieldCardWidget({
@@ -36,11 +36,34 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
     final orderStart = order.orderStart;
     final orderEnd = order.orderEnd;
 
-    orderStart;
-    orderEnd;
+    for (final notWorkingHour in notWorkingHours) {
+      final notWorkingStart = notWorkingHour.dateFrom;
+      final notWorkingEnd = notWorkingHour.dateTo;
 
-    return true; // Время заказа не пересекается с "Not Working Hours" и занимает все время Field, разрешаем перенос
+      if (orderStart.isBefore(notWorkingStart) && orderEnd.isAfter(notWorkingEnd)) {
+        return false; // Время заказа пересекается с "Not Working Hours", не разрешаем перенос
+      }
+
+      if (orderStart.isAfter(notWorkingStart) && orderStart.isBefore(notWorkingEnd)) {
+        return false; // Время заказа начинается во время "Not Working Hours", не разрешаем перенос
+      }
+
+      if (orderEnd.isAfter(notWorkingStart) && orderEnd.isBefore(notWorkingEnd)) {
+        return false; // Время заказа заканчивается во время "Not Working Hours", не разрешаем перенос
+      }
+
+      if (orderStart.isAtSameMomentAs(notWorkingStart) || orderEnd.isAtSameMomentAs(notWorkingEnd)) {
+        return false; // Время заказа точно соответствует началу или концу "Not Working Hours", не разрешаем перенос
+      }
+    }
+
+    return true; // Время заказа не пересекается с "Not Working Hours", разрешаем перенос
   }
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,24 +101,36 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                 },
                 onAccept: (dragOrder) async {
                   if (dragOrder.isResizing == false) {
-                    if (isCardAllowedToDrag(dragOrder.orderEntity, widget.notWorkingHours)) {
-                     TimeTableHelper.onAccept(
+                    OrderEntity localOrder = dragOrder.orderEntity;
+
+                    localOrder = TimeTableHelper.onAccept(
+                      localOrder,
+                      widget.hour,
+                      minute,
+                      widget.barberId,
+                      (p0) {
+                        widget.onDragEnded.call( p0,  false);
+                      },
+                    );
+                    print("Drag order ${localOrder.orderStart}");
+                    if (isCardAllowedToDrag(
+                        localOrder, widget.notWorkingHours)) {
+                      TimeTableHelper.onAccept(
                         dragOrder.orderEntity,
                         widget.hour,
                         minute,
                         widget.barberId,
                         (p0) {
-                        widget.onDragEnded.call(p0);
+                          widget.onDragEnded.call( p0,  true);
                         },
                       );
-
-
                     } else {
                       await confirm(
                         context,
-                        title: const Text('confirming').tr(),
-                        content: const Text('deleteConfirm').tr(),
-                        textOK: const Text('yes').tr(),
+                        title: const Text('draggable').tr(),
+                        content: const Text('youCantDrragOrder').tr(),
+                        textOK: const Text('ok').tr(),
+                        enableCancel: false,
                       );
                     }
                   }
