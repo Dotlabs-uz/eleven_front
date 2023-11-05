@@ -350,10 +350,10 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                           from, to),
                                                   (index) {
                                                     return PastTimeCardWidget(
-                                                      dateTime:
-                                                          DateTime.tryParse(
-                                                        widget.orderFilterQuery,
-                                                      ),
+                                                      // dateTime:
+                                                      //     DateTime.tryParse(
+                                                      //   widget.orderFilterQuery,
+                                                      // ),
                                                     );
                                                   },
                                                 ),
