@@ -102,8 +102,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     showSelectServices = false;
 
-
-
     listBarbers.clear();
     _setWidgetTop();
   }
@@ -235,8 +233,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   _updateOrder(OrderEntity order) {
-    webSocketService.sendData("update", OrderModel.fromEntity(order).toJsonUpdate());
-
+    webSocketService.sendData(
+      "update",
+      {
+        "data": OrderModel.fromEntity(order).toJsonUpdate(),
+      },
+    );
   }
 
   @override
@@ -277,7 +279,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 BlocListener<OrderFilterCubit, OrderFilterHelper>(
                   listener: (context, state) {
                     if (state.query.isNotEmpty) {
-                      webSocketService.addFilter({ "orderStart": state.query});
+                      webSocketService.addFilter({"orderStart": state.query});
                       orders.clear();
                     } else {
                       webSocketService.addFilter("");
@@ -360,9 +362,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       onTapNotWorkingHour:
                                           _onDeleteNotWorkingHours,
                                       onOrderDelete: _orderDelete,
-
-                                      orderFilterQuery: BlocProvider.of<OrderFilterCubit>(context).state.query,
-
+                                      orderFilterQuery:
+                                          BlocProvider.of<OrderFilterCubit>(
+                                                  context)
+                                              .state
+                                              .query,
                                       onFieldTap: (hour, minute) {
                                         activeData = OrderEntity.empty(
                                           hour: hour,
@@ -395,8 +399,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         );
                                       },
                                       listOrders: orders,
-                                      onOrderStartResizeEnd: (order) => _updateOrder(order),
-                                      onOrderEndResizeEnd: (order) => _updateOrder(order),
+                                      onOrderStartResizeEnd: (order) =>
+                                          _updateOrder(order),
+                                      onOrderEndResizeEnd: (order) =>
+                                          _updateOrder(order),
                                       onOrderDragEnd: (order) {
                                         print("Order drag end");
                                         _updateOrder(order);

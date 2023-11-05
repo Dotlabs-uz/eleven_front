@@ -12,8 +12,10 @@ import '../../../../management/domain/entity/not_working_hours_entity.dart';
 import '../../../domain/entity/order_entity.dart';
 
 class PastTimeCardWidget extends StatefulWidget {
+  final DateTime? dateTime;
   const PastTimeCardWidget({
     Key? key,
+    this.dateTime,
   }) : super(key: key);
 
   @override
@@ -21,34 +23,43 @@ class PastTimeCardWidget extends StatefulWidget {
 }
 
 class _PastTimeCardWidgetState extends State<PastTimeCardWidget> {
-  final startTime = DateTime.now().copyWith(hour: Constants.startWork.toInt(), minute: 0).toLocal();
-  DateTime endTime =  DateTime.now();
+  DateTime startTime = DateTime.now()
+      .copyWith(hour: Constants.startWork.toInt(), minute: 0)
+      .toLocal();
+  static DateTime endTime = DateTime.now().toLocal();
+
+  double h = 0;
+
+  @override
+  void didUpdateWidget(covariant PastTimeCardWidget oldWidget) {
+    if (endTime != widget.dateTime) {
+      initialize();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   void initState() {
-
-    if(endTime.hour >= 22) {
-      endTime =  DateTime.now().copyWith(hour: 22,minute: 0).toLocal();
-    }
+    initialize();
     super.initState();
   }
 
+  initialize() {
+    h = TimeTableHelper.getPastTimeHeight(
+      startTime,
+      endTime,
+      widget.dateTime,
+    );
 
-
-
-
-
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: TimeTableHelper.getCardHeight(
-        startTime,
-        endTime,
-      ),
+      height: h,
       color: Colors.blue.withOpacity(0.01),
-
       child: const SizedBox.shrink(),
     );
   }

@@ -27,9 +27,6 @@ class TimeTableHelper {
       final diffDays = fromFormatted.difference(filterFormat).inDays;
 
 
-      // print("filter ${filterFormat} from ${fromFormatted} diff in days $diffDays");
-
-
       if(diffDays.isNegative) {
         return 0;
       }
@@ -38,21 +35,18 @@ class TimeTableHelper {
         return Constants.timeTableItemHeight * 14 ;
       }
 
-
-
-
-
-
     }
 
     final differenceInMinutes =
         (to.difference(from).inHours * 60) + to.difference(from).inMinutes % 60;
 
+
     if (differenceInMinutes <= 0) {
       return Constants.timeTableItemHeight;
     }
 
-    final h = differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound;
+    final h = (differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound).toDouble();
+
     return h > 1600 ? 1600 : h;
   }
 
