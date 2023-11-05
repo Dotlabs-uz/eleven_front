@@ -136,6 +136,7 @@ class TimeTableHelper {
 
     // Обновление времени окончания заказа
     final newOrderEnd = orderTo.add(durationDiff);
+
     order.orderEnd = newOrderEnd;
 
     // Обновление идентификатора парикмахера

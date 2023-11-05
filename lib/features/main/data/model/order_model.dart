@@ -23,16 +23,17 @@ class OrderModel extends OrderEntity {
     required super.duration,
   });
 
-  factory OrderModel.fromJson(Map<String, dynamic> json) {
+  factory OrderModel.fromJson(Map<String, dynamic> json,
+      {bool withSubstract = false}) {
     // print("Order form json ${DateTime.parse(json['orderEnd']).toString()}");
     return OrderModel(
       id: json['_id'] ?? "",
       orderStart: DateTime.parse(json['orderStart']).toLocal(),
-      orderEnd: DateTime.parse(json['orderEnd']
+      orderEnd: withSubstract
+          ? DateTime.parse(json['orderEnd'])
 
-              // .toString().replaceAll("Z", "").replaceAll("z", "")
-              )
-          .toLocal(),
+              .toLocal()
+          : DateTime.parse(json['orderEnd']).toLocal(),
       barberId: json['barber']['_id'],
       paymentType:
           json['payment'] == "cash" ? OrderPayment.card : OrderPayment.card,
@@ -83,13 +84,17 @@ class OrderModel extends OrderEntity {
     return data;
   }
 
-  Map<String, dynamic> toJsonUpdate() {
+  Map<String, dynamic> toJsonUpdate({bool withOrderEnd = true}) {
     final data = <String, dynamic>{};
     data['orderStart'] = orderStart.toIso8601String();
     data['_id'] = id;
     data['barber'] = barberId;
     data['payments'] = paymentType.name;
-    data['orderEnd'] = orderStart.toIso8601String();
+    if (withOrderEnd) {
+
+      data['orderEnd'] =
+          orderEnd.toIso8601String();
+    }
     data['client'] = clientId;
     data['services'] = services.map((e) => e.id).toList();
 

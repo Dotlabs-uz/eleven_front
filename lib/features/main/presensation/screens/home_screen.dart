@@ -232,11 +232,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
     super.dispose();
   }
 
-  _updateOrder(OrderEntity order) {
+  _updateOrder(OrderEntity order, {bool withOrderEnd = true}) {
     webSocketService.sendData(
       "update",
       {
-        "data": OrderModel.fromEntity(order).toJsonUpdate(),
+        "data": OrderModel.fromEntity(order).toJsonUpdate(withOrderEnd: withOrderEnd),
       },
     );
   }
@@ -251,9 +251,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
             if (snapshot.hasData) {
               final listSnapData = List.from(snapshot.data);
               final data =
-                  listSnapData.map((e) => OrderModel.fromJson(e)).toList();
+                  listSnapData.map((e) => OrderModel.fromJson(e, withSubstract: true)).toList();
 
-              print("Shanshot has data ${data}");
+              if(data.isNotEmpty) {
+                print("Shanshot has data ${data} ${data.first.orderStart} ${data.first.orderEnd}");
+              }
               orders = data;
             }
             return MultiBlocListener(
@@ -399,13 +401,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         );
                                       },
                                       listOrders: orders,
-                                      onOrderStartResizeEnd: (order) =>
-                                          _updateOrder(order),
-                                      onOrderEndResizeEnd: (order) =>
-                                          _updateOrder(order),
+                                      onOrderStartResizeEnd: (order) => _updateOrder(order),
+                                      onOrderEndResizeEnd: (order) => _updateOrder(order),
                                       onOrderDragEnd: (order) {
                                         print("Order drag end");
-                                        _updateOrder(order);
+                                        _updateOrder(order, withOrderEnd: true);
                                       },
                                     );
                                   },
