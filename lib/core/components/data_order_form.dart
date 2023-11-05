@@ -1,3 +1,4 @@
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/barber_field_widget.dart';
 import 'package:eleven_crm/core/components/client_field_widget.dart';
@@ -17,7 +18,8 @@ import 'payment_type_field_widget.dart';
 
 class DataOrderForm extends StatefulWidget {
   final Map<String, FieldEntity> fields;
-  final Function(List<ServiceProductEntity> selectedServices) saveData;
+  final Function(List<ServiceProductEntity> selectedServices, String barber,
+      String client) saveData;
   final Function() closeForm;
 
   const DataOrderForm({
@@ -37,6 +39,8 @@ class DataOrderFormState extends State<DataOrderForm> {
   double price = 0;
   double duration = 0;
   // DateTime? orderEnd;
+  static String client = "";
+  static String barber = "";
 
   @override
   void initState() {
@@ -57,12 +61,17 @@ class DataOrderFormState extends State<DataOrderForm> {
       print("Duration ${e.duration}");
     }
 
-
     price = localPrice;
     duration = localDuration;
     setState(() {});
   }
 
+  @override
+  void dispose() {
+    client = '';
+    barber = '';
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +88,7 @@ class DataOrderFormState extends State<DataOrderForm> {
               TextButton(
                 onPressed: () {
                   widget.closeForm.call();
-                  BlocProvider.of<ShowSelectServicesCubit>(context)
-                      .disable();
+                  BlocProvider.of<ShowSelectServicesCubit>(context).disable();
                 },
                 child: Text(
                   'close'.tr(),
@@ -94,14 +102,16 @@ class DataOrderFormState extends State<DataOrderForm> {
           ),
           ClientFieldWidget(
             fieldEntity: widget.fields['clientId']!,
-            onChange: (client) {
-              widget.fields['clientId']!.val = client.id;
+            onChange: (value) {
+              widget.fields['clientId']!.val = value.id;
+              client = value.id;
             },
           ),
           BarberFieldWidget(
             fieldEntity: widget.fields['barberId']!,
-            onChange: (barber) {
-              widget.fields['barberId']!.val = barber.id;
+            onChange: (value) {
+              widget.fields['barberId']!.val = value.id;
+              barber = value.id;
             },
           ),
           DateTimeFieldWidget(
@@ -128,7 +138,35 @@ class DataOrderFormState extends State<DataOrderForm> {
           const SizedBox(height: 10),
           ButtonWidget(
             text: "save".tr(),
-            onPressed: () => widget.saveData.call(selectedProducts),
+            onPressed: () async {
+              if (client.isEmpty) {
+                await confirm(
+                  context,
+                  title: const Text('client').tr(),
+                  content: const Text('pleaseSelectClient').tr(),
+                  textOK: const Text('ok').tr(),
+                  enableCancel: false,
+                );
+              } else if (barber.isEmpty) {
+                await confirm(
+                  context,
+                  title: const Text('barber').tr(),
+                  content: const Text('pleaseSelectBarber').tr(),
+                  textOK: const Text('ok').tr(),
+                  enableCancel: false,
+                );
+              } else if (selectedProducts.isEmpty) {
+                await confirm(
+                  context,
+                  title: const Text('services').tr(),
+                  content: const Text('pleaseSelectServices').tr(),
+                  textOK: const Text('ok').tr(),
+                  enableCancel: false,
+                );
+              } else {
+                widget.saveData.call(selectedProducts, barber, client);
+              }
+            },
           ),
           const SizedBox(height: 30),
           SizedBox(

@@ -30,7 +30,7 @@ class TimeTableWidget extends StatefulWidget {
   final Function(OrderEntity)? onOrderClick;
   final String orderFilterQuery;
   final Function(OrderEntity)? onOrderDragEnd;
-  final Function(int hour, int minute)? onFieldTap;
+  final Function(int hour, int minute, String barberId)? onFieldTap;
   final Function(NotWorkingHoursEntity, BarberEntity)? onTapNotWorkingHour;
   final Function(OrderEntity order)? onOrderStartResizeEnd;
   final Function(OrderEntity order)? onOrderEndResizeEnd;
@@ -229,7 +229,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                                 widget
                                                                     .onFieldTap
                                                                     ?.call(hour,
-                                                                        minute),
+                                                                        minute, barber.id),
                                                           );
                                                         },
                                                       ),

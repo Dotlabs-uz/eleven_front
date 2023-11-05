@@ -126,8 +126,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
     );
   }
 
-  void _saveOrder(List<ServiceProductEntity> selectedServices) {
-    final entity = OrderEntity.fromFields(selectedServices: selectedServices);
+  void _saveOrder(List<ServiceProductEntity> selectedServices, String barber,
+      String client) {
+    final entity = OrderEntity.fromFields(
+      selectedServices: selectedServices,
+      barber: barber,
+      client: client,
+    );
 
     webSocketService.addDataToSocket(OrderModel.fromEntity(entity).toJson());
 
@@ -236,7 +241,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
     webSocketService.sendData(
       "update",
       {
-        "data": OrderModel.fromEntity(order).toJsonUpdate(withOrderEnd: withOrderEnd),
+        "data": OrderModel.fromEntity(order)
+            .toJsonUpdate(withOrderEnd: withOrderEnd),
       },
     );
   }
@@ -250,11 +256,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final listSnapData = List.from(snapshot.data);
-              final data =
-                  listSnapData.map((e) => OrderModel.fromJson(e, withSubstract: true)).toList();
+              final data = listSnapData
+                  .map((e) => OrderModel.fromJson(e, withSubstract: true))
+                  .toList();
 
-              if(data.isNotEmpty) {
-                print("Shanshot has data ${data} ${data.first.orderStart} ${data.first.orderEnd}");
+              if (data.isNotEmpty) {
+                print(
+                    "Shanshot has data ${data} ${data.first.orderStart} ${data.first.orderEnd}");
               }
               orders = data;
             }
@@ -369,10 +377,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                   context)
                                               .state
                                               .query,
-                                      onFieldTap: (hour, minute) {
+                                      onFieldTap: (hour, minute, barberId) {
                                         activeData = OrderEntity.empty(
                                           hour: hour,
                                           minute: minute,
+                                          barber: barberId,
                                         );
                                         _editOrder(activeData);
                                       },
@@ -401,8 +410,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         );
                                       },
                                       listOrders: orders,
-                                      onOrderStartResizeEnd: (order) => _updateOrder(order),
-                                      onOrderEndResizeEnd: (order) => _updateOrder(order),
+                                      onOrderStartResizeEnd: (order) =>
+                                          _updateOrder(order),
+                                      onOrderEndResizeEnd: (order) =>
+                                          _updateOrder(order),
                                       onOrderDragEnd: (order) {
                                         print("Order drag end");
                                         _updateOrder(order, withOrderEnd: true);

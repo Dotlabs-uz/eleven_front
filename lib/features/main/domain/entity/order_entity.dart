@@ -205,7 +205,9 @@ class OrderEntity extends Equatable {
   }
 
   factory OrderEntity.fromFields(
-      {List<ServiceProductEntity>? selectedServices}) {
+      {List<ServiceProductEntity>? selectedServices,
+      String? barber,
+      String? client}) {
     print("Factory Fields services ${List.from(fields["services"]?.val)}");
     return OrderEntity(
       id: fields["id"]?.val,
@@ -215,15 +217,15 @@ class OrderEntity extends Equatable {
       orderStart: fields["orderStart"]?.val,
       orderEnd: fields["orderEnd"]?.val,
       // price: fields["price"]?.val,
-      barberId: fields["barberId"]?.val,
-      clientId: fields["clientId"]?.val,
+      barberId: barber ?? fields["barberId"]?.val,
+      clientId: client ?? fields["clientId"]?.val,
       isNew: fields["isNew"]?.val,
       services: selectedServices ?? List.from(fields["services"]?.val),
       price: fields["price"]?.val, duration: fields["duration"]?.val,
     );
   }
 
-  factory OrderEntity.empty({int? hour, int? minute}) {
+  factory OrderEntity.empty({int? hour, int? minute, String ?barber}) {
     final dateTime = DateTime.now().copyWith(hour: hour, minute: minute);
     return OrderEntity(
       id: "",
@@ -233,7 +235,7 @@ class OrderEntity extends Equatable {
       orderStart: dateTime,
       orderEnd: dateTime.add(const Duration(hours: 1)),
       // price: 0,
-      barberId: "",
+      barberId: barber ?? "",
       clientId: "",
       isNew: true,
       services: const [], price: 0, duration: 0,
