@@ -655,5 +655,11 @@
   "selectStatusForSelected": "Выберите статус для выбранных",
 
   "almostOrderDateEnd": "Приблиз. время окончания",
+  "orderIsNotAllowedToDrag": "Нельзя перенести order",
+  "clearSelected": "Очистить выбранные",
+  "data": "data",
+  "data": "data",
+  "data": "data",
+  "data": "data",
   "data": "data"
 }

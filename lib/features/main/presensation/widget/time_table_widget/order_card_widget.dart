@@ -22,6 +22,7 @@ class OrderCardWidget extends StatefulWidget {
   final OrderEntity order;
   final bool isDragging;
   final Function() onOrderSize;
+  final Function(String id)? onOrderDelete;
   final Function(OrderEntity order)? onTopOrderEnd;
   final Function(OrderEntity order)? onBottomOrderEnd;
 
@@ -29,6 +30,7 @@ class OrderCardWidget extends StatefulWidget {
     Key? key,
     required this.order,
     required this.isDragging,
+      this.onOrderDelete,
     required this.onOrderSize,
     this.onTopOrderEnd,
     this.onBottomOrderEnd,
@@ -42,6 +44,16 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
   double topPosition = 0;
   double bottomPosition = 0;
 
+
+  // @override
+  // void initState() {
+
+    // print("Card h ${TimeTableHelper.getCardHeight(
+    //   widget.order.orderStart,
+    //   widget.order.orderEnd,
+    // )}");
+    // super.initState();
+  // }
   void onDragTopUpdate(DragUpdateDetails details) {
     final minutesToChange =
         (details.delta.dy / Constants.sizeTimeTableFieldPerMinuteRound).round();
@@ -130,10 +142,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                                     size: 14,
                                   ),
                                 ),
-                                onTap: () {
-                                  BlocProvider.of<OrderCubit>(context)
-                                      .delete(orderId: widget.order.id);
-                                },
+                                onTap: () => widget.onOrderDelete?.call(widget.order.id),
                               ),
                             ],
                           ),

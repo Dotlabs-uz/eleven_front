@@ -1,5 +1,3 @@
-import 'package:confirm_dialog/confirm_dialog.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/constants.dart';
@@ -13,14 +11,14 @@ class FieldCardWidget extends StatefulWidget {
   final bool isFirstSection;
   final String barberId;
   final Function(int hour, int minute) onFieldTap;
-  final Function() onPositionChanged;
+  final Function(OrderEntity) onDragEnded;
   final List<NotWorkingHoursEntity> notWorkingHours;
 
   const FieldCardWidget({
     super.key,
     required this.hour,
     required this.isFirstSection,
-    required this.onPositionChanged,
+    required this.onDragEnded,
     required this.onFieldTap,
     required this.barberId,
     required this.notWorkingHours,
@@ -36,9 +34,10 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
     final orderStart = order.orderStart;
     final orderEnd = order.orderEnd;
 
+    orderStart;
+    orderEnd;
 
-    return true;
-
+    return true; // Время заказа не пересекается с "Not Working Hours" и занимает все время Field, разрешаем перенос
   }
 
   @override
@@ -50,10 +49,11 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
       ),
       decoration: const BoxDecoration(
         border: Border(
-            bottom: BorderSide(
-          width: 1,
-          color: Colors.black26,
-        ),),
+          bottom: BorderSide(
+            width: 1,
+            color: Colors.black26,
+          ),
+        ),
         // border: Border.all(width: 1),
       ),
       child: Column(
@@ -71,30 +71,31 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
               child: DragTarget<DragOrder>(
                 onAcceptWithDetails: (details) {
                   print(
-                      "On Accept With details ${details.data}, Offset ${details.offset}");
+                    "On Accept With details ${details.data}, Offset ${details.offset}",
+                  );
                 },
                 onAccept: (dragOrder) async {
-
-
-                  if (isCardAllowedToDrag(dragOrder.orderEntity, widget.notWorkingHours)) {
-
-                    if (dragOrder.isResizing == false) {
-                      TimeTableHelper.onAccept(
+                  if (dragOrder.isResizing == false) {
+                    if (isCardAllowedToDrag(dragOrder.orderEntity, widget.notWorkingHours)) {
+                     TimeTableHelper.onAccept(
                         dragOrder.orderEntity,
                         widget.hour,
                         minute,
                         widget.barberId,
-                        widget.onPositionChanged,
+                        (p0) {
+                        widget.onDragEnded.call(p0);
+                        },
+                      );
+
+
+                    } else {
+                      await confirm(
+                        context,
+                        title: const Text('confirming').tr(),
+                        content: const Text('deleteConfirm').tr(),
+                        textOK: const Text('yes').tr(),
                       );
                     }
-
-                  } else {
-                    await confirm(
-                      context,
-                      title: const Text('draggable').tr(),
-                      content: const Text('youCantDragOrder').tr(),
-                      textOK: const Text('yes').tr(),
-                    );
                   }
                 },
                 builder: (context, candidateData, rejectedData) {

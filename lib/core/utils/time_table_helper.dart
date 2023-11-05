@@ -1,3 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+
 import '../../features/main/domain/entity/order_entity.dart';
 import '../../features/management/domain/entity/not_working_hours_entity.dart';
 import 'constants.dart';
@@ -7,13 +10,50 @@ class TimeTableHelper {
     final differenceInMinutes =
         (to.difference(from).inHours * 60) + to.difference(from).inMinutes % 60;
 
+    if (differenceInMinutes <= 0) {
+      return Constants.timeTableItemHeight;
+    }
+
+    return differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound;
+  }
+
+  static double getPastTimeHeight(
+      DateTime from, DateTime to, DateTime? filter) {
+
+    if (filter != null) {
+
+      final fromFormatted  = DateTime.parse(DateFormat('yyyy-MM-dd').format(from));
+      final filterFormat  = DateTime.parse(DateFormat('yyyy-MM-dd').format(filter));
+      final diffDays = fromFormatted.difference(filterFormat).inDays;
+
+
+      // print("filter ${filterFormat} from ${fromFormatted} diff in days $diffDays");
+
+
+      if(diffDays.isNegative) {
+        return 0;
+      }
+
+      if(diffDays >= 1 ) {
+        return Constants.timeTableItemHeight * 14 ;
+      }
+
+
+
+
+
+
+    }
+
+    final differenceInMinutes =
+        (to.difference(from).inHours * 60) + to.difference(from).inMinutes % 60;
 
     if (differenceInMinutes <= 0) {
       return Constants.timeTableItemHeight;
     }
 
-
-    return differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound;
+    final h = differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound;
+    return h > 1600 ? 1600 : h;
   }
 
   static double getTopPositionForOrder(OrderEntity order) {
@@ -66,8 +106,24 @@ class TimeTableHelper {
     return height;
   }
 
-  static onAccept(OrderEntity order, int hour, int minute, String barberId,
-      Function() onAllChanged) {
+  static notWorkingHourCondition(DateTime dateTimeFrom, String query) {
+    if (query.isNotEmpty) {
+      final dt = DateTime.tryParse(query);
+
+      if (dt != null) {
+        if (dateTimeFrom.day == dt.day &&
+            dateTimeFrom.month == dt.month &&
+            dateTimeFrom.year == dt.year) {
+          print("Remove not working hours $dateTimeFrom");
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  static OrderEntity onAccept(OrderEntity order, int hour, int minute, String barberId,
+      Function(OrderEntity) onAllChanged) {
     final orderFrom = order.orderStart;
     final orderTo = order.orderEnd;
 
@@ -92,6 +148,8 @@ class TimeTableHelper {
     order.barberId = barberId;
 
     // Вызов колбэка для обновления позиции
-    onAllChanged.call();
+    onAllChanged.call(order);
+
+    return order;
   }
 }

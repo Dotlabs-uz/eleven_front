@@ -24,15 +24,15 @@ class OrderModel extends OrderEntity {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
-
-    print("Order form json ${DateTime.parse(json['orderEnd']).toString()}");
+    // print("Order form json ${DateTime.parse(json['orderEnd']).toString()}");
     return OrderModel(
       id: json['_id'] ?? "",
-      orderStart: DateTime.parse(json['orderStart'] ).toLocal(),
+      orderStart: DateTime.parse(json['orderStart']).toLocal(),
       orderEnd: DateTime.parse(json['orderEnd']
 
-          // .toString().replaceAll("Z", "").replaceAll("z", "")
-          ).toLocal(),
+              // .toString().replaceAll("Z", "").replaceAll("z", "")
+              )
+          .toLocal(),
       barberId: json['barber']['_id'],
       paymentType:
           json['payment'] == "cash" ? OrderPayment.card : OrderPayment.card,
@@ -69,7 +69,6 @@ class OrderModel extends OrderEntity {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['orderStart'] = orderStart.toIso8601String();
-    print(orderStart.toUtc().toIso8601String());
     // data['orderEnd'] = orderEnd.toLocal().toIso8601String();
     // data['price'] = price;
     data['barber'] = barberId;
@@ -77,7 +76,21 @@ class OrderModel extends OrderEntity {
     // data['discountPercent'] = discountPercent;
     // data['discount'] = discount;
     data['client'] = clientId;
+    // data['filial'] = "6541c7a7dc28ae268a77572f";
     print("Services $services");
+    data['services'] = services.map((e) => e.id).toList();
+
+    return data;
+  }
+
+  Map<String, dynamic> toJsonUpdate() {
+    final data = <String, dynamic>{};
+    data['orderStart'] = orderStart.toIso8601String();
+    data['_id'] = id;
+    data['barber'] = barberId;
+    data['payments'] = paymentType.name;
+    data['orderEnd'] = orderStart.toIso8601String();
+    data['client'] = clientId;
     data['services'] = services.map((e) => e.id).toList();
 
     return data;

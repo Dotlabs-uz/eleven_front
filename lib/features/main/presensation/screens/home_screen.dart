@@ -52,6 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
@@ -65,7 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _ContentWidget extends StatefulWidget {
-  const _ContentWidget({Key? key}) : super(key: key);
+  const _ContentWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<_ContentWidget> createState() => _ContentWidgetState();
@@ -77,8 +84,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   late PlutoRow selectedRow;
   late PlutoGridStateManager stateManager;
-
-  static final WebSocketsService webSocketService =
+  final WebSocketsService webSocketService =
       WebSocketsService(ApiConstants.ordersWebSocket);
 
   @override
@@ -89,12 +95,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   initialize() async {
+    webSocketService.connect();
     print("Saved ");
 
     activeData = OrderEntity.empty();
-    webSocketService.connect();
 
     showSelectServices = false;
+
+
 
     listBarbers.clear();
     _setWidgetTop();
@@ -105,41 +113,37 @@ class _ContentWidgetState extends State<_ContentWidget> {
       TopMenuEntity(searchCubit: null, enableSearch: false, iconList: [
         MyIconButton(
           onPressed: () {
-            // activeData = OrderEntity(
-            //   id: "",
-            //   discount: 0,
-            //   discountPercent: 0,
-            //   paymentType: OrderPayment.cash,
-            //   orderStart: DateTime.now().copyWith(hour: 18),
-            //   orderEnd: DateTime.now().copyWith(hour: 18, minute: 30),
-            //   price: 30,
-            //   barberId: "6531612da3b411c75df5e944",
-            //   clientId: "65316125a3b411c75df5e938",
-            //   services: [
-            //     ServiceProductEntity(
-            //       id: "652a8270523968b4b942b123",
-            //       name: "",
-            //       price: 30,
-            //       duration: 10,
-            //       category: ServiceProductCategoryEntity.empty(),
-            //       sex: 'women',
-            //     )
-            //   ],
-            // );
-            // _saveOrderLocal(activeData);
-
             activeData = OrderEntity.empty();
             _editOrder(activeData);
           },
           icon: const Icon(Icons.add_box_rounded),
+        ),
+        MyIconButton(
+          onPressed: () {
+            webSocketService.refresh();
+          },
+          icon: const Icon(Icons.refresh),
         ),
       ]),
     );
   }
 
   void _saveOrder(List<ServiceProductEntity> selectedServices) {
-    BlocProvider.of<OrderCubit>(context).save(
-        order: OrderEntity.fromFields(selectedServices: selectedServices));
+    final entity = OrderEntity.fromFields(selectedServices: selectedServices);
+
+    webSocketService.addDataToSocket(OrderModel.fromEntity(entity).toJson());
+
+    // BlocProvider.of<OrderCubit>(context).save(
+    //     order: OrderEntity.fromFields(selectedServices: selectedServices));
+  }
+
+  void _orderDelete(String orderId) {
+    webSocketService.deleteFromSocket(
+      {'_id': orderId},
+    );
+
+    // BlocProvider.of<OrderCubit>(context).save(
+    //     order: OrderEntity.fromFields(selectedServices: selectedServices));
   }
 
   void _onDeleteNotWorkingHours(
@@ -191,37 +195,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   int selectedValue = 0;
 
-  List<BarberEntity> listBarbers = [
-    // EmployeeEntity(
-    //   id: "1",
-    //   firstName: "Sam",
-    //   lastName: "Satt",
-    //   password: "Satt",
-    //   login: "Satt",
-    //   phoneNumber: 99,
-    //   role: "manager",
-    //   schedule: [],
-    //   inTimeTable: false,
-    //   notWorkingHours: [],
-    // ),
-    // EmployeeEntity(
-    //   id: "2",
-    //   firstName: "Sam",
-    //   lastName: "Satt",
-    //   password: "Satt",
-    //   login: "Satt",
-    //   phoneNumber: 99,
-    //   role: "manager",
-    //   schedule: [],
-    //   inTimeTable: false,
-    //   notWorkingHours: [
-    //     NotWorkingHoursEntity(
-    //       dateFrom: DateTime(2023, 10, 19, 16),
-    //       dateTo: DateTime(2023, 10, 19, 17, 30),
-    //     ),
-    //   ],
-    // ),
-  ];
+  List<BarberEntity> listBarbers = [];
 
   _dateTimeWidget() {
     final now = DateTime.now();
@@ -246,250 +220,265 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   List<OrderEntity> orders = [];
+
+  @override
+  void dispose() {
+    orders.clear();
+    listBarbers.clear();
+    selectedValue = 0;
+    activeData = OrderEntity.empty();
+    showSelectServices = false;
+
+    webSocketService.dispose();
+
+    super.dispose();
+  }
+
+  _updateOrder(OrderEntity order) {
+    webSocketService.sendData("update", OrderModel.fromEntity(order).toJsonUpdate());
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: MultiBlocListener(
-        listeners: [
-          BlocListener<BarberCubit, BarberState>(
-            listener: (context, state) {
-              if (state is BarberLoaded) {
-                if (mounted) {
-                  Future.delayed(
-                    Duration.zero,
-                    () {
-                      setState(() {
-                        listBarbers = state.data.results;
-                      });
-                    },
-                  );
-                }
+      body: StreamBuilder<dynamic>(
+          stream: webSocketService.getResponse,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final listSnapData = List.from(snapshot.data);
+              final data =
+                  listSnapData.map((e) => OrderModel.fromJson(e)).toList();
 
-                BlocProvider.of<BarberCubit>(context).init();
-              }
-            },
-          ),
-          // BlocListener<OrderCubit, OrderState>(
-          //   listener: (context, state) {
-          //     print("Orders state $state");
-          //     if (state is OrderDeleted) {
-          //       final element =
-          //           orders.firstWhere((element) => element.id == state.orderId);
-          //
-          //       orders.remove(element);
-          //       BlocProvider.of<OrderCubit>(context).init();
-          //     } else if (state is OrderSaved) {
-          //       if (orders.contains(state.order) == false) {
-          //         orders.add(OrderModel.fromEntity(state.order));
-          //       }
-          //       BlocProvider.of<OrderCubit>(context).init();
-          //     }
-          //   },
-          // ),
-          // BlocListener<ShowSelectServicesCubit, ShowSelectedServiceHelper>(
-          //   listener: (context, state) {
-          //     if (mounted) {
-          //       Future.delayed(
-          //         Duration.zero,
-          //         () {
-          //           setState(() {
-          //             showSelectServices = state.show;
-          //           });
-          //         },
-          //       );
-          //     }
-          //   },
-          // ),
-        ],
-        child: Row(
-          children: [
-            if (listBarbers.isEmpty)
-              const Expanded(child: EmptyWidget())
-            else
-              Expanded(
-                child: Stack(
-                  alignment: Alignment.topCenter,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // const Expanded(
-                        //     child: CalendarWidget(
-                        //   calendarsCount: 3,
-                        // )),
+              print("Shanshot has data ${data}");
+              orders = data;
+            }
+            return MultiBlocListener(
+              listeners: [
+                BlocListener<BarberCubit, BarberState>(
+                  listener: (context, state) {
+                    if (state is BarberLoaded) {
+                      if (mounted) {
+                        Future.delayed(
+                          Duration.zero,
+                          () {
+                            setState(() {
+                              listBarbers = state.data.results;
+                            });
+                          },
+                        );
+                      }
 
-                        Expanded(
-                          flex: 2,
-                          child:
-                              BlocBuilder<OrderFilterCubit, OrderFilterHelper>(
-                            builder: (context, state) {
-                              if (state.query.isNotEmpty) {
-                                webSocketService.addFilter(state.query);
-                              } else {
-                                webSocketService.addFilter("");
-                              }
-                              return StreamBuilder(
-                                  stream: webSocketService.getResponse,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      final listSnapData =
-                                          List.from(snapshot.data);
-                                      final data = listSnapData
-                                          .map((e) => OrderModel.fromJson(e))
-                                          .toList();
+                      BlocProvider.of<BarberCubit>(context).init();
+                    }
+                  },
+                ),
+                BlocListener<OrderFilterCubit, OrderFilterHelper>(
+                  listener: (context, state) {
+                    if (state.query.isNotEmpty) {
+                      webSocketService.addFilter({ "orderStart": state.query});
+                      orders.clear();
+                    } else {
+                      webSocketService.addFilter("");
+                      orders.clear();
+                    }
+                  },
+                ),
+                // BlocListener<OrderCubit, OrderState>(
+                //   listener: (context, state) {
+                //     print("Orders state $state");
+                //     if (state is OrderDeleted) {
+                //       final element =
+                //           orders.firstWhere((element) => element.id == state.orderId);
+                //
+                //       orders.remove(element);
+                //       BlocProvider.of<OrderCubit>(context).init();
+                //     } else if (state is OrderSaved) {
+                //       if (orders.contains(state.order) == false) {
+                //         orders.add(OrderModel.fromEntity(state.order));
+                //       }
+                //       BlocProvider.of<OrderCubit>(context).init();
+                //     }
+                //   },
+                // ),
+                // BlocListener<ShowSelectServicesCubit, ShowSelectedServiceHelper>(
+                //   listener: (context, state) {
+                //     if (mounted) {
+                //       Future.delayed(
+                //         Duration.zero,
+                //         () {
+                //           setState(() {
+                //             showSelectServices = state.show;
+                //           });
+                //         },
+                //       );
+                //     }
+                //   },
+                // ),
+              ],
+              child: Row(
+                children: [
+                  if (listBarbers.isEmpty)
+                    const Expanded(child: EmptyWidget())
+                  else
+                    Expanded(
+                      child: Stack(
+                        alignment: Alignment.topCenter,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // const Expanded(
+                              //     child: CalendarWidget(
+                              //   calendarsCount: 3,
+                              // )),
 
-                                      print("Shanshot has data ${data.length}");
-                                      orders = data;
+                              Expanded(
+                                flex: 2,
+                                child: BlocBuilder<OrderCubit, OrderState>(
+                                  builder: (context, state) {
+                                    if (state is OrderDeleted) {
+                                      // final element = orders.firstWhere(
+                                      //     (element) =>
+                                      //         element.id == state.orderId);
+                                      //
+                                      // orders.remove(element);
+                                      // BlocProvider.of<OrderCubit>(context)
+                                      //     .init();
+                                    } else if (state is OrderSaved) {
+                                      // if (orders.contains(state.order) ==
+                                      //     false) {
+                                      //   orders.add(OrderModel.fromEntity(
+                                      //       state.order));
+                                      // }
+                                      // BlocProvider.of<OrderCubit>(context)
+                                      //     .init();
                                     }
+                                    return TimeTableWidget(
+                                      listBarbers: listBarbers,
+                                      onTapNotWorkingHour:
+                                          _onDeleteNotWorkingHours,
+                                      onOrderDelete: _orderDelete,
 
-                                    return BlocBuilder<OrderCubit, OrderState>(
-                                      builder: (context, state) {
-                                        if (state is OrderDeleted) {
-                                          final element = orders.firstWhere(
-                                              (element) =>
-                                                  element.id == state.orderId);
+                                      orderFilterQuery: BlocProvider.of<OrderFilterCubit>(context).state.query,
 
-                                          orders.remove(element);
-                                          BlocProvider.of<OrderCubit>(context)
-                                              .init();
-                                        } else if (state is OrderSaved) {
-                                          if (orders.contains(state.order) ==
-                                              false) {
-                                            orders.add(OrderModel.fromEntity(
-                                                state.order));
-                                          }
-                                          BlocProvider.of<OrderCubit>(context)
-                                              .init();
-                                        }
-                                        return TimeTableWidget(
-                                          listBarbers: listBarbers,
-                                          onTapNotWorkingHour:
-                                              _onDeleteNotWorkingHours,
-                                          onFieldTap: (hour, minute) {
-                                            activeData = OrderEntity.empty(
-                                              hour: hour,
-                                              minute: minute,
-                                            );
-                                            _editOrder(activeData);
-                                          },
-                                          onOrderClick: (entity) {
-                                            print("Entity $entity");
-                                            activeData = entity;
-                                            _editOrder(activeData);
-                                          },
-                                          onDeleteEmployeeFromTable:
-                                              (employeeId) {
-                                            _barberFromTimeTableCardAction(
-                                              employeeId,
-                                              false,
-                                            );
-                                          },
-                                          onNotWorkingHoursCreate: (
-                                            DateTime from,
-                                            DateTime to,
-                                            String employeeId,
-                                          ) {
-                                            BlocProvider.of<
-                                                NotWorkingHoursCubit>(
-                                              context,
-                                            ).save(
-                                              dateFrom: from,
-                                              dateTo: to,
-                                              employeeId: employeeId,
-                                            );
-                                          },
-                                          listOrders: orders,
-                                          onTopOrderEnd: (order) {
-                                            print(
-                                                "Order start ${order.orderStart.toString()}");
-                                            BlocProvider.of<OrderCubit>(context)
-                                                .save(order: order);
-                                            // BlocProvider.of<OrderCubit>(context).init();
-                                          },
-                                          onBottomOrderEnd: (order) {
-                                            print(
-                                                "Order bottom ${order.orderEnd.toString()}");
-                                            BlocProvider.of<OrderCubit>(context)
-                                                .save(order: order);
-                                          },
+                                      onFieldTap: (hour, minute) {
+                                        activeData = OrderEntity.empty(
+                                          hour: hour,
+                                          minute: minute,
+                                        );
+                                        _editOrder(activeData);
+                                      },
+                                      onOrderClick: (entity) {
+                                        print("Entity $entity");
+                                        activeData = entity;
+                                        _editOrder(activeData);
+                                      },
+                                      onDeleteEmployeeFromTable: (employeeId) {
+                                        _barberFromTimeTableCardAction(
+                                          employeeId,
+                                          false,
                                         );
                                       },
+                                      onNotWorkingHoursCreate: (
+                                        DateTime from,
+                                        DateTime to,
+                                        String employeeId,
+                                      ) {
+                                        BlocProvider.of<NotWorkingHoursCubit>(
+                                          context,
+                                        ).save(
+                                          dateFrom: from,
+                                          dateTo: to,
+                                          employeeId: employeeId,
+                                        );
+                                      },
+                                      listOrders: orders,
+                                      onOrderStartResizeEnd: (order) => _updateOrder(order),
+                                      onOrderEndResizeEnd: (order) => _updateOrder(order),
+                                      onOrderDragEnd: (order) {
+                                        print("Order drag end");
+                                        _updateOrder(order);
+                                      },
                                     );
-                                  });
+                                  },
+                                ),
+                              ),
+                              BlocBuilder<HomeScreenOrderFormCubit,
+                                  HomeScreenOrderFormHelper>(
+                                builder: (context, state) {
+                                  return AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 300),
+                                    child: state.show == false
+                                        ? Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 5),
+                                            child: BlocBuilder<BarberCubit,
+                                                BarberState>(
+                                              builder: (context, state) {
+                                                return NotSelectedBarbersListWidget(
+                                                  listBarbers: listBarbers,
+                                                  onTap: (String barberId) {
+                                                    setState(() {});
+                                                    _barberFromTimeTableCardAction(
+                                                      barberId,
+                                                      true,
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          BlocBuilder<ShowSelectServicesCubit,
+                              ShowSelectedServiceHelper>(
+                            builder: (context, state) {
+                              return state.show
+                                  ? const SelectServiceDialogWidget()
+                                  : const SizedBox();
                             },
                           ),
-                        ),
-                        BlocBuilder<HomeScreenOrderFormCubit,
-                            HomeScreenOrderFormHelper>(
-                          builder: (context, state) {
-                            return AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 300),
-                              child: state.show == false
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(left: 5),
-                                      child:
-                                          BlocBuilder<BarberCubit, BarberState>(
-                                        builder: (context, state) {
-                                          return NotSelectedBarbersListWidget(
-                                            listBarbers: listBarbers,
-                                            onTap: (String barberId) {
-                                              setState(() {});
-                                              _barberFromTimeTableCardAction(
-                                                barberId,
-                                                true,
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                            );
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    BlocBuilder<ShowSelectServicesCubit,
-                        ShowSelectedServiceHelper>(
-                      builder: (context, state) {
-                        return state.show
-                            ? const SelectServiceDialogWidget()
-                            : const SizedBox();
-                      },
-                    ),
-                  ],
-                ),
+                  BlocBuilder<HomeScreenOrderFormCubit,
+                      HomeScreenOrderFormHelper>(
+                    builder: (context, state) {
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: state.show
+                            ? Container(
+                                constraints: const BoxConstraints(
+                                  maxWidth: 300,
+                                ),
+                                color: Colors.white,
+                                height: MediaQuery.of(context).size.height,
+                                child: SingleChildScrollView(
+                                  child: DataOrderForm(
+                                    fields: activeData.getFields(),
+                                    saveData: _saveOrder,
+                                    closeForm: () {
+                                      BlocProvider.of<HomeScreenOrderFormCubit>(
+                                              context)
+                                          .disable();
+                                    },
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                      );
+                    },
+                  ),
+                ],
               ),
-            BlocBuilder<HomeScreenOrderFormCubit, HomeScreenOrderFormHelper>(
-              builder: (context, state) {
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: state.show
-                      ? Container(
-                          constraints: const BoxConstraints(
-                            maxWidth: 300,
-                          ),
-                          height: MediaQuery.of(context).size.height,
-                          child: SingleChildScrollView(
-                            child: DataOrderForm(
-                              fields: activeData.getFields(),
-                              saveData: _saveOrder,
-                              closeForm: () {
-                                BlocProvider.of<HomeScreenOrderFormCubit>(
-                                        context)
-                                    .disable();
-                              },
-                            ),
-                          ),
-                        )
-                      : const SizedBox(),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+            );
+          }),
     );
   }
 

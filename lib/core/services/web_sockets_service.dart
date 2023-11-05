@@ -6,32 +6,61 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class WebSocketsService {
+
   final String url;
   WebSocketsService(this.url);
 
-  static final _socketResponse = StreamController<dynamic>();
+
+     final _socketResponse = StreamController<dynamic>();
   static IO.Socket? socket;
 
-  void addData(dynamic data) => _socketResponse.sink.add(data);
+  void _addData(dynamic data) => _socketResponse.sink.add(data);
+  void addDataToSocket(dynamic data) {
+    debugPrint("Add data to socket $data");
 
-  void addFilter(String filter) {
+     socket!.emit("create" ,data);
+
+
+
+  }
+
+  void refresh() {
+    if(socket == null) return ;
+
+    socket!.emit("getAll");
+  }
+  void sendData(String method,  dynamic data) {
+    debugPrint("Send data $method $data");
+
+     socket!.emit(method ,data);
+  }
+  void deleteFromSocket(dynamic data) {
+
+    debugPrint("Delete from socket $data");
+    socket!.emit("delete" ,data);
+  }
+
+  void addFilter(dynamic filter) {
     if (socket == null) {
       return;
     }
 
     debugPrint("Add filter $filter");
 
-    socket!.onack({"filter": filter});
-    socket!.emit("getAll");
+    // socket!.onack({"filter": filter});
+    socket!.emit("getAll" ,filter);
   }
 
   Stream<dynamic> get getResponse => _socketResponse.stream;
 
   void dispose() {
+    socket = null;
+    _socketResponse.stream.drain();
     _socketResponse.close();
   }
 
   Stream<dynamic> connect()  {
+
     IO.Socket localSoket =
         IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
@@ -39,13 +68,13 @@ class WebSocketsService {
     // print("Socket url $url");
 
     localSoket.onConnect((_) {
-      print("websocket connected");
+      // print("websocket connected");
     });
 
     localSoket.emit("getAll");
 
     localSoket.on('fetched', (data) {
-      addData(data);
+      _addData(data);
     });
 
     // getResponse.map((event) => print(event));
