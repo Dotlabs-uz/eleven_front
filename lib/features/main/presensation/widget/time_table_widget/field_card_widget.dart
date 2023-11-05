@@ -1,3 +1,5 @@
+import 'package:confirm_dialog/confirm_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/constants.dart';
@@ -29,28 +31,15 @@ class FieldCardWidget extends StatefulWidget {
 }
 
 class _FieldCardWidgetState extends State<FieldCardWidget> {
-  // bool isCardAllowedToDrag(
-  //     OrderEntity order, List<NotWorkingHoursEntity> notWorkingHours) {
-  //   final orderStart = order.orderStart;
-  //   final orderEnd = order.orderEnd;
-  //
-  //   for (final notWorkingHour in notWorkingHours) {
-  //     final notWorkingHourStart = notWorkingHour.dateFrom;
-  //     final notWorkingHourEnd = notWorkingHour.dateTo;
-  //
-  //     final diffInMinutes =
-  //         (orderStart.difference(notWorkingHourStart).inHours * 60) +
-  //             (orderStart.difference(notWorkingHourStart).inMinutes % 60);
-  //
-  //     print("Not working hours start diff ${diffInMinutes}");
-  //
-  //     // if (orderEnd.difference(other)) {
-  //     //   return false; // Заказ пересекается с "Not Working Hours", не разрешаем перенос
-  //     // }
-  //   }
-  //
-  //   return true; // Время заказа не пересекается с "Not Working Hours" и занимает все время Field, разрешаем перенос
-  // }
+  bool isCardAllowedToDrag(
+      OrderEntity order, List<NotWorkingHoursEntity> notWorkingHours) {
+    final orderStart = order.orderStart;
+    final orderEnd = order.orderEnd;
+
+
+    return true;
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,28 +74,28 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                       "On Accept With details ${details.data}, Offset ${details.offset}");
                 },
                 onAccept: (dragOrder) async {
-                  if (dragOrder.isResizing == false) {
-                    TimeTableHelper.onAccept(
-                      dragOrder.orderEntity,
-                      widget.hour,
-                      minute,
-                      widget.barberId,
-                      widget.onPositionChanged,
+
+
+                  if (isCardAllowedToDrag(dragOrder.orderEntity, widget.notWorkingHours)) {
+
+                    if (dragOrder.isResizing == false) {
+                      TimeTableHelper.onAccept(
+                        dragOrder.orderEntity,
+                        widget.hour,
+                        minute,
+                        widget.barberId,
+                        widget.onPositionChanged,
+                      );
+                    }
+
+                  } else {
+                    await confirm(
+                      context,
+                      title: const Text('draggable').tr(),
+                      content: const Text('youCantDragOrder').tr(),
+                      textOK: const Text('yes').tr(),
                     );
                   }
-
-                  // if (true) {
-                  //
-                  //   TODO Add Not working hours logic
-                  //
-                  // } else {
-                  //   await confirm(
-                  //     context,
-                  //     title: const Text('confirming').tr(),
-                  //     content: const Text('deleteConfirm').tr(),
-                  //     textOK: const Text('yes').tr(),
-                  //   );
-                  // }
                 },
                 builder: (context, candidateData, rejectedData) {
                   return InkWell(
