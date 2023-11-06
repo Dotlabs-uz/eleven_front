@@ -46,6 +46,8 @@ class DataOrderFormState extends State<DataOrderForm> {
   void initState() {
     price = widget.fields['price']?.val ?? 0;
     duration = widget.fields['duration']?.val ?? 0;
+    client = widget.fields['barberId']?.val ?? "";
+    barber = widget.fields['clientId']?.val ?? "";
 
     super.initState();
   }
