@@ -663,7 +663,7 @@
   "pleaseSelectBarber": "Пожалуйста выберите барбера",
   "pleaseSelectClient": "Пожалуйста выберите клиента",
   "pleaseSelectServices": "Пожалуйста выберите сервисы",
-  "data": "data",
+  "youCantChooseThisOrderStartInThisTime": "Простите но вы не можете создать заказ в выбранное время (так как вы пытаетесь создать его в прошлом)",
   "data": "data",
   "data": "data",
   "data": "data",

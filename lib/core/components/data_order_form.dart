@@ -4,6 +4,7 @@ import 'package:eleven_crm/core/components/barber_field_widget.dart';
 import 'package:eleven_crm/core/components/client_field_widget.dart';
 import 'package:eleven_crm/core/components/date_time_field_widget.dart';
 import 'package:eleven_crm/core/components/select_services_widget.dart';
+import 'package:eleven_crm/core/components/success_flash_bar.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/select_services/select_services_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,7 @@ class DataOrderFormState extends State<DataOrderForm> {
   // DateTime? orderEnd;
   static String client = "";
   static String barber = "";
+  static DateTime orderStart = DateTime.now();
 
   @override
   void initState() {
@@ -48,6 +50,7 @@ class DataOrderFormState extends State<DataOrderForm> {
     duration = widget.fields['duration']?.val ?? 0;
     client = widget.fields['barberId']?.val ?? "";
     barber = widget.fields['clientId']?.val ?? "";
+    orderStart = widget.fields['orderStart']?.val ?? DateTime.now();
 
     super.initState();
   }
@@ -119,6 +122,7 @@ class DataOrderFormState extends State<DataOrderForm> {
           DateTimeFieldWidget(
             fieldEntity: widget.fields['orderStart']!,
             withTime: true,
+            onChanged: (value) => orderStart = value,
           ),
           // const SizedBox(height: 10),
           // DateTimeFieldWidget(
@@ -165,8 +169,19 @@ class DataOrderFormState extends State<DataOrderForm> {
                   textOK: const Text('ok').tr(),
                   enableCancel: false,
                 );
-              } else {
+              } else if( orderStart.isBefore(DateTime.now())) {
+                await confirm(
+                  context,
+                  title: const Text('orderStart').tr(),
+                  content: const Text('youCantChooseThisOrderStartInThisTime').tr(),
+                  textOK: const Text('ok').tr(),
+                  enableCancel: false,
+                );
+              }else {
                 widget.saveData.call(selectedProducts, barber, client);
+                BlocProvider.of<ShowSelectServicesCubit>(context).disable();
+                SuccessFlushBar("change_success".tr())
+                    .show(context);
               }
             },
           ),
