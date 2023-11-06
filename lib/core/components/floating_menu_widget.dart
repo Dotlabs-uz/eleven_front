@@ -168,8 +168,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
               }),
               //
               const SizedBox(height: 40),
-              _CalendarWidget(
-              ),
+              const _CalendarWidget(),
             ],
           ),
         ),
@@ -187,7 +186,9 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
 }
 
 class _CalendarWidget extends StatefulWidget {
-  const _CalendarWidget({Key? key, }) : super(key: key);
+  const _CalendarWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<_CalendarWidget> createState() => _CalendarWidgetState();
@@ -205,11 +206,11 @@ class _CalendarWidgetState extends State<_CalendarWidget> {
     return CleanCalendar(
       enableDenseViewForDates: true,
       enableDenseSplashForDates: true,
-
       dateSelectionMode: DatePickerSelectionMode.singleOrMultiple,
-
       startWeekday: WeekDay.monday,
+      onRefreshTap: () {
 
+      },
       headerProperties: HeaderProperties(
         monthYearDecoration: MonthYearDecoration(
           monthYearTextColor: Colors.white,
@@ -280,7 +281,8 @@ class _CalendarWidgetState extends State<_CalendarWidget> {
       },
       onSelectedDates: (List<DateTime> value) {
         print("FIlter ${value} ${value.first.toIso8601String()}");
-        BlocProvider.of<OrderFilterCubit>(context).setFilter(query:value.first.toIso8601String());
+        BlocProvider.of<OrderFilterCubit>(context)
+            .setFilter(query: value.first.toIso8601String());
       },
     );
   }

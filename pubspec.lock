@@ -86,7 +86,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: b9fa16983e1ca9783b4477742df8ae94b5ab90b1
+      resolved-ref: "2a7a1a8114fea3b7156f6e852d7a2538f6c6f451"
       url: "https://github.com/Samir-Sattarov/clean_calendar.git"
     source: git
     version: "1.1.0"
