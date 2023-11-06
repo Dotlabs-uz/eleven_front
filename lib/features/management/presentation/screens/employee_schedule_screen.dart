@@ -238,9 +238,10 @@ class _ContentWidgetState extends State<ContentWidget> {
                               EmployeeScheduleState>(
                             listener: (context, state) {
                               if (state is EmployeeScheduleSaved) {
+                                BlocProvider.of<EmployeeCubit>(context).load("");
+
                                 SuccessFlushBar("change_success".tr())
                                     .show(context);
-                                BlocProvider.of<EmployeeCubit>(context).load("");
                               } else if (state is EmployeeScheduleError) {
                                 ErrorFlushBar("change_error"
                                     .tr(args: [state.message])).show(context);
@@ -287,6 +288,9 @@ class _ContentWidgetState extends State<ContentWidget> {
                                   BlocProvider.of<EmployeeScheduleCubit>(
                                           context)
                                       .save(listData: listMultiSelect);
+
+                                  listMultiSelect.clear();
+
                                 }
                               },
                               listEmployee: listEmployee,
