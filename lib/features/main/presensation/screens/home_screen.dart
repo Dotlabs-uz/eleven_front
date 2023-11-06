@@ -500,7 +500,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     barber.inTimeTable = hasInTimeTable;
 
-setState(() {});
     print("in time table $hasInTimeTable");
 
     BlocProvider.of<BarberCubit>(context).save(barber: barber);
