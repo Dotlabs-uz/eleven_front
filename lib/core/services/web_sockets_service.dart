@@ -18,26 +18,24 @@ class WebSocketsService {
   void addDataToSocket(dynamic data) {
     debugPrint("Add data to socket $data");
 
-     socket!.emit("create" ,data);
-
-
-
+    socket!.emit("create", data);
   }
 
   void refresh() {
-    if(socket == null) return ;
+    if (socket == null) return;
 
     socket!.emit("getAll");
   }
-  void sendData(String method,  dynamic data) {
+
+  void sendData(String method, dynamic data) {
     debugPrint("Send data $method $data");
 
-     socket!.emit(method ,data);
+    socket!.emit(method, data);
   }
-  void deleteFromSocket(dynamic data) {
 
+  void deleteFromSocket(dynamic data) {
     debugPrint("Delete from socket $data");
-    socket!.emit("delete" ,data);
+    socket!.emit("delete", data);
   }
 
   void addFilter(dynamic filter) {
@@ -48,7 +46,7 @@ class WebSocketsService {
     debugPrint("Add filter $filter");
 
     // socket!.onack({"filter": filter});
-    socket!.emit("getAll" ,filter);
+    socket!.emit("getAll", filter);
   }
 
   Stream<dynamic> get getResponse => _socketResponse.stream;
@@ -58,8 +56,7 @@ class WebSocketsService {
     _socketResponse.close();
   }
 
-  Stream<dynamic> connect()  {
-
+  Stream<dynamic> connect() {
     IO.Socket localSoket =
         IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
