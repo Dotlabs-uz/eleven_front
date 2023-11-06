@@ -15,7 +15,7 @@ import 'selections.dart';
 import 'string_helper.dart';
 
 class Dialogs {
-  static  exitDialog({
+  static exitDialog({
     required BuildContext context,
     required Function() onExit,
   }) {
@@ -125,7 +125,8 @@ class Dialogs {
           onTimeSelected: (timeFrom, timeTo) => onTimeConfirm.call(
             timeFrom,
             timeTo,
-          ), onDeleteEmployeeFromTable: onDeleteEmployeeFromTable,
+          ),
+          onDeleteEmployeeFromTable: onDeleteEmployeeFromTable,
         ),
       ),
     );
@@ -134,9 +135,9 @@ class Dialogs {
   static scheduleField({
     required BuildContext context,
     required Function(int) onConfirm,
-      int? day,
-      int? month,
-      int? year,
+    int? day,
+    int? month,
+    int? year,
   }) {
     return showDialog(
       context: context,
@@ -164,14 +165,16 @@ class Dialogs {
               ),
 
               const SizedBox(height: 5),
-              day != null? Text(
-                "$day ${month != null ? StringHelper.monthName(month: month) : ""} $year.",
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ) : const SizedBox(),
+              day != null
+                  ? Text(
+                      "$day ${month != null ? StringHelper.monthName(month: month) : ""} $year.",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    )
+                  : const SizedBox(),
               const SizedBox(height: 20),
 
               ...Selections.listStatus.map((element) {
@@ -1179,7 +1182,15 @@ class _TimeTableEmployeeDialogBodyState
   _initialBody() {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        GestureDetector(
+          child: const Icon(Icons.close, color: Colors.black,),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+        const SizedBox(height: 10),
         ButtonWidget(
           text: 'selectNotWorkingTime'.tr(),
           onPressed: () =>
@@ -1196,44 +1207,31 @@ class _TimeTableEmployeeDialogBodyState
           color: Colors.blue,
         ),
         const SizedBox(height: 10),
-        ButtonWidget(
-          text: 'exit'.tr(),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          color: const Color(0xffff4040),
-        ),
       ],
     );
   }
 
   _selectNotWorkingHours() {
-
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 33),
         TimeFieldWithoutFieldWidget(
           label: "selectTimeFrom".tr(),
-
           value: TimeOfDay.fromDateTime(timeFrom),
           onSelected: (value) {
             if (value != null) {
-
-                timeFrom = value;
+              timeFrom = value;
             }
           },
         ),
         const SizedBox(height: 10),
         TimeFieldWithoutFieldWidget(
           label: "selectTimeTo".tr(),
-
           value: TimeOfDay.fromDateTime(timeTo),
           onSelected: (value) {
             if (value != null) {
-
-                timeTo = value;
+              timeTo = value;
             }
           },
         ),
