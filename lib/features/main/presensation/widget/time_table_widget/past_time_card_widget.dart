@@ -56,7 +56,7 @@ class _PastTimeCardWidgetState extends State<PastTimeCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DateTime.now().hour < Constants.startWork ? const SizedBox() : Container(
       width: MediaQuery.of(context).size.width,
       height: h,
       color: Colors.blue.withOpacity(0.01),
