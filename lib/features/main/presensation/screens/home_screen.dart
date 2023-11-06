@@ -431,18 +431,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         ? Padding(
                                             padding:
                                                 const EdgeInsets.only(left: 5),
-                                            child: BlocBuilder<BarberCubit,
-                                                BarberState>(
-                                              builder: (context, state) {
-                                                return NotSelectedBarbersListWidget(
-                                                  listBarbers: listBarbers,
-                                                  onTap: (String barberId) {
-                                                    setState(() {});
-                                                    _barberFromTimeTableCardAction(
-                                                      barberId,
-                                                      true,
-                                                    );
-                                                  },
+                                            child: NotSelectedBarbersListWidget(
+                                              listBarbers: listBarbers,
+                                              onTap: (String barberId) {
+                                                setState(() {});
+                                                _barberFromTimeTableCardAction(
+                                                  barberId,
+                                                  true,
                                                 );
                                               },
                                             ),
@@ -505,6 +500,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     barber.inTimeTable = hasInTimeTable;
 
+setState(() {});
     print("in time table $hasInTimeTable");
 
     BlocProvider.of<BarberCubit>(context).save(barber: barber);
