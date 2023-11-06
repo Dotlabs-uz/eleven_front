@@ -143,7 +143,7 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                                       child: _ServiceProductCard(
                                         isSelected: listSelectedServices
                                             .contains(service),
-                                        color: Colors.blue,
+                                        color: service.sex == "men" ?   Colors.blue : Colors.pink ,
                                         item: service,
                                         image: Assets.tLogo,
                                       ),
@@ -246,6 +246,15 @@ class _ServiceProductCardState extends State<_ServiceProductCard> {
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "${widget.item.duration} мин",
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
               ),
             ),
           ],

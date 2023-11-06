@@ -129,9 +129,8 @@ class DataOrderFormState extends State<DataOrderForm> {
           //   fieldEntity: widget.fields['orderEnd']!,
           //   withTime: true,
           // ),
-          PaymentTypeFieldWidget(
-            fieldEntity: widget.fields['paymentType']!,
-          ),
+          const SizedBox(height: 10),
+
           SelectServicesWidget(
             fieldEntity: widget.fields["services"]!,
             onChanged: (listData) {
@@ -140,6 +139,9 @@ class DataOrderFormState extends State<DataOrderForm> {
               print("Selected services $selectedProducts");
               getPriceAndDuration(selectedProducts);
             },
+          ),
+          PaymentTypeFieldWidget(
+            fieldEntity: widget.fields['paymentType']!,
           ),
           const SizedBox(height: 10),
           ButtonWidget(
@@ -169,126 +171,52 @@ class DataOrderFormState extends State<DataOrderForm> {
                   textOK: const Text('ok').tr(),
                   enableCancel: false,
                 );
-              } else if( orderStart.isBefore(DateTime.now())) {
+              } else if (orderStart.isBefore(DateTime.now())) {
                 await confirm(
                   context,
                   title: const Text('orderStart').tr(),
-                  content: const Text('youCantChooseThisOrderStartInThisTime').tr(),
+                  content:
+                      const Text('youCantChooseThisOrderStartInThisTime').tr(),
                   textOK: const Text('ok').tr(),
                   enableCancel: false,
                 );
-              }else {
+              } else {
                 widget.saveData.call(selectedProducts, barber, client);
                 BlocProvider.of<ShowSelectServicesCubit>(context).disable();
-                SuccessFlushBar("change_success".tr())
-                    .show(context);
+                SuccessFlushBar("change_success".tr()).show(context);
               }
             },
           ),
           const SizedBox(height: 30),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 10),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "${'price'.tr()}:",
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const TextSpan(text: " "),
-                                TextSpan(
-                                  text: price.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "${'duration'.tr()}:",
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const TextSpan(text: " "),
-                                TextSpan(
-                                  text: duration.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      // RichText(
-                      //   text: TextSpan(
-                      //     children: [
-                      //       orderEnd != null
-                      //           ? TextSpan(
-                      //               text: 'almostOrderDateEnd'.tr(),
-                      //               style: const TextStyle(
-                      //                 fontSize: 16,
-                      //                 color: Colors.black,
-                      //                 fontWeight: FontWeight.w500,
-                      //               ),
-                      //             )
-                      //           : const TextSpan(text: ""),
-                      //       orderEnd != null
-                      //           ? TextSpan(
-                      //               text: DateFormat("hh:mm")
-                      //                   .format(orderEnd!),
-                      //               style: const TextStyle(
-                      //                 fontSize: 16,
-                      //                 color: Colors.black,
-                      //                 fontWeight: FontWeight.w600,
-                      //               ),
-                      //             )
-                      //           : const TextSpan(text: ""),
-                      //     ],
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
+          _infoWidget("${'price'.tr()}:", price),
+          const SizedBox(height: 10),
+          _infoWidget("${'duration'.tr()}:", duration),
         ],
       ),
+    );
+  }
+
+  _infoWidget(String title, dynamic value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          price.toString(),
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 }

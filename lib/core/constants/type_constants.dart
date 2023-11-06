@@ -4,10 +4,10 @@ class TypeChooses {
   static const List<String> sex = [
     'men',
     'women',
-  ];static const List<String> paymentType = [
-    'cash',
-    'card',
-  ];
+  ];static const Map<String,String> paymentType =   {
+  "cash": "cash",
+  "card": "card",
+  };
   static const List<String> role = [
     'reception',
     'barber',

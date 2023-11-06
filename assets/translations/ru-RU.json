@@ -651,7 +651,7 @@
   "managers": "Менеджеры",
   "selectTimeFrom": "Выберите вермя от",
   "selectTimeTo": "Выберите время до",
-  "selectServices": "Выберите сервисы",
+  "selectServices": "Выбрать сервисы",
   "selectStatusForSelected": "Выберите статус для выбранных",
 
   "almostOrderDateEnd": "Приблиз. время окончания",

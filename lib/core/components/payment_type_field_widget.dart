@@ -1,5 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -46,26 +47,26 @@ class _ContentWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<_ContentWidget> createState() =>
-      _ContentWidgetState();
+  State<_ContentWidget> createState() => _ContentWidgetState();
 }
 
 class _ContentWidgetState extends State<_ContentWidget> {
   final TextEditingController controllerSearch = TextEditingController();
-  List<String> itemsList = [];
+  Map<String, String> mapValues = {};
+  String selectedValue = "cash";
+
   @override
   void initState() {
-    itemsList = TypeChooses.paymentType;
+    mapValues = TypeChooses.paymentType;
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    int ind = 0;
     if (widget.fieldEntity != null) {
       final OrderPayment paymentType = widget.fieldEntity!.val;
-      ind = paymentType.name == "cash" ? 0 : 1;
+      selectedValue = paymentType.name;
     }
 
     return Padding(
@@ -85,74 +86,51 @@ class _ContentWidgetState extends State<_ContentWidget> {
           const SizedBox(height: 3),
           SizedBox(
             height: 40,
-            child: DropdownSearch<String>(
-              items: itemsList,
-              enabled: widget.enabled,
-              itemAsString: (item) => item.tr(),
-              selectedItem: itemsList[ind],
-              popupProps: PopupPropsMultiSelection.menu(
-                showSelectedItems: true,
-                itemBuilder: (context, item, isSelected) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 5,
-                      left: 10,
-                      top: 5,
-                    ),
-                    child: Text(
-                      item.tr(),
-                      style: GoogleFonts.nunito(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                  );
-                },
-                showSearchBox: true,
-                searchFieldProps: TextFieldProps(
-                  controller: controllerSearch,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () => controllerSearch.clear(),
-                    ),
-                  ),
-                ),
-              ),
-              compareFn: (item, selectedItem) => (item == selectedItem),
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: const BorderSide(
-                      width: 2,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                  ),
-                  hintText: "status".tr().toUpperCase(),
-                ),
-              ),
-              onChanged: (val) {
-                if (val != null) {
-                  widget.fieldEntity?.val = val;
+            width: MediaQuery.of(context).size.width,
+            child: CupertinoSegmentedControl<String>(
+              selectedColor: const Color(0xff93A7B0),
+              groupValue: selectedValue,
+              borderColor: Colors.green,
+              padding: EdgeInsets.zero,
+              onValueChanged: (String value) {
+                setState(() {
+                  selectedValue = value;
+                  widget.fieldEntity?.val = _getPaymentTypeByString(value);
 
-                  widget.onChanged?.call(val);
-                }
+                  widget.onChanged?.call(value);
+                });
+              },
+              children: <String, Widget>{
+                "cash": Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.money_rounded),
+                    const SizedBox(width: 3),
+                    Text('cash'.tr()),
+                  ],
+                ),
+                "card": Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.credit_card),
+                    const SizedBox(width: 3),
+                    Text('card'.tr()),
+                  ],
+                ),
               },
             ),
           ),
         ],
       ),
     );
+  }
+
+  _getPaymentTypeByString(String value) {
+    switch (value) {
+      case "cash":
+        return OrderPayment.cash;
+      case "card":
+        return OrderPayment.card;
+    }
   }
 }

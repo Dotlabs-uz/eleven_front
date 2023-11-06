@@ -88,11 +88,16 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.blueGrey.shade300,
-                          Colors.blueGrey.shade200
-                        ],
+                      // gradient: LinearGradient(
+                      //   colors: [
+                      //     Colors.blueGrey.shade300,
+                      //     Colors.blueGrey.shade200
+                      //   ],
+                      // ),
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.green,
+
                       ),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(6),
@@ -102,9 +107,9 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
                       child: Text(
                         "selectServices".tr(),
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
