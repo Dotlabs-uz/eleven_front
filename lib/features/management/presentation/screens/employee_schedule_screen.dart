@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -238,10 +239,10 @@ class _ContentWidgetState extends State<ContentWidget> {
                               EmployeeScheduleState>(
                             listener: (context, state) {
                               if (state is EmployeeScheduleSaved) {
-                                BlocProvider.of<EmployeeCubit>(context).load("");
-
                                 SuccessFlushBar("change_success".tr())
                                     .show(context);
+                                BlocProvider.of<EmployeeCubit>(context)
+                                    .load("");
                               } else if (state is EmployeeScheduleError) {
                                 ErrorFlushBar("change_error"
                                     .tr(args: [state.message])).show(context);
@@ -253,6 +254,9 @@ class _ContentWidgetState extends State<ContentWidget> {
                               if (state is EmployeeSaved) {
                                 SuccessFlushBar("change_success".tr())
                                     .show(context);
+
+                                BlocProvider.of<EmployeeCubit>(context)
+                                    .load("");
                               } else if (state is EmployeeError) {
                                 ErrorFlushBar("change_error"
                                     .tr(args: [state.message])).show(context);
@@ -264,6 +268,8 @@ class _ContentWidgetState extends State<ContentWidget> {
                           builder: (context, state) {
                             if (state is EmployeeLoaded) {
                               listEmployee = state.data;
+                            }else if (state is EmployeeLoading) {
+                              return const LoadingCircle();
                             }
 
                             return EmployeeScheduleWidget(
@@ -290,7 +296,6 @@ class _ContentWidgetState extends State<ContentWidget> {
                                       .save(listData: listMultiSelect);
 
                                   listMultiSelect.clear();
-
                                 }
                               },
                               listEmployee: listEmployee,
