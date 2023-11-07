@@ -208,9 +208,7 @@ class _CalendarWidgetState extends State<_CalendarWidget> {
       enableDenseSplashForDates: true,
       dateSelectionMode: DatePickerSelectionMode.singleOrMultiple,
       startWeekday: WeekDay.monday,
-      onRefreshTap: () {
-
-      },
+      onRefreshTap: () {},
       headerProperties: HeaderProperties(
         monthYearDecoration: MonthYearDecoration(
           monthYearTextColor: Colors.white,
@@ -313,17 +311,18 @@ class FloatingMenuItemWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: entity.index == currentIndex
-                  ? AppColors.sideMenuSelected
-                  : null),
+            borderRadius: BorderRadius.circular(12),
+            // color: entity.index == currentIndex
+            //     ? AppColors.sideMenuSelected
+            //     : null),
+          ),
           child: !isOpen
               ? _icon(entity.index == currentIndex)
               : Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const SizedBox(width: 10),
+
                     _icon(entity.index == currentIndex),
                     const SizedBox(width: 10),
                     FittedBox(
@@ -332,7 +331,9 @@ class FloatingMenuItemWidget extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.nunito(
-                          color: Colors.white,
+                          color: entity.index == currentIndex
+                              ? Colors.white
+                              : Colors.grey.shade300,
                           fontSize: 16,
                           fontWeight: entity.index == currentIndex
                               ? FontWeight.w700
@@ -353,7 +354,7 @@ class FloatingMenuItemWidget extends StatelessWidget {
         child: Icon(
           entity.icon,
           size: 30,
-          color: selected ? Colors.white : Colors.white,
+          color: selected ? Colors.white : Colors.grey.shade300,
         ),
       ),
     );
