@@ -52,6 +52,8 @@ class DataOrderFormState extends State<DataOrderForm> {
     barber = widget.fields['clientId']?.val ?? "";
     orderStart = widget.fields['orderStart']?.val ?? DateTime.now();
 
+    print("Duration $duration");
+
     super.initState();
   }
 
@@ -81,17 +83,14 @@ class DataOrderFormState extends State<DataOrderForm> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(-10, 10),
-             blurRadius: 16,
-             color: Colors.black.withOpacity(0.1),
-          )
-        ]
-      ),
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        BoxShadow(
+          offset: const Offset(-10, 10),
+          blurRadius: 16,
+          color: Colors.black.withOpacity(0.1),
+        )
+      ]),
       child: CustomScrollView(
         slivers: [
           SliverFillRemaining(
@@ -163,7 +162,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   decoration: BoxDecoration(
-                    boxShadow:   [
+                    boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
                         blurRadius: 14,
@@ -251,7 +250,7 @@ class DataOrderFormState extends State<DataOrderForm> {
           ),
         ),
         Text(
-          price.toString(),
+          value.toString(),
           style: const TextStyle(
             color: Colors.black,
             fontSize: 16,
