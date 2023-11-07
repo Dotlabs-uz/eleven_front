@@ -429,7 +429,9 @@ class _EmployeeScheduleFieldWidgetState
         width: 35,
         height: 35,
         decoration: BoxDecoration(
-          color: ColorHelper.getColorForScheduleByStatus(status),
+          color:widget.isFieldSElected
+              ? Colors.brown.shade300
+              : ColorHelper.getColorForScheduleByStatus(status),
           border: Border.all(
             width: 1,
             color: Colors.grey.shade200,
