@@ -1,3 +1,4 @@
+import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/products/domain/entity/service_product_category_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -91,8 +92,9 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                   ),
                   const SizedBox(height: 10),
                   Expanded(
-                    child: BlocListener<ServiceProductCategoryCubit,
+                    child: BlocConsumer<ServiceProductCategoryCubit,
                         ServiceProductCategoryState>(
+
                       listener: (context, state) {
                         if (state is ServiceProductCategoryLoaded) {
                           if (mounted) {
@@ -107,55 +109,64 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                           }
                         }
                       },
-                      child: ListView.builder(
-                        physics: const ClampingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final category = listServiceCategories[index];
+                      builder: (context, state) {
 
-                          // return const SizedBox();
-                          return Column(
-                            children: [
-                              _serviceProductCategoryCard(category.name),
-                              const SizedBox(height: 10),
-                              GridView.count(
-                                shrinkWrap: true,
-                                crossAxisCount: 2,
-                                children: List.generate(
-                                    category.services.length, (index) {
-                                  final service = category.services[index];
-                                  return GestureDetector(
-                                    onTap: () {
-                                      if (listSelectedServices
-                                          .contains(service)) {
-                                        BlocProvider.of<SelectServicesCubit>(
-                                          context,
-                                        ).remove(service: service);
-                                      } else {
-                                        BlocProvider.of<SelectServicesCubit>(
-                                          context,
-                                        ).save(service: service);
-                                      }
-                                      setState(() {});
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 10, right: 10),
-                                      child: _ServiceProductCard(
-                                        isSelected: listSelectedServices
-                                            .contains(service),
-                                        color: service.sex == "men" ?   Colors.blue : Colors.pink ,
-                                        item: service,
-                                        image: Assets.tLogo,
+                        if (state is ServiceProductCategoryLoading) {
+                          return LoadingCircle();
+                        }
+
+                        return ListView.builder(
+                          physics: const ClampingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final category = listServiceCategories[index];
+
+                            // return const SizedBox();
+                            return Column(
+                              children: [
+                                _serviceProductCategoryCard(category.name),
+                                const SizedBox(height: 10),
+                                GridView.count(
+                                  shrinkWrap: true,
+                                  crossAxisCount: 2,
+                                  children: List.generate(
+                                      category.services.length, (index) {
+                                    final service = category.services[index];
+                                    return GestureDetector(
+                                      onTap: () {
+                                        if (listSelectedServices
+                                            .contains(service)) {
+                                          BlocProvider.of<SelectServicesCubit>(
+                                            context,
+                                          ).remove(service: service);
+                                        } else {
+                                          BlocProvider.of<SelectServicesCubit>(
+                                            context,
+                                          ).save(service: service);
+                                        }
+                                        setState(() {});
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            bottom: 10, right: 10),
+                                        child: _ServiceProductCard(
+                                          isSelected: listSelectedServices
+                                              .contains(service),
+                                          color: service.sex == "men"
+                                              ? Colors.blue
+                                              : Colors.pink,
+                                          item: service,
+                                          image: Assets.tLogo,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                }),
-                              ),
-                            ],
-                          );
-                        },
-                        itemCount: listServiceCategories.length,
-                      ),
+                                    );
+                                  }),
+                                ),
+                              ],
+                            );
+                          },
+                          itemCount: listServiceCategories.length,
+                        );
+                      },
                     ),
                   ),
                 ],

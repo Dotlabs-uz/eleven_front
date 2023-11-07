@@ -43,7 +43,6 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
           widget.onChanged.call(selectedServices);
           // widget.fieldEntity.val = selectedServices;
 
-
           setState(() {});
           BlocProvider.of<SelectServicesCubit>(context).init();
         },
@@ -97,7 +96,6 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
                       color: Colors.white,
                       border: Border.all(
                         color: Colors.green,
-
                       ),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(6),
@@ -141,7 +139,7 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       margin: const EdgeInsets.only(right: 6, bottom: 6),
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: serviceProductEntity.sex == "male" ? Colors.blue : Colors.pink,
         borderRadius: BorderRadius.circular(100),
       ),
       child: Text(
