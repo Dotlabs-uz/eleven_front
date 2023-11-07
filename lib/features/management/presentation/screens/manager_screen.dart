@@ -214,8 +214,10 @@ class _ContentWidgetState extends State<ContentWidget> {
               } else {
                 if (state is ManagerSaved) {
                   activeData = state.data;
-                  BlocProvider.of<DataFormCubit>(context)
-                      .editData(activeData.getFields());
+                  isFormVisible = false;
+
+                  // BlocProvider.of<DataFormCubit>(context)
+                  //     .editData(activeData.getFields());
                   var ind = customers
                       .indexWhere((element) => element.id == activeData.id);
                   if (ind >= 0) {

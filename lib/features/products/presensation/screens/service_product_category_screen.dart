@@ -224,8 +224,10 @@ class _ContentWidgetState extends State<ContentWidget> {
               } else {
                 if (state is ServiceProductCategorySaved) {
                   activeData = state.data;
-                  BlocProvider.of<DataFormCubit>(context)
-                      .editData(activeData.getFields());
+                  isFormVisible = false;
+
+                  // BlocProvider.of<DataFormCubit>(context)
+                  //     .editData(activeData.getFields());
                   var ind = serviceProducts
                       .indexWhere((element) => element.id == activeData.id);
                   if (ind >= 0) {
