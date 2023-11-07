@@ -11,9 +11,10 @@ class AppColors {
   static const mainTextColor = Color(0xffffffff);
   static const light = Color(0xffF9FAFF);
   static const darkText = Color(0xff23120B);
-  static const sideMenu = Color(0xff394251);
+  static const sideMenu = Color(0xff071E32);
   // static const sideMenuSelected = Colors.blue;
   // static const buttonColor = Colors.blue;
+  static const scaffoldColor = Color(0xffF8FAFF);
   static const sideMenuSelected = Color(0xff1A1A1A);
   static const buttonColor = Colors.yellow;
   static const  successColor = Color(0xFF0AE286);
