@@ -256,15 +256,15 @@ class _ContentWidgetState extends State<_ContentWidget> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final listSnapData = List.from(snapshot.data);
-              final data = listSnapData
-                  .map((e) => OrderModel.fromJson(e, withSubstract: true))
-                  .toList();
 
-              if (data.isNotEmpty) {
-                print(
-                    "Shanshot has data ${data} ${data.first.orderStart} ${data.first.orderEnd}");
+              if(listSnapData.isNotEmpty) {
+                final data = listSnapData
+                    .map((e) => OrderModel.fromJson(e, withSubstract: true))
+                    .toList();
+
+                orders = data;
               }
-              orders = data;
+
             }
             return MultiBlocListener(
               listeners: [

@@ -34,12 +34,12 @@ class OrderModel extends OrderEntity {
 
               .toLocal()
           : DateTime.parse(json['orderEnd']).toLocal(),
-      barberId: json['barber']['_id'],
+      barberId: json['barber']!=null ? json['barber']['_id']:  "",
       paymentType:
           json['payment'] == "cash" ? OrderPayment.card : OrderPayment.card,
       // discountPercent: json['discountPer'],
       // discount: json['discount'],
-      clientId: json['client']['_id'],
+      clientId: json['client']!=null ? json['client']['_id']:  "",
       services: List.from(json['services'])
           .map((e) => ServiceProductModel.fromJson(e, false))
           .toList(),

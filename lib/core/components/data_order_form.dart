@@ -174,9 +174,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                   child: Column(
                     children: <Widget>[
                       const SizedBox(height: 20),
-                      _infoWidget("${'price'.tr()}:", price),
+                      _infoWidget("${'price'.tr()}:", price , "сум"),
                       const SizedBox(height: 15),
-                      _infoWidget("${'duration'.tr()}:", duration),
+                      _infoWidget("${'duration'.tr()}:", duration, "мин"),
                       const SizedBox(height: 30),
                       ButtonWidget(
                         text: "save".tr(),
@@ -237,7 +237,7 @@ class DataOrderFormState extends State<DataOrderForm> {
     );
   }
 
-  _infoWidget(String title, dynamic value) {
+  _infoWidget(String title, dynamic value, String valueText) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -250,7 +250,7 @@ class DataOrderFormState extends State<DataOrderForm> {
           ),
         ),
         Text(
-          value.toString(),
+          value.toString()+ " " + valueText,
           style: const TextStyle(
             color: Colors.black,
             fontSize: 16,
