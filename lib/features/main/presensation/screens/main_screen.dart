@@ -301,8 +301,9 @@ class _ContentWidgetState extends State<ContentWidget> {
 
   _searchAndActionsMenu() {
     final TextEditingController textEditingController = TextEditingController();
-    return Padding(
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
+      color: Colors.white,
       child: BlocBuilder<TopMenuCubit, TopMenuEntity>(
         builder: (context, data) {
           if (data.iconList.isEmpty) {
@@ -316,13 +317,15 @@ class _ContentWidgetState extends State<ContentWidget> {
             child: Row(
               children: [
                 Expanded(
-                  child:data.enableSearch ? SearchField(
-                    onSearch: data.searchCubit == null
-                        ? null
-                        : (value) {
-                            data.searchCubit.load(value);
-                          },
-                  ): const SizedBox.shrink(),
+                  child: data.enableSearch
+                      ? SearchField(
+                          onSearch: data.searchCubit == null
+                              ? null
+                              : (value) {
+                                  data.searchCubit.load(value);
+                                },
+                        )
+                      : const SizedBox.shrink(),
                 ),
                 ...data.iconList,
               ],

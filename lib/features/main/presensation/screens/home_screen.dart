@@ -471,16 +471,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                 ),
                                 color: Colors.white,
                                 height: MediaQuery.of(context).size.height,
-                                child: SingleChildScrollView(
-                                  child: DataOrderForm(
-                                    fields: activeData.getFields(),
-                                    saveData: _saveOrder,
-                                    closeForm: () {
-                                      BlocProvider.of<HomeScreenOrderFormCubit>(
-                                              context)
-                                          .disable();
-                                    },
-                                  ),
+                                child: DataOrderForm(
+                                  fields: activeData.getFields(),
+                                  saveData: _saveOrder,
+                                  closeForm: () {
+                                    BlocProvider.of<HomeScreenOrderFormCubit>(
+                                            context)
+                                        .disable();
+                                  },
                                 ),
                               )
                             : const SizedBox(),

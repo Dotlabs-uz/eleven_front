@@ -80,117 +80,159 @@ class DataOrderFormState extends State<DataOrderForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton(
-                onPressed: () {
-                  widget.closeForm.call();
-                  BlocProvider.of<ShowSelectServicesCubit>(context).disable();
-                },
-                child: Text(
-                  'close'.tr(),
-                  style: GoogleFonts.nunito(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+    return Container(
+        padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(-10, 10),
+             blurRadius: 16,
+             color: Colors.black.withOpacity(0.1),
+          )
+        ]
+      ),
+      child: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        widget.closeForm.call();
+                        BlocProvider.of<ShowSelectServicesCubit>(context)
+                            .disable();
+                      },
+                      child: Text(
+                        'close'.tr(),
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                ClientFieldWidget(
+                  fieldEntity: widget.fields['clientId']!,
+                  onChange: (value) {
+                    widget.fields['clientId']!.val = value.id;
+                    client = value.id;
+                  },
+                ),
+                BarberFieldWidget(
+                  fieldEntity: widget.fields['barberId']!,
+                  onChange: (value) {
+                    widget.fields['barberId']!.val = value.id;
+                    barber = value.id;
+                  },
+                ),
+                DateTimeFieldWidget(
+                  fieldEntity: widget.fields['orderStart']!,
+                  withTime: true,
+                  onChanged: (value) => orderStart = value,
+                ),
+                // const SizedBox(height: 10),
+                // DateTimeFieldWidget(
+                //   fieldEntity: widget.fields['orderEnd']!,
+                //   withTime: true,
+                // ),
+                const SizedBox(height: 10),
+
+                SelectServicesWidget(
+                  fieldEntity: widget.fields["services"]!,
+                  onChanged: (listData) {
+                    selectedProducts = listData;
+                    widget.fields['services']!.val = listData;
+                    print("Selected services $selectedProducts");
+                    getPriceAndDuration(selectedProducts);
+                  },
+                ),
+                PaymentTypeFieldWidget(
+                  fieldEntity: widget.fields['paymentType']!,
+                ),
+                const SizedBox(height: 10),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                    boxShadow:   [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 14,
+                      )
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      const SizedBox(height: 20),
+                      _infoWidget("${'price'.tr()}:", price),
+                      const SizedBox(height: 15),
+                      _infoWidget("${'duration'.tr()}:", duration),
+                      const SizedBox(height: 30),
+                      ButtonWidget(
+                        text: "save".tr(),
+                        onPressed: () async {
+                          if (client.isEmpty) {
+                            await confirm(
+                              context,
+                              title: const Text('client').tr(),
+                              content: const Text('pleaseSelectClient').tr(),
+                              textOK: const Text('ok').tr(),
+                              enableCancel: false,
+                            );
+                          } else if (barber.isEmpty) {
+                            await confirm(
+                              context,
+                              title: const Text('barber').tr(),
+                              content: const Text('pleaseSelectBarber').tr(),
+                              textOK: const Text('ok').tr(),
+                              enableCancel: false,
+                            );
+                          } else if (selectedProducts.isEmpty) {
+                            await confirm(
+                              context,
+                              title: const Text('services').tr(),
+                              content: const Text('pleaseSelectServices').tr(),
+                              textOK: const Text('ok').tr(),
+                              enableCancel: false,
+                            );
+                          } else if (orderStart.isBefore(DateTime.now())) {
+                            await confirm(
+                              context,
+                              title: const Text('orderStart').tr(),
+                              content: const Text(
+                                      'youCantChooseThisOrderStartInThisTime')
+                                  .tr(),
+                              textOK: const Text('ok').tr(),
+                              enableCancel: false,
+                            );
+                          } else {
+                            widget.saveData
+                                .call(selectedProducts, barber, client);
+                            BlocProvider.of<ShowSelectServicesCubit>(context)
+                                .disable();
+                            SuccessFlushBar("change_success".tr())
+                                .show(context);
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                    ],
                   ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
-          ClientFieldWidget(
-            fieldEntity: widget.fields['clientId']!,
-            onChange: (value) {
-              widget.fields['clientId']!.val = value.id;
-              client = value.id;
-            },
-          ),
-          BarberFieldWidget(
-            fieldEntity: widget.fields['barberId']!,
-            onChange: (value) {
-              widget.fields['barberId']!.val = value.id;
-              barber = value.id;
-            },
-          ),
-          DateTimeFieldWidget(
-            fieldEntity: widget.fields['orderStart']!,
-            withTime: true,
-            onChanged: (value) => orderStart = value,
-          ),
-          // const SizedBox(height: 10),
-          // DateTimeFieldWidget(
-          //   fieldEntity: widget.fields['orderEnd']!,
-          //   withTime: true,
-          // ),
-          const SizedBox(height: 10),
-
-          SelectServicesWidget(
-            fieldEntity: widget.fields["services"]!,
-            onChanged: (listData) {
-              selectedProducts = listData;
-              widget.fields['services']!.val = listData;
-              print("Selected services $selectedProducts");
-              getPriceAndDuration(selectedProducts);
-            },
-          ),
-          PaymentTypeFieldWidget(
-            fieldEntity: widget.fields['paymentType']!,
-          ),
-          const SizedBox(height: 10),
-          ButtonWidget(
-            text: "save".tr(),
-            onPressed: () async {
-              if (client.isEmpty) {
-                await confirm(
-                  context,
-                  title: const Text('client').tr(),
-                  content: const Text('pleaseSelectClient').tr(),
-                  textOK: const Text('ok').tr(),
-                  enableCancel: false,
-                );
-              } else if (barber.isEmpty) {
-                await confirm(
-                  context,
-                  title: const Text('barber').tr(),
-                  content: const Text('pleaseSelectBarber').tr(),
-                  textOK: const Text('ok').tr(),
-                  enableCancel: false,
-                );
-              } else if (selectedProducts.isEmpty) {
-                await confirm(
-                  context,
-                  title: const Text('services').tr(),
-                  content: const Text('pleaseSelectServices').tr(),
-                  textOK: const Text('ok').tr(),
-                  enableCancel: false,
-                );
-              } else if (orderStart.isBefore(DateTime.now())) {
-                await confirm(
-                  context,
-                  title: const Text('orderStart').tr(),
-                  content:
-                      const Text('youCantChooseThisOrderStartInThisTime').tr(),
-                  textOK: const Text('ok').tr(),
-                  enableCancel: false,
-                );
-              } else {
-                widget.saveData.call(selectedProducts, barber, client);
-                BlocProvider.of<ShowSelectServicesCubit>(context).disable();
-                SuccessFlushBar("change_success".tr()).show(context);
-              }
-            },
-          ),
-          const SizedBox(height: 30),
-          _infoWidget("${'price'.tr()}:", price),
-          const SizedBox(height: 10),
-          _infoWidget("${'duration'.tr()}:", duration),
         ],
       ),
     );
