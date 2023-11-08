@@ -6,15 +6,15 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class WebSocketsService {
-
   final String url;
   WebSocketsService(this.url);
 
-
-     final _socketResponse = StreamController<dynamic>();
+  final _socketOrderResponse = StreamController<dynamic>();
+  final _socketDatesResponse = StreamController<dynamic>();
   static IO.Socket? socket;
 
-  void _addData(dynamic data) => _socketResponse.sink.add(data);
+  void _addOrderData(dynamic data) => _socketOrderResponse.sink.add(data);
+  void _addDatesData(dynamic data) => _socketDatesResponse.sink.add(data);
   void addDataToSocket(dynamic data) {
     debugPrint("Add data to socket $data");
 
@@ -49,11 +49,12 @@ class WebSocketsService {
     socket!.emit("getAll", filter);
   }
 
-  Stream<dynamic> get getResponse => _socketResponse.stream;
+  Stream<dynamic> get getOrderResponse => _socketOrderResponse.stream;
+  Stream<dynamic> get getDatesResponse => _socketDatesResponse.stream;
 
   void dispose() {
     socket = null;
-    _socketResponse.close();
+    _socketOrderResponse.close();
   }
 
   Stream<dynamic> connect() {
@@ -69,8 +70,15 @@ class WebSocketsService {
 
     localSoket.emit("getAll");
 
+    localSoket.on('datesWithIsNew', (data) {
+      debugPrint("Dates with is new $data");
+      _addDatesData(data);
+    });
+
     localSoket.on('fetched', (data) {
-      _addData(data);
+      debugPrint("Orders $data");
+
+      _addOrderData(data);
     });
 
     // getResponse.map((event) => print(event));
@@ -79,6 +87,6 @@ class WebSocketsService {
     //   yield data;
     // }
 
-    return getResponse;
+    return getOrderResponse;
   }
 }

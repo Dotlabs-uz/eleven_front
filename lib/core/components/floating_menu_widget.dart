@@ -1,5 +1,6 @@
 import 'package:clean_calendar/clean_calendar.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/features/main/domain/entity/current_user_entity.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import '../../features/auth/presentation/cubit/login_cubit.dart';
 import '../../features/main/domain/entity/order_entity.dart';
 import '../../features/main/presensation/cubit/order_filter_cubit.dart';
 import '../../features/main/presensation/widget/calendar_widget.dart';
+import '../api/api_constants.dart';
 import '../utils/app_colors.dart';
 import '../utils/assets.dart';
 import '../utils/dialogs.dart';
@@ -52,8 +54,14 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
   String version = "";
   static CurrentUserEntity currentUserEntity = CurrentUserEntity.empty();
 
+  // final WebSocketsService webSocketService =
+  // WebSocketsService(ApiConstants.ordersWebSocket);
+    List<DateTime> listBlinkDates = [];
+
   @override
   void initState() {
+    // webSocketService.connect();listBlinkDates.clear();
+
     BlocProvider.of<CurrentUserCubit>(context).load();
     super.initState();
   }
@@ -168,19 +176,21 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                 );
               }),
               //
-              const SizedBox(height: 40),
-              CalendarWidget(
-                onRefreshTap: () {
-                  BlocProvider.of<OrderFilterCubit>(context).setFilter(
-                    query: "",
-                  );
-                },
-                onDateTap: (DateTime dateTime) {
-                  BlocProvider.of<OrderFilterCubit>(context).setFilter(
-                    query: dateTime.toIso8601String(),
-                  );
-                },
-              ),
+
+
+                    CalendarWidget(
+                    onRefreshTap: () {
+                      BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                        query: DateTime.now().toIso8601String(),
+                      );
+                    },
+                    onDateTap: (DateTime dateTime) {
+                      BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                        query: dateTime.toIso8601String(),
+                      );
+                    }, listBlinkDates: listBlinkDates,
+                  ),
+
             ],
           ),
         ),

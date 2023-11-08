@@ -252,7 +252,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: StreamBuilder<dynamic>(
-          stream: webSocketService.getResponse,
+          stream: webSocketService.getOrderResponse,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final listSnapData = List.from(snapshot.data);

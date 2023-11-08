@@ -3,14 +3,20 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/api/api_constants.dart';
+import '../../../../core/services/web_sockets_service.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/string_helper.dart';
 
 class CalendarWidget extends StatefulWidget {
   final Function() onRefreshTap;
   final Function(DateTime dateTime) onDateTap;
+  final List<DateTime> listBlinkDates;
   const CalendarWidget(
-      {Key? key, required this.onRefreshTap, required this.onDateTap})
+      {Key? key,
+      required this.onRefreshTap,
+      required this.onDateTap,
+      required this.listBlinkDates})
       : super(key: key);
 
   @override
@@ -29,14 +35,21 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     "suSmall",
   ];
   final int realCurrentMonth = DateTime.now().month;
-  int selectedMonth = DateTime.now().month;
-  DateTime selectedDate = DateTime.now();
+  static int selectedMonth = DateTime.now().month;
+  static DateTime selectedDate = DateTime.now();
+  final WebSocketsService webSocketService =
+      WebSocketsService(ApiConstants.ordersWebSocket);
 
-  final List<DateTime> listBlinkedDates = [
-    DateTime(2023, 11, 15),
-    DateTime(2023, 11, 10),
-    // DateTime(2023, 11, 3),
-  ];
+  static List<DateTime> listBlinkedDates = [];
+  // @override
+  // void didUpdateWidget(covariant CalendarWidget oldWidget) {
+  //
+  //   if(listBlinkedDates.length !=  widget.listBlinkDates.length)  {
+  //
+  //     _initBlinked();
+  //   }
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   @override
   void dispose() {
@@ -45,10 +58,20 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   void initState() {
+    webSocketService.connect();
+    listBlinkedDates.clear();
+    _initBlinked();
     _initDaysOfMonth();
     super.initState();
   }
 
+  _initBlinked() {
+    // listBlinkedDates = widget.listBlinkDates;
+    // print("List blinked local $listBlinkedDates");
+// setState(() {
+//
+// });
+  }
   _initDaysOfMonth() {
     daysOfMonth.clear();
     final now = DateTime.now();
@@ -86,12 +109,28 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           ),
       width: 280,
       padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          _monthSelector(),
-          const SizedBox(height: 10),
-          _datesSelection(),
-        ],
+      child: StreamBuilder<dynamic>(
+        stream: webSocketService.getDatesResponse,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final listSnapData = List.from(snapshot.data);
+
+            print("$listSnapData Dates");
+            if (listSnapData.isNotEmpty) {
+              final data = listSnapData.map((e) => DateFormat("yyyy-MM-dd").parse(e)).toList();
+
+              listBlinkedDates = data;
+            }
+          }
+
+          return Column(
+            children: [
+              _monthSelector(),
+              const SizedBox(height: 10),
+              _datesSelection(listBlinkedDates),
+            ],
+          );
+        },
       ),
     );
   }
@@ -112,7 +151,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         ),
         const Spacer(),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            selectedDate = DateTime.now();
+            setState(() {
+
+            });
+            widget.onRefreshTap.call();
+          },
           icon: const Icon(
             Icons.refresh,
             size: 24,
@@ -151,7 +196,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     );
   }
 
-  _datesSelection() {
+  _datesSelection(List<DateTime> localBlinked) {
     return Column(
       children: [
         Row(
@@ -194,19 +239,19 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               selectedDate: selectedDate,
               isCurrentDate: isCurrentDate,
               isSelectedDate: isSelectedDate,
-              listBlinkedDates: listBlinkedDates,
-              month: selectedMonth,              year: currentYear,
-
-
+              listBlinkedDates: localBlinked,
+              month: selectedMonth,
+              year: currentYear,
               onDateTap: (dateTime) {
                 if (day != null) {
                   selectedDate = DateTime(currentYear, selectedMonth, day);
 
-                  debugPrint("Selected removed $selectedDate");
+                  print("Selected removed $selectedDate");
 
-                  widget.onDateTap.call(selectedDate);
-                  listBlinkedDates.remove(dateTime);
                   setState(() {});
+                  localBlinked.remove(dateTime);
+                  listBlinkedDates.remove(dateTime);
+                  widget.onDateTap.call(selectedDate);
                 }
               },
             );
@@ -256,11 +301,16 @@ class _DayItemState extends State<_DayItem> {
 
   @override
   void didUpdateWidget(covariant _DayItem oldWidget) {
-    if (month != widget.month ||
-        (listBlinkedDates.length != widget.listBlinkedDates.length)) {
+    if (month != widget.month ) {
+
+      month = widget.month;
+    }
+    if((listBlinkedDates.length != widget.listBlinkedDates.length)) {
       print(
           "listBlinkedDates.length != widget.listBlinkedDates.length ${listBlinkedDates.length} ${widget.listBlinkedDates.length}");
-      initialize();
+
+      _startBlinking(widget.listBlinkedDates);
+
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -276,25 +326,24 @@ class _DayItemState extends State<_DayItem> {
 
     month = widget.month;
     if (widget.day != null) {
-      _startBlinking();
+      _startBlinking(listBlinkedDates);
     }
   }
 
-  void _startBlinking() async {
+  void _startBlinking(List<DateTime> listBlinkedDates) async {
     if (widget.day == null) return;
 
     final dt = DateTime(widget.year, month, widget.day!);
+
     final condition = listBlinkedDates.contains(dt);
 
-    if (condition) {
+    if (condition && widget.selectedDate != dt) {
       timer(10000000000).listen((value) {
         final localCondition = listBlinkedDates.contains(dt);
 
-        if (localCondition == false || month != DateTime.now().month) {
-          backgroundColor= null;
-          setState(() {
-
-          });
+        if (localCondition == false || month != DateTime.now().month || widget.selectedDate == dt) {
+          backgroundColor = null;
+          setState(() {});
           return;
         }
 
@@ -302,6 +351,10 @@ class _DayItemState extends State<_DayItem> {
           backgroundColor = value % 2 == 0 ? Colors.purple : null;
         });
       });
+    }else {
+        backgroundColor = null;
+        setState(() {});
+        return;
     }
   }
 
@@ -321,12 +374,13 @@ class _DayItemState extends State<_DayItem> {
           if (widget.day != null) {
             widget.onDateTap.call(widget.selectedDate);
             backgroundColor = null;
-            listBlinkedDates
-                .remove(DateTime(widget.year, widget.month, widget.day!));
-
-            _startBlinking();
-            print(
-                "Remove date time ${DateTime(widget.year, widget.month, widget.day!)}");
+            final dt = DateTime(widget.year, widget.month, widget.day!);
+            listBlinkedDates.remove(dt);
+            print("list blinked ${listBlinkedDates.length}");
+            print("list blinked global ${widget.listBlinkedDates.length}");
+            _startBlinking(widget.listBlinkedDates);
+            // print(
+            //     "Remove date time ${dt}");
             setState(() {});
           }
         },
@@ -350,11 +404,9 @@ class _DayItemState extends State<_DayItem> {
                     widget.day.toString(),
                     style: TextStyle(
                       fontSize: 14,
-                      color: widget.isSelectedDate
+                      color: backgroundColor != null?Colors.white :   widget.isSelectedDate
                           ? Colors.white
-                          : backgroundColor == Colors.purple
-                              ? Colors.white
-                              : widget.isWeekend
+                          :   widget.isWeekend
                                   ? Colors.red
                                   : Colors.white,
                     ),
