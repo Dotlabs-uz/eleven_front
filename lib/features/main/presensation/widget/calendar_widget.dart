@@ -28,24 +28,22 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     "saSmall",
     "suSmall",
   ];
-  final int realCurrentMoth = DateTime.now().month;
+  final int realCurrentMonth = DateTime.now().month;
   int selectedMonth = DateTime.now().month;
   DateTime selectedDate = DateTime.now();
   final List<DateTime> listBlinkedDates = [
-    DateTime(2023,11,10),
+    DateTime(2023, 11, 15),
+    DateTime(2023, 11, 10),
+    DateTime(2023, 11, 3),
   ];
-
-  // Добавьте таймер для управления миганием дат
-  Timer? blinkTimer;
 
   @override
   void dispose() {
-    blinkTimer?.cancel(); // Отменяем таймер при уничтожении виджета
     super.dispose();
   }
 
   @override
-  initState() {
+  void initState() {
     _initDaysOfMonth();
     super.initState();
   }
@@ -182,61 +180,157 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             final day = daysOfMonth[index];
             final isWeekend =
                 index % 7 == 5 || index % 7 == 6; // Суббота и воскресенье
+            final isCurrentMonth = selectedMonth == selectedMonth;
 
-            return _dayItem(day, isWeekend);
+            final now = DateTime.now();
+            final currentYear = now.year;
+
+            final isCurrentDate = isCurrentMonth && day == now.day;
+            final isSelectedDate =
+                selectedDate.day == day && selectedDate.month == selectedMonth;
+
+            return _DayItem(
+              day: day,
+              isWeekend: isWeekend,
+              selectedDate: selectedDate,
+              isCurrentDate: isCurrentDate,
+              isSelectedDate: isSelectedDate,
+              listBlinkedDates: listBlinkedDates,
+              onDateTap: (dateTime) {
+                if (day != null) {
+                  selectedDate = DateTime(currentYear, selectedMonth, day);
+
+                  debugPrint("Selected date $selectedDate");
+
+                  widget.onDateTap.call(selectedDate);
+                  setState(() {});
+                }
+              },
+              year: currentYear,
+              month: selectedMonth,
+            );
           },
         ),
       ],
     );
   }
+}
 
-  _dayItem(int? day, bool isWeekend) {
-    final now = DateTime.now();
-    final currentMonth = now.month;
-    final currentYear = now.year;
+class _DayItem extends StatefulWidget {
+  final int? day;
+  final int year;
+  final int month;
+  final bool isWeekend;
+  final bool isSelectedDate;
+  final bool isCurrentDate;
+  final DateTime selectedDate;
+  final List<DateTime> listBlinkedDates;
+  final Function(DateTime dateTime) onDateTap;
 
-    final isCurrentMonth = selectedMonth == currentMonth;
-    final isCurrentDate = isCurrentMonth && day == now.day;
-    final isSelectedDate =
-        selectedDate.day == day && selectedDate.month == selectedMonth;
+  const _DayItem({
+    required this.day,
+    required this.year,
+    required this.month,
+    required this.isWeekend,
+    required this.selectedDate,
+    required this.isCurrentDate,
+    required this.isSelectedDate,
+    required this.listBlinkedDates,
+    required this.onDateTap,
+  });
 
+  @override
+  State<_DayItem> createState() => _DayItemState();
+}
 
+class _DayItemState extends State<_DayItem> {
+  Color? backgroundColor;
+  static int month = -1;
+  static List<DateTime> listBlinkedDates = [];
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant _DayItem oldWidget) {
+    if (month != widget.month ||
+        listBlinkedDates.length != listBlinkedDates.length) {
+      month = widget.month;
+
+      listBlinkedDates = widget.listBlinkedDates;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void initState() {
+    month = widget.month;
+    if (widget.day != null) {
+      _startBlinking();
+    }
+    super.initState();
+  }
+
+  void _startBlinking() async {
+    if (widget.day == null) return;
+
+    if (widget.listBlinkedDates
+        .contains(DateTime(widget.year, widget.month, widget.day!))) {
+      timer(20).listen((value) {
+        setState(() {
+          backgroundColor = value % 2 == 0 ? Colors.purple : Colors.transparent;
+        });
+      });
+    }
+
+    widget.listBlinkedDates.remove(widget.selectedDate);
+    setState(() {});
+  }
+
+  Stream<int> timer(int duration) async* {
+    for (var i = 0; i < duration; i++) {
+      await Future.delayed(const Duration(seconds: 1));
+      yield i;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-          if (day != null) {
-            selectedDate = DateTime(currentYear, selectedMonth, day);
-
-            debugPrint("Selected date $selectedDate");
-
-            widget.onDateTap.call(selectedDate);
-            setState(() {});
+          if (widget.day != null) {
+            widget.onDateTap.call(widget.selectedDate);
           }
         },
         borderRadius: BorderRadius.circular(6),
-        child: Ink(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
           decoration: BoxDecoration(
-            color: day == null
-                ? null
-                : isSelectedDate
-                    ? Colors.pink.shade400
-                    : isCurrentDate
-                        ? Colors.blue.shade200
-                        : null,
+            color: backgroundColor ??
+                (widget.day == null
+                    ? null
+                    : widget.isSelectedDate
+                        ? Colors.pink.shade400
+                        : widget.isCurrentDate
+                            ? Colors.blue.shade200
+                            : null),
             borderRadius: BorderRadius.circular(6),
           ),
-          child: day != null
+          child: widget.day != null
               ? Center(
                   child: Text(
-                    day.toString(),
+                    widget.day.toString(),
                     style: TextStyle(
                       fontSize: 14,
-                      color: isSelectedDate
+                      color: backgroundColor == Colors.purple
                           ? Colors.white
-                          : isWeekend
+                          : widget.isWeekend
                               ? Colors.red
-                              : isCurrentDate
+                              : backgroundColor == Colors.blue.shade200
                                   ? Colors.white
                                   : Colors.white,
                     ),
