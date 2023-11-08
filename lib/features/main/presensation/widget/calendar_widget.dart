@@ -181,11 +181,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             final day = daysOfMonth[index];
             final isWeekend =
                 index % 7 == 5 || index % 7 == 6; // Суббота и воскресенье
-            final isCurrentMonth = selectedMonth == selectedMonth;
-
             final now = DateTime.now();
+            final isCurrentMonth = selectedMonth == now.month;
             final currentYear = now.year;
-
             final isCurrentDate = isCurrentMonth && day == now.day;
             final isSelectedDate =
                 selectedDate.day == day && selectedDate.month == selectedMonth;
@@ -197,6 +195,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               isCurrentDate: isCurrentDate,
               isSelectedDate: isSelectedDate,
               listBlinkedDates: listBlinkedDates,
+              month: selectedMonth,              year: currentYear,
+
+
               onDateTap: (dateTime) {
                 if (day != null) {
                   selectedDate = DateTime(currentYear, selectedMonth, day);
@@ -208,8 +209,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   setState(() {});
                 }
               },
-              year: currentYear,
-              month: selectedMonth,
             );
           },
         ),
@@ -284,14 +283,20 @@ class _DayItemState extends State<_DayItem> {
   void _startBlinking() async {
     if (widget.day == null) return;
 
-    final dt = DateTime(widget.year, widget.month, widget.day!);
+    final dt = DateTime(widget.year, month, widget.day!);
     final condition = listBlinkedDates.contains(dt);
 
     if (condition) {
-      timer(20).listen((value) {
+      timer(10000000000).listen((value) {
         final localCondition = listBlinkedDates.contains(dt);
 
-        if (localCondition == false) return;
+        if (localCondition == false || month != DateTime.now().month) {
+          backgroundColor= null;
+          setState(() {
+
+          });
+          return;
+        }
 
         setState(() {
           backgroundColor = value % 2 == 0 ? Colors.purple : null;
