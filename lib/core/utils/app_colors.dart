@@ -27,5 +27,13 @@ class AppColors {
   static const Color disabledTextColor = Color.fromARGB(255, 98, 98, 98);
 
 
+  static const Color calendarButtonsColor = Colors.white;
+  static const Color calendarMonthColor = Colors.white;
+  static const Color calendarSelectedDateColor = Colors.orange;
+  static const Color calendarCurrentDayColor = Colors.white;
+  static const Color calendarWeekdayTitleColor = Colors.white;
+
+
+
 
 }

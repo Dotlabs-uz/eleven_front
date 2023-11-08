@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/core/entities/field_entity.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class OrderCardWidget extends StatefulWidget {
     Key? key,
     required this.order,
     required this.isDragging,
-      this.onOrderDelete,
+    this.onOrderDelete,
     required this.onOrderSize,
     this.onTopOrderEnd,
     this.onBottomOrderEnd,
@@ -44,15 +45,16 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
   double topPosition = 0;
   double bottomPosition = 0;
 
+  bool isDelete = true;
 
   // @override
   // void initState() {
 
-    // print("Card h ${TimeTableHelper.getCardHeight(
-    //   widget.order.orderStart,
-    //   widget.order.orderEnd,
-    // )}");
-    // super.initState();
+  // print("Card h ${TimeTableHelper.getCardHeight(
+  //   widget.order.orderStart,
+  //   widget.order.orderEnd,
+  // )}");
+  // super.initState();
   // }
   void onDragTopUpdate(DragUpdateDetails details) {
     final minutesToChange =
@@ -142,7 +144,8 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                                     size: 14,
                                   ),
                                 ),
-                                onTap: () => widget.onOrderDelete?.call(widget.order.id),
+                                onTap: () =>
+                                    widget.onOrderDelete?.call(widget.order.id),
                               ),
                             ],
                           ),

@@ -149,6 +149,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                           Expanded(
                             child: SingleChildScrollView(
                               padding: EdgeInsets.zero,
+                              clipBehavior: Clip.antiAlias,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,5 +1,7 @@
 import '../../features/management/domain/entity/employee_schedule_entity.dart';
 
+enum Weekday { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
+
 class StringHelper {
   static String monthName({required int month}) {
     final Map<int, String> map = {
@@ -39,7 +41,20 @@ class StringHelper {
     return daysInMonth[month] ?? 31;
   }
 
- static String getDayOfWeekType(DateTime dateTime) {
+  static Weekday getWeekDayByDate(int day, int month, int year) {
+    if (month < 3) {
+      month += 12;
+      year--;
+    }
+    int k = year % 100;
+    int j = year ~/ 100;
+    int dayOfWeek =
+        (day + (13 * (month + 1) ~/ 5) + k + (k ~/ 4) + (j ~/ 4) - 2 * j) % 7;
+
+    return Weekday.values[dayOfWeek];
+  }
+
+  static String getDayOfWeekType(DateTime dateTime) {
     final date = dateTime;
     final dayOfWeek = date.weekday;
 
@@ -64,21 +79,16 @@ class StringHelper {
   }
 
   static String getTitleForScheduleByStatus(int status) {
-
-    if(status ==  EmployeeScheduleStatus.work.index) {
+    if (status == EmployeeScheduleStatus.work.index) {
       return "Р";
-
-    }else if(status ==  EmployeeScheduleStatus.sick.index) {
+    } else if (status == EmployeeScheduleStatus.sick.index) {
       return "Б";
-    }else if(status ==  EmployeeScheduleStatus.vacation.index ) {
+    } else if (status == EmployeeScheduleStatus.vacation.index) {
       return "O";
     }
 
     return "Error";
-
   }
-
-
 
   static String getCardNumberForCard(String cardNumber) {
     return cardNumber.substring(cardNumber.length - 4);

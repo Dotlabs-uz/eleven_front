@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../features/auth/presentation/cubit/login_cubit.dart';
 import '../../features/main/domain/entity/order_entity.dart';
 import '../../features/main/presensation/cubit/order_filter_cubit.dart';
+import '../../features/main/presensation/widget/calendar_widget.dart';
 import '../utils/app_colors.dart';
 import '../utils/assets.dart';
 import '../utils/dialogs.dart';
@@ -168,7 +169,18 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
               }),
               //
               const SizedBox(height: 40),
-              const _CalendarWidget(),
+              CalendarWidget(
+                onRefreshTap: () {
+                  BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                    query: "",
+                  );
+                },
+                onDateTap: (DateTime dateTime) {
+                  BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                    query: dateTime.toIso8601String(),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -182,107 +194,6 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
     } else {
       return const AssetImage(Assets.tAvatarPlaceHolder);
     }
-  }
-}
-
-class _CalendarWidget extends StatefulWidget {
-  const _CalendarWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<_CalendarWidget> createState() => _CalendarWidgetState();
-}
-
-class _CalendarWidgetState extends State<_CalendarWidget> {
-  final List<OrderEntity> orders = [];
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CleanCalendar(
-      enableDenseViewForDates: true,
-      enableDenseSplashForDates: true,
-      dateSelectionMode: DatePickerSelectionMode.singleOrMultiple,
-      startWeekday: WeekDay.monday,
-      onRefreshTap: () {},
-      headerProperties: HeaderProperties(
-        monthYearDecoration: MonthYearDecoration(
-          monthYearTextColor: Colors.white,
-          monthYearTextStyle: const TextStyle(
-            color: Colors.white,
-            fontFamily: "Nunito",
-            fontSize: 16,
-          ),
-        ),
-        navigatorDecoration: NavigatorDecoration(
-          navigateLeftButtonIcon: const Icon(
-            Icons.chevron_left_rounded,
-            color: Colors.white,
-          ),
-          navigateRightButtonIcon: const Icon(
-            Icons.chevron_right_rounded,
-            color: Colors.white,
-          ),
-          navigatorResetButtonIcon: const Icon(
-            Icons.date_range_rounded,
-            color: Colors.white,
-          ),
-        ),
-      ),
-
-      selectedDatesProperties: DatesProperties(
-        datesDecoration: DatesDecoration(
-          datesBackgroundColor: Colors.amber,
-          datesBorderRadius: 6,
-          datesBorderColor: Colors.transparent,
-          datesTextStyle: const TextStyle(
-            fontFamily: "Nunito",
-            color: Colors.white,
-          ),
-        ),
-      ),
-      leadingTrailingDatesProperties: DatesProperties(
-          datesDecoration: DatesDecoration(
-        datesBorderRadius: 6,
-        datesBorderColor: Colors.black26,
-        datesBackgroundColor: Colors.black26,
-        datesTextColor: Colors.black26,
-      )),
-      // selectedDatesProperties: ,
-      generalDatesProperties: DatesProperties(
-        datesDecoration: DatesDecoration(
-          // datesBackgroundColor: const Color(0xff1A1A1A),
-          datesBorderColor: Colors.transparent,
-          datesBackgroundColor: Colors.transparent,
-          datesTextColor: Colors.white,
-          // datesTextStyle: const TextStyle(
-          //   fontFamily: "Nunito",
-          //   color: Colors.white,
-          // )
-        ),
-      ),
-
-      weekdaysProperties: WeekdaysProperties(
-        generalWeekdaysDecoration: WeekdaysDecoration(
-            weekdayTextColor: Colors.white,
-            weekdayTextStyle: GoogleFonts.nunito(
-              color: Colors.white,
-            )),
-      ),
-      selectedDates: [DateTime.now()],
-      onCalendarViewDate: (DateTime calendarViewDate) {
-        // debugPrint(calendarViewDate);
-      },
-      onSelectedDates: (List<DateTime> value) {
-        print("FIlter ${value} ${value.first.toIso8601String()}");
-        BlocProvider.of<OrderFilterCubit>(context)
-            .setFilter(query: value.first.toIso8601String());
-      },
-    );
   }
 }
 
@@ -322,7 +233,6 @@ class FloatingMenuItemWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-
                     _icon(entity.index == currentIndex),
                     const SizedBox(width: 10),
                     FittedBox(
