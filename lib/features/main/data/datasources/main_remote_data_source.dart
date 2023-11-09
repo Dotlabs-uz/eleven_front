@@ -90,7 +90,8 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<bool> savePhoto(List<int> file, String userId, String role) async {
-    await _client.postPhoto(fileBytes: file, userId: userId, role: role);
+    print("User id $userId  role $role ")
+;    await _client.postPhoto(fileBytes: file, userId: userId, role: role);
 
     return true;
   }

@@ -78,6 +78,13 @@ class BarberEntity extends Equatable {
       isRequired: true,
       isForm: true,
       val: "",
+    ),"avatar": FieldEntity<String>(
+      label: "avatar",
+      hintText: "avatar",
+      type: Types.string,
+      isRequired: false,
+      isForm: false,
+      val: "",
     ),
     "phone": FieldEntity<int>(
       label: "phoneNumber",
@@ -120,6 +127,7 @@ class BarberEntity extends Equatable {
         "filial": filial,
         "password": password,
         "isCurrentFilial": isCurrentFilial,
+        "avatar": avatar,
         "login": login,
       }[key];
 
@@ -130,11 +138,11 @@ class BarberEntity extends Equatable {
       lastName: row.cells["lastName"]?.value,
       phone: row.cells["phone"]?.value,
       filial: row.cells["filial"]?.value,
+      avatar: row.cells["avatar"]?.value,
       isCurrentFilial: row.cells["isCurrentFilial"]?.value,
       // password: row.cells["password"]?.value,
       password: "",
       login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: [],
-      avatar: '',
     );
   }
 
@@ -145,6 +153,7 @@ class BarberEntity extends Equatable {
       'firstName': PlutoCell(value: e.firstName),
       'lastName': PlutoCell(value: e.lastName),
       'phone': PlutoCell(value: e.phone),
+      'avatar': PlutoCell(value: e.avatar),
       'filial': PlutoCell(value: e.filial),
       'password': PlutoCell(value: e.password),
       'isCurrentFilial': PlutoCell(value: e.isCurrentFilial),
@@ -229,10 +238,10 @@ class BarberEntity extends Equatable {
       filial: fields["filial"]?.val,
       login: fields["login"]?.val,
       password: fields["password"]?.val,
+      avatar: fields["avatar"]?.val,
       isCurrentFilial: fields["isCurrentFilial"]?.val,
       inTimeTable: false,
       notWorkingHours: [],
-      avatar: '',
     );
   }
 

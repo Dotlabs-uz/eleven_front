@@ -59,7 +59,6 @@ class BarberModel extends BarberEntity {
   }
 
   factory BarberModel.fromJson(Map<String, dynamic> json) {
-
     print("current filial ${json['isCurrentFilial']}");
     return BarberModel(
       id: json['_id'],
@@ -71,11 +70,13 @@ class BarberModel extends BarberEntity {
       inTimeTable: json['inTimeTable'] ?? false,
       password: "",
       notWorkingHours: json['notWorkingHours'] != null &&
-          List.from(json['notWorkingHours']).isNotEmpty
+              List.from(json['notWorkingHours']).isNotEmpty
           ? List.from(json['notWorkingHours'])
-          .map((e) => NotWorkingHoursModel.fromJson(e, json["_id"]))
-          .toList()
-          : [], avatar: json['avatar'] ?? "", isCurrentFilial: json['isCurrentFilial'] ?? false,
+              .map((e) => NotWorkingHoursModel.fromJson(e, json["_id"]))
+              .toList()
+          : [],
+      avatar: json['avatar'] ?? "",
+      isCurrentFilial: json['isCurrentFilial'] ?? false,
     );
   }
 
@@ -89,7 +90,9 @@ class BarberModel extends BarberEntity {
       password: entity.password,
       login: entity.login,
       inTimeTable: entity.inTimeTable,
-      notWorkingHours: [], avatar: entity.avatar, isCurrentFilial: entity.isCurrentFilial,
+      notWorkingHours: entity.notWorkingHours,
+      avatar: entity.avatar,
+      isCurrentFilial: entity.isCurrentFilial,
     );
   }
 

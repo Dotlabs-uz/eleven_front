@@ -1,10 +1,12 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/avatar/avatar_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../../../core/components/data_barber_form.dart';
 import '../../../../core/components/data_form.dart';
 import '../../../../core/components/data_table_with_form_widget.dart';
 import '../../../../core/components/error_flash_bar.dart';
@@ -19,6 +21,7 @@ import '../../../main/domain/entity/top_menu_entity.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
+
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
@@ -109,9 +112,14 @@ class _ContentWidgetState extends State<ContentWidget> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DataPage(
-            saveData: _saveData,
-          ),
+          builder: (context) =>
+              DataBarberForm(
+                saveData: _saveData,
+                closeForm: () {
+                  Navigator.pop(context);
+                },
+                fields: activeData.getFields(),
+              ),
         ),
       );
     } else {
@@ -170,9 +178,7 @@ class _ContentWidgetState extends State<ContentWidget> {
     );
   }
 
-  fetch(
-    int page,
-  ) async {
+  fetch(int page,) async {
     BlocProvider.of<BarberCubit>(context).load("", page: page);
   }
 
@@ -184,167 +190,176 @@ class _ContentWidgetState extends State<ContentWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            child: isSearch
-                ? SearchField(
-                    onSearch: (value) {
-                      BlocProvider.of<BarberCubit>(context).load(
-                        value,
-                      );
-                    },
-                  )
-                : const SizedBox(),
-          ),
-          BlocConsumer<BarberCubit, BarberState>(
-            listener: (context, state) {
-              if (state is BarberLoaded) {
-                barbers = state.data.results;
-                dataCount = state.data.count;
-              }
-
-              {
-                if (state is BarberSaved) {
-                  SuccessFlushBar("change_success".tr()).show(context);
-                } else if (state is BarberDeleted) {
-                  SuccessFlushBar("data_deleted".tr()).show(context);
-                } else if (state is BarberError) {
-                  ErrorFlushBar("change_error".tr(args: [state.message]))
-                      .show(context);
+      child:  BlocListener<AvatarCubit, AvatarState>(
+        listener: (context, state) {
+          if (state is AvatarSaved) {
+            SuccessFlushBar("change_success".tr()).show(context);
+          }
+        },
+        child: Column(
+          children: [
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: isSearch
+                  ? SearchField(
+                onSearch: (value) {
+                  BlocProvider.of<BarberCubit>(context).load(
+                    value,
+                  );
+                },
+              )
+                  : const SizedBox(),
+            ),
+            BlocConsumer<BarberCubit, BarberState>(
+              listener: (context, state) {
+                if (state is BarberLoaded) {
+                  barbers = state.data.results;
+                  dataCount = state.data.count;
                 }
-              }
-            },
-            builder: (context, state) {
-              if (state is BarberLoading) {
-                return const Expanded(child: LoadingCircle());
-              } else {
-                if (state is BarberSaved) {
-                  activeData = state.entity;
-                  isFormVisible = false;
 
-                  // BlocProvider.of<DataFormCubit>(context)
-                  //     .editData(activeData.getFields());
-                  var ind = barbers
-                      .indexWhere((element) => element.id == activeData.id);
-                  if (ind >= 0) {
-                    barbers[ind] = activeData;
-                  } else {
-                    barbers.insert(0, activeData);
+                {
+                  if (state is BarberSaved) {
+                    SuccessFlushBar("change_success".tr()).show(context);
+                  } else if (state is BarberDeleted) {
+                    SuccessFlushBar("data_deleted".tr()).show(context);
+                  } else if (state is BarberError) {
+                    ErrorFlushBar("change_error".tr(args: [state.message]))
+                        .show(context);
                   }
-                  initCubit();
-                } else if (state is BarberDeleted) {
-                  var id = state.id;
-                  isFormVisible = false;
-
-                  var ind = barbers.indexWhere((element) => element.id == id);
-                  if (ind >= 0) {
-                    barbers.removeWhere((element) => element.id == id);
-                  }
-                  initCubit();
                 }
-                return Expanded(
-                  child: DataTableWithForm(
-                    data: barbers,
-                    isEmpty: barbers.isEmpty,
-                    onDelete: (id) {
-                      final elementToDelete = barbers.firstWhereOrNull(
-                        (element) => element.id == id,
-                      );
+              },
+              builder: (context, state) {
+                if (state is BarberLoading) {
+                  return const Expanded(child: LoadingCircle());
+                } else {
+                  if (state is BarberSaved) {
+                    activeData = state.entity;
+                    isFormVisible = false;
 
-                      if (elementToDelete != null) {
-                        debugPrint(
-                            "Element to delete is not null ${elementToDelete.id}");
-                        _deleteData(elementToDelete);
-                      }
-                    },
-                    pageCount: pageCount,
-                    isFormVisible: isFormVisible,
-                    screenKey: HiveBoxKeysConstants.customerColumnSizes,
-                    onTap: (data) {
-                      if (data != null) {
-                        selectedRow = data!;
-                        final entity = BarberEntity.fromRow(selectedRow);
-                        activeData = entity;
-                        _editData(entity);
-                      }
-                    },
-                    form: DataFormWidget(
-                      key: _formKey,
-                      closeForm: () {
-                        setState(() {
-                          isFormVisible = false;
-                        });
+                    // BlocProvider.of<DataFormCubit>(context)
+                    //     .editData(activeData.getFields());
+                    var ind = barbers
+                        .indexWhere((element) => element.id == activeData.id);
+                    if (ind >= 0) {
+                      barbers[ind] = activeData;
+                    } else {
+                      barbers.insert(0, activeData);
+                    }
+                    initCubit();
+                  } else if (state is BarberDeleted) {
+                    var id = state.id;
+                    isFormVisible = false;
+
+                    var ind = barbers.indexWhere((element) => element.id == id);
+                    if (ind >= 0) {
+                      barbers.removeWhere((element) => element.id == id);
+                    }
+                    initCubit();
+                  }
+                  return Expanded(
+                    child: DataTableWithForm(
+                      data: barbers,
+                      isEmpty: barbers.isEmpty,
+                      onDelete: (id) {
+                        final elementToDelete = barbers.firstWhereOrNull(
+                              (element) => element.id == id,
+                        );
+
+                        if (elementToDelete != null) {
+                          debugPrint(
+                              "Element to delete is not null ${elementToDelete
+                                  .id}");
+                          _deleteData(elementToDelete);
+                        }
                       },
-                      saveData: _saveData,
-                    ),
-                  ),
-                );
-              }
-            },
-          ),
-          BlocBuilder<BarberCubit, BarberState>(
-            builder: (context, state) {
-              if (state is BarberLoaded) {
-                pageCount = state.data.pageCount;
-              }
-              return Padding(
-                padding: pageCount != 1 && pageCount != 0
-                    ? const EdgeInsets.only(bottom: 5)
-                    : EdgeInsets.zero,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (pageCount != 1 && pageCount != 0)
-                      Expanded(
-                        child: PageSelectorWidget(
-                          pageCount: pageCount,
-                          onChanged: (value) {
-                            BlocProvider.of<BarberCubit>(context).load(
-                              "",
-                              page: value,
-                            );
-                          },
-                        ),
+                      pageCount: pageCount,
+                      isFormVisible: isFormVisible,
+                      screenKey: HiveBoxKeysConstants.customerColumnSizes,
+                      onTap: (data) {
+                        if (data != null) {
+                          selectedRow = data!;
+                          final entity = BarberEntity.fromRow(selectedRow);
+                          activeData = entity;
+                          _editData(entity);
+                        }
+                      },
+                      form: DataBarberForm(
+                        key: _formKey,
+                        closeForm: () {
+                          setState(() {
+                            isFormVisible = false;
+                          });
+                        },
+                        saveData: _saveData,
+                        fields: activeData.getFields(),
                       ),
-                    const SizedBox(width: 10),
-                    barbers.isEmpty
-                        ? const SizedBox()
-                        : Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: RichText(
-                                text: TextSpan(
-                                  style: GoogleFonts.nunito(
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.blue,
-                                    fontSize: 14,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: "${"DataCount".tr()}: ",
-                                    ),
-                                    TextSpan(
-                                      text: "$dataCount",
-                                      style: GoogleFonts.nunito(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                    ),
+                  );
+                }
+              },
+            ),
+            BlocBuilder<BarberCubit, BarberState>(
+              builder: (context, state) {
+                if (state is BarberLoaded) {
+                  pageCount = state.data.pageCount;
+                }
+                return Padding(
+                  padding: pageCount != 1 && pageCount != 0
+                      ? const EdgeInsets.only(bottom: 5)
+                      : EdgeInsets.zero,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (pageCount != 1 && pageCount != 0)
+                        Expanded(
+                          child: PageSelectorWidget(
+                            pageCount: pageCount,
+                            onChanged: (value) {
+                              BlocProvider.of<BarberCubit>(context).load(
+                                "",
+                                page: value,
+                              );
+                            },
+                          ),
+                        ),
+                      const SizedBox(width: 10),
+                      barbers.isEmpty
+                          ? const SizedBox()
+                          : Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: RichText(
+                            text: TextSpan(
+                              style: GoogleFonts.nunito(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.blue,
+                                fontSize: 14,
                               ),
+                              children: [
+                                TextSpan(
+                                  text: "${"DataCount".tr()}: ",
+                                ),
+                                TextSpan(
+                                  text: "$dataCount",
+                                  style: GoogleFonts.nunito(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                    const SizedBox(width: 10),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
