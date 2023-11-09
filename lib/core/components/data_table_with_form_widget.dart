@@ -295,7 +295,8 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
               }
 
               final data = rowColorContext.row;
-              if (data is BarberEntity) {
+
+              if (widget.data[0] is BarberEntity) {
                 return _colorForEmployee(data.cells['isCurrentFilial']?.value);
               }
 
@@ -307,11 +308,10 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
 
   _colorForEmployee(bool isCurrentFilial) {
     print("is current filial $isCurrentFilial");
-    if (!isCurrentFilial) {
+    if (isCurrentFilial == false) {
       return Colors.grey.shade200;
     }
-    return Colors.red;
-    return null;
+    return Colors.white;
   }
 
   _setColumnSize(List<PlutoColumn> columns) async {

@@ -59,6 +59,8 @@ class BarberModel extends BarberEntity {
   }
 
   factory BarberModel.fromJson(Map<String, dynamic> json) {
+
+    print("current filial ${json['isCurrentFilial']}");
     return BarberModel(
       id: json['_id'],
       firstName: json['firstName'],
@@ -94,6 +96,7 @@ class BarberModel extends BarberEntity {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     // data['_id'] = id;
+
     data['firstName'] = firstName;
     data['lastName'] = lastName;
     data['phone'] = phone;
