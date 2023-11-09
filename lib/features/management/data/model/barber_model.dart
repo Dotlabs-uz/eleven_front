@@ -20,6 +20,7 @@ class BarberModel extends BarberEntity {
     required super.login,
     required super.inTimeTable,
     required super.notWorkingHours,
+    required super.isCurrentFilial,
   });
 
   List<MobileFieldEntity> getFieldsAndValues() {
@@ -72,7 +73,7 @@ class BarberModel extends BarberEntity {
           ? List.from(json['notWorkingHours'])
           .map((e) => NotWorkingHoursModel.fromJson(e, json["_id"]))
           .toList()
-          : [], avatar: json['avatar'] ?? "",
+          : [], avatar: json['avatar'] ?? "", isCurrentFilial: json['isCurrentFilial'] ?? false,
     );
   }
 
@@ -86,7 +87,7 @@ class BarberModel extends BarberEntity {
       password: entity.password,
       login: entity.login,
       inTimeTable: entity.inTimeTable,
-      notWorkingHours: [], avatar: entity.avatar,
+      notWorkingHours: [], avatar: entity.avatar, isCurrentFilial: entity.isCurrentFilial,
     );
   }
 

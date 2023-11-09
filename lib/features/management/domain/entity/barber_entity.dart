@@ -11,7 +11,6 @@ import '../../../products/domain/entity/filial_entity.dart';
 import 'employee_schedule_entity.dart';
 import 'not_working_hours_entity.dart';
 
-
 @immutable
 class BarberEntity extends Equatable {
   final String id;
@@ -21,8 +20,9 @@ class BarberEntity extends Equatable {
   final String avatar;
   final String login;
   final int phone;
-   bool inTimeTable;
-   final List<NotWorkingHoursEntity> notWorkingHours;
+  bool inTimeTable;
+  final bool isCurrentFilial;
+  final List<NotWorkingHoursEntity> notWorkingHours;
   final FilialEntity filial;
 
   BarberEntity({
@@ -35,6 +35,7 @@ class BarberEntity extends Equatable {
     required this.phone,
     required this.notWorkingHours,
     required this.inTimeTable,
+    required this.isCurrentFilial,
     required this.filial,
   });
 
@@ -121,9 +122,11 @@ class BarberEntity extends Equatable {
       lastName: row.cells["lastName"]?.value,
       phone: row.cells["phone"]?.value,
       filial: row.cells["filial"]?.value,
+      isCurrentFilial: row.cells["isCurrentFilial"]?.value,
       // password: row.cells["password"]?.value,
       password: "",
-      login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: [], avatar: '',
+      login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: [],
+      avatar: '',
     );
   }
 
@@ -216,19 +219,27 @@ class BarberEntity extends Equatable {
       phone: fields["phone"]?.val,
       filial: fields["filial"]?.val,
       login: fields["login"]?.val,
-      password: fields["password"]?.val, inTimeTable: false, notWorkingHours: [], avatar: '',
+      password: fields["password"]?.val,
+      inTimeTable: false,
+      notWorkingHours: [],
+      avatar: '',
+      isCurrentFilial: false,
     );
   }
 
   factory BarberEntity.empty() {
-    return   BarberEntity(
+    return BarberEntity(
       id: "",
       firstName: "",
       lastName: "",
       phone: 99,
       filial: FilialEntity.empty(),
       password: "",
-      login: "", inTimeTable: false, notWorkingHours: [], avatar: '',
+      login: "",
+      inTimeTable: false,
+      notWorkingHours: [],
+      avatar: '',
+      isCurrentFilial: false,
     );
   }
 
