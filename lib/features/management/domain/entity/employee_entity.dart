@@ -16,6 +16,7 @@ class EmployeeEntity extends Equatable {
   final String lastName;
   final String login;
   final String password;
+  final String avatar;
   final String role;
   final int phoneNumber;
   final List<NotWorkingHoursEntity> notWorkingHours;
@@ -27,6 +28,7 @@ const  EmployeeEntity({
     required this.lastName,
     required this.password,
     required this.login,
+    required this.avatar,
     required this.role,
     required this.phoneNumber,
     required this.notWorkingHours,
@@ -63,6 +65,14 @@ const  EmployeeEntity({
       type: Types.string,
       isRequired: true,
       isForm: true,
+      val: "",
+    ),
+    "avatar": FieldEntity<String>(
+      label: "vatar",
+      hintText: "avatar",
+      type: Types.string,
+      isRequired: false,
+      isForm: false,
       val: "",
     ),
     "password": FieldEntity<String>(
@@ -107,6 +117,7 @@ const  EmployeeEntity({
         "password": password,
         "role": role,
         "phone": phoneNumber,
+        "avatar": avatar,
       }[key];
 
   factory EmployeeEntity.fromRow(PlutoRow row) {
@@ -118,6 +129,7 @@ const  EmployeeEntity({
       password: row.cells["password"]?.value,
       login: row.cells["login"]?.value,
       role: row.cells["role"]?.value,
+      avatar: row.cells["avatar"]?.value,
       schedule: [],
       notWorkingHours: [],
     );
@@ -133,6 +145,7 @@ const  EmployeeEntity({
       'password': PlutoCell(value: e.password),
       'phone': PlutoCell(value: e.phoneNumber),
       'role': PlutoCell(value: e.role),
+      'avatar': PlutoCell(value: e.avatar),
     });
   }
 
@@ -245,6 +258,7 @@ const  EmployeeEntity({
       password: fields["password"]?.val,
       login: fields["login"]?.val,
       role: fields["role"]?.val,
+      avatar: fields["avatar"]?.val,
       schedule: [],
       notWorkingHours: [],
     );
@@ -254,6 +268,7 @@ const  EmployeeEntity({
     return   const EmployeeEntity(
       id: "",
       firstName: "",
+      avatar: "",
       lastName: "",
       password: "",
       login: "",

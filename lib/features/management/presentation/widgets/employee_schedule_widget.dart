@@ -287,12 +287,14 @@ class _EmployeeScheduleTableWidgetState
         children: [
           const SizedBox(width: 10),
           Container(
-            decoration: const BoxDecoration(
+            decoration:   BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.grey,
+              color: Colors.grey,image: DecorationImage(image: NetworkImage(widget.employeeEntity.avatar), fit: BoxFit.cover)
             ),
+
             width: 30,
             height: 30,
+            clipBehavior: Clip.antiAlias,
           ),
           const SizedBox(width: 8),
           Column(

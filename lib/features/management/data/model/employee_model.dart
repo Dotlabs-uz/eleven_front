@@ -8,6 +8,7 @@ import 'not_working_hours_model.dart';
 class EmployeeModel extends EmployeeEntity {
   const EmployeeModel({
     required super.id,
+    required super.avatar,
     required super.firstName,
     required super.lastName,
     required super.role,
@@ -53,6 +54,7 @@ class EmployeeModel extends EmployeeEntity {
       id: json['_id'],
       firstName: json['firstName'],
       lastName: json['lastName'],
+      avatar: json['avatar'],
       phoneNumber: json['phone'],
       role: json['role'],
       login: "",
@@ -78,6 +80,7 @@ class EmployeeModel extends EmployeeEntity {
       id: entity.id,
       firstName: entity.firstName,
       lastName: entity.lastName,
+      avatar: entity.avatar,
       phoneNumber: entity.phoneNumber,
       role: entity.role,
       schedule: entity.schedule,
