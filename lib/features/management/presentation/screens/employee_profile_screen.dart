@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clean_calendar/clean_calendar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/button_widget.dart';
+import 'package:eleven_crm/core/components/loading_circle.dart';
+import 'package:eleven_crm/features/main/presensation/widget/calendar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,13 +17,15 @@ import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/field_masks.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../get_it/locator.dart';
+import '../../../main/presensation/widget/calendar_employee_widget.dart';
 import '../../domain/entity/employee_entity.dart';
 import '../cubit/employee/employee_cubit.dart';
 
 class EmployeeProfileScreen extends StatefulWidget {
   final String employeeId;
   final String employeeName;
-  const EmployeeProfileScreen({Key? key, required this.employeeId, required this.employeeName})
+  const EmployeeProfileScreen(
+      {Key? key, required this.employeeId, required this.employeeName})
       : super(key: key);
 
   @override
@@ -63,7 +67,8 @@ class ContentWidget extends StatefulWidget {
   const ContentWidget({
     Key? key,
     required this.employeeCubit,
-    required this.employeeId, required this.employeeName,
+    required this.employeeId,
+    required this.employeeName,
   }) : super(key: key);
 
   @override
@@ -91,7 +96,6 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   init() async {
-
     print(widget.employeeName.toString());
     BlocProvider.of<EmployeeCubit>(context).load("");
   }
@@ -210,10 +214,8 @@ class _ContentWidgetState extends State<ContentWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         _bodyWidget(),
-
-                        const SizedBox(width: 20),
-
-                        _calendarWidget(),
+                        // const SizedBox(width: 20),
+                        // _calendarWidget(),
                       ],
                     ),
                   ),
@@ -227,7 +229,7 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   _bodyWidget() {
-    return  Container(
+    return Container(
       constraints: BoxConstraints(
         maxWidth: Responsive.isDesktop(context)
             ? 400
@@ -262,7 +264,6 @@ class _ContentWidgetState extends State<ContentWidget> {
             enabled: false,
           ),
           const SizedBox(height: 15),
-
           const SizedBox(height: 25),
           ButtonWidget(
             text: "save".tr(),
@@ -271,95 +272,26 @@ class _ContentWidgetState extends State<ContentWidget> {
             },
           ),
           const SizedBox(height: 25),
-
         ],
       ),
     );
   }
+
   _calendarWidget() {
-    return    Container(
-      constraints: BoxConstraints(
-        maxWidth: Responsive.isDesktop(context)
-            ? 500
-            : MediaQuery.of(context).size.width,
-      ),
-      child: CleanCalendar(
-        enableDenseViewForDates: true,
-        enableDenseSplashForDates: true,
+    return BlocBuilder<EmployeeCubit, EmployeeState>(
+      builder: (context, state) {
+        if (state is EmployeeLoaded) {
+          final entity = state.data.first;
 
-        dateSelectionMode: DatePickerSelectionMode.disable,
-        startWeekday: WeekDay.monday,
+          return CalendarEmployeeWidget(
+            onRefreshTap: () {},
+            onDateTap: (dateTime) {},
+            listSchedule: entity.schedule,
+          );
+        }
 
-        headerProperties: HeaderProperties(
-          monthYearDecoration: MonthYearDecoration(
-            monthYearTextColor: Colors.black,
-            monthYearTextStyle: const TextStyle(
-              color: Colors.black,
-              fontFamily: "Nunito",
-              fontSize: 16,
-            ),
-          ),
-          navigatorDecoration: NavigatorDecoration(
-            navigateLeftButtonIcon: const Icon(
-              Icons.chevron_left_rounded,
-              color: Colors.black,
-            ),
-            navigateRightButtonIcon: const Icon(
-              Icons.chevron_right_rounded,
-              color: Colors.black,
-            ),
-            navigatorResetButtonIcon: const Icon(
-              Icons.date_range_rounded,
-              color: Colors.black,
-            ),
-          ),
-        ),
-
-        selectedDatesProperties: DatesProperties(
-          datesDecoration: DatesDecoration(
-            datesBackgroundColor: Colors.amber,
-            datesBorderRadius: 6,
-            datesBorderColor: Colors.transparent,
-            datesTextStyle: const TextStyle(
-              fontFamily: "Nunito",
-              color: Colors.black,
-            ),
-          ),
-        ),
-        leadingTrailingDatesProperties: DatesProperties(
-            datesDecoration: DatesDecoration(
-              datesBorderRadius: 6,
-              datesBorderColor: Colors.black26,
-              datesBackgroundColor: Colors.black26,
-              datesTextColor: Colors.black26,
-            )),
-        // selectedDatesProperties: ,
-        generalDatesProperties: DatesProperties(
-          datesDecoration: DatesDecoration(
-            // datesBackgroundColor: const Color(0xff1A1A1A),
-            datesBorderColor: Colors.transparent,
-            datesBackgroundColor: Colors.transparent,
-            datesTextColor: Colors.black,
-            // datesTextStyle: const TextStyle(
-            //   fontFamily: "Nunito",
-            //   color: Colors.white,
-            // )
-          ),
-        ),
-
-        weekdaysProperties: WeekdaysProperties(
-          generalWeekdaysDecoration: WeekdaysDecoration(
-              weekdayTextColor: Colors.black,
-              weekdayTextStyle: GoogleFonts.nunito(
-                color: Colors.black,
-              )),
-        ),
-        selectedDates: [DateTime.now()],
-        onCalendarViewDate: (DateTime calendarViewDate) {
-          // debugPrint(calendarViewDate);
-        },
-        onSelectedDates: (List<DateTime> value) {},
-      ),
+        return const LoadingCircle();
+      },
     );
   }
 }
