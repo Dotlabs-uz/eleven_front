@@ -51,9 +51,9 @@ class _NotSelectedBarbersListWidgetState
       margin: EdgeInsets.zero,
       child: Container(
         width: 120,
-        decoration: const BoxDecoration(
-          color: Color(0xffe0e0e0),
-          borderRadius: BorderRadius.only(
+        decoration:   BoxDecoration(
+          color: const Color(0xffe0e0e0).withOpacity(0.3),
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(12),
             bottomLeft: Radius.circular(12),
           ),
