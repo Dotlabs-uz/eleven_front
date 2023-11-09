@@ -98,22 +98,22 @@ class ApiClient {
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(
-        "${ApiConstants.baseApiUrl}${role == "managers" ? ApiConstants.managers : ApiConstants.barbers}",
+        "${ApiConstants.baseApiUrl}${ApiConstants.uploads}",
       ),
     );
 
-    // final avatar = http.MultipartFile.fromBytes(
-    //   'avatar',
-    //   fileBytes,
-    //   filename: 'avatar.png',
-    // );
-    //// Добавляем файл в запрос
-    // request.files.add(
-    //   avatar,
-    // );
+    final avatar = http.MultipartFile.fromBytes(
+      'avatar',
+      fileBytes,
+      filename: 'avatar.png',
+    );
+    // Добавляем файл в запрос
+    request.files.add(
+      avatar,
+    );
 
     // Добавляем параметры в тело запроса
-    request.fields['avatar'] = fileBytes.toString();
+    // request.fields['avatar'] = avatar;
     request.fields['userId'] = userId;
     request.fields['path'] = role;
 
@@ -121,6 +121,8 @@ class ApiClient {
 
     try {
       final response = await request.send();
+
+      debugPrint("message ${response.request}");
       debugPrint("Status ${response.statusCode}");
 
       if (response.statusCode == 200) {

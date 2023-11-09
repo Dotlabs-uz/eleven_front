@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/button_widget.dart';
+import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/avatar/avatar_cubit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +69,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
   File? _file;
   Uint8List webImage = Uint8List(8);
 
-   static  String userId = "";
+  static String userId = "";
   @override
   void initState() {
     initialize();
@@ -99,8 +101,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
-          child: BlocListener<CurrentUserCubit, CurrentUserState>(
-            listener: (context, state) {
+          child: BlocBuilder<CurrentUserCubit, CurrentUserState>(
+            builder: (context, state) {
               if (state is CurrentUserLoaded) {
                 final entity = state.entity;
                 controllerFirstName.text = entity.firstName;
@@ -112,186 +114,183 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
                 print("User id $userId");
 
-              }
-            },
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (!isUzbekLanguage) {
-                            isUzbekLanguage = true;
-                            context.setLocale(const Locale('uz', 'UZ'));
-                          } else {
-                            isUzbekLanguage = false;
+                return Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (!isUzbekLanguage) {
+                                isUzbekLanguage = true;
+                                context.setLocale(const Locale('uz', 'UZ'));
+                              } else {
+                                isUzbekLanguage = false;
 
-                            context.setLocale(const Locale('ru', 'RU'));
-                          }
-                        });
-                      },
-                      child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: CircleAvatar(
-                          backgroundColor: AppColors.background,
-                          child: Center(
-                            child: Text(
-                              context.locale.languageCode,
-                              style: GoogleFonts.nunito(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                context.setLocale(const Locale('ru', 'RU'));
+                              }
+                            });
+                          },
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: CircleAvatar(
+                              backgroundColor: AppColors.background,
+                              child: Center(
+                                child: Text(
+                                  context.locale.languageCode,
+                                  style: GoogleFonts.nunito(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                        const SizedBox(width: 30),
+                      ],
                     ),
-                    const SizedBox(width: 30),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (_file != null)
-                      IconButton(
-                        onPressed: () async {
-                          setState(() {
-                            _file = null;
-                           webImage =  Uint8List(8);
-                          });
-                        },
-                        icon: Icon(
-                          Icons.delete_forever_rounded,
-                          size: 30,
-                          color: _file == null ? Colors.grey : Colors.blue,
-                        ),
-                      ),
-                    if (_file != null) const SizedBox(width: 20),
-                    Center(
-                      child: Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(60),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                            )
-                          ],
-                          color: Colors.white,
-                        ),
-                        child: Center(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(60),
-                            child: _file == null
-                                ? CachedNetworkImage(
-                                    imageUrl: Assets
-                                        .tAvatarPlaceHolder, // entity.avatar ?? Assets.tAvatarPlaceHolder,
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(
-                                      Icons.error,
-                                      size: 30,
-                                      color: Colors.red,
-                                    ),
-                                  )
-                                : Image.memory(webImage, fit: BoxFit.cover,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (_file != null)
+                          IconButton(
+                            onPressed: () async {
+                              setState(() {
+                                _file = null;
+                                webImage = Uint8List(8);
+                              });
+                            },
+                            icon: Icon(
+                              Icons.delete_forever_rounded,
+                              size: 30,
+                              color: _file == null ? Colors.grey : Colors.blue,
+                            ),
+                          ),
+                        if (_file != null) const SizedBox(width: 20),
+                        Center(
+                          child: Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(60),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                )
+                              ],
+                              color: Colors.white,
+                            ),
+                            child: Center(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(60),
+                                child: _file == null
+                                    ? CachedNetworkImage(
+                                        imageUrl: entity.avatar ??
+                                            Assets.tAvatarPlaceHolder,
+                                        placeholder: (context, url) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(
+                                          Icons.error,
+                                          size: 30,
+                                          color: Colors.red,
+                                        ),
+                                      )
+                                    : Image.memory(
+                                        webImage,
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(width: 20),
+                        IconButton(
+                          onPressed: _file != null
+                              ? () {
+                                  List<int> list = webImage.cast();
+
+                                  BlocProvider.of<AvatarCubit>(context)
+                                      .setAvatar(
+                                          filePath: list,
+                                          userId: userId,
+                                          role: 'managers');
+                                }
+                              : () async {
+                                  _pickImage();
+                                },
+                          icon: Icon(
+                            _file != null ? Icons.check_rounded : Icons.edit,
+                            size: 30,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 20),
-                    IconButton(
-                      onPressed: _file != null ?   () {
-                        List<int> list = webImage.cast();
-
-                        BlocProvider.of<AvatarCubit>(context).setAvatar(
-                            filePath: list, userId: userId, role: 'manager');
-                      }:  () async {
-                        _pickImage();
-
-
-                      },
-                      icon: Icon(
-                        _file != null ? Icons.check_rounded : Icons.edit,
-                        size: 30,
+                    const SizedBox(height: 20),
+                    Container(
+                      constraints: BoxConstraints(
+                        maxWidth: Responsive.isDesktop(context)
+                            ? 600
+                            : MediaQuery.of(context).size.width,
+                      ),
+                      child: Column(
+                        children: [
+                          TextFormFieldWidget(
+                            label: "firstName".tr(),
+                            controller: controllerFirstName,
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormFieldWidget(
+                            label: "lastName".tr(),
+                            controller: controllerLastName,
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormFieldWidget(
+                            label: "shopName".tr(),
+                            controller: controllerFilial,
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormFieldWidget(
+                            label: "phone".tr(),
+                            controller: controllerPhoneNumber,
+                            textInputFormatter: FieldMasks.phoneMaskFormatter,
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormFieldWidget(
+                            label: "username".tr(),
+                            controller: controllerUsername,
+                            enabled: false,
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormFieldWidget(
+                            label: "password".tr(),
+                            controller: controllerPassword,
+                            enabled: true,
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormFieldWidget(
+                            label: "role".tr(),
+                            controller: controllerRole,
+                            enabled: false,
+                          ),
+                          const SizedBox(height: 25),
+                          ButtonWidget(
+                            text: "save".tr(),
+                            onPressed: () {},
+                          ),
+                        ],
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 20),
-
-                Container(
-                  constraints: BoxConstraints(
-                    maxWidth: Responsive.isDesktop(context)
-                        ? 600
-                        : MediaQuery.of(context).size.width,
-                  ),
-                  child: Column(
-                    children: [
-                      TextFormFieldWidget(
-                        label: "firstName".tr(),
-                        controller: controllerFirstName,
-                      ),
-                      const SizedBox(height: 15),
-                      TextFormFieldWidget(
-                        label: "lastName".tr(),
-                        controller: controllerLastName,
-                      ),
-                      const SizedBox(height: 15),
-                      TextFormFieldWidget(
-                        label: "shopName".tr(),
-                        controller: controllerFilial,
-                      ),
-                      const SizedBox(height: 15),
-                      TextFormFieldWidget(
-                        label: "phone".tr(),
-                        controller: controllerPhoneNumber,
-                        textInputFormatter: FieldMasks.phoneMaskFormatter,
-                      ),
-                      const SizedBox(height: 15),
-                      TextFormFieldWidget(
-                        label: "username".tr(),
-                        controller: controllerUsername,
-                        enabled: false,
-                      ),
-                      const SizedBox(height: 15),
-                      TextFormFieldWidget(
-                        label: "password".tr(),
-                        controller: controllerPassword,
-                        enabled: true,
-                      ),
-                      const SizedBox(height: 15),
-                      TextFormFieldWidget(
-                        label: "role".tr(),
-                        controller: controllerRole,
-                        enabled: false,
-                      ),
-                      const SizedBox(height: 15),
-                    ],
-                  ),
-                ),
-
-                //
-                // TextFormFieldWidget(
-                //   label: "IsStaff".tr(),
-                //   controller: controllerIsStaff,
-                //   boxConstraints: BoxConstraints(
-                //     maxWidth: Responsive.isDesktop(context)
-                //         ? 600
-                //         : MediaQuery.of(context).size.width,
-                //   ),
-                //   enabled: false,
-                // ),
-                const SizedBox(height: 20),
-              ],
-            ),
+                );
+              }
+              return const LoadingCircle();
+            },
           ),
         ),
       ),
