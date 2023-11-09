@@ -13,7 +13,7 @@ import '../model/order_model.dart';
 abstract class MainRemoteDataSource {
   Future<CurrentUserModel> getCurrentUser();
   Future<bool> saveOrder(OrderModel model);
-  Future<bool> savePhoto(String file, String userId);
+  Future<bool> savePhoto(List<int> file, String userId, String role);
   Future<bool> deleteOrder(String orderId);
   Future<bool> saveNotWorkingHours(
       DateTime from, DateTime to, String employeeId);
@@ -81,8 +81,8 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   }
 
   @override
-  Future<bool> savePhoto(String file, String userId)async  {
-    await _client.postPhoto(filename: file, userId: userId);
+  Future<bool> savePhoto(List<int> file, String userId, String role)async  {
+    await _client.postPhoto(fileBytes: file, userId: userId, role:role);
 
     return true;
   }

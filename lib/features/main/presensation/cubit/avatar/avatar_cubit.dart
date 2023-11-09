@@ -9,16 +9,18 @@ class AvatarCubit extends Cubit<AvatarState> {
   AvatarCubit(this.saveAvatar) : super(AvatarInitial());
 
   Future<void> setAvatar({
-    required String fileName,
+    required List<int> filePath,
     required String  userId,
+    required String  role,
   }) async {
     try {
       emit(AvatarLoading());
 
       final data = await saveAvatar.call(
         SaveAvatarParams(
-          fileName,
+          filePath,
           userId,
+          role,
         ),
       );
 

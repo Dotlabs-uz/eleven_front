@@ -14,14 +14,15 @@ class SaveAvatar extends UseCase<bool, SaveAvatarParams> {
 
   @override
   Future<Either<AppError, bool>> call(SaveAvatarParams params) async {
-    return await repository.savePhoto(params.file, params.userId);
+    return await repository.savePhoto(params.file, params.userId, params.role);
   }
 }
 
 
 class SaveAvatarParams {
-  final String file;
+  final List<int> file;
   final String userId;
+  final String role;
 
-  SaveAvatarParams(this.file, this.userId);
+  SaveAvatarParams(this.file, this.userId, this.role);
 }

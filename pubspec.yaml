@@ -58,7 +58,6 @@ dependencies:
     git:
       url: https://github.com/Samir-Sattarov/clean_calendar.git
   image_picker: ^1.0.4
-  image_cropper: ^4.0.1
   cached_network_image: ^3.2.3
   dropdown_search: ^5.0.6
   confirm_dialog: ^1.0.2

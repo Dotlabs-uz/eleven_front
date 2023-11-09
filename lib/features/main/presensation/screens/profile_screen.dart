@@ -3,21 +3,21 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/features/main/presensation/cubit/current_user/current_user_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/avatar/avatar_cubit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/components/text_form_field_widget.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/field_masks.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../get_it/locator.dart';
+import '../cubit/current_user/current_user_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -65,9 +65,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
   final TextEditingController controllerPassword = TextEditingController();
 
   File? _file;
+  Uint8List webImage = Uint8List(8);
 
-
-
+   static  String userId = "";
   @override
   void initState() {
     initialize();
@@ -108,6 +108,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 controllerPhoneNumber.text = entity.phoneNumber.toString();
                 controllerUsername.text = entity.login;
                 controllerRole.text = entity.role;
+                userId = entity.id;
+
+                print("User id $userId");
+
               }
             },
             child: Column(
@@ -153,19 +157,21 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (kIsWeb == false && Platform.isAndroid)
+                    if (_file != null)
                       IconButton(
-                        onPressed: _file != null
-                            ? () => setState(() => _file = null)
-                            : null,
+                        onPressed: () async {
+                          setState(() {
+                            _file = null;
+                           webImage =  Uint8List(8);
+                          });
+                        },
                         icon: Icon(
                           Icons.delete_forever_rounded,
                           size: 30,
                           color: _file == null ? Colors.grey : Colors.blue,
                         ),
                       ),
-                    if (kIsWeb == false && Platform.isAndroid)
-                      const SizedBox(width: 20),
+                    if (_file != null) const SizedBox(width: 20),
                     Center(
                       child: Container(
                         height: 100,
@@ -195,29 +201,28 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       color: Colors.red,
                                     ),
                                   )
-                                : Image.file(_file!),
+                                : Image.memory(webImage, fit: BoxFit.cover,),
                           ),
                         ),
                       ),
                     ),
-                    if (kIsWeb == false && Platform.isAndroid)
-                      const SizedBox(width: 20),
-                    if (kIsWeb == false && Platform.isAndroid)
-                      IconButton(
-                        onPressed: () {
-                          // setState(() {
-                          //   if (_file != null) {
-                          //     _saveAvatar(_file!.path);
-                          //   } else {
-                          //     pickImage();
-                          //   }
-                          // });
-                        },
-                        icon: Icon(
-                          _file != null ? Icons.check_rounded : Icons.edit,
-                          size: 30,
-                        ),
+                    const SizedBox(width: 20),
+                    IconButton(
+                      onPressed: _file != null ?   () {
+                        List<int> list = webImage.cast();
+
+                        BlocProvider.of<AvatarCubit>(context).setAvatar(
+                            filePath: list, userId: userId, role: 'manager');
+                      }:  () async {
+                        _pickImage();
+
+
+                      },
+                      icon: Icon(
+                        _file != null ? Icons.check_rounded : Icons.edit,
+                        size: 30,
                       ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -293,59 +298,26 @@ class _ContentWidgetState extends State<_ContentWidget> {
     );
   }
 
+  _pickImage() async {
+    final picker = ImagePicker();
+
+    if (kIsWeb) {
+      XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+      if (image != null) {
+        var bytes = await image.readAsBytes();
+        setState(() {
+          webImage = bytes;
+          _file = File(image.path);
+        });
+      }
+    }
+  }
+
   // _saveAvatar(String imagePath) {
   //   BlocProvider.of<UserCubit>(context).setAvatar(
   //     fileName: imagePath,
   //   );
   //   BlocProvider.of<UserCubit>(context).load("");
   // }
-
-  Future pickImage() async {
-    try {
-      final picker = ImagePicker();
-      var image = await picker.pickImage(source: ImageSource.gallery);
-
-      if (image == null) return;
-
-      final imagePath = image.path;
-
-      final cropImage = await ImageCropper.platform.cropImage(
-        sourcePath: imagePath,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-        ],
-        uiSettings: [
-          AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: Colors.red,
-            toolbarWidgetColor: Colors.yellow,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false,
-            activeControlsWidgetColor: Colors.teal,
-          ),
-          IOSUiSettings(
-            title: 'Cropper',
-            aspectRatioLockEnabled: true,
-          ),
-        ],
-      );
-      if (cropImage == null) return;
-
-      setState(() => _file = File(cropImage.path));
-      // _file = cropImage as File?;
-    } on PlatformException catch (error) {
-      throw PlatformException(code: error.toString());
-    }
-    //
-    // try {
-    //   final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    //   if (image == null) return;
-    //   final imageTemp = File(image.path);
-    //
-    //   setState(() => this.image = imageTemp);
-    //   log("image ${this.image}");
-    // } on PlatformException catch (e) {
-    //   debugPrint('Failed to pick image: $e');
-    // }
-  }
 }

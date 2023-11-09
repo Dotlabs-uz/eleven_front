@@ -80,45 +80,61 @@ class ApiClient {
     }
   }
 
-  dynamic postPhoto({required String filename, required String userId}) async {
+  dynamic postPhoto({
+    required List<int> fileBytes,
+    required String userId,
+    required String role,
+  }) async {
     String? sessionId = await _authenticationLocalDataSource.getSessionId();
 
-    log("File name $filename");
-
     var headers = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
     };
 
-    log("Basic $sessionId");
     if (sessionId != '') {
-      debugPrint("Token $sessionId");
-
       headers.addAll({'Authorization': '$sessionId'});
     }
 
-    debugPrint("filename $filename");
     var request = http.MultipartRequest(
-        'POST', Uri.parse('${ApiConstants.baseApiUrl}${ApiConstants.uploads}'));
-    request.fields['userId'] = userId;  // Добавляем userId в параметры запроса
-    request.files.add(await http.MultipartFile.fromPath(
-    'avatar',
-    filename,
-    ));
+      'POST',
+      Uri.parse(
+        "${ApiConstants.baseApiUrl}${role == "managers" ? ApiConstants.managers : ApiConstants.barbers}",
+      ),
+    );
+
+    // final avatar = http.MultipartFile.fromBytes(
+    //   'avatar',
+    //   fileBytes,
+    //   filename: 'avatar.png',
+    // );
+    //// Добавляем файл в запрос
+    // request.files.add(
+    //   avatar,
+    // );
+
+    // Добавляем параметры в тело запроса
+    request.fields['avatar'] = fileBytes.toString();
+    request.fields['userId'] = userId;
+    request.fields['path'] = role;
 
     request.headers.addAll(headers);
 
-    http.StreamedResponse response = await request.send();
+    try {
+      final response = await request.send();
+      debugPrint("Status ${response.statusCode}");
 
-    debugPrint("Status ${response.statusCode}");
-    if (response.statusCode == 200) {
-    debugPrint(await response.stream.bytesToString());
-    return true;
-    } else {
-    debugPrint(response.reasonPhrase);
-    return false;
+      if (response.statusCode == 200) {
+        debugPrint(await response.stream.bytesToString());
+        return true;
+      } else {
+        debugPrint(response.reasonPhrase);
+        return false;
+      }
+    } catch (error) {
+      debugPrint("Error: $error");
+      return false;
     }
   }
-
 
   dynamic post(
     String path, {

@@ -96,9 +96,9 @@ class MainRepositoryImpl extends MainRepository {
   }
 
   @override
-  Future<Either<AppError, bool>> savePhoto(String file, String userId)async {
+  Future<Either<AppError, bool>> savePhoto(List<int> file, String userId, String role)async {
     try {
-      final entity = await _mainRemoteDataSource.savePhoto(file, userId);
+      final entity = await _mainRemoteDataSource.savePhoto(file, userId, role);
 
       return Right(entity);
     } on SocketException {
