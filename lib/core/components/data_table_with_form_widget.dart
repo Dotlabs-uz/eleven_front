@@ -1,10 +1,11 @@
 // ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously, depend_on_referenced_packages
 
-
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import '../../features/management/domain/entity/barber_entity.dart';
+import '../../features/management/domain/entity/employee_entity.dart';
 import '../../get_it/locator.dart';
 import '../utils/responsive.dart';
 import '../utils/storage_service.dart';
@@ -79,7 +80,7 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
       rows = List<PlutoRow>.from(widget.data.map((e) => e.getRow(e)));
 
       columns = widget.data.first.getColumn(
-            (data) {
+        (data) {
           widget.onDelete.call(data.id);
         },
       );
@@ -118,89 +119,89 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
   Widget build(BuildContext context) {
     configuration = context.locale.languageCode == 'uz'
         ? PlutoGridConfiguration(
-      localeText: const PlutoGridLocaleText.russian(
-        unfreezeColumn: "Ustunni muzdan tushiring",
-        freezeColumnToStart: "Boshida ustunni o'rnating",
-        freezeColumnToEnd: "Oxirida ustunni o'rnating",
-        autoFitColumn: "Avtomatik ustun hajmi",
-        hideColumn: "Ustunni yashirish",
-        setColumns: "Karnaylarni o'rnating",
-        setFilter: "Filtrlarni o'rnating",
-        resetFilter: "Filtrlarni tiklash",
-        setColumnsTitle: "Sarlavha ustunlarini o'rnating",
-        filterColumn: "Karnaylarni filtrlash",
-        filterType: "Filtr turi",
-        filterValue: "Filtr qiymati",
-        filterAllColumns: "Barcha karnaylarni filtrlang",
-        filterContains: "Filtr mavjud",
-        filterEquals: "Filtr Teng",
-        filterStartsWith: "Filter bilan boshlanadi",
-        filterEndsWith: "Filtr bilan tugaydi",
-        filterGreaterThan: "Filtr kattaroq",
-        filterGreaterThanOrEqualTo: "Dan katta yoki teng filtrlang",
-        filterLessThan: "Kamroq filtrlang",
-        filterLessThanOrEqualTo: "Dan kam yoki teng filtrlang",
-        sunday: "yakshanba",
-        monday: "dushanba",
-        tuesday: "seshanba",
-        wednesday: "chorshanba",
-        thursday: "payshanba",
-        friday: "juma",
-        saturday: "shanba",
-        hour: "soat",
-        minute: "daqiqa",
-        loadingText: "Matn Yuklanmoqda",
-      ),
+            localeText: const PlutoGridLocaleText.russian(
+              unfreezeColumn: "Ustunni muzdan tushiring",
+              freezeColumnToStart: "Boshida ustunni o'rnating",
+              freezeColumnToEnd: "Oxirida ustunni o'rnating",
+              autoFitColumn: "Avtomatik ustun hajmi",
+              hideColumn: "Ustunni yashirish",
+              setColumns: "Karnaylarni o'rnating",
+              setFilter: "Filtrlarni o'rnating",
+              resetFilter: "Filtrlarni tiklash",
+              setColumnsTitle: "Sarlavha ustunlarini o'rnating",
+              filterColumn: "Karnaylarni filtrlash",
+              filterType: "Filtr turi",
+              filterValue: "Filtr qiymati",
+              filterAllColumns: "Barcha karnaylarni filtrlang",
+              filterContains: "Filtr mavjud",
+              filterEquals: "Filtr Teng",
+              filterStartsWith: "Filter bilan boshlanadi",
+              filterEndsWith: "Filtr bilan tugaydi",
+              filterGreaterThan: "Filtr kattaroq",
+              filterGreaterThanOrEqualTo: "Dan katta yoki teng filtrlang",
+              filterLessThan: "Kamroq filtrlang",
+              filterLessThanOrEqualTo: "Dan kam yoki teng filtrlang",
+              sunday: "yakshanba",
+              monday: "dushanba",
+              tuesday: "seshanba",
+              wednesday: "chorshanba",
+              thursday: "payshanba",
+              friday: "juma",
+              saturday: "shanba",
+              hour: "soat",
+              minute: "daqiqa",
+              loadingText: "Matn Yuklanmoqda",
+            ),
 
-      /// If columnFilterConfig is not set, the default setting is applied.
-      ///
-      /// Return the value returned by resolveDefaultColumnFilter through the resolver function.
-      /// Prevents errors returning filters that are not in the filters list.
-      columnFilter: PlutoGridColumnFilterConfig(
-        filters: const [
-          ...FilterHelper.defaultFilters,
-          // custom filter
-        ],
-        resolveDefaultColumnFilter: (column, resolver) {
-          if (column.field == 'text') {
-            return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
-          } else if (column.field == 'number') {
-            return resolver<PlutoFilterTypeGreaterThan>()
-            as PlutoFilterType;
-          } else if (column.field == 'date') {
-            return resolver<PlutoFilterTypeLessThan>() as PlutoFilterType;
-          }
+            /// If columnFilterConfig is not set, the default setting is applied.
+            ///
+            /// Return the value returned by resolveDefaultColumnFilter through the resolver function.
+            /// Prevents errors returning filters that are not in the filters list.
+            columnFilter: PlutoGridColumnFilterConfig(
+              filters: const [
+                ...FilterHelper.defaultFilters,
+                // custom filter
+              ],
+              resolveDefaultColumnFilter: (column, resolver) {
+                if (column.field == 'text') {
+                  return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
+                } else if (column.field == 'number') {
+                  return resolver<PlutoFilterTypeGreaterThan>()
+                      as PlutoFilterType;
+                } else if (column.field == 'date') {
+                  return resolver<PlutoFilterTypeLessThan>() as PlutoFilterType;
+                }
 
-          return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
-        },
-      ),
-    )
+                return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
+              },
+            ),
+          )
         : PlutoGridConfiguration(
-      localeText: const PlutoGridLocaleText.russian(),
+            localeText: const PlutoGridLocaleText.russian(),
 
-      /// If columnFilterConfig is not set, the default setting is applied.
-      ///
-      /// Return the value returned by resolveDefaultColumnFilter through the resolver function.
-      /// Prevents errors returning filters that are not in the filters list.
-      columnFilter: PlutoGridColumnFilterConfig(
-        filters: const [
-          ...FilterHelper.defaultFilters,
-          // custom filter
-        ],
-        resolveDefaultColumnFilter: (column, resolver) {
-          if (column.field == 'text') {
-            return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
-          } else if (column.field == 'number') {
-            return resolver<PlutoFilterTypeGreaterThan>()
-            as PlutoFilterType;
-          } else if (column.field == 'date') {
-            return resolver<PlutoFilterTypeLessThan>() as PlutoFilterType;
-          }
+            /// If columnFilterConfig is not set, the default setting is applied.
+            ///
+            /// Return the value returned by resolveDefaultColumnFilter through the resolver function.
+            /// Prevents errors returning filters that are not in the filters list.
+            columnFilter: PlutoGridColumnFilterConfig(
+              filters: const [
+                ...FilterHelper.defaultFilters,
+                // custom filter
+              ],
+              resolveDefaultColumnFilter: (column, resolver) {
+                if (column.field == 'text') {
+                  return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
+                } else if (column.field == 'number') {
+                  return resolver<PlutoFilterTypeGreaterThan>()
+                      as PlutoFilterType;
+                } else if (column.field == 'date') {
+                  return resolver<PlutoFilterTypeLessThan>() as PlutoFilterType;
+                }
 
-          return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
-        },
-      ),
-    );
+                return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
+              },
+            ),
+          );
 
     return Container(
       color: Colors.white,
@@ -208,12 +209,12 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
         padding: const EdgeInsets.only(bottom: 10),
         child: Responsive.isMobile(context)
             ? widget.data.isEmpty
-            ? const Center(child: EmptyWidget())
-            : DataMobileViewWidget(
-          data: List.of(widget.data),
-          editData: (data) => widget.onTap?.call(data.getRow(data)),
-          deleteData: (data) => widget.onDelete.call(data),
-        )
+                ? const Center(child: EmptyWidget())
+                : DataMobileViewWidget(
+                    data: List.of(widget.data),
+                    editData: (data) => widget.onTap?.call(data.getRow(data)),
+                    deleteData: (data) => widget.onDelete.call(data),
+                  )
             : _desktopViewWithForm(),
       ),
     );
@@ -242,60 +243,75 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
     return widget.data.isEmpty
         ? const Center(child: EmptyWidget())
         : PlutoGrid(
-      columns: columns,
-      rows: rows,
-      onSizeChanged: (column, size) {
-        jsonSizes[column.field] = size;
-        debugPrint("Column field  ${column.field}, Size $size $jsonSizes");
+            columns: columns,
+            rows: rows,
+            onSizeChanged: (column, size) {
+              jsonSizes[column.field] = size;
+              debugPrint(
+                  "Column field  ${column.field}, Size $size $jsonSizes");
 
-        _saveSize(jsonSizes);
-      },
+              _saveSize(jsonSizes);
+            },
 
-      // columnGroups: columnGroups,
-      mode: PlutoGridMode.readOnly,
+            // columnGroups: columnGroups,
+            mode: PlutoGridMode.readOnly,
 
-      onRowDoubleTap: (event) {
-          selectedRow = event.row;
-          widget.onTap?.call(event.row);
-      },
+            onRowDoubleTap: (event) {
+              selectedRow = event.row;
+              widget.onTap?.call(event.row);
+            },
 
-      onLoaded: (PlutoGridOnLoadedEvent event) async {
-        stateManager = event.stateManager;
+            onLoaded: (PlutoGridOnLoadedEvent event) async {
+              stateManager = event.stateManager;
 
-        stateManager.setShowColumnFilter(false);
-        stateManager.setIsDraggingRow(false);
-        // stateManager.setPageSize(widget.pageCount);
-        // stateManager.autoFitColumn(context, widget.columns.first);
-        // stateManager.setShowColumnFilter(false, );
+              stateManager.setShowColumnFilter(false);
+              stateManager.setIsDraggingRow(false);
+              // stateManager.setPageSize(widget.pageCount);
+              // stateManager.autoFitColumn(context, widget.columns.first);
+              // stateManager.setShowColumnFilter(false, );
 
-        // stateManager.removeColumnsInFilterRows([columns.first]);
+              // stateManager.removeColumnsInFilterRows([columns.first]);
 
-        stateManager.setPageSize(
-          widget.pageCount,
-          notify: true,
-        );
+              stateManager.setPageSize(
+                widget.pageCount,
+                notify: true,
+              );
 
-        await _setColumnSize(columns);
-        // if (widget.jsonSizes != null) {
-        //   _autoFitColumn(widget.jsonSizes!, columns);
-        // }
-        // _autoFitColumn(widget.columns);
-        // _setCheckToZero(widget.columns);
-      },
+              await _setColumnSize(columns);
+              // if (widget.jsonSizes != null) {
+              //   _autoFitColumn(widget.jsonSizes!, columns);
+              // }
+              // _autoFitColumn(widget.columns);
+              // _setCheckToZero(widget.columns);
+            },
 
-      onRowChecked: widget.handleOnRowChecked,
+            onRowChecked: widget.handleOnRowChecked,
 
-      onChanged: (PlutoGridOnChangedEvent event) =>
-          widget.onChanged?.call(event.row),
-      rowColorCallback: (rowColorContext) {
-        if (selectedRow == rowColorContext.row) {
-          return Colors.grey.shade200;
-        }
+            onChanged: (PlutoGridOnChangedEvent event) =>
+                widget.onChanged?.call(event.row),
+            rowColorCallback: (rowColorContext) {
+              if (selectedRow == rowColorContext.row) {
+                return Colors.grey.shade100;
+              }
 
-        return Colors.white;
-      },
-      configuration: configuration,
-    );
+              final data = rowColorContext.row;
+              if (data is BarberEntity) {
+                return _colorForEmployee(data.cells['isCurrentFilial']?.value);
+              }
+
+              return Colors.white;
+            },
+            configuration: configuration,
+          );
+  }
+
+  _colorForEmployee(bool isCurrentFilial) {
+    print("is current filial $isCurrentFilial");
+    if (!isCurrentFilial) {
+      return Colors.grey.shade200;
+    }
+    return Colors.red;
+    return null;
   }
 
   _setColumnSize(List<PlutoColumn> columns) async {
@@ -330,12 +346,10 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
     if (mounted) {
       Future.delayed(
         Duration.zero,
-            () {
+        () {
           setState(() {});
         },
       );
     }
   }
-
- 
 }

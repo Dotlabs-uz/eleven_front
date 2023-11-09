@@ -86,6 +86,13 @@ class BarberEntity extends Equatable {
       isRequired: true,
       isForm: true,
       val: 99,
+    ),"isCurrentFilial": FieldEntity<bool>(
+      label: "isCurrentFilial",
+      hintText: "isCurrentFilial",
+      type: Types.bool,
+      isRequired: false,
+      isForm:false,
+      val: false,
     ),
     "filial": FieldEntity<FilialEntity>(
       label: "filial",
@@ -112,6 +119,7 @@ class BarberEntity extends Equatable {
         "phone": phone,
         "filial": filial,
         "password": password,
+        "isCurrentFilial": isCurrentFilial,
         "login": login,
       }[key];
 
@@ -139,6 +147,7 @@ class BarberEntity extends Equatable {
       'phone': PlutoCell(value: e.phone),
       'filial': PlutoCell(value: e.filial),
       'password': PlutoCell(value: e.password),
+      'isCurrentFilial': PlutoCell(value: e.isCurrentFilial),
       'login': PlutoCell(value: e.login),
     });
   }
@@ -220,10 +229,10 @@ class BarberEntity extends Equatable {
       filial: fields["filial"]?.val,
       login: fields["login"]?.val,
       password: fields["password"]?.val,
+      isCurrentFilial: fields["isCurrentFilial"]?.val,
       inTimeTable: false,
       notWorkingHours: [],
       avatar: '',
-      isCurrentFilial: false,
     );
   }
 
