@@ -8,14 +8,20 @@ class CurrentUserInitial extends CurrentUserState {
   @override
   List<Object> get props => [];
 }
+
 class CurrentUserError extends CurrentUserState {
-  final String message
-  ;
+  final String message;
 
   const CurrentUserError({required this.message});
   @override
   List<Object> get props => [];
 }
+
+class CurrentUserSaved extends CurrentUserState {
+  @override
+  List<Object> get props => [];
+}
+
 class CurrentUserLoaded extends CurrentUserState {
   final CurrentUserEntity entity;
 

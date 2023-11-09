@@ -12,6 +12,7 @@ import '../../../../core/api/api_exceptions.dart';
 import '../../../../core/entities/app_error.dart';
 import '../../domain/repository/main_repository.dart';
 import '../datasources/main_remote_data_source.dart';
+import '../model/current_user_model.dart';
 
 class MainRepositoryImpl extends MainRepository {
   final MainRemoteDataSource _mainRemoteDataSource;
@@ -101,6 +102,27 @@ class MainRepositoryImpl extends MainRepository {
       final entity = await _mainRemoteDataSource.savePhoto(file, userId, role);
 
       return Right(entity);
+    } on SocketException {
+      return const Left(AppError(appErrorType: AppErrorType.network));
+    } on UnauthorisedException {
+      return const Left(AppError(appErrorType: AppErrorType.unauthorised));
+    } on ExceptionWithMessage catch (e) {
+      return Left(AppError(
+          appErrorType: AppErrorType.msgError, errorMessage: e.message));
+    } on Exception {
+      return const Left(AppError(appErrorType: AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, bool>> saveCurrentUser(CurrentUserEntity currentUser)async  {
+
+    try {
+
+
+      final model = CurrentUserModel.fromEntity(currentUser);
+       final response = await _mainRemoteDataSource.saveCurrentUser(model);
+      return Right(response);
     } on SocketException {
       return const Left(AppError(appErrorType: AppErrorType.network));
     } on UnauthorisedException {

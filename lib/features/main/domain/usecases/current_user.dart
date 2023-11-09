@@ -16,3 +16,14 @@ class GetCurrentUser extends UseCase<CurrentUserEntity, NoParams> {
     return await repository.getCurrentUser();
   }
 }
+
+class SaveCurrentUser extends UseCase<bool, CurrentUserEntity> {
+  final MainRepository repository;
+
+  SaveCurrentUser(this.repository);
+
+  @override
+  Future<Either<AppError, bool>> call(CurrentUserEntity params) async {
+    return await repository.saveCurrentUser(params);
+  }
+}

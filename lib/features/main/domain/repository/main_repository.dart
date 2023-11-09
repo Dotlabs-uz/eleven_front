@@ -8,6 +8,7 @@ import '../entity/order_entity.dart';
 
 abstract class MainRepository {
   Future<Either<AppError, CurrentUserEntity>> getCurrentUser();
+  Future<Either<AppError, bool>> saveCurrentUser(CurrentUserEntity currentUser);
   Future<Either<AppError, bool>> saveOrder(OrderEntity order);
   Future<Either<AppError, bool>> savePhoto(List<int> file, String userId,String role);
   Future<Either<AppError, bool>> deleteOrder(String orderId);

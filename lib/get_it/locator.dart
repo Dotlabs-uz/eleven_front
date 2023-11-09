@@ -72,7 +72,7 @@ void setup() {
   locator.registerFactory(() => TopMenuCubit());
   locator.registerFactory(() => DataFormCubit());
   locator.registerFactory(() => AuthCubit(locator()));
-  locator.registerFactory(() => CurrentUserCubit(locator()));
+  locator.registerFactory(() => CurrentUserCubit(locator(),locator()));
 
   // Customer
 
@@ -174,6 +174,9 @@ void setup() {
   // Current user
   locator
       .registerLazySingleton<GetCurrentUser>(() => GetCurrentUser(locator()));
+
+  locator
+      .registerLazySingleton<SaveCurrentUser>(() => SaveCurrentUser(locator()));
 
   // Filial
 

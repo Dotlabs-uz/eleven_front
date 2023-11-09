@@ -12,6 +12,7 @@ import '../model/order_model.dart';
 
 abstract class MainRemoteDataSource {
   Future<CurrentUserModel> getCurrentUser();
+  Future<bool> saveCurrentUser(CurrentUserModel model);
   Future<bool> saveOrder(OrderModel model);
   Future<bool> savePhoto(List<int> file, String userId, String role);
   Future<bool> deleteOrder(String orderId);
@@ -32,6 +33,14 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     final model = CurrentUserModel.fromJson(response);
 
     return model;
+  }
+
+  @override
+  Future<bool> saveCurrentUser(CurrentUserModel model) async {
+    await _client.patch("${ApiConstants.managers}/${model.id}",
+        params: model.toJson());
+
+    return true;
   }
 
   @override
@@ -60,7 +69,6 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<bool> saveOrder(OrderModel model) async {
-
     print("Order model id ${model.id}");
     if (model.id.isEmpty) {
       await _client.post(ApiConstants.orders, params: model.toJson());
@@ -81,8 +89,8 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   }
 
   @override
-  Future<bool> savePhoto(List<int> file, String userId, String role)async  {
-    await _client.postPhoto(fileBytes: file, userId: userId, role:role);
+  Future<bool> savePhoto(List<int> file, String userId, String role) async {
+    await _client.postPhoto(fileBytes: file, userId: userId, role: role);
 
     return true;
   }

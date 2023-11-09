@@ -10,15 +10,23 @@ part 'current_user_state.dart';
 
 class CurrentUserCubit extends Cubit<CurrentUserState> {
   final GetCurrentUser getCurrentUser;
-  CurrentUserCubit(this.getCurrentUser) : super(CurrentUserInitial());
+  final SaveCurrentUser saveCurrentUser;
+  CurrentUserCubit(this.getCurrentUser, this.saveCurrentUser)
+      : super(CurrentUserInitial());
 
   load() async {
     final data = await getCurrentUser.call(NoParams());
 
-    data.fold((l) => emit(CurrentUserError(message: l.errorMessage)),
-        (r) {
+    data.fold((l) => emit(CurrentUserError(message: l.errorMessage)), (r) {
       debugPrint("Loaded $r");
-          emit(CurrentUserLoaded(r));
-        });
+      emit(CurrentUserLoaded(r));
+    });
+  }
+
+  save(CurrentUserEntity entity) async {
+    final data = await saveCurrentUser.call(entity);
+
+    data.fold((l) => emit(CurrentUserError(message: l.errorMessage)),
+        (r) => emit(CurrentUserSaved()));
   }
 }

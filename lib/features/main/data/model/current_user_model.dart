@@ -24,4 +24,30 @@ class CurrentUserModel extends CurrentUserEntity {
       role: json['role'],
     );
   }
+
+  factory CurrentUserModel.fromEntity(CurrentUserEntity entity) {
+    return CurrentUserModel(
+      id: entity.id,
+      firstName: entity.firstName,
+      lastName: entity.lastName,
+      avatar: entity.avatar,
+      phoneNumber: entity.phoneNumber,
+      password: entity.password,
+      login: entity.login,
+      role: entity.role,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+
+    data['_id'] = id;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['phone'] = phoneNumber;
+    data['login'] = login;
+    data['role'] = role;
+
+    return data;
+  }
 }
