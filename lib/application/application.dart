@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/auth/presentation/cubit/login_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/avatar/avatar_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/home_screen_form/home_screen_order_form_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
@@ -36,6 +37,7 @@ class _ApplicationState extends State<Application> {
   late ShowSelectServicesCubit showSelectServicesCubit;
   late HomeScreenOrderFormCubit homeScreenOrderFormCubit;
   late OrderFilterCubit orderFilterCubit;
+  late AvatarCubit avatarCubit;
   @override
   void initState() {
     _loginCubit = locator();
@@ -48,6 +50,7 @@ class _ApplicationState extends State<Application> {
     currentUserCubit = locator();
     showSelectServicesCubit = locator();
     orderFilterCubit = locator();
+    avatarCubit = locator();
     super.initState();
   }
 
@@ -65,6 +68,7 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: showSelectServicesCubit),
         BlocProvider.value(value: homeScreenOrderFormCubit),
         BlocProvider.value(value: orderFilterCubit),
+        BlocProvider.value(value: avatarCubit),
 
       ],
       child: MaterialApp(

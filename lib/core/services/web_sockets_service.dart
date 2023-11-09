@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/api/api_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -20,6 +21,7 @@ class WebSocketsService {
 
     socket!.emit("create", data);
   }
+
 
   void refresh() {
     if (socket == null) return;
@@ -70,10 +72,7 @@ class WebSocketsService {
 
     localSoket.emit("getAll");
 
-    localSoket.on('datesWithIsNew', (data) {
-      debugPrint("Dates with is new $data");
-      _addDatesData(data);
-    });
+
 
     localSoket.on('fetched', (data) {
       debugPrint("Orders $data");
@@ -81,6 +80,11 @@ class WebSocketsService {
       _addOrderData(data);
     });
 
+
+    localSoket.on('datesWithIsNew', (data) {
+      debugPrint("Dates with is new $data");
+      _addDatesData(data);
+    });
     // getResponse.map((event) => print(event));
 
     // await for (var data in getResponse) {

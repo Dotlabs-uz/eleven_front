@@ -36,18 +36,15 @@ class ApiClient {
 
     log("Pth $pth");
 
-
     final header = {
       'Authorization': sessionId,
       'Content-Type': 'application/json',
     };
 
-
     final response = await _client.get(
       pth, //?format=json
       headers: header,
     );
-
 
     // log("Token $sessionId path: ${pth}  header $header Status code: ${response.statusCode}");
     // debugPrint("Get balance $pth status code ${response.statusCode} body ${response.body}");
@@ -83,7 +80,7 @@ class ApiClient {
     }
   }
 
-  dynamic postPhoto(String path, {required String filename}) async {
+  dynamic postPhoto({required String filename, required String userId}) async {
     String? sessionId = await _authenticationLocalDataSource.getSessionId();
 
     log("File name $filename");
@@ -101,58 +98,33 @@ class ApiClient {
 
     debugPrint("filename $filename");
     var request = http.MultipartRequest(
-        'PUT', Uri.parse('${ApiConstants.baseApiUrl}$path'));
+        'POST', Uri.parse('${ApiConstants.baseApiUrl}${ApiConstants.uploads}'));
+    request.fields['userId'] = userId;  // Добавляем userId в параметры запроса
     request.files.add(await http.MultipartFile.fromPath(
-      'avatar',
-      filename,
+    'avatar',
+    filename,
     ));
+
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
     debugPrint("Status ${response.statusCode}");
     if (response.statusCode == 200) {
-      debugPrint(await response.stream.bytesToString());
-      return true;
+    debugPrint(await response.stream.bytesToString());
+    return true;
     } else {
-      debugPrint(response.reasonPhrase);
-      return false;
+    debugPrint(response.reasonPhrase);
+    return false;
     }
-
-    // if (sessionId != '')
-    //   headers.addAll({'Authorization': 'Basic YWRtaW46YWRtaW4='});
-
-    // MultipartRequest request = http.MultipartRequest(
-    //   'PUT',
-    //   Uri.parse('${ApiConstants.baseApiUrl}$path'),
-    // );
-    // log("Zapros nachalo ${Uri.parse('${ApiConstants.baseApiUrl}$path')}");
-    //
-    // log("Request $request");
-    //
-    // request.files.add(await http.MultipartFile.fromPath("avatar", filename));
-    //
-    // request.headers.addAll(headers);
-    //
-    // log("Request: ${request}");
-    //
-    // http.StreamedResponse response = await request.send();
-    //
-    // log("REsponse status code: ${response.statusCode}");
-    //
-    // log(response.statusCode.toString());
-    //
-    // log(await response.stream.bytesToString());
-    //
-    // if (response.statusCode == 200) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
   }
 
-  dynamic post(String path,
-      {Map<dynamic, dynamic>? params, bool withToken = true,}) async {
+
+  dynamic post(
+    String path, {
+    Map<dynamic, dynamic>? params,
+    bool withToken = true,
+  }) async {
     String sessionId =
         await _authenticationLocalDataSource.getSessionId() ?? "";
     Map<String, String> userHeader = {
@@ -166,7 +138,6 @@ class ApiClient {
       log("Session != null $sessionId");
       userHeader.addAll({
         'Authorization': ' $sessionId',
-
       });
     }
 
@@ -234,7 +205,7 @@ class ApiClient {
       userHeader.addAll({'Authorization': sessionId});
     }
 
-    final pth =  getPath(path, null);
+    final pth = getPath(path, null);
     print("Path $pth");
     final response = await _client.patch(
       pth,

@@ -2,6 +2,7 @@ import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/features/auth/domain/usecases/change_password.dart';
 import 'package:eleven_crm/features/main/domain/usecases/current_user.dart';
 import 'package:eleven_crm/features/main/domain/usecases/not_working_hours.dart';
+import 'package:eleven_crm/features/main/domain/usecases/photo.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/menu/menu_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/not_working_hours/not_working_hours_cubit.dart';
@@ -38,6 +39,7 @@ import '../features/main/domain/repository/main_repository.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/main/domain/usecases/order.dart';
+import '../features/main/presensation/cubit/avatar/avatar_cubit.dart';
 import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import '../features/main/presensation/cubit/home_screen_form/home_screen_order_form_cubit.dart';
 import '../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
@@ -64,6 +66,7 @@ void setup() {
         logoutUser: locator(),
         passwordChange: locator(),
       ));
+  locator.registerFactory(() => AvatarCubit(locator()));
   locator.registerFactory(() => MenuCubit());
   locator.registerFactory(() => TopMenuCubit());
   locator.registerFactory(() => DataFormCubit());
@@ -125,6 +128,7 @@ void setup() {
   locator.registerLazySingleton<LoginUser>(() => LoginUser(locator()));
   locator.registerLazySingleton<LogoutUser>(() => LogoutUser(locator()));
   locator.registerLazySingleton<LogginedUser>(() => LogginedUser(locator()));
+  locator.registerLazySingleton<SaveAvatar>(() => SaveAvatar(locator()));
   locator
       .registerLazySingleton<ChangePassword>(() => ChangePassword(locator()));
 
