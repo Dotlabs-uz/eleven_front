@@ -48,6 +48,7 @@ import '../features/management/data/repositories/management_repository_impl.dart
 import '../features/management/domain/usecases/customer.dart';
 import '../features/management/presentation/cubit/barber/barber_cubit.dart';
 import '../features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
+import '../features/products/data/datasources/products_local_data_source.dart';
 import '../features/products/data/datasources/products_remote_data_source.dart';
 import '../features/products/data/repository/products_repository_impl.dart';
 import '../features/products/domain/repository/products_repository.dart';
@@ -98,7 +99,6 @@ void setup() {
   locator.registerFactory(() => ShowSelectServicesCubit());
   locator.registerFactory(() => SelectServicesCubit());
 
-
   // Barber
 
   locator.registerFactory(() => BarberCubit(locator(), locator(), locator()));
@@ -117,10 +117,12 @@ void setup() {
 
   // Order
 
-  locator.registerFactory(() => OrderCubit(locator(),locator(),));
+  locator.registerFactory(() => OrderCubit(
+        locator(),
+        locator(),
+      ));
   locator.registerFactory(() => HomeScreenOrderFormCubit());
   locator.registerFactory(() => OrderFilterCubit());
-
 
   // ================ UseCases ================ //
 
@@ -196,7 +198,6 @@ void setup() {
   locator.registerLazySingleton<SaveOrder>(() => SaveOrder(locator()));
   locator.registerLazySingleton<DeleteOrder>(() => DeleteOrder(locator()));
 
-
   // ================ Repository / Datasource ================ //
 
   locator.registerLazySingleton<AuthenticationRepository>(
@@ -242,6 +243,7 @@ void setup() {
   locator.registerLazySingleton<ProductsRepository>(
     () => ProductsRepositoryImpl(
       locator(),
+      locator(),
     ),
   );
 
@@ -249,6 +251,10 @@ void setup() {
     () => ProductsRemoteDataSourceImpl(
       locator(),
     ),
+  );
+
+  locator.registerLazySingleton<ProductsLocalDataSource>(
+    () => ProductsLocalDataSourceImpl(),
   );
 
   // ================ Core ================ //
@@ -259,7 +265,6 @@ void setup() {
       .registerLazySingleton<ApiClient>(() => ApiClient(locator(), locator()));
 
   locator.registerLazySingleton<StorageService>(() => StorageService());
-
 
   // ================ External ================ //
 

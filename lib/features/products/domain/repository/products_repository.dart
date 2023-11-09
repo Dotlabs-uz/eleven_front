@@ -29,6 +29,7 @@ abstract class ProductsRepository {
     String searchText,
     String? ordering,
     bool withServiceCategoryParsing,
+      bool fetchGlobal,
   );
 
   Future<Either<AppError, ServiceProductCategoryEntity>>

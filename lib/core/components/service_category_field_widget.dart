@@ -28,21 +28,23 @@ class ServiceCategoryFieldWidget extends StatefulWidget {
   final int? elementId;
 
   @override
-  State<ServiceCategoryFieldWidget> createState() => _ServiceCategoryFieldWidgetState();
+  State<ServiceCategoryFieldWidget> createState() =>
+      _ServiceCategoryFieldWidgetState();
 }
 
-class _ServiceCategoryFieldWidgetState extends State<ServiceCategoryFieldWidget> {
-
-  late   ServiceProductCategoryCubit serviceProductCategoryCubit;
+class _ServiceCategoryFieldWidgetState
+    extends State<ServiceCategoryFieldWidget> {
+  late ServiceProductCategoryCubit serviceProductCategoryCubit;
   @override
   void initState() {
     serviceProductCategoryCubit = locator();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>serviceProductCategoryCubit ,
+      create: (context) => serviceProductCategoryCubit,
       child: _ContentWidget(
         fieldEntity: widget.fieldEntity,
         onChange: widget.onChange,
@@ -75,7 +77,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
   final TextEditingController controllerSearch = TextEditingController();
 
   ServiceProductCategoryEntity serviceEntity =
-  ServiceProductCategoryEntity.empty();
+      ServiceProductCategoryEntity.empty();
   List<ServiceProductCategoryEntity> listData = [];
 
   final ServiceProductCategoryCubit serviceProductCategoryCubit = locator();
@@ -118,11 +120,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
     final data = await getCustomer.call(GetServiceProductCategoryParams(
       searchText: filter,
       page: 1,
+      fetchGlobal: true,
     ));
 
     data.fold(
-          (l) => print("error ${l.errorMessage}"),
-          (r) => listData = r.results,
+      (l) => print("error ${l.errorMessage}"),
+      (r) => listData = r.results,
     );
 
     return listData;
@@ -147,7 +150,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 widget.fieldEntity.val = selectedItem;
                 Future.delayed(
                   Duration.zero,
-                      () {
+                  () {
                     if (mounted) {
                       widget.onChange?.call(selectedItem!);
                     }
@@ -163,10 +166,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
               if (mounted) {
                 Future.delayed(
                   Duration.zero,
-                      () =>
-                      setState(() {
-                        listData.insert(0, state.data);
-                      }),
+                  () => setState(() {
+                    listData.insert(0, state.data);
+                  }),
                 );
               }
 
@@ -259,9 +261,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   enabledBorder: widget.fieldEntity.isRequired
                       ? const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.green,
-                      ))
+                          borderSide: BorderSide(
+                          color: Colors.green,
+                        ))
                       : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(6),
@@ -269,9 +271,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                       width: 2,
                     ),
                   ),
-                  labelText: "serviceProductCategoryFieldLabelText"
-                      .tr()
-                      .toUpperCase(),
+                  labelText:
+                      "serviceProductCategoryFieldLabelText".tr().toUpperCase(),
                   hintText: "serviceProductCategoryFieldHintText".tr(),
                 ),
               ),

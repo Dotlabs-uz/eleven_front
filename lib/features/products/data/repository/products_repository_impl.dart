@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 
 import 'package:eleven_crm/core/entities/app_error.dart';
+import 'package:eleven_crm/features/products/data/datasources/products_local_data_source.dart';
 import 'package:eleven_crm/features/products/data/datasources/products_remote_data_source.dart';
 import 'package:eleven_crm/features/products/domain/entity/filial_results_entity.dart';
 import 'package:eleven_crm/features/products/domain/entity/service_product_category_entity.dart';
@@ -17,8 +18,9 @@ import '../model/service_product_model.dart';
 
 class ProductsRepositoryImpl extends ProductsRepository {
   final ProductsRemoteDataSource remoteDataSource;
+  final ProductsLocalDataSource localDataSource;
 
-  ProductsRepositoryImpl(this.remoteDataSource);
+  ProductsRepositoryImpl(this.remoteDataSource, this.localDataSource);
   @override
   Future<Either<AppError, bool>> deleteServiceProduct(
       ServiceProductEntity entity) async {
@@ -107,11 +109,23 @@ class ProductsRepositoryImpl extends ProductsRepository {
 
   @override
   Future<Either<AppError, ServiceProductCategoryResultsEntity>>
-      getServiceProductCategory(
-          int page, String searchText, String? ordering, bool withServiceCategoryParsing) async {
+      getServiceProductCategory(int page, String searchText, String? ordering,
+          bool withServiceCategoryParsing, bool fetchGlobal) async {
     try {
+
+      if(fetchGlobal == false) {
+        final localData = await localDataSource.getServiceProductCategory(
+            searchText, withServiceCategoryParsing);
+
+        if (localData != null) {
+          print("local data ");
+          return Right(localData);
+        }
+      }
       final results = await remoteDataSource.getServiceProductCategory(
           page, searchText, ordering, withServiceCategoryParsing);
+
+      await localDataSource.saveServiceProductCategory(results);
 
       return Right(results);
     } on SocketException {

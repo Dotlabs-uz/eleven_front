@@ -26,6 +26,8 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
 
   late SelectServicesCubit selectServicesCubit;
 
+  static bool isFirstTime = true;
+
   @override
   void initState() {
     initialize();
@@ -34,9 +36,10 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
 
   initialize() {
     selectServicesCubit = locator();
-    BlocProvider.of<ServiceProductCategoryCubit>(context).load(
-      "",
-    );
+    BlocProvider.of<ServiceProductCategoryCubit>(context)
+        .load("", fetchGlobal: isFirstTime);
+
+    isFirstTime = false;
   }
 
   addGlobalSelectedServicesToLocal(List<ServiceProductEntity> listData) {
@@ -80,6 +83,23 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                         cursor: SystemMouseCursors.click,
                         child: GestureDetector(
                           onTap: () =>
+                              BlocProvider.of<ServiceProductCategoryCubit>(
+                                      context)
+                                  .load(
+                            "",
+                            fetchGlobal: true,
+                          ),
+                          child: const Icon(
+                            Icons.refresh,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () =>
                               BlocProvider.of<ShowSelectServicesCubit>(context)
                                   .disable(),
                           child: const Icon(
@@ -94,7 +114,6 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                   Expanded(
                     child: BlocConsumer<ServiceProductCategoryCubit,
                         ServiceProductCategoryState>(
-
                       listener: (context, state) {
                         if (state is ServiceProductCategoryLoaded) {
                           if (mounted) {
@@ -110,7 +129,6 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                         }
                       },
                       builder: (context, state) {
-
                         if (state is ServiceProductCategoryLoading) {
                           return LoadingCircle();
                         }
