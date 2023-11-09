@@ -56,7 +56,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
 
   // final WebSocketsService webSocketService =
   // WebSocketsService(ApiConstants.ordersWebSocket);
-    List<DateTime> listBlinkDates = [];
+  List<DateTime> listBlinkDates = [];
 
   @override
   void initState() {
@@ -175,22 +175,19 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                   isOpen: isOpen,
                 );
               }),
-              //
-
-
-                    CalendarWidget(
-                    onRefreshTap: () {
-                      BlocProvider.of<OrderFilterCubit>(context).setFilter(
-                        query: DateTime.now().toIso8601String(),
-                      );
-                    },
-                    onDateTap: (DateTime dateTime) {
-                      BlocProvider.of<OrderFilterCubit>(context).setFilter(
-                        query: dateTime.toIso8601String(),
-                      );
-                    }, listBlinkDates: listBlinkDates,
-                  ),
-
+              CalendarWidget(
+                onRefreshTap: () {
+                  BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                    query: DateTime.now().toIso8601String(),
+                  );
+                },
+                onDateTap: (DateTime dateTime) {
+                  BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                    query: dateTime.toIso8601String(),
+                  );
+                },
+                listBlinkDates: listBlinkDates,
+              ),
             ],
           ),
         ),

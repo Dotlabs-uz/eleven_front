@@ -333,7 +333,6 @@ class _DayItemState extends State<_DayItem> {
 
     final condition = listBlinkedDates.contains(dt);
 
-    print("condition $condition");
 
     if (_streamController.isClosed == false &&
         (condition && widget.selectedDate != dt)) {
