@@ -27,72 +27,80 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: BlocListener<LoginCubit, LoginState>(
-        listener: (context, state) {
-          if (state is LoginSuccess) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              RouteList.home,
-              (route) => false,
-            );
-          } else if (state is LoginError) {
-            ErrorFlushBar("change_error".tr(args: [state.message.tr()]))
-                .show(context);
+      body: RawKeyboardListener(
+        onKey: (input) {
+          if(input.physicalKey.debugName == "Enter") {
+            BlocProvider.of<LoginCubit>(context).login(controllerLogin.text, controllerPassword.text);
           }
         },
-        child: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: Responsive.isDesktop(context)
-                    ? 500
-                    : MediaQuery.of(context).size.width,
-              ),
-              padding: const EdgeInsets.all(10),
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const LogoWidget(
-                    height: 100,
-                  ),
-                  Text(
-                    "welcome".tr(),
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.nunito(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
+        focusNode: FocusScopeNode(),
+        child: BlocListener<LoginCubit, LoginState>(
+          listener: (context, state) {
+            if (state is LoginSuccess) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                RouteList.home,
+                (route) => false,
+              );
+            } else if (state is LoginError) {
+              ErrorFlushBar("change_error".tr(args: [state.message.tr()]))
+                  .show(context);
+            }
+          },
+          child: SingleChildScrollView(
+            child: Center(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: Responsive.isDesktop(context)
+                      ? 500
+                      : MediaQuery.of(context).size.width,
+                ),
+                padding: const EdgeInsets.all(10),
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const LogoWidget(
+                      height: 100,
                     ),
-                  ),
-                  const SizedBox(height: 15),
-                  Center(
-                    child: TextFormFieldWidget(
-                      controller: controllerLogin,
-                      defaultBorderColor: Colors.black.withOpacity(0.3),
-                      label: 'login'.tr(),
+                    Text(
+                      "welcome".tr(),
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.nunito(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black54,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Center(
-                    child: TextFormFieldWidget(
-                      controller: controllerPassword,
-                      defaultBorderColor: Colors.black.withOpacity(0.3),
-                      label: 'password'.tr(),
+                    const SizedBox(height: 15),
+                    Center(
+                      child: TextFormFieldWidget(
+                        controller: controllerLogin,
+                        defaultBorderColor: Colors.black.withOpacity(0.3),
+                        label: 'login'.tr(),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  ButtonWidget(
-                    borderRadius: BorderRadius.circular(14),
-                    onPressed: () {
-                      BlocProvider.of<LoginCubit>(context).login(
-                        controllerLogin.text,
-                        controllerPassword.text,
-                      );
-                    },
-                    text: "enter".tr(),
-                  ),
-                ],
+                    const SizedBox(height: 10),
+                    Center(
+                      child: TextFormFieldWidget(
+                        controller: controllerPassword,
+                        defaultBorderColor: Colors.black.withOpacity(0.3),
+                        label: 'password'.tr(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ButtonWidget(
+                      borderRadius: BorderRadius.circular(14),
+                      onPressed: () {
+                        BlocProvider.of<LoginCubit>(context).login(
+                          controllerLogin.text,
+                          controllerPassword.text,
+                        );
+                      },
+                      text: "enter".tr(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
