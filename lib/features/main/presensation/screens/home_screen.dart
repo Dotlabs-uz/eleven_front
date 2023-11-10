@@ -87,6 +87,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
   final WebSocketsService webSocketService =
       WebSocketsService(ApiConstants.ordersWebSocket);
 
+  DateTime filteredDate = DateTime.now();
+
   @override
   void initState() {
     initialize();
@@ -111,7 +113,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
       TopMenuEntity(searchCubit: null, enableSearch: false, iconList: [
         MyIconButton(
           onPressed: () {
-            activeData = OrderEntity.empty();
+            activeData = OrderEntity.empty(
+              month: filteredDate.month,
+              day: filteredDate.day
+            );
             _editOrder(activeData);
           },
           icon: const Icon(Icons.add_box_rounded),
@@ -290,6 +295,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
                   listener: (context, state) {
                     if (state.query.isNotEmpty) {
                       webSocketService.addFilter({"orderStart": state.query});
+                      filteredDate= DateTime.parse(state.query);
+                      print("Filter date init $filteredDate");
+
                       orders.clear();
                     } else {
                       webSocketService.addFilter("");
@@ -378,10 +386,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                               .state
                                               .query,
                                       onFieldTap: (hour, minute, barberId) {
+                                        print("Filter date $filteredDate");
                                         activeData = OrderEntity.empty(
                                           hour: hour,
                                           minute: minute,
                                           barber: barberId,
+                                          month: filteredDate.month,
+                                          day: filteredDate.day,
                                         );
                                         _editOrder(activeData);
                                       },

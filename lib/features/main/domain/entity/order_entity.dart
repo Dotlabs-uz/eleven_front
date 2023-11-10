@@ -225,8 +225,8 @@ class OrderEntity extends Equatable {
     );
   }
 
-  factory OrderEntity.empty({int? hour, int? minute, String ?barber}) {
-    final dateTime = DateTime.now().copyWith(hour: hour, minute: minute);
+  factory OrderEntity.empty({int? hour, int? minute, String ?barber, int? day, int? month}) {
+    final dateTime = DateTime.now().copyWith(hour: hour, minute: minute, day: day, month: month);
     return OrderEntity(
       id: "",
       // discount: 0,
