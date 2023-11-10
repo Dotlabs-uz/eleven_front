@@ -214,8 +214,8 @@ class _ContentWidgetState extends State<ContentWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         _bodyWidget(),
-                        // const SizedBox(width: 20),
-                        // _calendarWidget(),
+                        const SizedBox(width: 20),
+                        _calendarWidget(),
                       ],
                     ),
                   ),
@@ -278,13 +278,20 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   _calendarWidget() {
+    // return CalendarEmployeeWidget(
+    //   onRefreshTap: () {},
+    //   onDateTap: (dateTime) {},
+    //   listSchedule:[],
+    // );
     return BlocBuilder<EmployeeCubit, EmployeeState>(
       builder: (context, state) {
         if (state is EmployeeLoaded) {
           final entity = state.data.first;
 
           return CalendarEmployeeWidget(
-            onRefreshTap: () {},
+            onRefreshTap: () {
+              BlocProvider.of<EmployeeCubit>(context).load("");
+            },
             onDateTap: (dateTime) {},
             listSchedule: entity.schedule,
           );

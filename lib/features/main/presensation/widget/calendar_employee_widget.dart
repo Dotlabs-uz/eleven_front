@@ -4,6 +4,7 @@ import '../../../../core/utils/color_helper.dart';
 import '../../../../core/utils/string_helper.dart';
 import '../../../management/domain/entity/employee_schedule_entity.dart';
 import '../../../management/presentation/widgets/employee_schedule_widget.dart';
+import 'package:collection/collection.dart';
 
 class CalendarEmployeeWidget extends StatefulWidget {
   final Function() onRefreshTap;
@@ -43,6 +44,7 @@ class _CalendarEmployeeWidgetState extends State<CalendarEmployeeWidget> {
   @override
   void initState() {
     _initDaysOfMonth();
+
     super.initState();
   }
 
@@ -80,7 +82,6 @@ class _CalendarEmployeeWidgetState extends State<CalendarEmployeeWidget> {
           // border: Border.all(color: Colors.black),
           // borderRadius: BorderRadius.circular(10),
           ),
-      height: 300,
       width: 280,
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -184,22 +185,20 @@ class _CalendarEmployeeWidgetState extends State<CalendarEmployeeWidget> {
                 index % 7 == 5 || index % 7 == 6; // Суббота и воскресенье
             final now = DateTime.now();
             final currentYear = now.year;
+            final isCurrentMonth = selectedMonth == now.month;
+            final isCurrentDate = isCurrentMonth && day == now.day;
+            final isSelectedDate =
+                selectedDate.day == day && selectedDate.month == selectedMonth;
 
             return _DayItem(
               day: day,
               isWeekend: isWeekend,
-              selectedDate: selectedDate,
               month: selectedMonth,
-              year: currentYear,
-              onDateTap: (dateTime) {
-                if (day != null) {
-                  selectedDate = DateTime(currentYear, selectedMonth, day);
-
-                  setState(() {});
-                  widget.onDateTap.call(selectedDate);
-                }
-              },
+              selectedDate: selectedDate,
+              isCurrentDate: isCurrentDate,
+              isSelectedDate: isSelectedDate,
               listEmployeeScheduleField: widget.listSchedule,
+              year: currentYear,
             );
           },
         ),
@@ -213,9 +212,10 @@ class _DayItem extends StatefulWidget {
   final int year;
   final int month;
   final bool isWeekend;
+  final bool isSelectedDate;
+  final bool isCurrentDate;
   final DateTime selectedDate;
   final List<EmployeeScheduleEntity> listEmployeeScheduleField;
-  final Function(DateTime dateTime) onDateTap;
 
   const _DayItem({
     required this.day,
@@ -223,7 +223,8 @@ class _DayItem extends StatefulWidget {
     required this.month,
     required this.isWeekend,
     required this.selectedDate,
-    required this.onDateTap,
+    required this.isCurrentDate,
+    required this.isSelectedDate,
     required this.listEmployeeScheduleField,
   });
 
@@ -232,21 +233,12 @@ class _DayItem extends StatefulWidget {
 }
 
 class _DayItemState extends State<_DayItem> {
-  Color? backgroundColor;
-  static int month = -1;
-
-  EmployeeScheduleEntity? scheduleEntity;
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  static EmployeeScheduleEntity? fieldEntity;
 
   @override
   void didUpdateWidget(covariant _DayItem oldWidget) {
-    if (month != widget.month) {
-      month = widget.month;
-    }
+    initialize();
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -257,28 +249,47 @@ class _DayItemState extends State<_DayItem> {
   }
 
   initialize() {
-    month = widget.month;
+    initField();
+    // if(month != DateTime.now().month) {
+    //   print(" month != DateTime.now().month  ${month != DateTime.now().month}");
+    //   print("Filed entity ${fieldEntity != null}");
+    //   fieldEntity = null;
+    //   setState(() {
+    //
+    //   });
+    // }
+  }
 
+  initField() {
     if (widget.day != null) {
       final dt = DateTime(widget.year, widget.month, widget.day!);
-      scheduleEntity = widget.listEmployeeScheduleField.firstWhere((element) {
-        final elementDt = DateTime.parse(
-            DateFormat("yyyy-MM-dd").format(DateTime.parse(element.date)));
+      // print("Date time ${dt}");
 
-        return elementDt.isAtSameMomentAs(dt);
+      fieldEntity =
+          widget.listEmployeeScheduleField.firstWhereOrNull((element) {
+
+        return DateFormat("yyyy-MM-dd").parse(element.date) == dt;
+      });
+      setState(() {
+
+      });
+
+      // print(fieldEntity);
+    } else {
+      fieldEntity = null;
+      setState(() {
+
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
+    return Container(
       decoration: BoxDecoration(
-        color: scheduleEntity != null
-            ? ColorHelper.getColorForScheduleByStatus(
-                scheduleEntity!.status)
-            : Colors.transparent,
+        color: fieldEntity != null
+            ? ColorHelper.getColorForScheduleByStatus(fieldEntity!.status)
+            : null,
         borderRadius: BorderRadius.circular(6),
       ),
       child: widget.day != null
@@ -287,7 +298,15 @@ class _DayItemState extends State<_DayItem> {
                 widget.day.toString(),
                 style: TextStyle(
                   fontSize: 14,
-                  color: widget.isWeekend ? Colors.red : Colors.black,
+                  color: fieldEntity != null
+                      ? Colors.black
+                      : widget.isCurrentDate
+                          ? Colors.white
+                          : widget.isSelectedDate
+                              ? Colors.white
+                              : widget.isWeekend
+                                  ? Colors.red
+                                  : Colors.black,
                 ),
               ),
             )
@@ -295,3 +314,90 @@ class _DayItemState extends State<_DayItem> {
     );
   }
 }
+//
+// class _DayItem extends StatefulWidget {
+//   final int? day;
+//   final int year;
+//   final int month;
+//   final bool isWeekend;
+//   final DateTime selectedDate;
+//   final List<EmployeeScheduleEntity> listEmployeeScheduleField;
+//   final Function(DateTime dateTime) onDateTap;
+//
+//   const _DayItem({
+//     required this.day,
+//     required this.year,
+//     required this.month,
+//     required this.isWeekend,
+//     required this.selectedDate,
+//     required this.onDateTap,
+//     required this.listEmployeeScheduleField,
+//   });
+//
+//   @override
+//   State<_DayItem> createState() => _DayItemState();
+// }
+//
+// class _DayItemState extends State<_DayItem> {
+//   Color? backgroundColor;
+//   static int month = -1;
+//
+//   EmployeeScheduleEntity? scheduleEntity;
+//
+//   @override
+//   void dispose() {
+//     super.dispose();
+//   }
+//
+//   @override
+//   void didUpdateWidget(covariant _DayItem oldWidget) {
+//     if (month != widget.month) {
+//       month = widget.month;
+//     }
+//     super.didUpdateWidget(oldWidget);
+//   }
+//
+//   @override
+//   void initState() {
+//     initialize();
+//     super.initState();
+//   }
+//
+//   initialize() {
+//     month = widget.month;
+//
+//     if (widget.day != null) {
+//       final dt = DateTime(widget.year, widget.month, widget.day!);
+//       scheduleEntity = widget.listEmployeeScheduleField.firstWhere((element) {
+//         final elementDt = DateTime.parse(
+//             DateFormat("yyyy-MM-dd").format(DateTime.parse(element.date)));
+//
+//         return elementDt.isAtSameMomentAs(dt);
+//       });
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: scheduleEntity != null
+//             ? ColorHelper.getColorForScheduleByStatus(
+//                 scheduleEntity!.status)
+//             : Colors.transparent,
+//         borderRadius: BorderRadius.circular(6),
+//       ),
+//       child: widget.day != null
+//           ? Center(
+//               child: Text(
+//                 widget.day.toString(),
+//                 style: TextStyle(
+//                   fontSize: 14,
+//                   color: widget.isWeekend ? Colors.red : Colors.black,
+//                 ),
+//               ),
+//             )
+//           : const SizedBox(),
+//     );
+//   }
+// }
