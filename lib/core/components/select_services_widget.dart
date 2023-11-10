@@ -139,7 +139,7 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       margin: const EdgeInsets.only(right: 6, bottom: 6),
       decoration: BoxDecoration(
-        color: serviceProductEntity.sex == "male" ? Colors.blue : Colors.pink,
+        color: serviceProductEntity.sex == "men" ? Colors.blue : Colors.pink,
         borderRadius: BorderRadius.circular(100),
       ),
       child: Text(

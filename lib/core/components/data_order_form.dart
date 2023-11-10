@@ -48,8 +48,8 @@ class DataOrderFormState extends State<DataOrderForm> {
   void initState() {
     price = widget.fields['price']?.val ?? 0;
     duration = widget.fields['duration']?.val ?? 0;
-    client = widget.fields['barberId']?.val ?? "";
-    barber = widget.fields['clientId']?.val ?? "";
+    client = widget.fields['clientId']?.val ?? "";
+    barber = widget.fields['barberId']?.val ?? "";
     orderStart = widget.fields['orderStart']?.val ?? DateTime.now();
 
     print("Duration $duration");
@@ -190,8 +190,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                               enableCancel: false,
                             );
                             return;
-                          }
-                          if (barber.isEmpty) {
+                          } else if (barber.isEmpty) {
                             await confirm(
                               context,
                               title: const Text('barber').tr(),
@@ -200,8 +199,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                               enableCancel: false,
                             );
                             return;
-                          }
-                          if (selectedProducts.isEmpty) {
+                          } else if (selectedProducts.isEmpty) {
                             await confirm(
                               context,
                               title: const Text('services').tr(),
@@ -210,8 +208,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                               enableCancel: false,
                             );
                             return;
-                          }
-                          if (orderStart.isBefore(DateTime.now())) {
+                          } else if (orderStart.isBefore(DateTime.now())) {
                             await confirm(
                               context,
                               title: const Text('orderStart').tr(),
