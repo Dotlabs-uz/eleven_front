@@ -174,7 +174,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                   child: Column(
                     children: <Widget>[
                       const SizedBox(height: 20),
-                      _infoWidget("${'price'.tr()}:", price , "сум"),
+                      _infoWidget("${'price'.tr()}:", price, "сум"),
                       const SizedBox(height: 15),
                       _infoWidget("${'duration'.tr()}:", duration, "мин"),
                       const SizedBox(height: 30),
@@ -189,7 +189,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                               textOK: const Text('ok').tr(),
                               enableCancel: false,
                             );
-                          } else if (barber.isEmpty) {
+                            return;
+                          }
+                          if (barber.isEmpty) {
                             await confirm(
                               context,
                               title: const Text('barber').tr(),
@@ -197,7 +199,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                               textOK: const Text('ok').tr(),
                               enableCancel: false,
                             );
-                          } else if (selectedProducts.isEmpty) {
+                            return;
+                          }
+                          if (selectedProducts.isEmpty) {
                             await confirm(
                               context,
                               title: const Text('services').tr(),
@@ -205,7 +209,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                               textOK: const Text('ok').tr(),
                               enableCancel: false,
                             );
-                          } else if (orderStart.isBefore(DateTime.now())) {
+                            return;
+                          }
+                          if (orderStart.isBefore(DateTime.now())) {
                             await confirm(
                               context,
                               title: const Text('orderStart').tr(),
@@ -215,14 +221,14 @@ class DataOrderFormState extends State<DataOrderForm> {
                               textOK: const Text('ok').tr(),
                               enableCancel: false,
                             );
-                          } else {
-                            widget.saveData
-                                .call(selectedProducts, barber, client);
-                            BlocProvider.of<ShowSelectServicesCubit>(context)
-                                .disable();
-                            SuccessFlushBar("change_success".tr())
-                                .show(context);
+                            return;
                           }
+
+                          widget.saveData
+                              .call(selectedProducts, barber, client);
+                          BlocProvider.of<ShowSelectServicesCubit>(context)
+                              .disable();
+                          SuccessFlushBar("change_success".tr()).show(context);
                         },
                       ),
                       const SizedBox(height: 20),
@@ -250,7 +256,7 @@ class DataOrderFormState extends State<DataOrderForm> {
           ),
         ),
         Text(
-          value.toString()+ " " + valueText,
+          value.toString() + " " + valueText,
           style: const TextStyle(
             color: Colors.black,
             fontSize: 16,
