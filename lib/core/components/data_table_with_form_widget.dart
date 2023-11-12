@@ -119,6 +119,7 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
   Widget build(BuildContext context) {
     configuration = context.locale.languageCode == 'uz'
         ? PlutoGridConfiguration(
+
             localeText: const PlutoGridLocaleText.russian(
               unfreezeColumn: "Ustunni muzdan tushiring",
               freezeColumnToStart: "Boshida ustunni o'rnating",
@@ -157,6 +158,7 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
             ///
             /// Return the value returned by resolveDefaultColumnFilter through the resolver function.
             /// Prevents errors returning filters that are not in the filters list.
+
             columnFilter: PlutoGridColumnFilterConfig(
               filters: const [
                 ...FilterHelper.defaultFilters,
@@ -245,6 +247,7 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
         : PlutoGrid(
             columns: columns,
             rows: rows,
+
             onSizeChanged: (column, size) {
               jsonSizes[column.field] = size;
               debugPrint(
@@ -252,15 +255,11 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
 
               _saveSize(jsonSizes);
             },
-
-            // columnGroups: columnGroups,
             mode: PlutoGridMode.readOnly,
-
             onRowDoubleTap: (event) {
               selectedRow = event.row;
               widget.onTap?.call(event.row);
             },
-
             onLoaded: (PlutoGridOnLoadedEvent event) async {
               stateManager = event.stateManager;
 
@@ -284,9 +283,7 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
               // _autoFitColumn(widget.columns);
               // _setCheckToZero(widget.columns);
             },
-
             onRowChecked: widget.handleOnRowChecked,
-
             onChanged: (PlutoGridOnChangedEvent event) =>
                 widget.onChanged?.call(event.row),
             rowColorCallback: (rowColorContext) {
@@ -303,6 +300,7 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
               return Colors.white;
             },
             configuration: configuration,
+
           );
   }
 
