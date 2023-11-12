@@ -88,9 +88,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
             height: 40,
             width: MediaQuery.of(context).size.width,
             child: CupertinoSegmentedControl<String>(
-              selectedColor: const Color(0xff93A7B0),
+              selectedColor: const Color(0xff071E32),
               groupValue: selectedValue,
-              borderColor: Colors.green,
+              borderColor: const Color(0xff071E32),
               padding: EdgeInsets.zero,
               onValueChanged: (String value) {
                 setState(() {

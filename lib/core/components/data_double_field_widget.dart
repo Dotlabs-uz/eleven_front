@@ -105,16 +105,15 @@ class _DataDoubleFieldWidgetState extends State<DataDoubleFieldWidget> {
                 // initialValue: widget.fieldEntity.val,
                 controller: widget.controller ?? controllerField,
                 obscureText: widget.isPasswordField,
-
                 obscuringCharacter: '*',
                 keyboardType: TextInputType.number,
                 inputFormatters: widget.currencyTextInputFormatter != null
                     ? [
-                  widget.currencyTextInputFormatter!,
-                ]
+                        widget.currencyTextInputFormatter!,
+                      ]
                     : widget.inputFormattes != null
-                    ? widget.inputFormattes!
-                    : [],
+                        ? widget.inputFormattes!
+                        : [],
 
                 // controller: controller,
                 maxLines: widget.maxLines,
@@ -126,26 +125,27 @@ class _DataDoubleFieldWidgetState extends State<DataDoubleFieldWidget> {
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   hintText: widget.fieldEntity?.hintText.tr(),
+                  enabledBorder: widget.fieldEntity!.isRequired
+                      ? const OutlineInputBorder(
+                          borderSide: BorderSide(
+                          color: Colors.grey,
+                        ))
+                      : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(6),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       width: 2,
-                      color: widget.fieldEntity!.isRequired
-                          ? Colors.blueGrey
-                          : const Color(0xFF000000),
+                      color: Color(0xff071E32),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(6),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       width: 2,
-                      color: widget.fieldEntity!.isRequired
-                          ? Colors.blueGrey
-                          : const Color(0xFF000000),
+                      color: Color(0xff071E32),
                     ),
                   ),
-                  hintStyle: Theme
-                      .of(context)
+                  hintStyle: Theme.of(context)
                       .textTheme
                       .bodyLarge!
                       .copyWith(color: AppColors.hintTextColor),
@@ -164,8 +164,7 @@ class _DataDoubleFieldWidgetState extends State<DataDoubleFieldWidget> {
                     } else {
                       widget.fieldEntity?.val = double.parse(value);
                     }
-                    log("Field value  == ${widget.fieldEntity?.val} ${widget
-                        .fieldEntity?.hintText ?? ""}");
+                    log("Field value  == ${widget.fieldEntity?.val} ${widget.fieldEntity?.hintText ?? ""}");
                   } catch (e) {
                     debugPrint("Error $e");
                   }

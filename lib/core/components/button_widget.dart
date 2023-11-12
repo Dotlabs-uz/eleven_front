@@ -15,7 +15,8 @@ class ButtonWidget extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.color,
-    this.isEnabled = true,   this.borderRadius,
+    this.isEnabled = true,
+    this.borderRadius,
   }) : super(key: key);
 
   @override
@@ -41,13 +42,14 @@ class ButtonWidget extends StatelessWidget {
             gradient: color != null
                 ? null
                 : LinearGradient(
-              colors: isEnabled
-                  ? [Colors.blueGrey.shade300, Colors.blueGrey.shade200]
-                  : [Colors.grey, Colors.grey],
-            ),
-            borderRadius: borderRadius ?? const BorderRadius.all(
-              Radius.circular(6),
-            ),
+                    colors: isEnabled
+                        ? [const Color(0xff071E32), const Color(0xff0f2a44)]
+                        : [Colors.grey, Colors.grey],
+                  ),
+            borderRadius: borderRadius ??
+                const BorderRadius.all(
+                  Radius.circular(6),
+                ),
           ),
           child: Text(
             text.tr(),

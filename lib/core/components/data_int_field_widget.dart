@@ -105,7 +105,7 @@ class _DataIntFieldWidgetState extends State<DataIntFieldWidget> {
                     borderRadius: BorderRadius.circular(6),
                     borderSide: const BorderSide(
                       width: 2,
-                      color: Colors.blue,
+                      color: const Color(0xFF000000),
                     ),
                   ),
                   border: OutlineInputBorder(

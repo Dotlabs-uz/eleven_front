@@ -12,6 +12,7 @@ import '../../features/management/domain/entity/customer_entity.dart';
 import '../../features/management/domain/usecases/customer.dart';
 import '../../features/management/presentation/cubit/customer/customer_cubit.dart';
 import '../../get_it/locator.dart';
+import '../constants/drop_down_decoration.dart';
 import '../entities/field_entity.dart';
 import 'package:collection/collection.dart';
 import 'data_form.dart';
@@ -275,37 +276,12 @@ class _CustomerFieldContentState extends State<CustomerFieldContent> {
               //   },
               // ),
               compareFn: (item, selectedItem) => (item.id == selectedItem.id),
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  enabledBorder: widget.fieldEntity.isRequired
-                      ? const OutlineInputBorder(
-                          borderSide: BorderSide(
-                          color: Colors.blueGrey,
-                        ))
-                      : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: BorderSide(
-                      width: 2,
-                      color: widget.fieldEntity!.isRequired
-                          ? Colors.blueGrey
-                          : const Color(0xFF000000),
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: BorderSide(
-                      width: 2,
-                      color: widget.fieldEntity!.isRequired
-                          ? Colors.blueGrey
-                          : const Color(0xFF000000),
-                    ),
-                  ),
-                  labelText: "customer".tr().toUpperCase(),
-                  hintText: "Выберите пользователя",
-                ),
+              dropdownDecoratorProps: DropDownDecoration.dropDownColor(
+                'customer',
+                "customer".tr().toUpperCase(),
+                widget.fieldEntity.isRequired,
               ),
+
               onChanged: (CustomerEntity? data) {
                 log("Data $data");
 

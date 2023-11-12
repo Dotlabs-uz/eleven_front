@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../features/management/domain/entity/barber_entity.dart';
 import '../../get_it/locator.dart';
+import '../constants/drop_down_decoration.dart';
 import '../entities/field_entity.dart';
 import '../utils/assets.dart';
 
@@ -282,24 +283,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
               //   },
               // ),
               compareFn: (item, selectedItem) => (item.id == selectedItem.id),
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  enabledBorder: widget.fieldEntity.isRequired
-                      ? const OutlineInputBorder(
-                          borderSide: BorderSide(
-                          color: Colors.green,
-                        ))
-                      : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                  ),
-                  labelText: "barber".tr().toUpperCase(),
-                  hintText: "barber".tr(),
-                ),
+
+              dropdownDecoratorProps: DropDownDecoration.dropDownColor(
+                'barber',
+                "barber".tr().toUpperCase(),
+                widget.fieldEntity.isRequired,
               ),
               onChanged: (BarberEntity? data) {
                 log("Data $data");

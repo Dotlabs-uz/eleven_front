@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../features/management/domain/usecases/customer.dart';
 import '../../features/management/presentation/cubit/customer/customer_cubit.dart';
 import '../../get_it/locator.dart';
+import '../constants/drop_down_decoration.dart';
 import '../entities/field_entity.dart';
 
 class ClientFieldWidget extends StatefulWidget {
@@ -239,26 +240,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
               //   },
               // ),
               compareFn: (item, selectedItem) => (item.id == selectedItem.id),
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  enabledBorder: widget.fieldEntity != null
-                      ? widget.fieldEntity!.isRequired
-                          ? const OutlineInputBorder(
-                              borderSide: BorderSide(
-                              color: Colors.green,
-                            ))
-                          : null
-                      : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                  ),
-                  labelText: "customer".tr().toUpperCase(),
-                  hintText: "customer".tr(),
-                ),
+              dropdownDecoratorProps: DropDownDecoration.dropDownColor(
+                'customer',
+                "customer".tr().toUpperCase(),
+                widget.fieldEntity?.isRequired ?? false,
               ),
               onChanged: (CustomerEntity? data) {
                 log("Data $data");

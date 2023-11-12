@@ -55,28 +55,14 @@ class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              widget.fieldEntity.label.tr().toUpperCase(),
-              // style: Theme.of(context).textTheme.bodyText2,
-              textAlign: TextAlign.start,
-              style: GoogleFonts.nunito(
-                color: Colors.grey.shade700,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            if (widget.fieldEntity.isRequired) const SizedBox(width: 5),
-            if (widget.fieldEntity.isRequired)
-              Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                  color: Colors.green.shade200,
-                  shape: BoxShape.circle,
-                ),
-              ),
-          ],
+        Text(
+          widget.fieldEntity.label.tr().toUpperCase(),
+          // style: Theme.of(context).textTheme.bodyText2,
+          textAlign: TextAlign.start,
+          style: GoogleFonts.nunito(
+            color: Colors.grey.shade700,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         const SizedBox(height: 3),
         Row(
@@ -91,19 +77,24 @@ class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
 
                     // controller: controller,
                     maxLines: widget.maxLines,
-                    style: GoogleFonts.nunito(color: Colors.green),
+                    style: GoogleFonts.nunito(color: Colors.black54),
                     // style: Theme.of(context).textTheme.headline6,
                     decoration: InputDecoration(
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 10),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(6),
-                        borderSide: const BorderSide(),
+                        borderSide: const BorderSide(
+                          color: Color(0xff071E32),
+
+                        ),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(6),
                         borderSide: const BorderSide(
                           width: 2,
+                          color: Color(0xff071E32),
+
                         ),
                       ),
                       hintText: widget.fieldEntity.hintText.tr(),

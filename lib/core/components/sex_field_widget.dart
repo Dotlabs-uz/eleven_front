@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../constants/drop_down_decoration.dart';
 import '../constants/type_constants.dart';
 import '../entities/field_entity.dart';
 
@@ -123,24 +124,10 @@ class _CustomerOrderFieldContentState extends State<CustomerOrderFieldContent> {
                 ),
               ),
               compareFn: (item, selectedItem) => (item == selectedItem),
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: const BorderSide(
-                      width: 2,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                  ),
-                  hintText: "status".tr().toUpperCase(),
-                ),
+              dropdownDecoratorProps: DropDownDecoration.dropDownColor(
+                'sex',
+                "sex".tr().toUpperCase(),
+                widget.fieldEntity?.isRequired ?? false,
               ),
               onChanged: (val) {
                 if (val != null) {

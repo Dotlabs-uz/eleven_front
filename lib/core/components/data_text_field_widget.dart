@@ -99,20 +99,17 @@ class _DataTextFieldWidgetState extends State<DataTextFieldWidget> {
                   : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   width: 2,
-                  color: widget.fieldEntity!.isRequired
-                      ? Colors.blueGrey
-                      : const Color(0xFF000000),
+                  color:Color(0xff071E32),
+
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   width: 2,
-                  color: widget.fieldEntity!.isRequired
-                      ? Colors.blueGrey
-                      : const Color(0xFF000000),
+                  color:Color(0xff071E32),
                 ),
               ),
               hintStyle: Theme.of(context)

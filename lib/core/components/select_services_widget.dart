@@ -95,7 +95,7 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
                       // ),
                       color: Colors.white,
                       border: Border.all(
-                        color: Colors.green,
+                        color: const Color(0xff071E32),
                       ),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(6),
@@ -105,7 +105,7 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
                       child: Text(
                         "selectServices".tr(),
                         style: const TextStyle(
-                          color: Colors.black,
+                          color: Colors.black54,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),

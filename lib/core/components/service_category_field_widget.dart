@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../features/management/domain/usecases/customer.dart';
 import '../../get_it/locator.dart';
+import '../constants/drop_down_decoration.dart';
 import '../entities/field_entity.dart';
 
 class ServiceCategoryFieldWidget extends StatefulWidget {
@@ -256,26 +257,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
               //   },
               // ),
               compareFn: (item, selectedItem) => (item.id == selectedItem.id),
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  enabledBorder: widget.fieldEntity.isRequired
-                      ? const OutlineInputBorder(
-                          borderSide: BorderSide(
-                          color: Colors.green,
-                        ))
-                      : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                  ),
-                  labelText:
-                      "serviceProductCategoryFieldLabelText".tr().toUpperCase(),
-                  hintText: "serviceProductCategoryFieldHintText".tr(),
-                ),
-              ),
+
+              dropdownDecoratorProps: DropDownDecoration.dropDownColor(
+              'serviceProductCategoryFieldLabelText',
+              "serviceProductCategoryFieldLabelText".tr().toUpperCase(),
+              widget.fieldEntity.isRequired,
+            ),
               onChanged: (ServiceProductCategoryEntity? data) {
                 log("Data $data");
 

@@ -133,6 +133,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                     barber = value.id;
                   },
                 ),
+                PaymentTypeFieldWidget(
+                  fieldEntity: widget.fields['paymentType']!,
+                ),
                 DateTimeFieldWidget(
                   fieldEntity: widget.fields['orderStart']!,
                   withTime: true,
@@ -143,6 +146,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                 //   fieldEntity: widget.fields['orderEnd']!,
                 //   withTime: true,
                 // ),
+
+
+
                 const SizedBox(height: 10),
 
                 SelectServicesWidget(
@@ -153,9 +159,6 @@ class DataOrderFormState extends State<DataOrderForm> {
                     print("Selected services $selectedProducts");
                     getPriceAndDuration(selectedProducts);
                   },
-                ),
-                PaymentTypeFieldWidget(
-                  fieldEntity: widget.fields['paymentType']!,
                 ),
                 const SizedBox(height: 10),
                 const Spacer(),

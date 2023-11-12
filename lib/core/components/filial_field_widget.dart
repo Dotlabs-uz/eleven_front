@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../features/products/domain/entity/filial_entity.dart';
 import '../../features/products/presensation/cubit/filial/filial_cubit.dart';
 import '../../get_it/locator.dart';
+import '../constants/drop_down_decoration.dart';
 import '../entities/field_entity.dart';
 
 class FilialFieldWidget extends StatefulWidget {
@@ -253,26 +254,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
               //   },
               // ),
               compareFn: (item, selectedItem) => (item.id == selectedItem.id),
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  enabledBorder: widget.fieldEntity.isRequired
-                      ? const OutlineInputBorder(
-                          borderSide: BorderSide(
-                          color: Colors.green,
-                        ))
-                      : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: const BorderSide(
-                      width: 2,
-                    ),
-                  ),
-                  labelText: "filial".tr().toUpperCase(),
-                  hintText: "filial".tr(),
-                ),
-              ),
-              onChanged: (FilialEntity? data) {
+              dropdownDecoratorProps: DropDownDecoration.dropDownColor(
+                'filial',
+                "filial".tr().toUpperCase(),
+                widget.fieldEntity.isRequired,
+              ),              onChanged: (FilialEntity? data) {
                 log("Data $data");
 
                 if (data != null) {
