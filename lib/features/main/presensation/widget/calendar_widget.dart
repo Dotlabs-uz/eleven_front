@@ -137,6 +137,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     );
   }
 
+
   _monthSelector() {
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -154,7 +155,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         const Spacer(),
         IconButton(
           onPressed: () {
-            selectedDate = DateTime.now();
+            final now = DateTime.now();
+            selectedDate = now;
             setState(() {});
             widget.onRefreshTap.call();
           },
@@ -395,7 +397,7 @@ class _DayItemState extends State<_DayItem> {
                           ? Colors.white
                           : widget.isSelectedDate
                               ? Colors.white
-                              : widget.isWeekend
+                              : widget.isCurrentDate ?Colors.white : widget.isWeekend
                                   ? Colors.red
                                   : Colors.white,
                     ),
