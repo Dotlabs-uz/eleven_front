@@ -124,7 +124,7 @@ class _CustomerOrderFieldContentState extends State<CustomerOrderFieldContent> {
               ),
               compareFn: (item, selectedItem) => (item == selectedItem),
               dropdownDecoratorProps: DropDownDecoration.dropDownColor(
-                'role',
+                'role'.tr(),
                 "role".tr().toUpperCase(),
                 widget.fieldEntity?.isRequired ?? false,
               ),              onChanged: (val) {

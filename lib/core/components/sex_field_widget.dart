@@ -125,7 +125,7 @@ class _CustomerOrderFieldContentState extends State<CustomerOrderFieldContent> {
               ),
               compareFn: (item, selectedItem) => (item == selectedItem),
               dropdownDecoratorProps: DropDownDecoration.dropDownColor(
-                'sex',
+                'sex'.tr(),
                 "sex".tr().toUpperCase(),
                 widget.fieldEntity?.isRequired ?? false,
               ),

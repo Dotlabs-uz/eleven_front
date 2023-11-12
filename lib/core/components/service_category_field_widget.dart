@@ -259,7 +259,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
               compareFn: (item, selectedItem) => (item.id == selectedItem.id),
 
               dropdownDecoratorProps: DropDownDecoration.dropDownColor(
-              'serviceProductCategoryFieldLabelText',
+              'serviceProductCategoryFieldLabelText'.tr(),
               "serviceProductCategoryFieldLabelText".tr().toUpperCase(),
               widget.fieldEntity.isRequired,
             ),

@@ -277,7 +277,7 @@ class _CustomerFieldContentState extends State<CustomerFieldContent> {
               // ),
               compareFn: (item, selectedItem) => (item.id == selectedItem.id),
               dropdownDecoratorProps: DropDownDecoration.dropDownColor(
-                'customer',
+                "customer".tr(),
                 "customer".tr().toUpperCase(),
                 widget.fieldEntity.isRequired,
               ),

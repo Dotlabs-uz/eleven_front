@@ -70,7 +70,7 @@ class Menus {
     ),
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
-      text: 'barber',
+      text: 'barbers',
       page: const BarberScreen(),
     ),
   ];

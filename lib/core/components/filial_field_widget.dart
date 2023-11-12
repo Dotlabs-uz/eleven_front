@@ -255,7 +255,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
               // ),
               compareFn: (item, selectedItem) => (item.id == selectedItem.id),
               dropdownDecoratorProps: DropDownDecoration.dropDownColor(
-                'filial',
+                'filial'.tr(),
                 "filial".tr().toUpperCase(),
                 widget.fieldEntity.isRequired,
               ),              onChanged: (FilialEntity? data) {
