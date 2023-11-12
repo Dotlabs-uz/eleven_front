@@ -13,7 +13,6 @@ class TimeTableRulerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: Constants.rulerWidth,
-
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -23,6 +22,7 @@ class TimeTableRulerWidget extends StatelessWidget {
       ),
     );
   }
+
   List<Widget> _buildTimeSlots() {
     List<Widget> timeSlots = [];
 
@@ -47,22 +47,20 @@ class TimeTableRulerWidget extends StatelessWidget {
 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-
         children: [
           Text(
-            '${time.hour}', // Время
-
-            style: const TextStyle(
-              fontSize: 16, // Размер шрифта времени
-              color: Colors.black,
-              fontWeight: FontWeight.bold, // Жирный стиль для часа
+            '${time.hour}:00',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade500,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(width: 5),
           Container(
             height: 1,
-            width: 50,
-            color: Colors.black,
+            width: 40,
+            color: Colors.grey.shade600,
           ),
         ],
       ),
@@ -72,27 +70,27 @@ class TimeTableRulerWidget extends StatelessWidget {
   Widget _buildTimeMinuteSlot(DateTime time) {
     return Container(
       height: 50, // Высота слота времени
-      color:Colors.transparent,
+      color: Colors.transparent,
       padding: const EdgeInsets.only(right: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-
         children: [
-          const Text(
-            '30', // Время
+          Text(
+            "${time.hour}:30",
             style: TextStyle(
-              fontSize: 16, // Размер шрифта времени
-              color: Colors.black,
+              fontSize: 12,
+              color: Colors.grey.shade500,
 
-              fontWeight: FontWeight.bold, // Жирный стиль для часа
+              fontWeight: FontWeight.bold,
             ),
           ),
+          const SizedBox(width: 5),
+
           Container(
             height: 1,
             width: 20,
-            color: Colors.black,
+            color: Colors.grey.shade600,
           ),
-
         ],
       ),
     );

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -17,23 +16,21 @@ class AppColors {
   static const scaffoldColor = Color(0xffF8FAFF);
   static const sideMenuSelected = Color(0xff1A1A1A);
   static const buttonColor = Colors.yellow;
-  static const  successColor = Color(0xFF0AE286);
+  static const successColor = Color(0xFF0AE286);
   static const hintTextColor = Color(0xFF999999);
 
   static const Color enabledTextColor = Colors.black;
-  static const Color timeTableCardAppBar = Colors.blue;
-  static const Color timeTableCard = Color(0xffDEE8FF);
+  static const Color timeTableCardSideColor = Color(0xff17A6E9);
+  static const Color timeTableCard = Color(0xffE7F6FD);
+  static const Color timeTableCardContentColor =   Color(0xff066BA2);
+  // static const Color timeTableCardSideColor = Color(0xffE7F6FD);
+  // static const Color timeTableCard =  Color(0xff337CF5);
 
   static const Color disabledTextColor = Color.fromARGB(255, 98, 98, 98);
-
 
   static const Color calendarButtonsColor = Colors.white;
   static const Color calendarMonthColor = Colors.white;
   static const Color calendarSelectedDateColor = Colors.orange;
   static const Color calendarCurrentDayColor = Colors.white;
   static const Color calendarWeekdayTitleColor = Colors.white;
-
-
-
-
 }

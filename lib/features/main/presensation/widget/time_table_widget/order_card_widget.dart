@@ -100,14 +100,13 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
           color: widget.isDragging
               ? Colors.grey.shade400.withOpacity(0.3)
               : AppColors.timeTableCard,
+
           border: const Border(
+
             left: BorderSide(
-              width: 1,
-              color: Colors.black26,
-            ),
-            right: BorderSide(
-              width: 1,
-              color: Colors.black26,
+              width: 3,
+              color: AppColors.timeTableCardSideColor,
+
             ),
           ),
         ),
@@ -118,40 +117,36 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        color: AppColors.timeTableCardAppBar,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
-                                style: GoogleFonts.nunito(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
+                              style: GoogleFonts.nunito(
+                                color: AppColors.timeTableCardContentColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            GestureDetector(
+                              child: const MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: Icon(
+                                  Icons.delete,
+                                  color: AppColors.timeTableCardContentColor,
+                                  size: 12,
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              GestureDetector(
-                                child: const MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                    size: 14,
-                                  ),
-                                ),
-                                onTap: () =>
-                                    widget.onOrderDelete?.call(widget.order.id),
-                              ),
-                            ],
-                          ),
+                              onTap: () =>
+                                  widget.onOrderDelete?.call(widget.order.id),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 3),
                       ...widget.order.services.map(
                         (e) => Flexible(
                           child: Padding(
@@ -160,7 +155,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                             child: Text(
                               "${e.name} ${e.price}сум. ${e.duration}м.",
                               style: GoogleFonts.nunito(
-                                color: Colors.black,
+                                color: AppColors.timeTableCardContentColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
                               ),

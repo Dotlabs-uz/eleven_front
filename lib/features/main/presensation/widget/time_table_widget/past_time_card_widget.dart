@@ -59,7 +59,7 @@ class _PastTimeCardWidgetState extends State<PastTimeCardWidget> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: h,
-      color: Colors.blue.withOpacity(0.01),
+      color: const Color(0xffDBDBDB).withOpacity(0.05),
       child: const SizedBox.shrink(),
     );
   }
