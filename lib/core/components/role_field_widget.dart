@@ -70,73 +70,58 @@ class _CustomerOrderFieldContentState extends State<CustomerOrderFieldContent> {
 
     return Padding(
       padding: widget.padding ?? const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.fieldEntity?.label.tr().toUpperCase() ?? "",
-            // style: Theme.of(context).textTheme.bodyText2,
-            textAlign: TextAlign.start,
-            style: GoogleFonts.nunito(
-              color: Colors.grey.shade700,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 3),
-          SizedBox(
-            height: 40,
-            child: DropdownSearch<String>(
-              items: itemsList,
-              enabled: widget.enabled,
-              itemAsString: (item) => item.tr(),
-              selectedItem: itemsList[ind],
-              popupProps: PopupPropsMultiSelection.menu(
-                showSelectedItems: true,
-                itemBuilder: (context, item, isSelected) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 5,
-                      left: 10,
-                      top: 5,
-                    ),
-                    child: Text(
-                      item.tr(),
-                      style: GoogleFonts.nunito(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                  );
-                },
-                showSearchBox: true,
-                searchFieldProps: TextFieldProps(
-                  controller: controllerSearch,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () => controllerSearch.clear(),
-                    ),
+      child: SizedBox(
+        height: 40,
+        child: DropdownSearch<String>(
+          items: itemsList,
+          enabled: widget.enabled,
+          itemAsString: (item) => item.tr(),
+          selectedItem: itemsList[ind],
+          popupProps: PopupPropsMultiSelection.menu(
+            showSelectedItems: true,
+            itemBuilder: (context, item, isSelected) {
+              return Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 5,
+                  left: 10,
+                  top: 5,
+                ),
+                child: Text(
+                  item.tr(),
+                  style: GoogleFonts.nunito(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
                   ),
                 ),
+              );
+            },
+            showSearchBox: true,
+            searchFieldProps: TextFieldProps(
+              controller: controllerSearch,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () => controllerSearch.clear(),
+                ),
               ),
-              compareFn: (item, selectedItem) => (item == selectedItem),
-              dropdownDecoratorProps: DropDownDecoration.dropDownColor(
-                'role'.tr(),
-                "role".tr().toUpperCase(),
-                widget.fieldEntity?.isRequired ?? false,
-              ),              onChanged: (val) {
-                if (val != null) {
-                  widget.fieldEntity?.val = val;
-
-                  widget.onChanged?.call(val);
-                }
-              },
             ),
           ),
-        ],
+          compareFn: (item, selectedItem) => (item == selectedItem),
+          dropdownDecoratorProps: DropDownDecoration.dropDownColor(
+            'role'.tr(),
+            "role".tr().toUpperCase(),
+            widget.fieldEntity?.isRequired ?? false,
+          ),              onChanged: (val) {
+            if (val != null) {
+              widget.fieldEntity?.val = val;
+
+              widget.onChanged?.call(val);
+            }
+          },
+        ),
       ),
     );
   }

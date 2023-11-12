@@ -78,7 +78,7 @@ class Menus {
   static List<SubMenu> productMenu = [
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
-      text: 'service_product',
+      text: 'services',
       page: const ServiceProductsScreen(),
     ),
     SubMenu(
