@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/features/management/domain/entity/employee_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -89,10 +90,7 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
                   context: context,
                   page: EmployeeProfileScreen(
                     employeeId: widget.fields['id']!.val!,
-                    employeeName: widget.fields['firstName']?.val +
-                            " " +
-                            widget.fields['lastName']?.val ??
-                        "",
+                    employeeEntity:EmployeeEntity.fromFields() ,
                   ),
                 );
               },

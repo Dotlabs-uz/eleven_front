@@ -80,19 +80,6 @@ class DataManagerFormState extends State<DataManagerForm> {
             DataIntFieldWidget(fieldEntity: widget.fields['phone']!),
             const SizedBox(height: 10),
             ButtonWidget(text: "save".tr(), onPressed: widget.saveData),
-            const SizedBox(height: 10),
-            ButtonWidget(
-              text: "navigateToEmployeeProfile".tr(),
-              onPressed: () {
-                AnimatedNavigation.push(
-                  context: context,
-                  page: EmployeeProfileScreen(
-                    employeeId: widget.fields['id']!.val!,
-                    employeeName: widget.fields['firstName']?.val + " "+ widget.fields['lastname']?.val   ?? "",
-                  ),
-                );
-              },
-            ),
           ],
         ),
       ),

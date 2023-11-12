@@ -23,10 +23,12 @@ import '../cubit/employee/employee_cubit.dart';
 
 class EmployeeProfileScreen extends StatefulWidget {
   final String employeeId;
-  final String employeeName;
-  const EmployeeProfileScreen(
-      {Key? key, required this.employeeId, required this.employeeName})
-      : super(key: key);
+  final EmployeeEntity employeeEntity;
+  const EmployeeProfileScreen({
+    Key? key,
+    required this.employeeId,
+    required this.employeeEntity,
+  }) : super(key: key);
 
   @override
   State<EmployeeProfileScreen> createState() => _EmployeeProfileScreenState();
@@ -51,7 +53,7 @@ class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
       ],
       child: ContentWidget(
         employeeCubit: employeeCubit,
-        employeeName: widget.employeeName,
+        employeeEntity: widget.employeeEntity,
         employeeId: widget.employeeId,
       ),
     );
@@ -62,13 +64,13 @@ class ContentWidget extends StatefulWidget {
   final EmployeeCubit employeeCubit;
 
   final String employeeId;
-  final String employeeName;
+  final EmployeeEntity employeeEntity;
 
   const ContentWidget({
     Key? key,
     required this.employeeCubit,
     required this.employeeId,
-    required this.employeeName,
+    required this.employeeEntity,
   }) : super(key: key);
 
   @override
@@ -79,15 +81,11 @@ class _ContentWidgetState extends State<ContentWidget> {
   final TextEditingController controllerFirstName = TextEditingController();
   final TextEditingController controllerLastName = TextEditingController();
   final TextEditingController controllerPhoneNumber = TextEditingController();
-  final TextEditingController controllerFilial = TextEditingController();
+  // final TextEditingController controllerFilial = TextEditingController();
   final TextEditingController controllerRole = TextEditingController();
 
   File? _file;
 
-  void _saveData() {
-    BlocProvider.of<EmployeeCubit>(context)
-        .save(employee: EmployeeEntity.fromFields());
-  }
 
   @override
   void initState() {
@@ -96,15 +94,15 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   init() async {
-    print(widget.employeeName.toString());
+    controllerFirstName.text = widget.employeeEntity.firstName;
+    controllerLastName.text = widget.employeeEntity.lastName;
+    controllerPhoneNumber.text = widget.employeeEntity.phoneNumber.toString();
+    // controllerFilial.text = widget.employeeEntity.;
+    controllerRole.text = widget.employeeEntity.role.tr();
+
     BlocProvider.of<EmployeeCubit>(context).load("");
   }
 
-  fetch(
-    int page,
-  ) async {
-    BlocProvider.of<EmployeeCubit>(context).load("", page: page);
-  }
 
   initCubit() {
     BlocProvider.of<EmployeeCubit>(context).init();
@@ -113,15 +111,14 @@ class _ContentWidgetState extends State<ContentWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.employeeName)),
+      appBar: AppBar(
+        title: Text(
+            "${widget.employeeEntity.firstName} ${widget.employeeEntity.lastName}"),
+        backgroundColor: const Color(0xff071E32),
+      ),
       body: SingleChildScrollView(
         child: BlocListener<EmployeeCubit, EmployeeState>(
           listener: (context, state) {
-            if (state is EmployeeLoaded) {
-              // customers = state.data;
-              // dataCount = state.dataCount;
-            }
-
             {
               if (state is EmployeeSaved) {
                 SuccessFlushBar("change_success".tr()).show(context);
@@ -143,7 +140,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      IconButton(
+                      if(_file != null)   IconButton(
                         onPressed: _file != null
                             ? () => setState(() => _file = null)
                             : null,
@@ -153,7 +150,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                           color: _file == null ? Colors.grey : Colors.blue,
                         ),
                       ),
-                      const SizedBox(width: 20),
+                          const SizedBox(width: 20),
                       Center(
                         child: Container(
                           height: 100,
@@ -246,11 +243,11 @@ class _ContentWidgetState extends State<ContentWidget> {
             label: "lastName".tr(),
             controller: controllerLastName,
           ),
-          const SizedBox(height: 15),
-          TextFormFieldWidget(
-            label: "shopName".tr(),
-            controller: controllerFilial,
-          ),
+          // const SizedBox(height: 15),
+          // TextFormFieldWidget(
+          //   label: "shopName".tr(),
+          //   controller: controllerFilial,
+          // ),
           const SizedBox(height: 15),
           TextFormFieldWidget(
             label: "phone".tr(),
@@ -268,7 +265,22 @@ class _ContentWidgetState extends State<ContentWidget> {
           ButtonWidget(
             text: "save".tr(),
             onPressed: () {
-              _saveData();
+              final employee = EmployeeEntity(
+                id: widget.employeeId,
+                firstName: controllerFirstName.text,
+                lastName: controllerLastName.text,
+                password: widget.employeeEntity.password,
+                login: widget.employeeEntity.login,
+                avatar: widget.employeeEntity.avatar,
+                role: widget.employeeEntity.role,
+                phoneNumber: widget.employeeEntity.phoneNumber,
+                notWorkingHours: widget.employeeEntity.notWorkingHours,
+                schedule: widget.employeeEntity.schedule,
+              );
+
+              BlocProvider.of<EmployeeCubit>(context).save(
+                employee: employee,
+              );
             },
           ),
           const SizedBox(height: 25),
