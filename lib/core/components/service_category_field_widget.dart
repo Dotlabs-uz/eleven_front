@@ -267,7 +267,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 log("Data $data");
 
                 if (data != null) {
-                  widget.fieldEntity.val = data.id;
+                  widget.fieldEntity.val = data;
 
                   widget.onChange?.call(data);
                 }
