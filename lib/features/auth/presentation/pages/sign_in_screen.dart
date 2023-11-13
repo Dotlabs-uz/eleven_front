@@ -1,8 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import '../../../../core/components/button_widget.dart';
 import '../../../../core/components/error_flash_bar.dart';
@@ -22,6 +25,8 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController controllerLogin = TextEditingController();
   final TextEditingController controllerPassword = TextEditingController();
+
+
 
 
   @override
@@ -84,15 +89,29 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  ButtonWidget(
-                    borderRadius: BorderRadius.circular(14),
-                    onPressed: () {
-                      BlocProvider.of<LoginCubit>(context).login(
-                        controllerLogin.text,
-                        controllerPassword.text,
-                      );
+                  RawKeyboardListener(
+                    focusNode: FocusNode(),
+                    onKey: (RawKeyEvent event) {
+                      if (event.isKeyPressed(LogicalKeyboardKey.enter) ||
+                          event.isKeyPressed(LogicalKeyboardKey.numpadEnter)) {
+                        BlocProvider.of<LoginCubit>(context).login(
+                          controllerLogin.text,
+                          controllerPassword.text,
+                        );
+                      }
+
                     },
-                    text: "enter".tr(),
+                    autofocus: true,
+                    child: ButtonWidget(
+                      borderRadius: BorderRadius.circular(14),
+                      onPressed: () {
+                        BlocProvider.of<LoginCubit>(context).login(
+                          controllerLogin.text,
+                          controllerPassword.text,
+                        );
+                      },
+                      text: "enter".tr(),
+                    ),
                   ),
                 ],
               ),
