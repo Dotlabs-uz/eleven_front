@@ -64,13 +64,73 @@ class _MainScreenState extends State<MainScreen> {
         },
         child: SafeArea(
           child: ResponsiveBuilder(
+
             mobileBuilder: (context, constraints) {
+
+              return Container(
+                color: AppColors.mainTextColor,
+                child: Row(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SideMenuWidget(),
+                    // Flexible(
+                    //   flex: constraints.maxWidth > 1350 ? 3 : 4,
+                    //   child: SingleChildScrollView(
+                    //     controller: ScrollController(),
+                    //     child: _buildSidebar(context),
+                    //   ),
+                    // ),
+                    Expanded(
+                      child: ContentWidget(
+                        menus: widget.menus,
+                        openDrawer: () {},
+                      ),
+                    ),
+                    // Flexible(
+                    //   flex: constraints.maxWidth > 1350 ? 14 : 11,
+                    //   child: ContentWidget(
+                    //     menus: widget.menus,
+                    //     openDrawer: controller.openDrawer,
+                    //   ),
+                    // ),
+                  ],
+                ),
+              );
               return ContentWidget(
                 menus: widget.menus,
                 openDrawer: () {},
               );
             },
             tabletBuilder: (context, constraints) {
+              return Container(
+                color: AppColors.mainTextColor,
+                child: Row(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SideMenuWidget(),
+                    // Flexible(
+                    //   flex: constraints.maxWidth > 1350 ? 3 : 4,
+                    //   child: SingleChildScrollView(
+                    //     controller: ScrollController(),
+                    //     child: _buildSidebar(context),
+                    //   ),
+                    // ),
+                    Expanded(
+                      child: ContentWidget(
+                        menus: widget.menus,
+                        openDrawer: () {},
+                      ),
+                    ),
+                    // Flexible(
+                    //   flex: constraints.maxWidth > 1350 ? 14 : 11,
+                    //   child: ContentWidget(
+                    //     menus: widget.menus,
+                    //     openDrawer: controller.openDrawer,
+                    //   ),
+                    // ),
+                  ],
+                ),
+              );
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
