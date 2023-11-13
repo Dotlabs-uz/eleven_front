@@ -78,6 +78,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   Center(
                     child: TextFormFieldWidget(
                       controller: controllerPassword,
+                      isPassword: true,
                       defaultBorderColor: Colors.black.withOpacity(0.3),
                       label: 'password'.tr(),
                     ),
