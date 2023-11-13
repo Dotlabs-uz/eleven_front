@@ -32,7 +32,7 @@ class ServiceProductCategoryModel extends ServiceProductCategoryEntity {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
 
-    data['_id'] = id;
+    // data['_id'] = id;
     data['name'] = name;
     data['services'] = services.map((e) => ServiceProductModel.fromEntity(e).toJson())
         .toList();
