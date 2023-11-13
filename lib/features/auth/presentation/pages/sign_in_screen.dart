@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import '../../../../core/components/button_widget.dart';
 import '../../../../core/components/error_flash_bar.dart';
