@@ -209,15 +209,16 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),
-        child: Responsive.isMobile(context)
-            ? widget.data.isEmpty
-                ? const Center(child: EmptyWidget())
-                : DataMobileViewWidget(
-                    data: List.of(widget.data),
-                    editData: (data) => widget.onTap?.call(data.getRow(data)),
-                    deleteData: (data) => widget.onDelete.call(data),
-                  )
-            : _desktopViewWithForm(),
+         child:  _desktopViewWithForm(),
+        // child: Responsive.isMobile(context)
+        //     ? widget.data.isEmpty
+        //         ? const Center(child: EmptyWidget())
+        //         : DataMobileViewWidget(
+        //             data: List.of(widget.data),
+        //             editData: (data) => widget.onTap?.call(data.getRow(data)),
+        //             deleteData: (data) => widget.onDelete.call(data),
+        //           )
+        //     : _desktopViewWithForm(),
       ),
     );
   }

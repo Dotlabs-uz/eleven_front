@@ -258,8 +258,13 @@ class _EmployeeScheduleTableWidgetState
 
             return RegionDetector(
               onFocused: () {
-                print("Focused ");
-                widget.onHoverDrag.call(fieldSchedule);
+                if(fieldSchedule.dateTime != null ) {
+
+                  if(fieldSchedule.dateTime!.isBefore(dateTimeNow )) return ;
+
+                  widget.onHoverDrag.call(fieldSchedule);
+
+                }
               },
               child: _EmployeeScheduleFieldWidget(
                 key: Key((day + widget.currentMonth + year).toString()),
@@ -360,6 +365,9 @@ class _EmployeeScheduleFieldWidgetState
 
   changeState() {
     if (widget.fieldSchedule.dateTime != null) {
+
+      final dt = DateTime.now();
+      if(widget.fieldSchedule.dateTime == DateTime(dt.year,dt.month,dt.day)) return;
       Dialogs.scheduleField(
         context: context,
         onConfirm: (val) {
