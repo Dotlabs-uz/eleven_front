@@ -30,9 +30,10 @@ class TimeTableRulerWidget extends StatelessWidget {
     while (timeTo.hour >= currentTime.hour) {
       timeSlots.add(_buildTimeHourSlot(currentTime));
 
+      final lastCurrentTime = currentTime;
       currentTime = currentTime.add(const Duration(hours: 1));
       if (timeTo.hour >= currentTime.hour) {
-        timeSlots.add(_buildTimeMinuteSlot(currentTime));
+        timeSlots.add(_buildTimeMinuteSlot(lastCurrentTime));
       }
     }
 
