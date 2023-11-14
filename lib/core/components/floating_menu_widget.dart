@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clean_calendar/clean_calendar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/services/web_sockets_service.dart';
@@ -99,7 +100,6 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               const SizedBox(height: 10),
-
               Padding(
                 padding:
                     // !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
@@ -114,9 +114,26 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundImage: _image(currentUserEntity.avatar),
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: currentUserEntity.avatar.isEmpty
+                                  ? Assets.tAvatarPlaceHolder
+                                  : currentUserEntity.avatar,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => const Icon(
+                                Icons.error,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                           const SizedBox(width: 10),
                           Column(
