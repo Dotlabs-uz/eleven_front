@@ -260,9 +260,9 @@ class _EmployeeScheduleTableWidgetState
               onFocused: () {
                 if(fieldSchedule.dateTime != null ) {
 
-                  if(fieldSchedule.dateTime!.isBefore(dateTimeNow )) return ;
-
-                  widget.onHoverDrag.call(fieldSchedule);
+                  if(fieldSchedule.dateTime!.isBefore(dateTimeNow)) return ;
+                    print("fieldSchedule datetime  ${fieldSchedule.dateTime} is after ${dateTimeNow}");
+                    widget.onHoverDrag.call(fieldSchedule);
 
                 }
               },
