@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -12,7 +15,7 @@ class EmptyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Lottie.asset(Assets.tEmptyLottie, frameRate: FrameRate(120)),
+        Image.asset(Assets.tEmptyLottie),
         Text(
           "empty".tr(),
           style: GoogleFonts.nunito(

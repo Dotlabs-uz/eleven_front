@@ -111,6 +111,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
             listener: (context, state) {
               if (state is CurrentUserLoaded) {
                 entity = state.entity;
+
                 controllerFirstName.text = entity.firstName;
                 controllerLastName.text = entity.lastName;
                 controllerPhoneNumber.text = entity.phoneNumber.toString();

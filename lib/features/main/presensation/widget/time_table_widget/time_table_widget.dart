@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
@@ -419,22 +420,40 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                 Container(
                   height: 60,
                   width: 60,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    image: entity.avatar.isEmpty
-                        ? const DecorationImage(
-                            image: AssetImage(
-                              Assets.tAvatarPlaceHolder,
-                            ),
-                            fit: BoxFit.cover,
-                          )
-                        : DecorationImage(
-                            image: NetworkImage(
-                              entity.avatar,
-                            ),
-                            fit: BoxFit.cover,
-                          ),
                   ),
+                  clipBehavior: Clip.antiAlias,
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: entity.avatar.isEmpty
+                        ? Assets.tAvatarPlaceHolder
+                        : entity.avatar,
+                    placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.error,
+                      size: 30,
+                      color: Colors.red,
+                    ),
+                  ),
+
+                  // decoration: BoxDecoration(
+                  //   shape: BoxShape.circle,
+                  //   image: entity.avatar.isEmpty
+                  //       ? const DecorationImage(
+                  //           image: AssetImage(
+                  //             Assets.tAvatarPlaceHolder,
+                  //           ),
+                  //           fit: BoxFit.cover,
+                  //         )
+                  //       : DecorationImage(
+                  //           image: NetworkImage(
+                  //             entity.avatar,
+                  //           ),
+                  //           fit: BoxFit.cover,
+                  //         ),
+                  // ),
                 ),
                 const SizedBox(height: 5),
                 Text("${entity.firstName} ${entity.lastName}"),

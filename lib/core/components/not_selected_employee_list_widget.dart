@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/management/domain/entity/barber_entity.dart';
@@ -64,11 +65,11 @@ class _NotSelectedBarbersListWidgetState
           children: [
             // const SizedBox(height: 20),
             ...List.generate(listBarbers.length, (index) {
-              final el = listBarbers[index];
+              final entity = listBarbers[index];
               return GestureDetector(
                 onTap: () {
-                  listBarbers.remove(el);
-                  widget.onTap.call(el.id);
+                  listBarbers.remove(entity);
+                  widget.onTap.call(entity.id);
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
@@ -78,26 +79,44 @@ class _NotSelectedBarbersListWidgetState
                       Container(
                         height: 60,
                         width: 60,
-                        decoration:   BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                            image: el.avatar.isEmpty
-                                ? const DecorationImage(
-                                image: AssetImage(
-                                  Assets.tAvatarPlaceHolder,
-                                ),
-                                fit: BoxFit.cover)
-                                : DecorationImage(
-                              image: NetworkImage(
-                                el.avatar,
-                              ),
-                              fit: BoxFit.cover,
                         ),
+                        clipBehavior: Clip.antiAlias,
+                        // decoration:   BoxDecoration(
+                        //   shape: BoxShape.circle,
+                        //     image: entity.avatar.isEmpty
+                        //         ? const DecorationImage(
+                        //         image: AssetImage(
+                        //           Assets.tAvatarPlaceHolder,
+                        //         ),
+                        //         fit: BoxFit.cover)
+                        //         : DecorationImage(
+                        //       image: NetworkImage(
+                        //         entity.avatar,
+                        //       ),
+                        //       fit: BoxFit.cover,
+                        // ),
+                        // ),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: entity.avatar.isEmpty
+                              ? Assets.tAvatarPlaceHolder
+                              : entity.avatar,
+                          placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.error,
+                            size: 30,
+                            color: Colors.red,
+                          ),
                         ),
+
                       ),
                       const SizedBox(height: 5),
                       Center(
                         child: Text(
-                          "${el.firstName} ${el.lastName}",
+                          "${entity.firstName} ${entity.lastName}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.black,
