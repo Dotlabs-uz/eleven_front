@@ -73,6 +73,7 @@ dependencies:
   image_picker_web: ^3.0.0+1
   flutter_animate: ^4.2.0+1
   assets_audio_player_web: ^3.1.1
+  assets_audio_player: ^3.1.1
 
 dev_dependencies:
   flutter_test:
