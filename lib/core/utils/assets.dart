@@ -16,6 +16,12 @@ class Assets {
   static const String tWarningIcon = 'assets/icons/warning.svg';
   static const String tClosedEyeIcon = "assets/icons/eye_closed.svg";
 
+  // Audio
+
+  static const String tNewOrderVoiceDaler = 'assets/voices/new-order-daler.mp3';
+  static const String tNewOrderVoiceBeka = 'assets/voices/new-order-beka.mp3';
+
+
 
 
 

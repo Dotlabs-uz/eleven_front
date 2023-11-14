@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import '../../../../core/api/api_constants.dart';
 import '../../../../core/services/web_sockets_service.dart';
 import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/string_helper.dart';
 
 class CalendarWidget extends StatefulWidget {
@@ -41,15 +43,34 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       WebSocketsService(ApiConstants.ordersWebSocket);
 
   static List<DateTime> listBlinkedDates = [];
-  // @override
-  // void didUpdateWidget(covariant CalendarWidget oldWidget) {
-  //
-  //   if(listBlinkedDates.length !=  widget.listBlinkDates.length)  {
-  //
-  //     _initBlinked();
-  //   }
-  //   super.didUpdateWidget(oldWidget);
-  // }
+  static final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer()
+    ..open(
+      Audio.file(Assets.tNewOrderVoiceDaler),
+      volume: 1,
+      loopMode: LoopMode.none,
+      forceOpen: true,
+    );
+
+  @override
+  void didUpdateWidget(covariant CalendarWidget oldWidget) {
+    if (listBlinkedDates.length != widget.listBlinkDates.length) {
+      listBlinkedDates = widget.listBlinkDates;
+      _voice();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  _voice() async {
+    try {
+      if (assetsAudioPlayer.isPlaying.value == true) return;
+      print("Voice ");
+
+      assetsAudioPlayer.play();
+    } catch (error) {
+      print("Error voice $error");
+      //mp3 unreachable
+    }
+  }
 
   @override
   void dispose() {
@@ -136,7 +157,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       ),
     );
   }
-
 
   _monthSelector() {
     return Row(
@@ -293,7 +313,7 @@ class _DayItemState extends State<_DayItem> {
   Color? backgroundColor;
   static int month = -1;
   List<DateTime> listBlinkedDates = [];
-  late StreamController<int> _streamController ;
+  late StreamController<int> _streamController;
 
   @override
   void dispose() {
@@ -324,7 +344,7 @@ class _DayItemState extends State<_DayItem> {
     listBlinkedDates = widget.listBlinkedDates;
 
     month = widget.month;
- _streamController =     StreamController() ;
+    _streamController = StreamController();
     _startBlinking();
   }
 
@@ -334,7 +354,6 @@ class _DayItemState extends State<_DayItem> {
     final dt = DateTime(widget.year, month, widget.day!);
 
     final condition = listBlinkedDates.contains(dt);
-
 
     if (_streamController.isClosed == false &&
         (condition && widget.selectedDate != dt)) {
@@ -397,9 +416,11 @@ class _DayItemState extends State<_DayItem> {
                           ? Colors.white
                           : widget.isSelectedDate
                               ? Colors.white
-                              : widget.isCurrentDate ?Colors.white : widget.isWeekend
-                                  ? Colors.red
-                                  : Colors.white,
+                              : widget.isCurrentDate
+                                  ? Colors.white
+                                  : widget.isWeekend
+                                      ? Colors.red
+                                      : Colors.white,
                     ),
                   ),
                 )
