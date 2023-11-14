@@ -105,7 +105,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
-          child: BlocListener<CurrentUserCubit, CurrentUserState>(
+          child: MultiBlocListener(
+  listeners: [
+    BlocListener<CurrentUserCubit, CurrentUserState>(
             listener: (context, state) {
               if (state is CurrentUserLoaded) {
                 entity = state.entity;
@@ -119,7 +121,17 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 SuccessFlushBar("change_success".tr()).show(context);
               }
             },
-            child: Column(
+),
+    BlocListener<AvatarCubit, AvatarState>(
+      listener: (context, state) {
+        if(state is AvatarSaved) {
+          SuccessFlushBar("change_success".tr()).show(context);
+
+        }
+      },
+    ),
+  ],
+  child: Column(
               children: [
                 const SizedBox(height: 10),
                 Row(
@@ -309,7 +321,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 ),
               ],
             ),
-          ),
+),
         ),
       ),
     );
