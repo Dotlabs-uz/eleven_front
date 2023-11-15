@@ -71,6 +71,7 @@ class WebSocketsService {
     });
 
     localSoket.emit("getAll");
+    localSoket.emit("getDates");
 
 
 

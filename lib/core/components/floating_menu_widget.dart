@@ -55,14 +55,10 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
   String version = "";
   static CurrentUserEntity currentUserEntity = CurrentUserEntity.empty();
 
-  // final WebSocketsService webSocketService =
-  // WebSocketsService(ApiConstants.ordersWebSocket);
   List<DateTime> listBlinkDates = [];
 
   @override
   void initState() {
-    // webSocketService.connect();listBlinkDates.clear();
-
     BlocProvider.of<CurrentUserCubit>(context).load();
     super.initState();
   }

@@ -45,8 +45,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   static List<DateTime> listBlinkedDates = [];
   static final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer()
     ..open(
-      Audio.file(Assets.tNewOrderVoiceDaler),
-      volume: 1,
+      Audio.file(Assets.tNewOrderVoiceBeka),
+      volume: 1,//TODO volume
       loopMode: LoopMode.none,
       forceOpen: true,
     );
@@ -134,6 +134,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   .map((e) => DateFormat("yyyy-MM-dd").parse(e))
                   .toList();
 
+              if(listBlinkedDates.length != listSnapData.length) {
+                _voice();
+              }
               listBlinkedDates = data;
             }
           }
