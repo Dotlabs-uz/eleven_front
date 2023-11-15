@@ -228,6 +228,9 @@ class DataFormWidgetState extends State<DataFormWidget> {
           if (field.type == Types.customers) {
             ctrlWidgets.add(CustomerFieldWidget(
               fieldEntity: field,
+              onCreate: () {
+                widget.closeForm.call();
+              },
               onChanged: (val) {},
             ));
           } else if (field.type == Types.string) {

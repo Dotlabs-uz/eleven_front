@@ -22,11 +22,13 @@ class ClientFieldWidget extends StatefulWidget {
     this.fieldEntity,
     this.onChange,
     this.enabled = true,
-    this.elementId,
+    this.elementId, this.onCreate,
   }) : super(key: key);
   final bool enabled;
   final FieldEntity? fieldEntity;
   final Function(CustomerEntity)? onChange;
+  final Function()? onCreate;
+
   final int? elementId;
 
   @override
@@ -59,12 +61,14 @@ class _ContentWidget extends StatefulWidget {
   final FieldEntity? fieldEntity;
   final bool enabled;
   final Function(CustomerEntity)? onChange;
+  final Function()? onCreate;
   final int? elementId;
 
   const _ContentWidget({
     Key? key,
     this.fieldEntity,
     this.onChange,
+    this.onCreate,
     required this.enabled,
     this.elementId,
   }) : super(key: key);
@@ -236,6 +240,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                   BlocProvider.of<CustomerCubit>(context).save(
                                     customer: CustomerEntity.fromFields(),
                                   );
+                                  widget.onCreate?.call();
                                 },
                               ),
                             ),
@@ -243,7 +248,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                         },
                         child: Ink(
                           color: Colors.orange,
-                          height: 56,
+                          height: 30,
                           child: Center(
                             child: Text(
                               'Add'.tr(),

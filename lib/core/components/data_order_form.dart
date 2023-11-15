@@ -121,6 +121,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                 ),
                 ClientFieldWidget(
                   fieldEntity: widget.fields['clientId']!,
+                  onCreate: () {
+                    widget.closeForm.call();
+                  },
                   onChange: (value) {
                     widget.fields['clientId']!.val = value.id;
                     client = value.id;
