@@ -24,10 +24,12 @@ class DataPage extends StatelessWidget {
     Key? key,
     required this.saveData,
     this.onExit,
+    this.enableBackButton = true,
   }) : super(key: key);
 
   final Function() saveData;
   final Function()? onExit;
+  final bool enableBackButton ;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,6 @@ class DataPage extends StatelessWidget {
             onExit?.call();
           },
         ),
-        backgroundColor: Colors.blue,
         title: BlocBuilder<DataFormCubit, DataFormState>(
           builder: (context, state) {
             if (state is DataFormLoadedData) {
@@ -64,12 +65,17 @@ class DataPage extends StatelessWidget {
                   if (!ResponsiveBuilder.isMobile(context))
                     const Expanded(flex: 2, child: SizedBox.shrink()),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: DataFormWidget(
                       closeForm: () => Navigator.pop(context),
                       // fields: state.fields,
-                      saveData: saveData,
-                      onExit: () => onExit?.call(),
+                      saveData:() {
+
+                        saveData.call();
+                        Navigator.pop(context);
+
+                        },
+                      onExit: () => onExit?.call(), enableBackButton: enableBackButton,
                     ),
                   ),
                   if (!ResponsiveBuilder.isMobile(context))
@@ -116,12 +122,15 @@ class DataFormWidget extends StatefulWidget {
   final Function() closeForm;
   final Function()? onExit;
   final String? title;
+  final bool enableBackButton ;
+
 
   const DataFormWidget({
     Key? key,
     required this.saveData,
     required this.closeForm,
     this.onExit,
+      this.enableBackButton = true,
     this.title,
   }) : super(key: key);
 
@@ -172,7 +181,8 @@ class DataFormWidgetState extends State<DataFormWidget> {
   void _setParams(Map<String, FieldEntity> fields, Function() closeForm,
       Function() saveData) {
     ctrlWidgets.clear();
-    ctrlWidgets.add(Row(
+    if(widget.enableBackButton) {
+      ctrlWidgets.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // Container(
@@ -209,6 +219,7 @@ class DataFormWidgetState extends State<DataFormWidget> {
         )
       ],
     ));
+    }
     fields.forEach((key, field) {
       if (field.isForm) {
         const SizedBox(height: 5);

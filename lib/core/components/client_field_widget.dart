@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/data_form.dart';
 import 'package:eleven_crm/features/management/domain/entity/customer_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../features/management/domain/usecases/customer.dart';
 import '../../features/management/presentation/cubit/customer/customer_cubit.dart';
 import '../../get_it/locator.dart';
@@ -140,8 +142,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
               if (widget.fieldEntity != null) {
                 selectedItem = listData
                     .firstWhereOrNull((e) => e.id == widget.fieldEntity!.val);
-                print(listData ) ;
-                print("Selected ${widget.fieldEntity!.val} client $selectedItem");
+                print(listData);
+                print(
+                    "Selected ${widget.fieldEntity!.val} client $selectedItem");
 
                 if (selectedItem != null) {
                   widget.fieldEntity!.val = selectedItem!.id;
@@ -207,6 +210,55 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 },
 
                 showSearchBox: true,
+                containerBuilder: (context, popupWidget) {
+                  return Column(
+                    children: [
+                      Expanded(child: popupWidget),
+                      InkWell(
+                        onTap: () {
+                          final fields = Map<String, FieldEntity<dynamic>>.from(
+                              CustomerEntity.empty().getFields());
+                          BlocProvider.of<DataFormCubit>(context)
+                              .editData(fields);
+
+                          // FocusManager.instance.primaryFocus?.unfocus();
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DataPage(
+                                enableBackButton: false,
+                                onExit: () {
+                                  BlocProvider.of<CustomerCubit>(context)
+                                      .load("");
+                                },
+                                saveData: () {
+                                  BlocProvider.of<CustomerCubit>(context).save(
+                                    customer: CustomerEntity.fromFields(),
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                        child: Ink(
+                          color: Colors.orange,
+                          height: 56,
+                          child: Center(
+                            child: Text(
+                              'Add'.tr(),
+                              style: GoogleFonts.nunito(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
 
                 searchFieldProps: TextFieldProps(
                   controller: controllerSearch,

@@ -2,6 +2,7 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/api/api_constants.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
+import 'package:eleven_crm/core/components/success_flash_bar.dart';
 import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/home_screen_form/home_screen_order_form_cubit.dart';
@@ -18,6 +19,7 @@ import '../../../../core/components/data_order_form.dart';
 import '../../../../core/components/not_selected_employee_list_widget.dart';
 import '../../../../core/components/responsive_builder.dart';
 import '../../../../get_it/locator.dart';
+import '../../../management/presentation/cubit/customer/customer_cubit.dart';
 import '../../../products/domain/entity/service_product_entity.dart';
 import '../../data/model/order_model.dart';
 import '../../domain/entity/order_entity.dart';
@@ -273,6 +275,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
             }
             return MultiBlocListener(
               listeners: [
+                BlocListener<CustomerCubit, CustomerState>(listener: (context, state) {
+
+
+                  if(state is CustomerSaved) {
+                    SuccessFlushBar("change_success".tr()).show(context);
+                  }
+                },),
                 BlocListener<BarberCubit, BarberState>(
                   listener: (context, state) {
                     if (state is BarberLoaded) {

@@ -54,8 +54,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   @override
   void didUpdateWidget(covariant CalendarWidget oldWidget) {
     if (listBlinkedDates.length != widget.listBlinkDates.length) {
-      listBlinkedDates = widget.listBlinkDates;
       _voice();
+      listBlinkedDates = widget.listBlinkDates;
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -81,18 +81,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   void initState() {
     webSocketService.connect();
     listBlinkedDates.clear();
-    _initBlinked();
     _initDaysOfMonth();
     super.initState();
   }
 
-  _initBlinked() {
-    // listBlinkedDates = widget.listBlinkDates;
-    // print("List blinked local $listBlinkedDates");
-// setState(() {
-//
-// });
-  }
   _initDaysOfMonth() {
     daysOfMonth.clear();
     final now = DateTime.now();

@@ -6,6 +6,7 @@ import 'package:eleven_crm/features/main/presensation/cubit/home_screen_form/hom
 import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,6 +39,7 @@ class _ApplicationState extends State<Application> {
   late HomeScreenOrderFormCubit homeScreenOrderFormCubit;
   late OrderFilterCubit orderFilterCubit;
   late AvatarCubit avatarCubit;
+  late CustomerCubit customerCubit;
   @override
   void initState() {
     _loginCubit = locator();
@@ -51,6 +53,7 @@ class _ApplicationState extends State<Application> {
     showSelectServicesCubit = locator();
     orderFilterCubit = locator();
     avatarCubit = locator();
+    customerCubit = locator();
     super.initState();
   }
 
@@ -69,7 +72,7 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: homeScreenOrderFormCubit),
         BlocProvider.value(value: orderFilterCubit),
         BlocProvider.value(value: avatarCubit),
-
+        BlocProvider.value(value: customerCubit),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -81,10 +84,11 @@ class _ApplicationState extends State<Application> {
           primaryColor: Colors.red,
           scaffoldBackgroundColor: AppColors.scaffoldColor,
           // backgroundColor: Colors.white,
+
           iconTheme: const IconThemeData(color: Colors.blue),
-          appBarTheme: const AppBarTheme(
+          appBarTheme:   const AppBarTheme(
             // color: AppColor.menuBgColor,
-            backgroundColor: AppColors.background,
+            backgroundColor: AppColors.sideMenu,
           ),
         ),
         // scrollBehavior: CustomScrollBehaviour(),
