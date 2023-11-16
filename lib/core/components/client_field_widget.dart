@@ -98,9 +98,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   initialize() {
-    BlocProvider.of<CustomerCubit>(context).load(
-      "",
-    );
+    // BlocProvider.of<CustomerCubit>(context).load(
+    //   "",
+    // );
 
     enabled = widget.enabled;
   }
@@ -171,17 +171,25 @@ class _ContentWidgetState extends State<_ContentWidget> {
               items: listData,
               enabled: enabled,
 
+
+
+
               asyncItems: (text) async {
-                if (text.isNotEmpty) {
-                  return _getData(text);
-                }
+                // if (text.isNotEmpty) {
+                  return await _getData(text);
+                // }
                 return [];
               },
+
               itemAsString: (CustomerEntity c) => c.fullName,
               selectedItem: selectedItem,
 
+
+
               popupProps: PopupPropsMultiSelection.menu(
                 showSelectedItems: true,
+
+
 
                 // validationWidgetBuilder: (context, item) {
                 //   return Container(

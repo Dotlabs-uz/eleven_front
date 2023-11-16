@@ -256,38 +256,40 @@ class _ServiceProductCardState extends State<_ServiceProductCard> {
       decoration: BoxDecoration(
         color: isSelected ? Colors.black45.withOpacity(0.4) : widget.color,
         borderRadius: BorderRadius.circular(8),
-        image: DecorationImage(
-          opacity: 0.1,
-          fit: BoxFit.cover,
-          image: AssetImage(
-            widget.image,
-          ),
-        ),
+
       ),
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              widget.item.name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Opacity(opacity: 0.3, child: Image.asset(widget.image, fit: BoxFit.cover,)),
+          Container(decoration: BoxDecoration(
+            color: widget.color.withOpacity(0.4),
+
+          ),),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.item.name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "${widget.item.duration} мин",
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
+              const SizedBox(height: 10),
+              Text(
+                "${widget.item.duration} мин",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }
