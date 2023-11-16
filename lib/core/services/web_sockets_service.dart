@@ -19,7 +19,7 @@ class WebSocketsService {
   void addDataToSocket(dynamic data) {
     debugPrint("Add data to socket $data");
 
-    socket!.emit("createLocal", data);
+    socket!.emit("create", data);
   }
 
 
