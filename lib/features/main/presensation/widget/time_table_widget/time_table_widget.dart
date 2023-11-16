@@ -124,7 +124,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: 1300,
+                      width: 2200,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
