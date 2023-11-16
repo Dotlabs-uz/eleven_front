@@ -19,7 +19,7 @@ class WebSocketsService {
   void addDataToSocket(dynamic data) {
     debugPrint("Add data to socket $data");
 
-    socket!.emit("create", data);
+    socket!.emit("createLocal", data);
   }
 
 
@@ -90,6 +90,24 @@ class WebSocketsService {
     //   yield data;
     // }
 
+    return getOrderResponse;
+  }
+  Stream<dynamic> connectDates() {
+    IO.Socket localSoket =
+        IO.io(url, OptionBuilder().setTransports(['websocket']).build());
+
+    socket = localSoket;
+    // print("Socket url $url");
+
+    localSoket.onConnect((_) {
+      // print("websocket connected");
+    });
+    localSoket.emit("getDates");
+
+
+    localSoket.on('datesWithIsNew', (data) {
+      _addDatesData(data);
+    });
     return getOrderResponse;
   }
 }

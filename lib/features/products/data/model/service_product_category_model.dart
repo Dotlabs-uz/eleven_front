@@ -14,7 +14,7 @@ class ServiceProductCategoryModel extends ServiceProductCategoryEntity {
       name: json['name'],
       services: json['services'] != null
           ? List.of(json['services'])
-              .map((e) => ServiceProductModel.fromJson(e ,withCategoryParse))
+              .map((e) => ServiceProductModel.fromJson( Map<String ,dynamic>.from(e) ,withCategoryParse))
               .toList()
           : [],
     );

@@ -208,7 +208,7 @@ class OrderEntity extends Equatable {
       {List<ServiceProductEntity>? selectedServices,
       String? barber,
       String? client}) {
-    print("Factory Fields services ${List.from(fields["services"]?.val)}");
+    print("Factory Fields services ${selectedServices}");
     return OrderEntity(
       id: fields["id"]?.val,
       // discount: fields["discount"]?.val,
@@ -220,13 +220,37 @@ class OrderEntity extends Equatable {
       barberId: barber ?? fields["barberId"]?.val,
       clientId: client ?? fields["clientId"]?.val,
       isNew: fields["isNew"]?.val,
-      services: selectedServices ?? List.from(fields["services"]?.val),
+      services: selectedServices != null && selectedServices.isNotEmpty
+          ? selectedServices
+          : List.from(fields["services"]?.val),
       price: fields["price"]?.val, duration: fields["duration"]?.val,
     );
   }
 
-  factory OrderEntity.empty({int? hour, int? minute, String ?barber, int? day, int? month}) {
-    final dateTime = DateTime.now().copyWith(hour: hour, minute: minute, day: day, month: month);
+  factory OrderEntity.fromFieldsWithSelectedServices(
+      {required List<ServiceProductEntity> selectedServices,
+        String? barber,
+        String? client}) {
+    return OrderEntity(
+      id: fields["id"]?.val,
+      // discount: fields["discount"]?.val,
+      // discountPercent: fields["discountPercent"]?.val,
+      paymentType: fields["paymentType"]?.val,
+      orderStart: fields["orderStart"]?.val,
+      orderEnd: fields["orderEnd"]?.val,
+      // price: fields["price"]?.val,
+      barberId: barber ?? fields["barberId"]?.val,
+      clientId: client ?? fields["clientId"]?.val,
+      isNew: fields["isNew"]?.val,
+      services: selectedServices,
+      price: fields["price"]?.val, duration: fields["duration"]?.val,
+    );
+  }
+
+  factory OrderEntity.empty(
+      {int? hour, int? minute, String? barber, int? day, int? month}) {
+    final dateTime = DateTime.now()
+        .copyWith(hour: hour, minute: minute, day: day, month: month);
     return OrderEntity(
       id: "",
       // discount: 0,

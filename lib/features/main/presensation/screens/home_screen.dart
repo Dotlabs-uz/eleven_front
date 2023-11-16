@@ -135,7 +135,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   void _saveOrder(List<ServiceProductEntity> selectedServices, String barber,
       String client) {
-    final entity = OrderEntity.fromFields(
+
+    final entity = OrderEntity.fromFieldsWithSelectedServices(
       selectedServices: selectedServices,
       barber: barber,
       client: client,
