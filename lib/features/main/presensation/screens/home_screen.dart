@@ -107,6 +107,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
     showSelectServices = false;
 
     listBarbers.clear();
+
+    BlocProvider.of<CustomerCubit>(context).load(""); // Need to save local
     _setWidgetTop();
   }
 
@@ -125,7 +127,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
         ),
         MyIconButton(
           onPressed: () {
-            webSocketService.refresh();
+            webSocketService.addFilter({"orderStart": filteredDate});
           },
           icon: const Icon(Icons.refresh),
         ),

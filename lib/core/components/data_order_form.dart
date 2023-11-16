@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../features/management/presentation/cubit/customer/customer_cubit.dart';
 import '../../features/products/domain/entity/service_product_entity.dart';
 import '../entities/field_entity.dart';
 import 'button_widget.dart';

@@ -81,7 +81,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
   final TextEditingController controllerSearch = TextEditingController();
 
   CustomerEntity serviceEntity = CustomerEntity.empty();
-  List<CustomerEntity> listData = [];
+ static List<CustomerEntity> listData = [];
 
   final CustomerCubit filialCubit = locator();
   final GetCustomer getCustomer = locator();
@@ -98,14 +98,15 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   initialize() {
-    // BlocProvider.of<CustomerCubit>(context).load(
-    //   "",
-    // );
+    BlocProvider.of<CustomerCubit>(context).load(
+      "",
+    );
 
     enabled = widget.enabled;
   }
 
   static int previousId = -1;
+
 
   @override
   void didUpdateWidget(_ContentWidget oldWidget) {
@@ -133,6 +134,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   @override
+  void dispose() {
+    listData.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -146,9 +153,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
               if (widget.fieldEntity != null) {
                 selectedItem = listData
                     .firstWhereOrNull((e) => e.id == widget.fieldEntity!.val);
-                print(listData);
-                print(
-                    "Selected ${widget.fieldEntity!.val} client $selectedItem");
+                print("Fetch clients");
 
                 if (selectedItem != null) {
                   widget.fieldEntity!.val = selectedItem!.id;
@@ -163,7 +168,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 }
               }
 
-              filialCubit.init();
             }
           },
           builder: (context, state) {
@@ -175,9 +179,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
 
               asyncItems: (text) async {
-                // if (text.isNotEmpty) {
+                if (text.isNotEmpty) {
                   return await _getData(text);
-                // }
+                }
                 return [];
               },
 

@@ -5,4 +5,5 @@ class HiveBoxKeysConstants {
 
   // Managment
   static const customerColumnSizes = "customerColumnSizes";
+  static const customerResult = "customerResult";
 }

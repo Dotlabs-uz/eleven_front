@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:eleven_crm/features/management/data/datasources/management_local_data_source.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_results_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_results_entity.dart';
@@ -23,8 +24,9 @@ import '../model/manager_model.dart';
 
 class ManagementRepositoryImpl extends ManagementRepository {
   final ManagementRemoteDataSource remoteDataSource;
+  final ManagementLocalDataSource localDataSource;
 
-  ManagementRepositoryImpl(this.remoteDataSource);
+  ManagementRepositoryImpl(this.remoteDataSource, this.localDataSource);
 
 //===Customer CRUD=======
   @override
@@ -36,6 +38,12 @@ class ManagementRepositoryImpl extends ManagementRepository {
     String? endDate,
   ) async {
     try {
+      final localData = await localDataSource.getCustomerResult(searchText);
+
+      if (localData != null) {
+        return Right(localData);
+      }
+
       final entity = await remoteDataSource.getCustomer(
         page,
         searchText,
@@ -43,6 +51,8 @@ class ManagementRepositoryImpl extends ManagementRepository {
         startDate,
         endDate,
       );
+
+      await localDataSource.saveCustomerResult(entity);
 
       return Right(entity);
     } on SocketException {
@@ -58,7 +68,8 @@ class ManagementRepositoryImpl extends ManagementRepository {
 
   @override
   Future<Either<AppError, CustomerEntity>> saveCustomer(
-      CustomerEntity data,) async {
+    CustomerEntity data,
+  ) async {
     try {
       final model = CustomerModel.fromEntity(data);
 
@@ -96,9 +107,9 @@ class ManagementRepositoryImpl extends ManagementRepository {
   //===Employee CRUD=======
   @override
   Future<Either<AppError, EmployeeResultsEntity>> getEmployee(
-      int page,
-      String searchText,
-      ) async {
+    int page,
+    String searchText,
+  ) async {
     try {
       final entity = await remoteDataSource.getEmployee(
         page,
@@ -119,7 +130,8 @@ class ManagementRepositoryImpl extends ManagementRepository {
 
   @override
   Future<Either<AppError, EmployeeEntity>> saveEmployee(
-      EmployeeEntity data,) async {
+    EmployeeEntity data,
+  ) async {
     try {
       final model = EmployeeModel.fromEntity(data);
 
@@ -156,10 +168,8 @@ class ManagementRepositoryImpl extends ManagementRepository {
 
   // ================ BARBER CRUD ================ //
 
-
-
   @override
-  Future<Either<AppError, bool>> deleteBarber(BarberEntity entity) async  {
+  Future<Either<AppError, bool>> deleteBarber(BarberEntity entity) async {
     try {
       final model = BarberModel.fromEntity(entity);
 
@@ -177,10 +187,11 @@ class ManagementRepositoryImpl extends ManagementRepository {
   }
 
   @override
-  Future<Either<AppError, BarberResultsEntity>> getBarber(int page, String searchText, String? ordering) async {
+  Future<Either<AppError, BarberResultsEntity>> getBarber(
+      int page, String searchText, String? ordering) async {
     try {
-
-      final result = await remoteDataSource.getBarber(page, searchText, ordering);
+      final result =
+          await remoteDataSource.getBarber(page, searchText, ordering);
 
       return Right(result);
     } on SocketException {
@@ -194,7 +205,7 @@ class ManagementRepositoryImpl extends ManagementRepository {
   }
 
   @override
-  Future<Either<AppError, BarberEntity>> saveBarber(BarberEntity data)async  {
+  Future<Either<AppError, BarberEntity>> saveBarber(BarberEntity data) async {
     try {
       final model = BarberModel.fromEntity(data);
 
@@ -212,9 +223,9 @@ class ManagementRepositoryImpl extends ManagementRepository {
   }
 
   @override
-  Future<Either<AppError, bool>> saveEmployeeScheduleList(List<FieldSchedule> data)async  {
+  Future<Either<AppError, bool>> saveEmployeeScheduleList(
+      List<FieldSchedule> data) async {
     try {
-
       final result = await remoteDataSource.saveEmployeeSchedule(data);
 
       return Right(result);
@@ -230,10 +241,8 @@ class ManagementRepositoryImpl extends ManagementRepository {
 
   // ================ MANAGER CRUD ================ //
 
-
-
   @override
-  Future<Either<AppError, bool>> deleteManager(ManagerEntity entity)async  {
+  Future<Either<AppError, bool>> deleteManager(ManagerEntity entity) async {
     try {
       final model = ManagerModel.fromEntity(entity);
 
@@ -251,9 +260,11 @@ class ManagementRepositoryImpl extends ManagementRepository {
   }
 
   @override
-  Future<Either<AppError, ManagerResultsEntity>> getManager(int page, String searchText, ) async {
+  Future<Either<AppError, ManagerResultsEntity>> getManager(
+    int page,
+    String searchText,
+  ) async {
     try {
-
       final result = await remoteDataSource.getManager(page, searchText);
 
       return Right(result);
@@ -268,7 +279,8 @@ class ManagementRepositoryImpl extends ManagementRepository {
   }
 
   @override
-  Future<Either<AppError, ManagerEntity>> saveManager(ManagerEntity data)async  {
+  Future<Either<AppError, ManagerEntity>> saveManager(
+      ManagerEntity data) async {
     try {
       final model = ManagerModel.fromEntity(data);
 

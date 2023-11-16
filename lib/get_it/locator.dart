@@ -9,6 +9,7 @@ import 'package:eleven_crm/features/main/presensation/cubit/order/not_working_ho
 import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/select_services/select_services_cubit.dart';
+import 'package:eleven_crm/features/management/data/datasources/management_local_data_source.dart';
 import 'package:eleven_crm/features/management/data/datasources/management_remote_data_source.dart';
 import 'package:eleven_crm/features/management/domain/repositories/management_repository.dart';
 import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
@@ -234,12 +235,17 @@ void setup() {
   locator.registerLazySingleton<ManagementRepository>(
     () => ManagementRepositoryImpl(
       locator(),
+      locator(),
     ),
   );
 
   locator.registerLazySingleton<ManagementRemoteDataSource>(
     () => ManagementRemoteDataSourceImpl(
       locator(),
+    ),
+  );
+  locator.registerLazySingleton<ManagementLocalDataSource>(
+    () => ManagementLocalDataSourceImpl(
     ),
   );
 

@@ -262,7 +262,7 @@ class _ServiceProductCardState extends State<_ServiceProductCard> {
         alignment: Alignment.center,
         children: [
           Opacity(opacity: 0.3, child: Image.asset(widget.image, fit: BoxFit.cover,)),
-          Container(decoration: BoxDecoration(
+        if(!widget.isSelected)  Container(decoration: BoxDecoration(
             color: widget.color.withOpacity(0.4),
 
           ),),
