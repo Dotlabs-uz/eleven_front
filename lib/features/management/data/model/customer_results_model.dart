@@ -24,7 +24,7 @@ class CustomerResultsModel extends CustomerResultsEntity {
     final Map<String,dynamic> data= {};
     data['count'] = count;
     data['pageCount'] = pageCount;
-    data['results'] = results.map((e) =>CustomerModel.fromEntity( e).toJson());
+    data['results'] = results.map((e) =>CustomerModel.fromEntity( e).toJson()).toList();
     return data;
   }
 }

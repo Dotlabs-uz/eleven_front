@@ -144,6 +144,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
               if (widget.fieldEntity.val != null) {
                 selectedItem = listData
                     .firstWhereOrNull((e) => e.id == widget.fieldEntity.val);
+listData.removeWhere((element) => element.isCurrentFilial == false);
 
                 if (selectedItem != null) {
                   widget.fieldEntity.val = selectedItem!.id;

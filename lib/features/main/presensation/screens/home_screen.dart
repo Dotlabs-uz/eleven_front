@@ -127,7 +127,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
         ),
         MyIconButton(
           onPressed: () {
-            webSocketService.addFilter({"orderStart": filteredDate});
+            webSocketService.addFilter({"orderStart": filteredDate.toIso8601String()});
           },
           icon: const Icon(Icons.refresh),
         ),

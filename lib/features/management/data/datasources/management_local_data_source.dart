@@ -17,29 +17,28 @@ abstract class ManagementLocalDataSource {
 class ManagementLocalDataSourceImpl extends ManagementLocalDataSource {
   @override
   Future<CustomerResultsModel?> getCustomerResult(String searchText) async {
-    final devicesBox = await Hive.openBox(
+    final customerBox = await Hive.openBox(
       HiveBoxNamesConstants.customerResultBox,
     );
 
-    final response = devicesBox.get(HiveBoxKeysConstants.customerResult);
-    if (response == null) return null;
-    final result = CustomerResultsModel.fromJson(response);
+    final json = await customerBox.get(HiveBoxKeysConstants.customerResult);
+
+    print("Box json clients $json");
+    if (json == null) return null;
+    final result = CustomerResultsModel.fromJson(Map<String,dynamic>.from(json));
 
     return result;
   }
 
   @override
   Future<bool> saveCustomerResult(CustomerResultsModel data) async {
-    try {
-      final customerBox = await Hive.openBox(
-        HiveBoxNamesConstants.customerResultBox,
-      );
+    final customerBox = await Hive.openBox(
+      HiveBoxNamesConstants.customerResultBox,
+    );
 
-      await customerBox.put(HiveBoxKeysConstants.customerResult, data.toJson());
+    await customerBox.put(HiveBoxKeysConstants.customerResult, data.toJson());
+    print("Save clients to local data sourse ");
 
-      return true;
-    } catch (error) {
-      return false;
-    }
+    return true;
   }
 }

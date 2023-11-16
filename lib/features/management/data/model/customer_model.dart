@@ -59,8 +59,10 @@ class CustomerModel extends CustomerEntity {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
+    data['_id'] = id;
     data['name'] = fullName;
     data['phone'] = phoneNumber;
+    data['ordersCount'] = ordersCount;
     return data;
   }
 }

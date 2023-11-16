@@ -153,7 +153,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
               if (widget.fieldEntity != null) {
                 selectedItem = listData
                     .firstWhereOrNull((e) => e.id == widget.fieldEntity!.val);
-                print("Fetch clients");
 
                 if (selectedItem != null) {
                   widget.fieldEntity!.val = selectedItem!.id;

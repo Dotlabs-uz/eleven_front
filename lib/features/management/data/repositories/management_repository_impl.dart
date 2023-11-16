@@ -40,6 +40,9 @@ class ManagementRepositoryImpl extends ManagementRepository {
     try {
       final localData = await localDataSource.getCustomerResult(searchText);
 
+
+      print("Local data clients");
+
       if (localData != null) {
         return Right(localData);
       }
@@ -51,6 +54,7 @@ class ManagementRepositoryImpl extends ManagementRepository {
         startDate,
         endDate,
       );
+      print("save clients to local data sourse");
 
       await localDataSource.saveCustomerResult(entity);
 
