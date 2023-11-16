@@ -1,8 +1,8 @@
 class ApiConstants {
   ApiConstants._();
 
-  // static const String baseApiUrl = "https://starfish-app-f4ezq.ondigitalocean.app/";
-  static const String baseApiUrl = "http://localhost:3030/";
+  static const String baseApiUrl = "https://starfish-app-f4ezq.ondigitalocean.app/";
+  // static const String baseApiUrl = "http://localhost:3030/";
 
   static const String login = "login/";
   static const String getCurrentUser = "current-user";
