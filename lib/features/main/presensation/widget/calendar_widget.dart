@@ -46,7 +46,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   static final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer()
     ..open(
       Audio.file(Assets.tNewOrderVoiceBeka),
-      volume: 1,//TODO volume
+      volume: 0,
       loopMode: LoopMode.none,
       forceOpen: true,
     );
@@ -352,7 +352,9 @@ class _DayItemState extends State<_DayItem> {
 
     if (_streamController.isClosed == false &&
         (condition && widget.selectedDate != dt)) {
-      _startTimer(10000000);
+      if(_streamController.hasListener == false) {
+        _startTimer(10000000);
+      }
       _streamController.stream.listen((value) {
         setState(() {
           backgroundColor = value % 2 == 0 ? Colors.purple : null;

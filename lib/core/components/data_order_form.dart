@@ -35,7 +35,7 @@ class DataOrderForm extends StatefulWidget {
 }
 
 class DataOrderFormState extends State<DataOrderForm> {
-  List<ServiceProductEntity> selectedProducts = [];
+  static List<ServiceProductEntity> selectedProducts = [];
 
   double price = 0;
   double duration = 0;
@@ -51,6 +51,7 @@ class DataOrderFormState extends State<DataOrderForm> {
     client = widget.fields['clientId']?.val ?? "";
     barber = widget.fields['barberId']?.val ?? "";
     orderStart = widget.fields['orderStart']?.val ?? DateTime.now();
+    selectedProducts.clear();
 
     print("Duration $duration");
 
@@ -77,6 +78,8 @@ class DataOrderFormState extends State<DataOrderForm> {
   void dispose() {
     client = '';
     barber = '';
+    selectedProducts.clear();
+
     super.dispose();
   }
 
@@ -158,8 +161,8 @@ class DataOrderFormState extends State<DataOrderForm> {
                   fieldEntity: widget.fields["services"]!,
                   onChanged: (listData) {
                     selectedProducts = listData;
-                    widget.fields['services']!.val = listData;
                     print("Selected services $selectedProducts");
+                    widget.fields['services']!.val = selectedProducts;
                     getPriceAndDuration(selectedProducts);
                   },
                 ),

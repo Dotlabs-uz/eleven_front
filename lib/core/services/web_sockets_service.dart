@@ -69,21 +69,19 @@ class WebSocketsService {
     localSoket.onConnect((_) {
       // print("websocket connected");
     });
-
-    localSoket.emit("getAll");
     localSoket.emit("getDates");
 
-
+    localSoket.emit("getAll");
 
     localSoket.on('fetched', (data) {
-      debugPrint("Orders $data");
+      // debugPrint("Orders $data");
 
       _addOrderData(data);
     });
 
 
     localSoket.on('datesWithIsNew', (data) {
-      debugPrint("Dates with is new $data");
+      // debugPrint("Dates with is new $data");
       _addDatesData(data);
     });
     // getResponse.map((event) => print(event));

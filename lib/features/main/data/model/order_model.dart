@@ -81,6 +81,9 @@ class OrderModel extends OrderEntity {
     print("Services $services");
     data['services'] = services.map((e) => e.id).toList();
 
+
+    print("Data $data");
+
     return data;
   }
 

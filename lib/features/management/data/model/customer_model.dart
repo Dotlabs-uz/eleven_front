@@ -43,7 +43,7 @@ class CustomerModel extends CustomerEntity {
     return CustomerModel(
       id: json['_id'],
       fullName: json['name'],
-      phoneNumber: json['phone'],
+      phoneNumber: json['phone']??99,
       ordersCount: json['ordersCount'] ?? 0,
     );
   }

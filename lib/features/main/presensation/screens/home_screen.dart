@@ -269,7 +269,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     .map((e) => OrderModel.fromJson(e, withSubstract: true))
                     .toList();
 
+
                 orders = data;
+                print("Orders $orders");
               }
 
             }
@@ -290,7 +292,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                           Duration.zero,
                           () {
                             setState(() {
-                              listBarbers = state.data.results;
+
+                              final data = state.data.results;
+                              data.removeWhere((element) => element.isCurrentFilial == false);
+                              listBarbers = data;
                             });
                           },
                         );

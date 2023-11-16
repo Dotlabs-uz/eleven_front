@@ -33,9 +33,12 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
 
           if (data != null) {
             if (action == SelectedServicesAction.remove) {
+              print("Data remove $data");
               selectedServices.remove(data);
             }
             if (action == SelectedServicesAction.add) {
+              print("Data add $data");
+
               selectedServices.add(data);
             }
           }
