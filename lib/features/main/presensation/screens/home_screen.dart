@@ -462,7 +462,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                             child: NotSelectedBarbersListWidget(
                                               listBarbers: listBarbers,
                                               onTap: (String barberId) {
-                                                setState(() {});
                                                 _barberFromTimeTableCardAction(
                                                   barberId,
                                                   true,
@@ -525,9 +524,16 @@ class _ContentWidgetState extends State<_ContentWidget> {
     final barber =
         listBarbers.firstWhere((element) => element.id == employeeId);
 
+
     barber.inTimeTable = hasInTimeTable;
 
+
+
+
     print("in time table $hasInTimeTable");
+    setState(() {
+
+    });
 
     BlocProvider.of<BarberCubit>(context).save(barber: barber);
   }

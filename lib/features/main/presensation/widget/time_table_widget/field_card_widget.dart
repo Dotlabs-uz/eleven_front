@@ -168,6 +168,7 @@ class _ItemState extends State<Item> {
   Widget build(BuildContext context) {
     return InkWell(
       onHover: (value) {
+        if(widget.candidateData.isNotEmpty) return;
         if (value) {
           setState(() {
             isHover = true;
@@ -181,7 +182,7 @@ class _ItemState extends State<Item> {
       onTap: () =>widget.onTap.call(),
       child: Ink(
         decoration: BoxDecoration(
-          color: widget.candidateData.isNotEmpty
+          color: isHover ? Colors.pink.shade400:  widget.candidateData.isNotEmpty
               ? widget.candidateData.first != null &&
               widget.candidateData.first!.isResizing == true
               ? Colors.transparent
@@ -207,8 +208,8 @@ class _ItemState extends State<Item> {
                 child: Text(
                   "${widget.hour}:${widget.minute == 0 ? "00" : widget.minute}",
                   style: TextStyle(
-                    color: Colors.grey.shade400,
-                    fontSize: 10,
+                    color: isHover ?Colors.white :Colors.grey.shade400,
+                    fontSize: isHover ? 14 :10,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
