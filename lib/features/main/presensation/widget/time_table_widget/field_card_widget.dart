@@ -31,7 +31,6 @@ class FieldCardWidget extends StatefulWidget {
 }
 
 class _FieldCardWidgetState extends State<FieldCardWidget> {
-  bool isHover = false;
 
   bool isCardAllowedToDrag(
       OrderEntity order, List<NotWorkingHoursEntity> notWorkingHours) {
@@ -42,19 +41,23 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
       final notWorkingStart = notWorkingHour.dateFrom;
       final notWorkingEnd = notWorkingHour.dateTo;
 
-      if (orderStart.isBefore(notWorkingStart) && orderEnd.isAfter(notWorkingEnd)) {
+      if (orderStart.isBefore(notWorkingStart) &&
+          orderEnd.isAfter(notWorkingEnd)) {
         return false; // Время заказа пересекается с "Not Working Hours", не разрешаем перенос
       }
 
-      if (orderStart.isAfter(notWorkingStart) && orderStart.isBefore(notWorkingEnd)) {
+      if (orderStart.isAfter(notWorkingStart) &&
+          orderStart.isBefore(notWorkingEnd)) {
         return false; // Время заказа начинается во время "Not Working Hours", не разрешаем перенос
       }
 
-      if (orderEnd.isAfter(notWorkingStart) && orderEnd.isBefore(notWorkingEnd)) {
+      if (orderEnd.isAfter(notWorkingStart) &&
+          orderEnd.isBefore(notWorkingEnd)) {
         return false; // Время заказа заканчивается во время "Not Working Hours", не разрешаем перенос
       }
 
-      if (orderStart.isAtSameMomentAs(notWorkingStart) || orderEnd.isAtSameMomentAs(notWorkingEnd)) {
+      if (orderStart.isAtSameMomentAs(notWorkingStart) ||
+          orderEnd.isAtSameMomentAs(notWorkingEnd)) {
         return false; // Время заказа точно соответствует началу или концу "Not Working Hours", не разрешаем перенос
       }
     }
@@ -62,17 +65,12 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
     return true; // Время заказа не пересекается с "Not Working Hours", разрешаем перенос
   }
 
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(
         maxHeight: Constants.timeTableItemHeight,
-        minWidth: 100,
+        minWidth: 444,
       ),
       decoration: const BoxDecoration(
         border: Border(
@@ -111,7 +109,7 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                       minute,
                       widget.barberId,
                       (p0) {
-                        widget.onDragEnded.call( p0,  false);
+                        widget.onDragEnded.call(p0, false);
                       },
                     );
                     print("Drag order ${localOrder.orderStart}");
@@ -123,7 +121,7 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                         minute,
                         widget.barberId,
                         (p0) {
-                          widget.onDragEnded.call( p0,  true);
+                          widget.onDragEnded.call(p0, true);
                         },
                       );
                     } else {
@@ -138,59 +136,9 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                   }
                 },
                 builder: (context, candidateData, rejectedData) {
-
-                  return InkWell(
-                    onHover: (value) {
-
-                      if(value) {
-                        setState(() {
-                          isHover = true;
-                        });
-                      }else {
-                        setState(() {
-                          isHover = false;
-
-                        });
-                      }
-
-                    },
-                    onTap: () => widget.onFieldTap.call(widget.hour, minute),
-                    child: Ink(
-                      decoration: BoxDecoration(
-                        color: candidateData.isNotEmpty
-                            ? candidateData.first != null &&
-                                    candidateData.first!.isResizing == true
-                                ? Colors.transparent
-                                : Colors.orange
-                            : Colors.white,
-                        border: Border.all(
-                          width: 0.3,
-                          color: Colors.black26,
-                        ),
-                      ),
-                      width: double.infinity,
-                      child: isHover == false
-                          ? const SizedBox()
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 4, top: 2),
-                                  child: Text(
-                                    "${widget.hour}:${minute == 0 ? "00" : minute}",
-                                    style: TextStyle(
-                                      color: Colors.grey.shade400,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                    ),
-                  );
+                  return Item(onTap: () {
+                    widget.onFieldTap.call(widget.hour, minute);
+                  }, candidateData: candidateData, hour: widget.hour, minute: minute,);
                 },
               ),
             );
@@ -200,3 +148,76 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
     );
   }
 }
+
+class Item extends StatefulWidget {
+  final Function() onTap;
+  final List<DragOrder?> candidateData;
+  final int hour;
+  final int minute;
+  const Item({Key? key, required this.onTap, required this.candidateData, required this.hour, required this.minute}) : super(key: key);
+
+  @override
+  State<Item> createState() => _ItemState();
+}
+
+class _ItemState extends State<Item> {
+  bool isHover = false;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onHover: (value) {
+        if (value) {
+          setState(() {
+            isHover = true;
+          });
+        } else {
+          setState(() {
+            isHover = false;
+          });
+        }
+      },
+      onTap: () =>widget.onTap.call(),
+      child: Ink(
+        decoration: BoxDecoration(
+          color: widget.candidateData.isNotEmpty
+              ? widget.candidateData.first != null &&
+              widget.candidateData.first!.isResizing == true
+              ? Colors.transparent
+              : Colors.orange
+              : Colors.white,
+          border: Border.all(
+            width: 0.3,
+            color: Colors.black26,
+          ),
+        ),
+        width: double.infinity,
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: isHover == false
+              ? const SizedBox()
+              : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding:
+                const EdgeInsets.only(left: 4, top: 2),
+                child: Text(
+                  "${widget.hour}:${widget.minute == 0 ? "00" : widget.minute}",
+                  style: TextStyle(
+                    color: Colors.grey.shade400,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+

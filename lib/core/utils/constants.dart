@@ -2,7 +2,8 @@ class Constants {
   static double rulerWidth =100;
   static double startWork =8;
   static double endWork =22;
-  static double timeTableItemWidth =200;
+  static double timeTableItemWidth =300;
+  static double timeTableItemMinWidth =600;
   static double timeTableItemHeight =100;
   static double sizeTimeTableFieldPerMinuteRound =1.67;
   static double sizeTimeTableFieldPerMinute =1.6;

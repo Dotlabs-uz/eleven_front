@@ -7,6 +7,7 @@ import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/t
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/assets.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/dialogs.dart';
@@ -123,7 +124,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: 1000,
+                      width: 1300,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -456,7 +457,12 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                   // ),
                 ),
                 const SizedBox(height: 5),
-                Text("${entity.firstName} ${entity.lastName}"),
+                Text("${entity.firstName} ${entity.lastName}", textAlign: TextAlign.center, style: const TextStyle(
+                  color: AppColors.sideMenu,
+                  fontSize: 12,
+
+                  fontFamily: "Nunito",
+                ),),
               ],
             ),
           ),
