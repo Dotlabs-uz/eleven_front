@@ -31,6 +31,8 @@ class FieldCardWidget extends StatefulWidget {
 }
 
 class _FieldCardWidgetState extends State<FieldCardWidget> {
+  bool isHover = false;
+
   bool isCardAllowedToDrag(
       OrderEntity order, List<NotWorkingHoursEntity> notWorkingHours) {
     final orderStart = order.orderStart;
@@ -136,7 +138,22 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                   }
                 },
                 builder: (context, candidateData, rejectedData) {
+
                   return InkWell(
+                    onHover: (value) {
+
+                      if(value) {
+                        setState(() {
+                          isHover = true;
+                        });
+                      }else {
+                        setState(() {
+                          isHover = false;
+
+                        });
+                      }
+
+                    },
                     onTap: () => widget.onFieldTap.call(widget.hour, minute),
                     child: Ink(
                       decoration: BoxDecoration(
@@ -152,7 +169,7 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                         ),
                       ),
                       width: double.infinity,
-                      child: widget.isFirstSection
+                      child: isHover == false
                           ? const SizedBox()
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.start,
