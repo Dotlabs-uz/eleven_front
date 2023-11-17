@@ -7,6 +7,7 @@ import '../entities/field_entity.dart';
 import '../utils/animated_navigation.dart';
 import 'button_widget.dart';
 import 'data_int_field_widget.dart';
+import 'data_phone_number_field_widget.dart';
 import 'data_text_field_widget.dart';
 import 'role_field_widget.dart';
 
@@ -77,7 +78,7 @@ class DataManagerFormState extends State<DataManagerForm> {
             DataTextFieldWidget(fieldEntity: widget.fields['lastName']!),
             DataTextFieldWidget(fieldEntity: widget.fields['login']!),
             DataTextFieldWidget(fieldEntity: widget.fields['password']!),
-            DataIntFieldWidget(fieldEntity: widget.fields['phone']!),
+            DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!),
             const SizedBox(height: 10),
             ButtonWidget(text: "save".tr(), onPressed: widget.saveData),
           ],

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/data_phone_number_field_widget.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -79,7 +80,7 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
             DataTextFieldWidget(fieldEntity: widget.fields['login']!),
             DataTextFieldWidget(fieldEntity: widget.fields['password']!),
             RoleFieldWidget(fieldEntity: widget.fields['role']!),
-            DataIntFieldWidget(fieldEntity: widget.fields['phone']!),
+            DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!),
             const SizedBox(height: 10),
             ButtonWidget(text: "save".tr(), onPressed: widget.saveData),
             const SizedBox(height: 10),

@@ -108,7 +108,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     dynamic response;
     if (data.id.isEmpty) {
       response =
-          await _client.post(ApiConstants.clients, params: data.toJson());
+          await _client.post(ApiConstants.clients, params: data.toNewJson());
     } else {
       response = await _client.patch('${ApiConstants.clients}/${data.id}/',
           params: data.toJson());

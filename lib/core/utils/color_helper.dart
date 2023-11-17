@@ -19,10 +19,8 @@ class ColorHelper {
     if(status ==  EmployeeScheduleStatus.work.index) {
       return const Color(0xff99C499);
 
-    }else if(status ==  EmployeeScheduleStatus.sick.index) {
+    }else if(status ==  EmployeeScheduleStatus.notWork.index) {
       return const Color(0xffDFBBBB);
-    }else if(status ==  EmployeeScheduleStatus.vacation.index ) {
-      return const Color(0xffC9D6E6);
     }
 
       return Colors.transparent;

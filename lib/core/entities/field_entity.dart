@@ -1,5 +1,6 @@
 enum Types {
   string,
+  phoneNumber,
   int,
   year,
   month,

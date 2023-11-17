@@ -41,7 +41,7 @@ class CustomerEntity extends Equatable {
     "phoneNumber": FieldEntity<int>(
       label: "phoneNumber",
       hintText: "phoneNumber",
-      type: Types.int,
+      type: Types.phoneNumber,
       isRequired: true,
       isForm: true,
       val: 99,
@@ -156,7 +156,7 @@ class CustomerEntity extends Equatable {
         title: 'phoneNumber'.tr(),
         field: 'phoneNumber',
         readOnly: false,
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.number(format: "",allowFirstDot: false,),
       ),
       PlutoColumn(
         enableColumnDrag: false,

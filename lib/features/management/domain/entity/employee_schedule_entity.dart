@@ -3,10 +3,8 @@
 import 'package:equatable/equatable.dart';
 
 enum EmployeeScheduleStatus {
-  notSelected,
+  notWork,
   work,
-  sick,
-  vacation,
 }
 
 class EmployeeScheduleEntity extends Equatable {

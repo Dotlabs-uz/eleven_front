@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../features/management/domain/entity/employee_entity.dart';
 import '../../features/management/domain/entity/employee_schedule_entity.dart';
 import '../components/button_widget.dart';
 import '../components/time_field_widget.dart';
-import '../entities/field_entity.dart';
 import 'assets.dart';
 import 'selections.dart';
 import 'string_helper.dart';
@@ -249,7 +247,7 @@ class Dialogs {
                   text: 'clear'.tr(),
                   onPressed: () {
                     Navigator.pop(context);
-                    onConfirm.call(EmployeeScheduleStatus.notSelected.index);
+                    onConfirm.call(EmployeeScheduleStatus.notWork.index);
                   },
                   color: const Color(0xffABACAE),
                 ),

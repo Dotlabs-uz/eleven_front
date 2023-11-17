@@ -18,6 +18,7 @@ import '../utils/animated_navigation.dart';
 import '../utils/assets.dart';
 import 'button_widget.dart';
 import 'data_int_field_widget.dart';
+import 'data_phone_number_field_widget.dart';
 import 'data_text_field_widget.dart';
 import 'filial_field_widget.dart';
 import 'role_field_widget.dart';
@@ -167,7 +168,7 @@ class DataBarberFormState extends State<DataBarberForm> {
             DataTextFieldWidget(fieldEntity: widget.fields['lastName']!),
             DataTextFieldWidget(fieldEntity: widget.fields['login']!),
             DataTextFieldWidget(fieldEntity: widget.fields['password']!),
-            DataIntFieldWidget(fieldEntity: widget.fields['phone']!),
+            DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!),
             FilialFieldWidget(fieldEntity: widget.fields['filial']!),
             const SizedBox(height: 10),
             ButtonWidget(

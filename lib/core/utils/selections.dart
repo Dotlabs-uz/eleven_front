@@ -12,16 +12,10 @@ class Selections {
       status: EmployeeScheduleStatus.work,
     ),
     EmployeeScheduleStatusField(
-      title: "Б",
+      title: "НР",
       color: Color(0xffDFBBBB),
-      description: 'Больничный',
-      status: EmployeeScheduleStatus.sick,
-    ),
-    EmployeeScheduleStatusField(
-      title: "O",
-      color: Color(0xffC9D6E6),
-      description: 'Oтпуск',
-      status: EmployeeScheduleStatus.vacation,
+      description: 'Не рабочий',
+      status: EmployeeScheduleStatus.notWork,
     ),
   ];
 }

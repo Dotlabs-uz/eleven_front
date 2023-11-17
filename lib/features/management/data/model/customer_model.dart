@@ -41,8 +41,8 @@ class CustomerModel extends CustomerEntity {
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     return CustomerModel(
-      id: json['_id'],
-      fullName: json['name'],
+      id: json['_id']  ?? "",
+      fullName: json['name'] ?? "",
       phoneNumber: json['phone']??99,
       ordersCount: json['ordersCount'] ?? 0,
     );
@@ -60,6 +60,14 @@ class CustomerModel extends CustomerEntity {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['_id'] = id;
+    data['name'] = fullName;
+    data['phone'] = phoneNumber;
+    data['ordersCount'] = ordersCount;
+    return data;
+  }
+
+  Map<String, dynamic> toNewJson() {
+    final data = <String, dynamic>{};
     data['name'] = fullName;
     data['phone'] = phoneNumber;
     data['ordersCount'] = ordersCount;

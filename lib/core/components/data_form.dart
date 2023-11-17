@@ -14,6 +14,7 @@ import '../../features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../entities/field_entity.dart';
 import 'button_widget.dart';
 import 'customer_order_status_field_widget.dart';
+import 'data_phone_number_field_widget.dart';
 import 'filial_field_widget.dart';
 import 'header_text.dart';
 import 'role_field_widget.dart';
@@ -237,7 +238,12 @@ class DataFormWidgetState extends State<DataFormWidget> {
             ctrlWidgets.add(DataTextFieldWidget(
               fieldEntity: field,
             ));
-          } else if (field.type == Types.double) {
+          }
+          else if (field.type == Types.phoneNumber) {
+            ctrlWidgets.add(DataPhoneNumberFieldWidget(
+              fieldEntity: field,
+            ));
+          }else if (field.type == Types.double) {
             ctrlWidgets.add(DataDoubleFieldWidget(
               fieldEntity: field,
             ));

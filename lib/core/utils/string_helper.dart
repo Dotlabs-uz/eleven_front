@@ -81,10 +81,8 @@ class StringHelper {
   static String getTitleForScheduleByStatus(int status) {
     if (status == EmployeeScheduleStatus.work.index) {
       return "Р";
-    } else if (status == EmployeeScheduleStatus.sick.index) {
-      return "Б";
-    } else if (status == EmployeeScheduleStatus.vacation.index) {
-      return "O";
+    } else if (status == EmployeeScheduleStatus.notWork.index) {
+      return "НР";
     }
 
     return "Error";

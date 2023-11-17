@@ -269,7 +269,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                             if (state is EmployeeLoaded) {
                               listEmployee = state.data;
                             }else if (state is EmployeeLoading) {
-                              return const LoadingCircle();
+                              return LoadingCircle();
                             }
 
                             return EmployeeScheduleWidget(
@@ -306,7 +306,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
                 const EmployeeScheduleStatusWidget(),
               ],
             ),
