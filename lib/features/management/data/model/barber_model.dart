@@ -18,6 +18,8 @@ class BarberModel extends BarberEntity {
     required super.avatar,
     required super.password,
     required super.login,
+    required super.isOnline,
+    required super.isActive,
     required super.inTimeTable,
     required super.notWorkingHours,
     required super.isCurrentFilial,
@@ -64,6 +66,8 @@ class BarberModel extends BarberEntity {
       firstName: json['firstName'],
       lastName: json['lastName'],
       phone: json['phone'],
+      isActive: json['isActive'],
+      isOnline: json['isOnline'],
       filial: FilialModel.fromJson(json['filial']),
       login: json['login'],
       inTimeTable: json['inTimeTable'] ?? false,
@@ -85,6 +89,8 @@ class BarberModel extends BarberEntity {
       firstName: entity.firstName,
       lastName: entity.lastName,
       phone: entity.phone,
+      isActive: entity.isActive,
+      isOnline: entity.isOnline,
       filial: entity.filial,
       password: entity.password,
       login: entity.login,
@@ -106,6 +112,8 @@ class BarberModel extends BarberEntity {
     data['login'] = login;
     data['password'] = password;
     data['inTimeTable'] = inTimeTable;
+    data['isActive'] = isActive;
+    data['isOnline'] = isOnline;
     return data;
   }
 }

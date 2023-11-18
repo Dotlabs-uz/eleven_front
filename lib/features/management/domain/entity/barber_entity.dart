@@ -20,6 +20,8 @@ class BarberEntity extends Equatable {
   final String avatar;
   final String login;
   final int phone;
+  final bool isActive;
+  final bool isOnline;
   bool inTimeTable;
   final bool isCurrentFilial;
   final List<NotWorkingHoursEntity> notWorkingHours;
@@ -30,6 +32,8 @@ class BarberEntity extends Equatable {
     required this.firstName,
     required this.lastName,
     required this.avatar,
+    required this.isActive,
+    required this.isOnline,
     required this.password,
     required this.login,
     required this.phone,
@@ -78,7 +82,8 @@ class BarberEntity extends Equatable {
       isRequired: true,
       isForm: true,
       val: "",
-    ),"avatar": FieldEntity<String>(
+    ),
+    "avatar": FieldEntity<String>(
       label: "avatar",
       hintText: "avatar",
       type: Types.string,
@@ -93,12 +98,29 @@ class BarberEntity extends Equatable {
       isRequired: true,
       isForm: true,
       val: 99,
-    ),"isCurrentFilial": FieldEntity<bool>(
+    ),
+    "isCurrentFilial": FieldEntity<bool>(
       label: "isCurrentFilial",
       hintText: "isCurrentFilial",
       type: Types.bool,
       isRequired: false,
-      isForm:false,
+      isForm: false,
+      val: false,
+    ),
+    "isActive": FieldEntity<bool>(
+      label: "isActive",
+      hintText: "isActive",
+      type: Types.bool,
+      isRequired: false,
+      isForm: false,
+      val: false,
+    ),
+    "isOnline": FieldEntity<bool>(
+      label: "isOnline",
+      hintText: "isOnline",
+      type: Types.bool,
+      isRequired: false,
+      isForm: false,
       val: false,
     ),
     "filial": FieldEntity<FilialEntity>(
@@ -127,6 +149,8 @@ class BarberEntity extends Equatable {
         "filial": filial,
         "password": password,
         "isCurrentFilial": isCurrentFilial,
+        "isOnline": isOnline,
+        "isActive": isActive,
         "avatar": avatar,
         "login": login,
       }[key];
@@ -139,6 +163,8 @@ class BarberEntity extends Equatable {
       phone: row.cells["phone"]?.value,
       filial: row.cells["filial"]?.value,
       avatar: row.cells["avatar"]?.value,
+      isActive: row.cells["isActive"]?.value,
+      isOnline: row.cells["isOnline"]?.value,
       isCurrentFilial: row.cells["isCurrentFilial"]?.value,
       // password: row.cells["password"]?.value,
       password: "",
@@ -156,6 +182,8 @@ class BarberEntity extends Equatable {
       'avatar': PlutoCell(value: e.avatar),
       'filial': PlutoCell(value: e.filial),
       'password': PlutoCell(value: e.password),
+      'isOnline': PlutoCell(value: e.isOnline),
+      'isActive': PlutoCell(value: e.isActive),
       'isCurrentFilial': PlutoCell(value: e.isCurrentFilial),
       'login': PlutoCell(value: e.login),
     });
@@ -224,7 +252,26 @@ class BarberEntity extends Equatable {
         title: 'phoneNumber'.tr(),
         field: 'phone',
         readOnly: false,
-        type: PlutoColumnType.number(format: "",allowFirstDot: false,),
+        type: PlutoColumnType.number(
+          format: "",
+          allowFirstDot: false,
+        ),
+      ),
+      PlutoColumn(
+        enableColumnDrag: false,
+        enableRowDrag: false,
+        title: 'isActive'.tr(),
+        field: 'isActive',
+        readOnly: false,
+        type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        enableColumnDrag: false,
+        enableRowDrag: false,
+        title: 'isOnline'.tr(),
+        field: 'isOnline',
+        readOnly: false,
+        type: PlutoColumnType.text(),
       ),
     ];
   }
@@ -241,6 +288,8 @@ class BarberEntity extends Equatable {
       avatar: fields["avatar"]?.val,
       isCurrentFilial: fields["isCurrentFilial"]?.val,
       inTimeTable: false,
+      isOnline: false,
+      isActive: false,
       notWorkingHours: [],
     );
   }
@@ -255,6 +304,8 @@ class BarberEntity extends Equatable {
       password: "",
       login: "",
       inTimeTable: false,
+      isActive: false,
+      isOnline: false,
       notWorkingHours: [],
       avatar: '',
       isCurrentFilial: false,
