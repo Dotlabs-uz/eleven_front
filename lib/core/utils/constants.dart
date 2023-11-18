@@ -10,6 +10,10 @@ class Constants {
   static double onTimetableFieldItemRound =25;
   static double onTimetableFieldItem =25;
 
+  static double sizeOfBarberProfileCard =300;
+
+
+
   // static double onTimetableFieldItemRound =1.55;
   // static double onTimetableFieldItem =1.4;
 

@@ -13,6 +13,7 @@ class AppColors {
   static const sideMenu = Color(0xff071E32);
   // static const sideMenuSelected = Colors.blue;
   // static const buttonColor = Colors.blue;
+  static  Color accent = Colors.pink.shade400;
   static const scaffoldColor = Color(0xffF8FAFF);
   static const sideMenuSelected = Color(0xff1A1A1A);
   static const buttonColor = Colors.yellow;

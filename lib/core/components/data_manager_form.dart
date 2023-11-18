@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../features/management/presentation/screens/employee_profile_screen.dart';
+import '../../features/management/presentation/screens/barber_profile_screen.dart';
 import '../entities/field_entity.dart';
 import '../utils/animated_navigation.dart';
 import 'button_widget.dart';

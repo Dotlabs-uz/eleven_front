@@ -397,7 +397,9 @@ class _DayItemState extends State<_DayItem> {
                 (widget.day == null
                     ? null
                     : widget.isSelectedDate
-                        ? Colors.pink.shade400
+                        ?
+                 AppColors.accent
+
                         : widget.isCurrentDate
                             ? Colors.blue.shade200
                             : null),

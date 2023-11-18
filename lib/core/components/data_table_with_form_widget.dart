@@ -306,7 +306,6 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
   }
 
   _colorForEmployee(bool isCurrentFilial) {
-    print("is current filial $isCurrentFilial");
     if (isCurrentFilial == false) {
       return Colors.grey.shade200;
     }
