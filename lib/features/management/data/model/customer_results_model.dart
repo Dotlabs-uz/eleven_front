@@ -14,7 +14,7 @@ class CustomerResultsModel extends CustomerResultsEntity {
     return CustomerResultsModel(
       count: json['count'],
       pageCount: json['pageCount'],
-      results: List.from(json['reszults'])
+      results: List.from(json['results'])
           .map((e) => CustomerModel.fromJson(Map.from(e)))
           .toList(),
     );

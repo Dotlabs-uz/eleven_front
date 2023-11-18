@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/barber_field_multi_select_widget.dart';
 import 'package:eleven_crm/core/components/barber_field_widget.dart';
 import 'package:eleven_crm/core/components/client_field_widget.dart';
 import 'package:eleven_crm/core/components/customer_field_widget.dart';
@@ -271,7 +272,12 @@ class DataFormWidgetState extends State<DataFormWidget> {
             ctrlWidgets.add(BarberFieldWidget(
               fieldEntity: field,
             ));
-          } else if (field.type == Types.client) {
+          }
+          else if (field.type == Types.barberMultiSelectId) {
+            ctrlWidgets.add(BarberFieldMultiSelectWidget(
+              fieldEntity: field,
+            ));
+          }else if (field.type == Types.client) {
             ctrlWidgets.add(ClientFieldWidget(
               fieldEntity: field,
             ));

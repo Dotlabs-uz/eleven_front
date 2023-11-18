@@ -14,6 +14,7 @@ enum Types {
   serviceCategory,
   paymentType,
   barber,
+  barberMultiSelectId,
   client,
   sex,
   role,

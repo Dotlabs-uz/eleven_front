@@ -38,14 +38,14 @@ class ManagementRepositoryImpl extends ManagementRepository {
     String? endDate,
   ) async {
     try {
-      final localData = await localDataSource.getCustomerResult(searchText);
-
-
-      print("Local data clients");
-
-      if (localData != null) {
-        return Right(localData);
-      }
+      // final localData = await localDataSource.getCustomerResult(searchText);
+      //
+      //
+      // print("Local data clients");
+      //
+      // if (localData != null) {
+      //   return Right(localData);
+      // }
 
       final entity = await remoteDataSource.getCustomer(
         page,
@@ -54,7 +54,7 @@ class ManagementRepositoryImpl extends ManagementRepository {
         startDate,
         endDate,
       );
-      print("save clients to local data sourse");
+      // print("save clients to local data sourse ${entity.results.first.fullName}");
 
       await localDataSource.saveCustomerResult(entity);
 

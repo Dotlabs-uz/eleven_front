@@ -9,6 +9,7 @@ class ServiceProductModel extends ServiceProductEntity {
     required super.price,
     required super.duration,
     required super.category,
+    required super.listBarberId,
     required super.sex,
   });
 
@@ -18,6 +19,7 @@ class ServiceProductModel extends ServiceProductEntity {
       name: json['name'],
       price: json['price'],
       duration: json['duration'],
+      listBarberId:  ["65562dbe52dacddcde917213"],
       category:withCategoryParse ? ServiceProductCategoryModel.fromJson( json['category'] ,false) : ServiceProductCategoryModel.fromEntity(ServiceProductCategoryEntity.empty()),
       sex: json['sex'] ?? "men",
     );
@@ -30,6 +32,7 @@ class ServiceProductModel extends ServiceProductEntity {
       price: entity.price,
       duration: entity.duration,
       category: entity.category,
+      listBarberId: entity.listBarberId,
       sex: entity.sex,
     );
   }
@@ -41,6 +44,7 @@ class ServiceProductModel extends ServiceProductEntity {
     data['name'] = name;
     data['price'] = price;
     data['duration'] = duration;
+    data['listBarberId'] = listBarberId;
     data['category'] =
         category.id;
     data['sex'] = sex;

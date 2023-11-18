@@ -13,6 +13,7 @@ class ServiceProductEntity extends Equatable {
   final double price;
   final double duration;
   final ServiceProductCategoryEntity category;
+  final List<String> listBarberId;
   final String sex;
 
   const ServiceProductEntity({
@@ -21,6 +22,7 @@ class ServiceProductEntity extends Equatable {
     required this.price,
     required this.duration,
     required this.category,
+    required this.listBarberId,
     required this.sex,
   });
 
@@ -64,6 +66,14 @@ class ServiceProductEntity extends Equatable {
       isRequired: false,
       val: ServiceProductCategoryEntity.empty(),
     ),
+    "listBarberId": FieldEntity<List<String>>(
+      label: "listBarberId",
+      hintText: "listBarberId",
+      type: Types.barberMultiSelectId,
+      isForm: true,
+      isRequired: false,
+      val: [],
+    ),
     "sex": FieldEntity<String>(
       label: "sex",
       hintText: "sex",
@@ -88,6 +98,7 @@ class ServiceProductEntity extends Equatable {
         "price": price,
         "duration": duration,
         "category": category,
+        "listBarberId": listBarberId,
         "sex": sex,
       }[key];
 
@@ -99,6 +110,7 @@ class ServiceProductEntity extends Equatable {
       duration: row.cells["duration"]?.value,
       category: row.cells["category"]?.value,
       sex: row.cells["sex"]?.value,
+      listBarberId: row.cells["listBarberId"]?.value,
     );
   }
 
@@ -111,6 +123,7 @@ class ServiceProductEntity extends Equatable {
       'duration': PlutoCell(value: e.duration),
       'category': PlutoCell(value: e.category),
       'categoryName': PlutoCell(value: e.category),
+      'listBarberId': PlutoCell(value: e.listBarberId),
       'sex': PlutoCell(value: e.sex),
     });
   }
@@ -273,6 +286,7 @@ class ServiceProductEntity extends Equatable {
       duration: fields["duration"]?.val,
       category: fields["category"]?.val,
       sex: fields["sex"]?.val,
+      listBarberId: fields["listBarberId"]?.val,
     );
   }
 
@@ -284,6 +298,7 @@ class ServiceProductEntity extends Equatable {
       duration: 0,
       category: ServiceProductCategoryEntity.empty(),
       sex: "men",
+      listBarberId: [],
     );
   }
 
@@ -292,5 +307,6 @@ class ServiceProductEntity extends Equatable {
         id,
         name,
         price,
+        listBarberId.length,
       ];
 }
