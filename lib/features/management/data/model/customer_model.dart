@@ -40,6 +40,8 @@ class CustomerModel extends CustomerEntity {
   }
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
+
+    print("json ${json['ordersCount']}");
     return CustomerModel(
       id: json['_id']  ?? "",
       fullName: json['name'] ?? "",
