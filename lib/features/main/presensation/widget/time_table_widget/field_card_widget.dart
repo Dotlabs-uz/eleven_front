@@ -31,7 +31,6 @@ class FieldCardWidget extends StatefulWidget {
 }
 
 class _FieldCardWidgetState extends State<FieldCardWidget> {
-
   bool isCardAllowedToDrag(
       OrderEntity order, List<NotWorkingHoursEntity> notWorkingHours) {
     final orderStart = order.orderStart;
@@ -136,9 +135,14 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                   }
                 },
                 builder: (context, candidateData, rejectedData) {
-                  return Item(onTap: () {
-                    widget.onFieldTap.call(widget.hour, minute);
-                  }, candidateData: candidateData, hour: widget.hour, minute: minute,);
+                  return Item(
+                    onTap: () {
+                      widget.onFieldTap.call(widget.hour, minute);
+                    },
+                    candidateData: candidateData,
+                    hour: widget.hour,
+                    minute: minute,
+                  );
                 },
               ),
             );
@@ -154,7 +158,13 @@ class Item extends StatefulWidget {
   final List<DragOrder?> candidateData;
   final int hour;
   final int minute;
-  const Item({Key? key, required this.onTap, required this.candidateData, required this.hour, required this.minute}) : super(key: key);
+  const Item(
+      {Key? key,
+      required this.onTap,
+      required this.candidateData,
+      required this.hour,
+      required this.minute})
+      : super(key: key);
 
   @override
   State<Item> createState() => _ItemState();
@@ -163,12 +173,11 @@ class Item extends StatefulWidget {
 class _ItemState extends State<Item> {
   bool isHover = false;
 
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onHover: (value) {
-        if(widget.candidateData.isNotEmpty) return;
+        if (widget.candidateData.isNotEmpty) return;
         if (value) {
           setState(() {
             isHover = true;
@@ -179,46 +188,43 @@ class _ItemState extends State<Item> {
           });
         }
       },
-      onTap: () =>widget.onTap.call(),
+      onTap: () => widget.onTap.call(),
       child: Ink(
         decoration: BoxDecoration(
-          color: isHover ? Colors.pink.shade400:  widget.candidateData.isNotEmpty
-              ? widget.candidateData.first != null &&
-              widget.candidateData.first!.isResizing == true
-              ? Colors.transparent
-              : Colors.orange
-              : Colors.white,
+          color: isHover
+              ? Colors.pink.shade400
+              : widget.candidateData.isNotEmpty
+                  ? widget.candidateData.first != null &&
+                          widget.candidateData.first!.isResizing == true
+                      ? Colors.transparent
+                      : Colors.orange
+                  : Colors.white,
           border: Border.all(
             width: 0.3,
             color: Colors.black26,
           ),
         ),
         width: double.infinity,
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: isHover == false
-              ? const SizedBox()
-              : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding:
-                const EdgeInsets.only(left: 4, top: 2),
-                child: Text(
-                  "${widget.hour}:${widget.minute == 0 ? "00" : widget.minute}",
-                  style: TextStyle(
-                    color: isHover ?Colors.white :Colors.grey.shade400,
-                    fontSize: isHover ? 14 :10,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
+        child: isHover == false
+            ? const SizedBox()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4, top: 2),
+                    child: Text(
+                      "${widget.hour}:${widget.minute == 0 ? "00" : widget.minute}",
+                      style: TextStyle(
+                        color: isHover ? Colors.white : Colors.grey.shade400,
+                        fontSize: isHover ? 14 : 10,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  )
+                ],
+              ),
       ),
     );
   }
 }
-
