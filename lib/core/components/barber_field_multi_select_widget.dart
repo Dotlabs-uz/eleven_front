@@ -3,12 +3,17 @@ import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/api/api_constants.dart';
+import 'package:eleven_crm/features/auth/data/datasources/authentication_local_data_source.dart';
 import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:multiselect_dropdown_flutter/multiselect_dropdown_flutter.dart';
 
+import '../../features/management/data/model/barber_model.dart';
 import '../../features/management/domain/entity/barber_entity.dart';
 import '../../get_it/locator.dart';
 import '../constants/drop_down_decoration.dart';
@@ -23,7 +28,6 @@ class BarberFieldMultiSelectWidget extends StatefulWidget {
     this.onChange,
     this.elementId,
     this.enabled = true,
-
   }) : super(key: key);
   final bool enabled;
   final FieldEntity fieldEntity;
@@ -31,10 +35,12 @@ class BarberFieldMultiSelectWidget extends StatefulWidget {
   final String? elementId;
 
   @override
-  State<BarberFieldMultiSelectWidget> createState() => _BarberFieldMultiSelectWidgetState();
+  State<BarberFieldMultiSelectWidget> createState() =>
+      _BarberFieldMultiSelectWidgetState();
 }
 
-class _BarberFieldMultiSelectWidgetState extends State<BarberFieldMultiSelectWidget> {
+class _BarberFieldMultiSelectWidgetState
+    extends State<BarberFieldMultiSelectWidget> {
   late BarberCubit barberCubit;
   @override
   void initState() {
@@ -78,13 +84,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
   final TextEditingController controllerSearch = TextEditingController();
 
   BarberEntity serviceEntity = BarberEntity.empty();
-  List<BarberEntity> listData = [];
-    List<BarberEntity> listSelectedBarbers = [];
+ static List<BarberEntity> listData = [];
+  static List<BarberEntity> listSelectedBarbers = [];
 
   final BarberCubit filialCubit = locator();
   final GetBarber getBarbers = locator();
 
   bool enabled = true;
+  String sessionId = " ";
 
   @override
   void initState() {
@@ -92,13 +99,16 @@ class _ContentWidgetState extends State<_ContentWidget> {
     super.initState();
   }
 
-  initialize() {
-
+  initialize() async {
+    listSelectedBarbers.clear();
+    listData.clear();
     BlocProvider.of<BarberCubit>(context).load(
       "",
     );
 
     enabled = widget.enabled;
+
+    sessionId = await AuthenticationLocalDataSourceImpl().getSessionId() ?? "";
   }
 
   static String previousId = "";
@@ -117,38 +127,25 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   initializeSelectedList(List<BarberEntity> listData) {
+    final List<String> listIds = List.from(widget.fieldEntity.val);
 
-
-    final  List<String> listIds = List.from(widget.fieldEntity.val);
-
-
-
+    final List<BarberEntity> listSelected = [];
     print("List id's ${listIds}");
     print("List data len ${listData.length}");
 
-
     for (var element in listData) {
-
-
       print("listIds.contains(element.id) ${listIds.contains(element.id)}");
       print("Element id ${element.id}");
-      if(listIds.contains(element.id)) {
-        listSelectedBarbers.add(element);
+      if (listIds.contains(element.id)) {
+        listSelected.add(element);
       }
-
-
-
     }
 
-
-    print("List element ${listSelectedBarbers.length}");
-
-
-
     setState(() {
+      listSelectedBarbers = listSelected;
 
+      print("List selected barbers $listSelectedBarbers");
     });
-    return listSelectedBarbers;
   }
 
   Future<List<BarberEntity>> _getData(filter) async {
@@ -168,22 +165,23 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: SizedBox(
-        height: 40,
+    return Theme(
+      data: ThemeData(
+          primaryColorLight: Colors.pink.shade400,
+          textTheme: const TextTheme(
+              titleSmall: TextStyle(
+                  fontFamily: "Nunito", fontSize: 14, color: Colors.white))),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: BlocConsumer<BarberCubit, BarberState>(
           listener: (context, state) {
             if (state is BarberLoaded) {
               listData = state.data.results;
 
-              listData.removeWhere((element) => element.isCurrentFilial == false);
+              listData
+                  .removeWhere((element) => element.isCurrentFilial == false);
 
-              if (widget.fieldEntity.val != null) {
-
-              listSelectedBarbers =   initializeSelectedList(listData);
-
-              }
+              initializeSelectedList(listData);
 
               filialCubit.init();
             }
@@ -200,12 +198,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 return [];
               },
               itemAsString: (BarberEntity c) => "${c.firstName} ${c.lastName}",
-              selectedItems: listSelectedBarbers ,
-
-
+              selectedItems: listSelectedBarbers,
 
               popupProps: PopupPropsMultiSelection.menu(
-                showSelectedItems: true,
+
                 itemBuilder: (context, item, isSelected) {
                   return Padding(
                     padding: const EdgeInsets.only(
@@ -264,23 +260,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
                   );
                 },
                 showSearchBox: true,
-                validationWidgetBuilder: (context, item){
-                  return Row(children: [...item.map((e) => Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: AppColors.accent,
-                        borderRadius: BorderRadius.circular(16)
-                    ),
-                    child: Text(
-                      "${e.firstName} ${e.lastName}",
-                      style: TextStyle(
-                      ),
-
-
-                    ),
-                  ))],);
-
-                },
                 searchFieldProps: TextFieldProps(
                   controller: controllerSearch,
                   decoration: InputDecoration(
@@ -315,25 +294,24 @@ class _ContentWidgetState extends State<_ContentWidget> {
               compareFn: (item, selectedItem) => (item.id == selectedItem.id),
 
               dropdownDecoratorProps: DropDownDecoration.dropDownColor(
-                'barber'.tr(),
-                "barber".tr().toUpperCase(),
+                'barbers'.tr(),
+                "barbers".tr().toUpperCase(),
                 widget.fieldEntity.isRequired,
               ),
               onChanged: (List<BarberEntity>? data) {
                 log("Data $data");
 
                 if (data != null) {
-
                   listSelectedBarbers = data;
-                  final List<String > listData = List.from(widget.fieldEntity.val );
+                  final List<String> listData =
+                      List.from(widget.fieldEntity.val);
                   for (var element in listSelectedBarbers) {
-
-                    if(!listData.contains(element.id))  {
+                    if (!listData.contains(element.id)) {
                       listData.add(element.id);
                     }
                   }
 
-                  widget.fieldEntity.val   = listData;
+                  widget.fieldEntity.val = listData;
 
                   widget.onChange?.call(listData);
                 } else {
@@ -344,6 +322,47 @@ class _ContentWidgetState extends State<_ContentWidget> {
           },
         ),
       ),
+    );
+    return MultiSelectDropDown.network(
+      onOptionSelected: (List<ValueItem> selectedOptions) {
+        print("Option selected $selectedOptions");
+      },
+      selectionType: SelectionType.multi,
+      borderRadius: 6,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      chipConfig: const ChipConfig(wrapType: WrapType.scroll),
+      dropdownHeight: 300,
+      optionTextStyle: const TextStyle(fontSize: 16),
+      selectedOptionIcon: Icon(
+        Icons.check_circle,
+        color: AppColors.accent,
+      ),
+      searchEnabled: true,
+      hint: widget.fieldEntity.hintText,
+      networkConfig: NetworkConfig(
+        url: ApiConstants.baseApiUrl + ApiConstants.barbers,
+        headers: {
+          'Authorization': sessionId,
+        },
+      ),
+      responseErrorBuilder: ((context, body) {
+        return const Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text('Error fetching the data'),
+        );
+      }),
+      responseParser: (response) async {
+        final results = response['results'];
+        final list = (results as List<dynamic>).map((e) {
+          final item = e as Map<String, dynamic>;
+          return ValueItem(
+            label: item['firstName'] + " " + item['lastName'],
+            value: BarberModel.fromJson(item).id,
+          );
+        }).toList();
+
+        return Future.value(list);
+      },
     );
   }
 }
