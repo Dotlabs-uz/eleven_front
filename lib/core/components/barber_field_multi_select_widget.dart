@@ -13,6 +13,7 @@ import '../../features/management/domain/entity/barber_entity.dart';
 import '../../get_it/locator.dart';
 import '../constants/drop_down_decoration.dart';
 import '../entities/field_entity.dart';
+import '../utils/app_colors.dart';
 import '../utils/assets.dart';
 
 class BarberFieldMultiSelectWidget extends StatefulWidget {
@@ -78,7 +79,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   BarberEntity serviceEntity = BarberEntity.empty();
   List<BarberEntity> listData = [];
-  static List<BarberEntity> listSelectedBarbers = [];
+    List<BarberEntity> listSelectedBarbers = [];
 
   final BarberCubit filialCubit = locator();
   final GetBarber getBarbers = locator();
@@ -88,13 +89,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
   @override
   void initState() {
     initialize();
-    // listenController();
-
     super.initState();
   }
 
   initialize() {
-
 
     BlocProvider.of<BarberCubit>(context).load(
       "",
@@ -119,22 +117,37 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   initializeSelectedList(List<BarberEntity> listData) {
-    listSelectedBarbers.clear();
+
 
     final  List<String> listIds = List.from(widget.fieldEntity.val);
 
 
 
+    print("List id's ${listIds}");
+    print("List data len ${listData.length}");
+
+
     for (var element in listData) {
 
+
+      print("listIds.contains(element.id) ${listIds.contains(element.id)}");
+      print("Element id ${element.id}");
       if(listIds.contains(element.id)) {
         listSelectedBarbers.add(element);
       }
 
+
+
     }
 
 
+    print("List element ${listSelectedBarbers.length}");
 
+
+
+    setState(() {
+
+    });
     return listSelectedBarbers;
   }
 
@@ -170,26 +183,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
               listSelectedBarbers =   initializeSelectedList(listData);
 
-              if (listSelectedBarbers.isNotEmpty) {
-                Future.delayed(
-                  Duration.zero,
-                      () {
-
-                      final List<String > listData = List.from(widget.fieldEntity.val );
-                      for (var element in listSelectedBarbers) {
-
-                        if(listData.contains(element.id)) {
-                          listData.remove(element.id);
-                        }else{
-                          listData.add(element.id);
-                        }
-                      }
-
-                      widget.onChange?.call(listData);
-
-                  },
-                );
-              }
               }
 
               filialCubit.init();
@@ -209,23 +202,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
               itemAsString: (BarberEntity c) => "${c.firstName} ${c.lastName}",
               selectedItems: listSelectedBarbers ,
 
+
+
               popupProps: PopupPropsMultiSelection.menu(
                 showSelectedItems: true,
-
-
-                // validationWidgetBuilder: (context, item) {
-                //   return Container(
-                //     color: Colors.blue[200],
-                //     height: 56,=
-                //     child: Align(
-                //       alignment: Alignment.center,
-                //       child: MaterialButton(
-                //         child: Text('OK'),
-                //         onPressed: () {},
-                //       ),
-                //     ),
-                //   );
-                // },
                 itemBuilder: (context, item, isSelected) {
                   return Padding(
                     padding: const EdgeInsets.only(
@@ -283,9 +263,24 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     ),
                   );
                 },
-
                 showSearchBox: true,
+                validationWidgetBuilder: (context, item){
+                  return Row(children: [...item.map((e) => Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: AppColors.accent,
+                        borderRadius: BorderRadius.circular(16)
+                    ),
+                    child: Text(
+                      "${e.firstName} ${e.lastName}",
+                      style: TextStyle(
+                      ),
 
+
+                    ),
+                  ))],);
+
+                },
                 searchFieldProps: TextFieldProps(
                   controller: controllerSearch,
                   decoration: InputDecoration(
@@ -333,9 +328,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                   final List<String > listData = List.from(widget.fieldEntity.val );
                   for (var element in listSelectedBarbers) {
 
-                    if(listData.contains(element.id)) {
-                      listData.remove(element.id);
-                    }else{
+                    if(!listData.contains(element.id))  {
                       listData.add(element.id);
                     }
                   }
