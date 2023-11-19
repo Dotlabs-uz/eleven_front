@@ -1,24 +1,17 @@
 import 'dart:developer';
 
-import 'package:collection/collection.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/core/api/api_constants.dart';
 import 'package:eleven_crm/features/auth/data/datasources/authentication_local_data_source.dart';
 import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:multiselect_dropdown_flutter/multiselect_dropdown_flutter.dart';
-
-import '../../features/management/data/model/barber_model.dart';
 import '../../features/management/domain/entity/barber_entity.dart';
 import '../../get_it/locator.dart';
 import '../constants/drop_down_decoration.dart';
 import '../entities/field_entity.dart';
-import '../utils/app_colors.dart';
 import '../utils/assets.dart';
 
 class BarberFieldMultiSelectWidget extends StatefulWidget {
@@ -322,47 +315,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
           },
         ),
       ),
-    );
-    return MultiSelectDropDown.network(
-      onOptionSelected: (List<ValueItem> selectedOptions) {
-        print("Option selected $selectedOptions");
-      },
-      selectionType: SelectionType.multi,
-      borderRadius: 6,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      chipConfig: const ChipConfig(wrapType: WrapType.scroll),
-      dropdownHeight: 300,
-      optionTextStyle: const TextStyle(fontSize: 16),
-      selectedOptionIcon: Icon(
-        Icons.check_circle,
-        color: AppColors.accent,
-      ),
-      searchEnabled: true,
-      hint: widget.fieldEntity.hintText,
-      networkConfig: NetworkConfig(
-        url: ApiConstants.baseApiUrl + ApiConstants.barbers,
-        headers: {
-          'Authorization': sessionId,
-        },
-      ),
-      responseErrorBuilder: ((context, body) {
-        return const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text('Error fetching the data'),
-        );
-      }),
-      responseParser: (response) async {
-        final results = response['results'];
-        final list = (results as List<dynamic>).map((e) {
-          final item = e as Map<String, dynamic>;
-          return ValueItem(
-            label: item['firstName'] + " " + item['lastName'],
-            value: BarberModel.fromJson(item).id,
-          );
-        }).toList();
-
-        return Future.value(list);
-      },
     );
   }
 }
