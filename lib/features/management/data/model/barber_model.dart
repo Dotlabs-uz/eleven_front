@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import '../../../../core/entities/field_entity.dart';
 import '../../../products/data/model/filial_model.dart';
 import '../../domain/entity/barber_entity.dart';
+import '../../domain/entity/barber_schedule_results_entity.dart';
+import 'barber_schedule_results_model.dart';
 import 'not_working_hours_model.dart';
 
 @immutable
@@ -23,6 +25,7 @@ class BarberModel extends BarberEntity {
     required super.inTimeTable,
     required super.notWorkingHours,
     required super.isCurrentFilial,
+    required super.weeklySchedule,
   });
 
   List<MobileFieldEntity> getFieldsAndValues() {
@@ -67,7 +70,7 @@ class BarberModel extends BarberEntity {
       lastName: json['lastName'],
       phone: json['phone'],
       isActive: json['isActive'] ?? true,
-      isOnline: json['isOnline']?? true,
+      isOnline: json['isOnline'] ?? true,
       filial: FilialModel.fromJson(json['filial']),
       login: json['login'],
       inTimeTable: json['inTimeTable'] ?? false,
@@ -75,11 +78,12 @@ class BarberModel extends BarberEntity {
       notWorkingHours: json['notWorkingHours'] != null &&
               List.from(json['notWorkingHours']).isNotEmpty
           ? List.from(json['notWorkingHours'])
-              .map((e) => NotWorkingHoursModel.fromJson(e, json["_id"]))
+              .map((e) => NotWorkingHoursModel.fromJson(e))
               .toList()
           : [],
       avatar: json['avatar'] ?? "",
       isCurrentFilial: json['isCurrentFilial'] ?? false,
+      weeklySchedule: BarberScheduleResultsModel.fromJson( json['weeklySchedule']),
     );
   }
 
@@ -98,6 +102,7 @@ class BarberModel extends BarberEntity {
       notWorkingHours: entity.notWorkingHours,
       avatar: entity.avatar,
       isCurrentFilial: entity.isCurrentFilial,
+      weeklySchedule: entity.weeklySchedule,
     );
   }
 
@@ -114,6 +119,7 @@ class BarberModel extends BarberEntity {
     data['inTimeTable'] = inTimeTable;
     data['isActive'] = isActive;
     data['isOnline'] = isOnline;
+    data['weeklySchedule'] = weeklySchedule.schedule;
     return data;
   }
 }

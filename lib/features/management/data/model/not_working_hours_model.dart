@@ -4,14 +4,23 @@ import '../../domain/entity/not_working_hours_entity.dart';
 import 'employee_schedule_model.dart';
 
 class NotWorkingHoursModel extends NotWorkingHoursEntity {
-  const NotWorkingHoursModel({required super.dateFrom, required super.dateTo, required super.barberId});
+  const NotWorkingHoursModel({required super.dateFrom, required super.dateTo});
 
-  factory NotWorkingHoursModel.fromJson(Map<String, dynamic> json, String barberId) {
+  factory NotWorkingHoursModel.fromJson(Map<String, dynamic> json, ) {
     return NotWorkingHoursModel(
       dateFrom:DateTime.parse( json['from']),
-      dateTo:DateTime.parse( json['to']), barberId: barberId,
+      dateTo:DateTime.parse( json['to']),
     );
   }
+
+  factory NotWorkingHoursModel.fromEntity(NotWorkingHoursEntity entity ) {
+    return NotWorkingHoursModel(
+      dateFrom:entity.dateFrom,
+      dateTo:entity.dateTo,
+    );
+  }
+
+
 
 
   Map<String, dynamic> toJson() {

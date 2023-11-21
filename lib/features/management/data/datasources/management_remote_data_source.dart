@@ -2,6 +2,8 @@ import 'package:eleven_crm/features/management/data/model/barber_model.dart';
 
 import '../../../../core/api/api_client.dart';
 import '../../../../core/api/api_constants.dart';
+import '../../../products/data/model/service_product_model.dart';
+import '../../../products/domain/entity/service_product_entity.dart';
 import '../../presentation/widgets/employee_schedule_widget.dart';
 import '../model/barber_results_model.dart';
 import '../model/customer_model.dart';
@@ -61,6 +63,8 @@ abstract class ManagementRemoteDataSource {
   Future<bool> saveEmployeeSchedule(List<FieldSchedule> data);
 
   Future<bool> deleteBarber(String id);
+
+  Future<bool> saveBarberServices(String barberId , List<ServiceProductEntity> services);
 }
 
 class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
@@ -249,6 +253,17 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
   }
 
   @override
+  Future<bool> saveBarberServices(String barberId, List<ServiceProductEntity> services) async {
+
+    await _client.post(ApiConstants.setBarberServices, params: {
+      "services": services.map((e) => ServiceProductModel.fromEntity(e).toJson()),
+      "barberId" : barberId,
+    });
+
+    return true;
+  }
+
+  @override
   Future<bool> saveEmployeeSchedule(List<FieldSchedule> data) async {
     await _client.post(ApiConstants.employeeSchedule,
         params: {"schedule": data.map((e) => e.toJson()).toList()});
@@ -286,4 +301,6 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
     return ManagerModel.fromJson(response);
   }
+
+
 }

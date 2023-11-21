@@ -664,9 +664,9 @@
   "pleaseSelectClient": "Пожалуйста выберите клиента",
   "pleaseSelectServices": "Пожалуйста выберите сервисы",
   "youCantChooseThisOrderStartInThisTime": "Простите но вы не можете создать заказ в выбранное время (так как вы пытаетесь создать его в прошлом)",
-  "data": "data",
-  "data": "data",
-  "data": "data",
-  "data": "data",
+  "isOnline": "Онлайн",
+  "schedule": "Рассписание",
+  "masterActive" : "Мастер активен",
+  "showInOnline": "Показать в онлайн",
   "data": "data"
 }

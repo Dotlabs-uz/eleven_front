@@ -1,5 +1,6 @@
 class BarberProfileTabsEntity {
   final String title;
+  final Function() ? onTap;
 
-  BarberProfileTabsEntity(this.title);
+  BarberProfileTabsEntity({required this.title, this.onTap});
 }

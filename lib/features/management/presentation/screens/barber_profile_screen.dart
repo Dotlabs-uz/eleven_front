@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/widgets/barber_profile_services_body.dart';
 import 'package:eleven_crm/features/management/presentation/widgets/checker_with_title_widget.dart';
+import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/components/error_flash_bar.dart';
@@ -12,6 +15,8 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../get_it/locator.dart';
+import '../../../products/domain/entity/service_product_entity.dart';
+import '../../../products/presensation/cubit/service_product/service_product_cubit.dart';
 import '../../domain/entity/barber_entity.dart';
 import '../../domain/entity/barber_profile_tabs_entity.dart';
 
@@ -30,10 +35,12 @@ class BarberProfileScreen extends StatefulWidget {
 
 class _BarberProfileScreenState extends State<BarberProfileScreen> {
   late BarberCubit barberCubit;
+  late ServiceProductCubit serviceProductCubit;
 
   @override
   void initState() {
     barberCubit = locator<BarberCubit>();
+    serviceProductCubit = locator<ServiceProductCubit>();
     super.initState();
   }
 
@@ -43,6 +50,9 @@ class _BarberProfileScreenState extends State<BarberProfileScreen> {
       providers: [
         BlocProvider<BarberCubit>(
           create: (context) => barberCubit,
+        ),
+        BlocProvider<ServiceProductCubit>(
+          create: (context) => serviceProductCubit,
         ),
       ],
       child: ContentWidget(
@@ -73,13 +83,8 @@ class ContentWidget extends StatefulWidget {
 
 class _ContentWidgetState extends State<ContentWidget> {
   final List<BarberProfileTabsEntity> listTabs = [
-    BarberProfileTabsEntity("test"),
-    BarberProfileTabsEntity("test"),
-    BarberProfileTabsEntity("test"),
-    BarberProfileTabsEntity("test"),
-    BarberProfileTabsEntity("test"),
-    BarberProfileTabsEntity("test"),
-    BarberProfileTabsEntity("test"),
+    BarberProfileTabsEntity(title: "services"),
+    BarberProfileTabsEntity(title: "schedule"),
   ];
   final TextEditingController controllerFirstName = TextEditingController();
   final TextEditingController controllerLastName = TextEditingController();
@@ -108,6 +113,7 @@ class _ContentWidgetState extends State<ContentWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final tab = listTabs[selectedTab];
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -140,7 +146,6 @@ class _ContentWidgetState extends State<ContentWidget> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(4),
-
                     ),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -157,16 +162,17 @@ class _ContentWidgetState extends State<ContentWidget> {
                               child: MouseRegion(
                                 child: GestureDetector(
                                   onTap: () => setState(() {
-                                      selectedTab = index;
-                                    }),
+                                    selectedTab = index;
+                                  }),
                                   child: Text(
-                                    tab.title,
+                                    tab.title.tr(),
                                     style: TextStyle(
-                                      color: selectedTab == index ? AppColors.accent :  Colors.black,
+                                      color: selectedTab == index
+                                          ? AppColors.accent
+                                          : Colors.black,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: "Nunito",
                                       fontSize: 16,
-
                                     ),
                                   ),
                                 ),
@@ -179,17 +185,40 @@ class _ContentWidgetState extends State<ContentWidget> {
                   ),
                   const SizedBox(height: 20),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _barberCardWithCheckers(widget.barberEntity),
                       const SizedBox(width: 20),
                       Expanded(
                         child: Container(
+                          padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(4)),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                           child: Column(
-                            children: const [
-                              Text("test"),
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(tab.title.tr(), style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Nunito",
+                                  ),),
+                                  if (tab.onTap != null)
+                                    ElevatedButton(
+                                      onPressed: tab.onTap,
+                                      child: Text("edit".tr()),
+                                    ),
+                                ],
+                              ),
+                              const Divider(),
+                              const SizedBox(height: 10),
+                              _getBody(widget.barberEntity),
                             ],
                           ),
                         ),
@@ -205,13 +234,27 @@ class _ContentWidgetState extends State<ContentWidget> {
     );
   }
 
+  _getBody(BarberEntity barberEntity) {
+    if (selectedTab == 0) {
+      return BarberProfileServicesBody(
+        barberEntity: barberEntity,
+      );
+    } else if (selectedTab == 1) {
+      return const SizedBox();
+    } else if (selectedTab == 2) {
+      return const SizedBox();
+    } else {
+      return const SizedBox();
+    }
+  }
+
   _barberCardWithCheckers(BarberEntity barberEntity) {
     return SizedBox(
       width: Constants.sizeOfBarberProfileCard,
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 14),
+            padding: const EdgeInsets.symmetric(vertical: 14),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(6),
@@ -294,7 +337,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                     fontSize: 18,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   "barber".tr(),
                   style: TextStyle(

@@ -69,7 +69,7 @@ class EmployeeModel extends EmployeeEntity {
       notWorkingHours: json['notWorkingHours'] != null &&
               List.from(json['notWorkingHours']).isNotEmpty
           ? List.from(json['notWorkingHours'])
-              .map((e) => NotWorkingHoursModel.fromJson(e, json['_id']))
+              .map((e) => NotWorkingHoursModel.fromJson(e))
               .toList()
           : [],
     );
