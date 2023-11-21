@@ -19,6 +19,7 @@ import '../../../products/domain/entity/service_product_entity.dart';
 import '../../../products/presensation/cubit/service_product/service_product_cubit.dart';
 import '../../domain/entity/barber_entity.dart';
 import '../../domain/entity/barber_profile_tabs_entity.dart';
+import '../widgets/barber_profile_schedule_body.dart';
 
 class BarberProfileScreen extends StatefulWidget {
   final String barberId;
@@ -83,8 +84,12 @@ class ContentWidget extends StatefulWidget {
 
 class _ContentWidgetState extends State<ContentWidget> {
   final List<BarberProfileTabsEntity> listTabs = [
-    BarberProfileTabsEntity(title: "services"),
-    BarberProfileTabsEntity(title: "schedule"),
+    BarberProfileTabsEntity(
+      title: "services",
+    ),
+    BarberProfileTabsEntity(
+      title: "schedule",
+    ),
   ];
   final TextEditingController controllerFirstName = TextEditingController();
   final TextEditingController controllerLastName = TextEditingController();
@@ -149,7 +154,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                     ),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -158,7 +163,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                             final tab = listTabs[index];
 
                             return Padding(
-                              padding: const EdgeInsets.only(right: 10),
+                              padding: const EdgeInsets.only(right: 15),
                               child: MouseRegion(
                                 child: GestureDetector(
                                   onTap: () => setState(() {
@@ -203,22 +208,26 @@ class _ContentWidgetState extends State<ContentWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(tab.title.tr(), style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Nunito",
-                                  ),),
-                                  if (tab.onTap != null)
-                                    ElevatedButton(
-                                      onPressed: tab.onTap,
-                                      child: Text("edit".tr()),
+                                  Text(
+                                    tab.title.tr(),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "Nunito",
                                     ),
+                                  ),
+                                  // if (tab.editTap != null)
+                                  //   ElevatedButton(
+                                  //     onPressed: tab.editTap,
+                                  //     child: Text("edit".tr()),
+                                  //   ),
                                 ],
                               ),
                               const Divider(),
                               const SizedBox(height: 10),
                               _getBody(widget.barberEntity),
+
                             ],
                           ),
                         ),
@@ -240,7 +249,9 @@ class _ContentWidgetState extends State<ContentWidget> {
         barberEntity: barberEntity,
       );
     } else if (selectedTab == 1) {
-      return const SizedBox();
+      return BarberProfileScheduleBody(
+        barberEntity: barberEntity,
+      );
     } else if (selectedTab == 2) {
       return const SizedBox();
     } else {

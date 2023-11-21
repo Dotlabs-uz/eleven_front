@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import '../../../../core/api/api_client.dart';
 import '../../../../core/api/api_constants.dart';
+import '../../domain/entity/service_product_entity.dart';
 import '../model/filial_results_model.dart';
 import '../model/service_product_caregory_results_model.dart';
 import '../model/service_product_category_model.dart';
@@ -15,10 +16,14 @@ abstract class ProductsRemoteDataSource {
     int page,
     String searchText,
     String? ordering,
-    bool withCategoryParse ,
+    bool withCategoryParse,
   );
 
   Future<ServiceProductModel> saveServiceProduct(ServiceProductModel data);
+  Future<bool> saveBarberServiceProducts({
+    required List<ServiceProductEntity> services,
+    required String barberId,
+  });
 
   Future<bool> deleteServiceProduct(String id);
 
@@ -57,7 +62,8 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
       int page, String searchText, String? ordering, withCategoryParse) async {
     final response = await _client.get(
         '${ApiConstants.serviceProduct}/?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}');
-    final results = ServiceResultsProductModel.fromJson(response, withCategoryParse);
+    final results =
+        ServiceResultsProductModel.fromJson(response, withCategoryParse);
 
     return results;
     //
@@ -79,7 +85,8 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
       response = await _client.post(ApiConstants.serviceProduct,
           params: data.toJson());
     } else {
-      response = await _client.patch('${ApiConstants.serviceProduct}/${data.id}/',
+      response = await _client.patch(
+          '${ApiConstants.serviceProduct}/${data.id}/',
           params: data.toJson());
     }
     return ServiceProductModel.fromJson(response, false);
@@ -92,11 +99,26 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
     return response['success'] ?? false;
   }
 
+  @override
+  Future<bool> saveBarberServiceProducts(
+      {required List<ServiceProductEntity> services,
+      required String barberId}) async {
+    await _client.post(ApiConstants.setBarberServices, params: {
+      "services": services.map((e) => e.id).toList(),
+      "barberId": barberId,
+    });
+
+    return true;
+  }
+
   // ================ SERVICE PRODUCT CATEGORY CRUD ================ //
 
   @override
   Future<ServiceProductCategoryResultsModel> getServiceProductCategory(
-      int page, String searchText, String? ordering,bool withServiceCategoryParsing) async {
+      int page,
+      String searchText,
+      String? ordering,
+      bool withServiceCategoryParsing) async {
     final response = await _client.get(
       '${ApiConstants.serviceProductCategory}/?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}',
     );
@@ -142,9 +164,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
       '${ApiConstants.filial}?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}',
     );
 
-
     final results = FilialResultsModel.fromJson(response);
-
 
     log("Filials ${results.results.length}");
     return results;

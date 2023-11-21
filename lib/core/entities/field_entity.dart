@@ -19,6 +19,7 @@ enum Types {
   sex,
   role,
   choseServices,
+  weeklySchedule,
 }
 
 class FieldEntity<T> {

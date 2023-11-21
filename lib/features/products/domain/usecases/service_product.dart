@@ -7,7 +7,8 @@ import '../entity/service_product_entity.dart';
 import '../entity/service_results_product_entity.dart';
 import '../repository/products_repository.dart';
 
-class GetServiceProduct extends UseCase<ServiceResultsProductEntity, GetServiceProductParams> {
+class GetServiceProduct
+    extends UseCase<ServiceResultsProductEntity, GetServiceProductParams> {
   final ProductsRepository repository;
 
   GetServiceProduct(this.repository);
@@ -24,14 +25,32 @@ class GetServiceProduct extends UseCase<ServiceResultsProductEntity, GetServiceP
   }
 }
 
-class SaveServiceProduct extends UseCase<ServiceProductEntity, ServiceProductEntity> {
+class SaveServiceProduct
+    extends UseCase<ServiceProductEntity, ServiceProductEntity> {
   final ProductsRepository repository;
 
   SaveServiceProduct(this.repository);
 
   @override
-  Future<Either<AppError, ServiceProductEntity>> call(ServiceProductEntity params) async {
+  Future<Either<AppError, ServiceProductEntity>> call(
+      ServiceProductEntity params) async {
     return await repository.saveServiceProduct(params);
+  }
+}
+
+class SaveBarberServiceProducts
+    extends UseCase<bool, SaveBarberServiceProductsParams> {
+  final ProductsRepository repository;
+
+  SaveBarberServiceProducts(this.repository);
+
+  @override
+  Future<Either<AppError, bool>> call(
+      SaveBarberServiceProductsParams params) async {
+    return await repository.saveBarberServicesProducts(
+      barberId: params.barberId,
+      services: params.services,
+    );
   }
 }
 
@@ -46,6 +65,16 @@ class DeleteServiceProduct extends UseCase<void, ServiceProductEntity> {
   }
 }
 
+class SaveBarberServiceProductsParams extends Equatable {
+  final List<ServiceProductEntity> services;
+  final String barberId;
+
+  const SaveBarberServiceProductsParams(
+      {required this.services, required this.barberId});
+
+  @override
+  List<Object?> get props => [barberId, services.length];
+}
 
 class GetServiceProductParams extends Equatable {
   final int page;

@@ -40,6 +40,15 @@ class ServiceProductSaved extends ServiceProductState {
   List<Object> get props => [data];
 }
 
+
+class BarberServiceProductSaved extends ServiceProductState {
+
+  const BarberServiceProductSaved();
+
+  @override
+  List<Object> get props => [];
+}
+
 class ServiceProductDeleted extends ServiceProductState {
   final String id;
 

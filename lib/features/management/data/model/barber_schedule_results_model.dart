@@ -11,10 +11,10 @@ class BarberScheduleResultsModel extends BarberScheduleResultsEntity {
   const BarberScheduleResultsModel({required super.schedule});
 
   factory BarberScheduleResultsModel.fromJson(List<dynamic> data) {
+
+
     return BarberScheduleResultsModel(
-        schedule: data
-            .map((e) => BarberScheduleModel.fromJson(e))
-            .toList());
+        schedule: data.map((e) => BarberScheduleModel.fromJson(e)).toList());
   }
 
   Map<String, dynamic> toJson() {

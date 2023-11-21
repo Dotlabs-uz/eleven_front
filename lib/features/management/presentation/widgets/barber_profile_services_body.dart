@@ -3,7 +3,9 @@ import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/loading_circle.dart';
+import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../products/domain/entity/service_product_entity.dart';
 import '../../../products/presensation/cubit/service_product/service_product_cubit.dart';
@@ -20,6 +22,7 @@ class BarberProfileServicesBody extends StatefulWidget {
 
 class _BarberProfileServicesBodyState extends State<BarberProfileServicesBody> {
   final List<ServiceProductEntity> listSelectedServices = [];
+    List<ServiceProductEntity> listData = [];
 
   @override
   void initState() {
@@ -29,44 +32,93 @@ class _BarberProfileServicesBodyState extends State<BarberProfileServicesBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ServiceProductCubit, ServiceProductState>(
-      builder: (context, state) {
-        if (state is ServiceProductLoaded) {
-          final listData = state.data;
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                ...listData.map(
-                  (e) {
-                    final barberHasInServices =
-                        e.listBarberId.contains(widget.barberEntity.id);
+    return Column(
+      children: [
+        BlocConsumer<ServiceProductCubit, ServiceProductState>(
+          listener: (context, state) {
+            if (state is ServiceProductLoaded) {
+       listData =      state.data;
 
-                    if (barberHasInServices) {
-                      listSelectedServices.add(e);
-                    }
-                    return _ServiceItem(
-                      productEntity: e,
-                      barberHasInServices: barberHasInServices,
-                      onChangeChecker: (value) {
-                        if (value) {
-                          listSelectedServices.add(e);
-                        } else {
-                          if (listSelectedServices.contains(e)) {
-                            listSelectedServices.remove(e);
-                          }
-                        }
-                      },
-                    );
-                  },
-                )
-              ],
+
+            }
+            if (state is BarberServiceProductSaved) {
+              SuccessFlushBar("change_success".tr()).show(context);
+              BlocProvider.of<ServiceProductCubit>(context).load("");
+            }  else if (state is ServiceProductError) {
+              ErrorFlushBar("change_error".tr(args: [state.message]))
+                  .show(context);
+            }
+          },
+          builder: (context, state) {
+            if (state is ServiceProductLoading) {
+              return const LoadingCircle();
+            }
+
+
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  ...listData.map(
+                        (e) {
+                      final barberHasInServices =
+                      e.listBarberId.contains(widget.barberEntity.id);
+
+                      if (barberHasInServices) {
+                        listSelectedServices.add(e);
+                      }
+                      return Column(
+                        children: [
+                          const SizedBox(height: 5),
+                          _ServiceItem(
+                            productEntity: e,
+                            barberHasInServices: barberHasInServices,
+                            onChangeChecker: (value) {
+                              if (value) {
+                                listSelectedServices.add(e);
+                              } else {
+                                if (listSelectedServices.contains(e)) {
+                                  listSelectedServices.remove(e);
+                                }
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 5),
+                          const Divider(),
+                        ],
+                      );
+                    },
+                  )
+                ],
+              ),
+            );
+
+          },
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                onPressed: () {
+                  BlocProvider.of<ServiceProductCubit>(context)
+                      .saveServicesToBarber(
+                    services: listSelectedServices,
+                    barberId: widget.barberEntity.id,
+                  );
+
+                  listSelectedServices.clear();
+
+                },
+                child: Text(
+                  "save".tr(),
+                ),
+              ),
             ),
-          );
-        } else if (state is ServiceProductError) {
-          return Center(child: Text(state.message));
-        }
-        return const LoadingCircle();
-      },
+          ],
+        ),
+      ],
     );
   }
 }

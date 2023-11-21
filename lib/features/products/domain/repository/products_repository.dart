@@ -17,7 +17,14 @@ abstract class ProductsRepository {
     bool withCategoryParse,
   );
   Future<Either<AppError, ServiceProductEntity>> saveServiceProduct(
-      ServiceProductEntity data);
+    ServiceProductEntity data,
+  );
+
+  Future<Either<AppError, bool>> saveBarberServicesProducts({
+    required List<ServiceProductEntity> services,
+    required String barberId,
+  });
+
   Future<Either<AppError, bool>> deleteServiceProduct(
       ServiceProductEntity entity);
 
@@ -29,7 +36,7 @@ abstract class ProductsRepository {
     String searchText,
     String? ordering,
     bool withServiceCategoryParsing,
-      bool fetchGlobal,
+    bool fetchGlobal,
   );
 
   Future<Either<AppError, ServiceProductCategoryEntity>>

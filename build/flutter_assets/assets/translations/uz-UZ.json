@@ -653,5 +653,10 @@
   "pleaseSelectBarber": "Iltimos, sartaroshni tanlang",
   "pleaseSelectClient": "Iltimos, mijoz tanlang",
   "pleaseSelectServices": "Iltimos, xizmatlarni tanlang",
-  "youCantChooseThisOrderStartInThisTime": "Kechirasiz, lekin siz tanlangan vaqtda buyurtma yarata olmaysiz (chunki uni o'tmishda yaratmoqchi bo'lgansiz)"
+  "youCantChooseThisOrderStartInThisTime": "Kechirasiz, lekin siz tanlangan vaqtda buyurtma yarata olmaysiz (chunki uni o'tmishda yaratmoqchi bo'lgansiz)",
+  "isOnline": "Onlayn",
+  "schedule": "Jadval",
+  "masterActive" : "Usta faol",
+  "showInOnline": "Onlayn ko'rsatish"
+
 }

@@ -134,6 +134,14 @@ class BarberEntity extends Equatable {
       isForm: true,
       val: FilialEntity.empty(),
     ),
+    "weeklySchedule": FieldEntity<BarberScheduleResultsEntity>(
+      label: "weeklySchedule",
+      hintText: "weeklySchedule",
+      type: Types.weeklySchedule,
+      isRequired: false,
+      isForm: false,
+      val: BarberScheduleResultsEntity.empty(),
+    ),
   };
 
   Map<String, FieldEntity> getFields() {
@@ -149,6 +157,7 @@ class BarberEntity extends Equatable {
         "firstName": firstName,
         "lastName": lastName,
         "phone": phone,
+        "weeklySchedule": weeklySchedule,
         "filial": filial,
         "password": password,
         "isCurrentFilial": isCurrentFilial,
@@ -169,9 +178,10 @@ class BarberEntity extends Equatable {
       isActive: row.cells["isActive"]?.value,
       isOnline: row.cells["isOnline"]?.value,
       isCurrentFilial: row.cells["isCurrentFilial"]?.value,
+      weeklySchedule: row.cells["weeklySchedule"]?.value,
       // password: row.cells["password"]?.value,
       password: "",
-      login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: [], weeklySchedule:BarberScheduleResultsEntity.empty(),
+      login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: [],
     );
   }
 
@@ -188,6 +198,7 @@ class BarberEntity extends Equatable {
       'isOnline': PlutoCell(value: e.isOnline),
       'isActive': PlutoCell(value: e.isActive),
       'isCurrentFilial': PlutoCell(value: e.isCurrentFilial),
+      'weeklySchedule': PlutoCell(value: e.weeklySchedule),
       'login': PlutoCell(value: e.login),
     });
   }
@@ -288,12 +299,13 @@ class BarberEntity extends Equatable {
       filial: fields["filial"]?.val,
       login: fields["login"]?.val,
       password: fields["password"]?.val,
+      weeklySchedule: fields["weeklySchedule"]?.val,
       avatar: fields["avatar"]?.val,
       isCurrentFilial: fields["isCurrentFilial"]?.val,
       inTimeTable: false,
       isOnline: false,
       isActive: false,
-      notWorkingHours: [], weeklySchedule: BarberScheduleResultsEntity.empty(),
+      notWorkingHours: [],
     );
   }
 
@@ -311,7 +323,8 @@ class BarberEntity extends Equatable {
       isOnline: false,
       notWorkingHours: [],
       avatar: '',
-      isCurrentFilial: false, weeklySchedule: BarberScheduleResultsEntity.empty(),
+      isCurrentFilial: false,
+      weeklySchedule: BarberScheduleResultsEntity.empty(),
     );
   }
 

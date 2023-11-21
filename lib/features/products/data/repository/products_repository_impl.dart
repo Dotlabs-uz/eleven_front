@@ -42,6 +42,24 @@ class ProductsRepositoryImpl extends ProductsRepository {
   }
 
   @override
+  Future<Either<AppError, bool>> saveBarberServicesProducts({required List<ServiceProductEntity> services, required String barberId})async  {
+    try {
+
+      final result = await remoteDataSource.saveBarberServiceProducts(services: services,barberId: barberId);
+
+      return Right(result);
+    } on SocketException {
+      return const Left(AppError(appErrorType: AppErrorType.network));
+    } on UnauthorisedException {
+      return const Left(AppError(appErrorType: AppErrorType.unauthorised));
+    } on ExceptionWithMessage catch (e) {
+      return Left(
+        AppError(appErrorType: AppErrorType.msgError, errorMessage: e.message),
+      );
+    }
+  }
+
+  @override
   Future<Either<AppError, ServiceResultsProductEntity>> getServiceProducts(
     int page,
     String searchText,
@@ -179,4 +197,6 @@ class ProductsRepositoryImpl extends ProductsRepository {
       );
     }
   }
+
+
 }

@@ -1,8 +1,10 @@
 import 'package:eleven_crm/core/utils/route_constants.dart';
 import 'package:eleven_crm/features/auth/presentation/pages/sign_in_screen.dart';
+import 'package:eleven_crm/features/management/presentation/screens/barber_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/main/presensation/screens/main_screen.dart';
+import '../../features/management/domain/entity/barber_entity.dart';
 import 'menu_constants.dart';
 
 class Routes {

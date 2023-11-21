@@ -9,10 +9,12 @@ part 'service_product_state.dart';
 class ServiceProductCubit extends Cubit<ServiceProductState> {
   final GetServiceProduct getData;
   final SaveServiceProduct saveData;
+  final SaveBarberServiceProducts saveBarberServiceProducts;
   final DeleteServiceProduct deleteData;
   ServiceProductCubit(
     this.getData,
     this.saveData,
+    this.saveBarberServiceProducts,
     this.deleteData,
   ) : super(ServiceProductInitial());
 
@@ -23,6 +25,21 @@ class ServiceProductCubit extends Cubit<ServiceProductState> {
     var save = await saveData(customer);
     save.fold((error) => emit(ServiceProductError(message: error.errorMessage)),
         (data) => emit(ServiceProductSaved(data: data)));
+  }
+
+  void saveServicesToBarber({
+    required List<ServiceProductEntity> services,
+    required String barberId,
+  }) async {
+    emit(ServiceProductLoading());
+    var save = await saveBarberServiceProducts(
+      SaveBarberServiceProductsParams(services: services, barberId: barberId),
+    );
+
+    save.fold(
+      (error) => emit(ServiceProductError(message: error.errorMessage)),
+      (data) => emit(const BarberServiceProductSaved()),
+    );
   }
 
   void delete({required ServiceProductEntity entity}) async {

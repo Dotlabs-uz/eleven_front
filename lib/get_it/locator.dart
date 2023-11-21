@@ -73,7 +73,7 @@ void setup() {
   locator.registerFactory(() => TopMenuCubit());
   locator.registerFactory(() => DataFormCubit());
   locator.registerFactory(() => AuthCubit(locator()));
-  locator.registerFactory(() => CurrentUserCubit(locator(),locator()));
+  locator.registerFactory(() => CurrentUserCubit(locator(), locator()));
 
   // Customer
 
@@ -89,8 +89,12 @@ void setup() {
 
   // Service Product
 
-  locator.registerFactory(
-      () => ServiceProductCubit(locator(), locator(), locator()));
+  locator.registerFactory(() => ServiceProductCubit(
+        locator(),
+        locator(),
+        locator(),
+        locator(),
+      ));
 
   // Service Product Category
 
@@ -158,6 +162,8 @@ void setup() {
       () => DeleteServiceProduct(locator()));
   locator.registerLazySingleton<SaveServiceProduct>(
       () => SaveServiceProduct(locator()));
+  locator.registerLazySingleton<SaveBarberServiceProducts>(
+      () => SaveBarberServiceProducts(locator()));
 
   // Service Product Category
   locator.registerLazySingleton<GetServiceProductCategory>(
@@ -245,8 +251,7 @@ void setup() {
     ),
   );
   locator.registerLazySingleton<ManagementLocalDataSource>(
-    () => ManagementLocalDataSourceImpl(
-    ),
+    () => ManagementLocalDataSourceImpl(),
   );
 
   locator.registerLazySingleton<ProductsRepository>(

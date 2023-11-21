@@ -6,6 +6,7 @@ import '../../../../core/entities/field_entity.dart';
 import '../../../products/data/model/filial_model.dart';
 import '../../domain/entity/barber_entity.dart';
 import '../../domain/entity/barber_schedule_results_entity.dart';
+import 'barber_schedule_model.dart';
 import 'barber_schedule_results_model.dart';
 import 'not_working_hours_model.dart';
 
@@ -119,7 +120,7 @@ class BarberModel extends BarberEntity {
     data['inTimeTable'] = inTimeTable;
     data['isActive'] = isActive;
     data['isOnline'] = isOnline;
-    data['weeklySchedule'] = weeklySchedule.schedule;
+    data['weeklySchedule'] = weeklySchedule.schedule.map((e) => BarberScheduleModel.fromEntity( e).toJson());
     return data;
   }
 }

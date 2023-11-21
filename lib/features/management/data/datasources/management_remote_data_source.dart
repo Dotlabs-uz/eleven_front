@@ -64,7 +64,6 @@ abstract class ManagementRemoteDataSource {
 
   Future<bool> deleteBarber(String id);
 
-  Future<bool> saveBarberServices(String barberId , List<ServiceProductEntity> services);
 }
 
 class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
@@ -252,16 +251,6 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     return results;
   }
 
-  @override
-  Future<bool> saveBarberServices(String barberId, List<ServiceProductEntity> services) async {
-
-    await _client.post(ApiConstants.setBarberServices, params: {
-      "services": services.map((e) => ServiceProductModel.fromEntity(e).toJson()),
-      "barberId" : barberId,
-    });
-
-    return true;
-  }
 
   @override
   Future<bool> saveEmployeeSchedule(List<FieldSchedule> data) async {
