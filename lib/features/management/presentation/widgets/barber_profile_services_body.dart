@@ -22,10 +22,11 @@ class BarberProfileServicesBody extends StatefulWidget {
 
 class _BarberProfileServicesBodyState extends State<BarberProfileServicesBody> {
   final List<ServiceProductEntity> listSelectedServices = [];
-    List<ServiceProductEntity> listData = [];
+  List<ServiceProductEntity> listData = [];
 
   @override
   void initState() {
+    listSelectedServices.clear();
     BlocProvider.of<ServiceProductCubit>(context).load("");
     super.initState();
   }
@@ -37,14 +38,12 @@ class _BarberProfileServicesBodyState extends State<BarberProfileServicesBody> {
         BlocConsumer<ServiceProductCubit, ServiceProductState>(
           listener: (context, state) {
             if (state is ServiceProductLoaded) {
-       listData =      state.data;
-
-
+              listData = state.data;
             }
             if (state is BarberServiceProductSaved) {
               SuccessFlushBar("change_success".tr()).show(context);
               BlocProvider.of<ServiceProductCubit>(context).load("");
-            }  else if (state is ServiceProductError) {
+            } else if (state is ServiceProductError) {
               ErrorFlushBar("change_error".tr(args: [state.message]))
                   .show(context);
             }
@@ -54,14 +53,13 @@ class _BarberProfileServicesBodyState extends State<BarberProfileServicesBody> {
               return const LoadingCircle();
             }
 
-
             return SingleChildScrollView(
               child: Column(
                 children: [
                   ...listData.map(
-                        (e) {
+                    (e) {
                       final barberHasInServices =
-                      e.listBarberId.contains(widget.barberEntity.id);
+                          e.listBarberId.contains(widget.barberEntity.id);
 
                       if (barberHasInServices) {
                         listSelectedServices.add(e);
@@ -91,7 +89,6 @@ class _BarberProfileServicesBodyState extends State<BarberProfileServicesBody> {
                 ],
               ),
             );
-
           },
         ),
         const SizedBox(height: 10),
@@ -109,7 +106,6 @@ class _BarberProfileServicesBodyState extends State<BarberProfileServicesBody> {
                   );
 
                   listSelectedServices.clear();
-
                 },
                 child: Text(
                   "save".tr(),
@@ -158,7 +154,7 @@ class _ServiceItemState extends State<_ServiceItem> {
             color: Colors.black,
             fontSize: 16,
             fontFamily: "Nunito",
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const Spacer(),
@@ -176,7 +172,7 @@ class _ServiceItemState extends State<_ServiceItem> {
         SizedBox(
           width: 140,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(width: 10),

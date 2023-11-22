@@ -3,14 +3,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'employee_schedule_entity.dart';
-import 'not_working_hours_for_barber_schedule_entity.dart';
+import 'working_hours_for_barber_schedule_entity.dart';
 
 @immutable
-class BarberScheduleEntity extends Equatable {
-  final List<NotWorkingHoursForBarberScheduleEntity> workingHours;
+class WeeklyScheduleItemEntity extends Equatable {
+  final List<NotWorkingHoursForWeeklyScheduleEntity> workingHours;
   late   EmployeeScheduleStatus status;
 
-    BarberScheduleEntity({
+    WeeklyScheduleItemEntity({
     required this.workingHours,
     required this.status,
   });

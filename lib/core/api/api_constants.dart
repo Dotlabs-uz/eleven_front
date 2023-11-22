@@ -20,4 +20,5 @@ class ApiConstants {
   static const String ordersWebSocket = baseApiUrl;
   static const String orders = "orders";
   static const String setBarberServices = "set-barber-services";
+  static const String setBarberSchedule = "set-barbers-schedule";
 }

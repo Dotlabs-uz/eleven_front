@@ -46,6 +46,7 @@ class DateTimeHelper {
   }) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
+      initialEntryMode: TimePickerEntryMode.input,
       initialTime: TimeOfDay.now(),
     );
 

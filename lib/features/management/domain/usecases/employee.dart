@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:eleven_crm/features/management/domain/entity/weekly_schedule_results_entity.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/entities/app_error.dart';
@@ -33,6 +34,19 @@ class SaveEmployee extends UseCase<EmployeeEntity, EmployeeEntity>{
   }
 }
 
+
+class SaveEmployeeWeeklySchedule extends UseCase<bool, SaveEmployeeWeeklyScheduleParams>{
+  final ManagementRepository repository;
+
+  SaveEmployeeWeeklySchedule(this.repository);
+
+  @override
+  Future<Either<AppError, bool>> call(SaveEmployeeWeeklyScheduleParams params) async {
+    return await repository.saveEmployeeWeeklySchedule(params.weeklySchedule, params.employeeId);
+  }
+}
+
+
 class DeleteEmployee extends UseCase<void, EmployeeEntity> {
   final ManagementRepository repository;
 
@@ -56,4 +70,16 @@ class GetEmployeeParams extends Equatable {
 
   @override
   List<Object?> get props => [page];
+}
+class SaveEmployeeWeeklyScheduleParams extends Equatable {
+  final WeeklyScheduleResultsEntity weeklySchedule;
+  final String employeeId;
+
+  const SaveEmployeeWeeklyScheduleParams({
+    required this.weeklySchedule,
+    required this.employeeId,
+  });
+
+  @override
+  List<Object?> get props => [employeeId];
 }

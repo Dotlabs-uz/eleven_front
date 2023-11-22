@@ -36,6 +36,11 @@ class EmployeeSaved extends EmployeeState {
   List<Object> get props => [data];
 }
 
+class EmployeeWeeklyScheduleSaved extends EmployeeState {
+  @override
+  List<Object?> get props =>[];
+}
+
 class EmployeeDeleted extends EmployeeState {
   final String id;
 

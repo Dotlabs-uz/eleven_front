@@ -5,9 +5,9 @@ import 'package:flutter/cupertino.dart';
 import '../../../../core/entities/field_entity.dart';
 import '../../../products/data/model/filial_model.dart';
 import '../../domain/entity/barber_entity.dart';
-import '../../domain/entity/barber_schedule_results_entity.dart';
-import 'barber_schedule_model.dart';
-import 'barber_schedule_results_model.dart';
+import '../../domain/entity/weekly_schedule_results_entity.dart';
+import 'weekly_schedule_item_model.dart';
+import 'weekly_schedule_results_model.dart';
 import 'not_working_hours_model.dart';
 
 @immutable
@@ -84,7 +84,7 @@ class BarberModel extends BarberEntity {
           : [],
       avatar: json['avatar'] ?? "",
       isCurrentFilial: json['isCurrentFilial'] ?? false,
-      weeklySchedule: BarberScheduleResultsModel.fromJson( json['weeklySchedule']),
+      weeklySchedule: WeeklyScheduleResultsModel.fromJson( json['weeklySchedule']),
     );
   }
 
@@ -120,7 +120,7 @@ class BarberModel extends BarberEntity {
     data['inTimeTable'] = inTimeTable;
     data['isActive'] = isActive;
     data['isOnline'] = isOnline;
-    data['weeklySchedule'] = weeklySchedule.schedule.map((e) => BarberScheduleModel.fromEntity( e).toJson());
+    data['weeklySchedule'] = weeklySchedule.schedule.map((e) => WeeklyScheduleItemModel.fromEntity( e).toJson());
     return data;
   }
 }

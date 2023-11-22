@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
+import 'package:eleven_crm/features/management/data/model/weekly_schedule_results_model.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_results_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/manager_results_entity.dart';
 
 import '../../../../core/entities/app_error.dart';
 import '../../presentation/widgets/employee_schedule_widget.dart';
+import '../entity/weekly_schedule_results_entity.dart';
 import '../entity/customer_entity.dart';
 import '../entity/customer_results_entity.dart';
 import '../entity/employee_entity.dart';
@@ -44,6 +46,7 @@ abstract class ManagementRepository {
     String? ordering,
   );
   Future<Either<AppError, BarberEntity>> saveBarber(BarberEntity data);
+  Future<Either<AppError, bool>> saveEmployeeWeeklySchedule(WeeklyScheduleResultsEntity weeklySchedule, String employeeId);
   Future<Either<AppError, bool>> deleteBarber(BarberEntity entity);
 
   // ================ Employee ================ //

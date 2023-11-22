@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/widgets/barber_profile_services_body.dart';
 import 'package:eleven_crm/features/management/presentation/widgets/checker_with_title_widget.dart';
 import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
@@ -37,11 +38,13 @@ class BarberProfileScreen extends StatefulWidget {
 class _BarberProfileScreenState extends State<BarberProfileScreen> {
   late BarberCubit barberCubit;
   late ServiceProductCubit serviceProductCubit;
+  late EmployeeCubit employeeCubit;
 
   @override
   void initState() {
-    barberCubit = locator<BarberCubit>();
-    serviceProductCubit = locator<ServiceProductCubit>();
+    barberCubit = locator();
+    employeeCubit = locator();
+    serviceProductCubit = locator();
     super.initState();
   }
 
@@ -51,6 +54,9 @@ class _BarberProfileScreenState extends State<BarberProfileScreen> {
       providers: [
         BlocProvider<BarberCubit>(
           create: (context) => barberCubit,
+        ),
+        BlocProvider<EmployeeCubit>(
+          create: (context) => employeeCubit,
         ),
         BlocProvider<ServiceProductCubit>(
           create: (context) => serviceProductCubit,
@@ -227,7 +233,6 @@ class _ContentWidgetState extends State<ContentWidget> {
                               const Divider(),
                               const SizedBox(height: 10),
                               _getBody(widget.barberEntity),
-
                             ],
                           ),
                         ),

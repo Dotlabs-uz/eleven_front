@@ -1,3 +1,5 @@
+import 'package:eleven_crm/features/management/domain/entity/weekly_schedule_results_entity.dart';
+import 'package:eleven_crm/features/management/domain/usecases/employee_schedule.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,9 +11,11 @@ part 'employee_state.dart';
 class EmployeeCubit extends Cubit<EmployeeState> {
   final GetEmployee getData;
   final SaveEmployee saveData;
+  final SaveEmployeeWeeklySchedule saveEmployeeWeeklySchedule;
   final DeleteEmployee deleteData;
 
-  EmployeeCubit(this.getData, this.saveData, this.deleteData)
+  EmployeeCubit(this.getData, this.saveData, this.deleteData,
+      this.saveEmployeeWeeklySchedule)
       : super(EmployeeInitial());
 
   init() => emit(EmployeeInitial());
@@ -21,7 +25,20 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     var save = await saveData(employee);
     save.fold(
       (error) => emit(EmployeeError(message: error.errorMessage)),
-      (data) => emit(EmployeeSaved(data:employee )),
+      (data) => emit(EmployeeSaved(data: employee)),
+    );
+  }
+
+  void saveWeeklySchedule(
+      {required String employeeId,
+      required WeeklyScheduleResultsEntity weeklySchedule}) async {
+    emit(EmployeeLoading());
+    var save = await saveEmployeeWeeklySchedule(
+        SaveEmployeeWeeklyScheduleParams(
+            weeklySchedule: weeklySchedule, employeeId: employeeId));
+    save.fold(
+      (error) => emit(EmployeeError(message: error.errorMessage)),
+      (data) => emit(EmployeeWeeklyScheduleSaved()),
     );
   }
 
@@ -44,7 +61,7 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     );
   }
 
-  load(String search, { int page = 0}) async {
+  load(String search, {int page = 0}) async {
     //loadingCubit.show();
     emit(EmployeeLoading());
     final data = await getData(GetEmployeeParams(

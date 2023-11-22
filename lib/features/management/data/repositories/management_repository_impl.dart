@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:eleven_crm/features/management/data/datasources/management_local_data_source.dart';
+import 'package:eleven_crm/features/management/data/model/weekly_schedule_results_model.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_results_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_results_entity.dart';
@@ -11,6 +12,7 @@ import 'package:eleven_crm/features/management/domain/entity/manager_results_ent
 
 import '../../../../core/api/api_exceptions.dart';
 import '../../../../core/entities/app_error.dart';
+import '../../domain/entity/weekly_schedule_results_entity.dart';
 import '../../domain/entity/customer_entity.dart';
 import '../../domain/entity/customer_results_entity.dart';
 import '../../domain/entity/employee_entity.dart';
@@ -289,6 +291,26 @@ class ManagementRepositoryImpl extends ManagementRepository {
       final model = ManagerModel.fromEntity(data);
 
       final result = await remoteDataSource.saveManager(model);
+
+      return Right(result);
+    } on SocketException {
+      return const Left(AppError(appErrorType: AppErrorType.network));
+    } on UnauthorisedException {
+      return const Left(AppError(appErrorType: AppErrorType.unauthorised));
+    } on ExceptionWithMessage catch (e) {
+      return Left(AppError(
+          appErrorType: AppErrorType.msgError, errorMessage: e.message));
+    }
+  }
+
+  @override
+  Future<Either<AppError, bool>> saveEmployeeWeeklySchedule(
+      WeeklyScheduleResultsEntity weeklySchedule, String employeeId) async {
+    try {
+      final model = WeeklyScheduleResultsModel.fromEntity(weeklySchedule);
+
+      final result =
+          await remoteDataSource.saveEmployeeWeeklySchedule(model, employeeId);
 
       return Right(result);
     } on SocketException {

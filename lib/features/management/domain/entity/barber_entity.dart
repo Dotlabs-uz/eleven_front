@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/features/management/domain/entity/barber_schedule_results_entity.dart';
+import 'package:eleven_crm/features/management/domain/entity/weekly_schedule_results_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -27,7 +27,7 @@ class BarberEntity extends Equatable {
   final bool isCurrentFilial;
   final List<NotWorkingHoursEntity> notWorkingHours;
   final FilialEntity filial;
-  final BarberScheduleResultsEntity weeklySchedule;
+  final WeeklyScheduleResultsEntity weeklySchedule;
 
   BarberEntity({
     required this.id,
@@ -134,13 +134,13 @@ class BarberEntity extends Equatable {
       isForm: true,
       val: FilialEntity.empty(),
     ),
-    "weeklySchedule": FieldEntity<BarberScheduleResultsEntity>(
+    "weeklySchedule": FieldEntity<WeeklyScheduleResultsEntity>(
       label: "weeklySchedule",
       hintText: "weeklySchedule",
       type: Types.weeklySchedule,
       isRequired: false,
       isForm: false,
-      val: BarberScheduleResultsEntity.empty(),
+      val: WeeklyScheduleResultsEntity.empty(),
     ),
   };
 
@@ -324,7 +324,7 @@ class BarberEntity extends Equatable {
       notWorkingHours: [],
       avatar: '',
       isCurrentFilial: false,
-      weeklySchedule: BarberScheduleResultsEntity.empty(),
+      weeklySchedule: WeeklyScheduleResultsEntity.empty(),
     );
   }
 

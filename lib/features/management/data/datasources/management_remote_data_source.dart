@@ -1,4 +1,6 @@
 import 'package:eleven_crm/features/management/data/model/barber_model.dart';
+import 'package:eleven_crm/features/management/data/model/weekly_schedule_results_model.dart';
+import 'package:eleven_crm/features/management/domain/entity/weekly_schedule_results_entity.dart';
 
 import '../../../../core/api/api_client.dart';
 import '../../../../core/api/api_constants.dart';
@@ -6,6 +8,7 @@ import '../../../products/data/model/service_product_model.dart';
 import '../../../products/domain/entity/service_product_entity.dart';
 import '../../presentation/widgets/employee_schedule_widget.dart';
 import '../model/barber_results_model.dart';
+import '../model/weekly_schedule_item_model.dart';
 import '../model/customer_model.dart';
 import '../model/customer_results_model.dart';
 import '../model/employee_model.dart';
@@ -64,6 +67,8 @@ abstract class ManagementRemoteDataSource {
 
   Future<bool> deleteBarber(String id);
 
+  Future<bool> saveEmployeeWeeklySchedule(
+      WeeklyScheduleResultsModel resultsModel, String employeeId);
 }
 
 class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
@@ -237,6 +242,20 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
   }
 
   @override
+  Future<bool> saveEmployeeWeeklySchedule(
+      WeeklyScheduleResultsModel resultsModel, String employeeId) async {
+    final params = {
+      "weeklySchedule": resultsModel.schedule
+          .map((e) => WeeklyScheduleItemModel.fromEntity(e).toJson()).toList(),
+      "employeeId": employeeId,
+    };
+
+    print("params $params");
+    await _client.post(ApiConstants.setBarberSchedule, params: params);
+    return true;
+  }
+
+  @override
   Future<BarberModel> saveBarber(BarberModel data) async {
     dynamic response;
     if (data.id.isEmpty) {
@@ -250,7 +269,6 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
     return results;
   }
-
 
   @override
   Future<bool> saveEmployeeSchedule(List<FieldSchedule> data) async {
@@ -290,6 +308,4 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
     return ManagerModel.fromJson(response);
   }
-
-
 }
