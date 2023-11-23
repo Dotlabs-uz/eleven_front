@@ -233,12 +233,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     IconButton(
                       onPressed: _file != null
                           ? () {
-                              List<int> list = webImage.cast();
 
-                              BlocProvider.of<AvatarCubit>(context).setAvatar(
-                                  filePath: list,
-                                  userId: entity.id,
-                                  role: 'managers');
                             }
                           : () async {
                               _pickImage();

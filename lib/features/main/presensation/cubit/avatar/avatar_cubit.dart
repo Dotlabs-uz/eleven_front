@@ -8,6 +8,9 @@ class AvatarCubit extends Cubit<AvatarState> {
   final SaveAvatar saveAvatar;
   AvatarCubit(this.saveAvatar) : super(AvatarInitial());
 
+
+
+  init() => emit(AvatarInitial());
   Future<void> setAvatar({
     required List<int> filePath,
     required String  userId,
