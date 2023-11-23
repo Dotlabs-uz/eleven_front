@@ -23,8 +23,8 @@ class BarberEntity extends Equatable {
   final String avatar;
   final String login;
   final int phone;
-  final bool isActive;
-  final bool isOnline;
+    bool isActive;
+    bool isOnline;
   bool inTimeTable;
   final bool isCurrentFilial;
   final List<NotWorkingHoursEntity> notWorkingHours;

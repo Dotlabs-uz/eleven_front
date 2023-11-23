@@ -2,12 +2,11 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/widgets/barber_profile_edit_body.dart';
 import 'package:eleven_crm/features/management/presentation/widgets/barber_profile_services_body.dart';
 import 'package:eleven_crm/features/management/presentation/widgets/checker_with_title_widget.dart';
-import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/components/error_flash_bar.dart';
@@ -16,7 +15,6 @@ import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../get_it/locator.dart';
-import '../../../products/domain/entity/service_product_entity.dart';
 import '../../../products/presensation/cubit/service_product/service_product_cubit.dart';
 import '../../domain/entity/barber_entity.dart';
 import '../../domain/entity/barber_profile_tabs_entity.dart';
@@ -90,6 +88,9 @@ class ContentWidget extends StatefulWidget {
 
 class _ContentWidgetState extends State<ContentWidget> {
   final List<BarberProfileTabsEntity> listTabs = [
+    BarberProfileTabsEntity(
+      title: "profile",
+    ),
     BarberProfileTabsEntity(
       title: "services",
     ),
@@ -250,15 +251,15 @@ class _ContentWidgetState extends State<ContentWidget> {
 
   _getBody(BarberEntity barberEntity) {
     if (selectedTab == 0) {
+      return BarberProfileEditBody(barberEntity: barberEntity);
+    } else if (selectedTab == 1) {
       return BarberProfileServicesBody(
         barberEntity: barberEntity,
       );
-    } else if (selectedTab == 1) {
+    } else if (selectedTab == 2) {
       return BarberProfileScheduleBody(
         barberEntity: barberEntity,
       );
-    } else if (selectedTab == 2) {
-      return const SizedBox();
     } else {
       return const SizedBox();
     }
@@ -379,11 +380,21 @@ class _ContentWidgetState extends State<ContentWidget> {
               children: [
                 CheckerWithTitleWidget(
                   isActive: barberEntity.isActive,
+                  onChange: (value) {
+                    barberEntity.isActive = value;
+
+                    BlocProvider.of<BarberCubit>(context).save(barber: barberEntity);
+                  },
                   title: 'masterActive'.tr(),
                 ),
                 const SizedBox(height: 10),
                 CheckerWithTitleWidget(
-                  isActive: true,
+                  isActive: barberEntity.isOnline,
+                  onChange: (value) {
+                    barberEntity.isOnline = value;
+
+                    BlocProvider.of<BarberCubit>(context).save(barber: barberEntity);
+                  },
                   title: 'showInOnline'.tr(),
                 ),
               ],

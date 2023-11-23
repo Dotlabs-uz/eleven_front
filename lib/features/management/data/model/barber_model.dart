@@ -118,8 +118,8 @@ class BarberModel extends BarberEntity {
     data['lastName'] = lastName;
     data['phone'] = phone;
     data['filial'] = filial.id;
-    data['login'] = login;
-    data['password'] = password;
+    data['login'] = "test";
+    data['password'] = "test";
     data['inTimeTable'] = inTimeTable;
     data['isActive'] = isActive;
     data['isOnline'] = isOnline;
