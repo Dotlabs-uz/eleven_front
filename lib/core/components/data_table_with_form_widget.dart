@@ -119,7 +119,6 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
   Widget build(BuildContext context) {
     configuration = context.locale.languageCode == 'uz'
         ? PlutoGridConfiguration(
-
             localeText: const PlutoGridLocaleText.russian(
               unfreezeColumn: "Ustunni muzdan tushiring",
               freezeColumnToStart: "Boshida ustunni o'rnating",
@@ -209,7 +208,7 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),
-         child:  _desktopViewWithForm(),
+        child: _desktopViewWithForm(),
         // child: Responsive.isMobile(context)
         //     ? widget.data.isEmpty
         //         ? const Center(child: EmptyWidget())
@@ -248,7 +247,6 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
         : PlutoGrid(
             columns: columns,
             rows: rows,
-
             onSizeChanged: (column, size) {
               jsonSizes[column.field] = size;
               debugPrint(
@@ -294,21 +292,35 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
 
               final data = rowColorContext.row;
 
-              if (widget.data[0] is BarberEntity) {
+              if (widget.data[0] is EmployeeEntity) {
                 return _colorForEmployee(data.cells['isCurrentFilial']?.value);
+              }
+              if (widget.data[0] is BarberEntity) {
+                return _colorForBarber(data.cells['isCurrentFilial']?.value, data.cells['isActive']?.value);
               }
 
               return Colors.white;
             },
             configuration: configuration,
-
           );
   }
 
   _colorForEmployee(bool isCurrentFilial) {
     if (isCurrentFilial == false) {
-      return Colors.grey.shade200;
+      return Colors.grey.shade300;
     }
+
+    return Colors.white;
+  }
+
+  _colorForBarber(bool isCurrentFilial,bool isActive) {
+    if (isCurrentFilial == false) {
+      return Colors.grey.shade300;
+    }
+    if (isActive == false) {
+      return Colors.grey.shade500;
+    }
+
     return Colors.white;
   }
 

@@ -14,6 +14,7 @@ import 'not_working_hours_model.dart';
 class BarberModel extends BarberEntity {
   BarberModel({
     required super.id,
+    required super.employeeId,
     required super.firstName,
     required super.lastName,
     required super.phone,
@@ -68,6 +69,7 @@ class BarberModel extends BarberEntity {
     return BarberModel(
       id: json['_id'],
       firstName: json['firstName'],
+      employeeId: json['employeeId'],
       lastName: json['lastName'],
       phone: json['phone'],
       isActive: json['isActive'] ?? true,
@@ -92,6 +94,7 @@ class BarberModel extends BarberEntity {
     return BarberModel(
       id: entity.id,
       firstName: entity.firstName,
+      employeeId: entity.employeeId,
       lastName: entity.lastName,
       phone: entity.phone,
       isActive: entity.isActive,
@@ -120,7 +123,10 @@ class BarberModel extends BarberEntity {
     data['inTimeTable'] = inTimeTable;
     data['isActive'] = isActive;
     data['isOnline'] = isOnline;
-    data['weeklySchedule'] = weeklySchedule.schedule.map((e) => WeeklyScheduleItemModel.fromEntity( e).toJson());
+
+    // if(id.isNotEmpty) {
+    //   data['weeklySchedule'] = WeeklyScheduleResultsModel.fromEntity(weeklySchedule).toJson();
+    // }
     return data;
   }
 }

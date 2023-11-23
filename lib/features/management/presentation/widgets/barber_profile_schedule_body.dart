@@ -54,8 +54,9 @@ class BarberProfileScheduleBody extends StatelessWidget {
                     onPressed: () {
                       BlocProvider.of<EmployeeCubit>(context)
                           .saveWeeklySchedule(
-                              employeeId: barberEntity.id,
-                              weeklySchedule: barberEntity.weeklySchedule);
+                        employeeId: barberEntity.employeeId,
+                        weeklySchedule: barberEntity.weeklySchedule,
+                      );
                     },
                     child: Text(
                       "save".tr(),

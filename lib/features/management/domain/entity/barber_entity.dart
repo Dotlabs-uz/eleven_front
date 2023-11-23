@@ -15,6 +15,7 @@ import 'not_working_hours_entity.dart';
 @immutable
 class BarberEntity extends Equatable {
   final String id;
+  final String employeeId;
   final String firstName;
   final String lastName;
   final String password;
@@ -31,6 +32,7 @@ class BarberEntity extends Equatable {
 
   BarberEntity({
     required this.id,
+    required this.employeeId,
     required this.firstName,
     required this.lastName,
     required this.avatar,
@@ -60,6 +62,14 @@ class BarberEntity extends Equatable {
       type: Types.string,
       isRequired: true,
       isForm: true,
+      val: "",
+    ),
+    "employeeId": FieldEntity<String>(
+      label: "employeeId",
+      hintText: "employeeId",
+      type: Types.string,
+      isRequired: false,
+      isForm: false,
       val: "",
     ),
     "lastName": FieldEntity<String>(
@@ -154,6 +164,7 @@ class BarberEntity extends Equatable {
 
   dynamic getProp(String key) => <String, dynamic>{
         "id": id,
+        "employeeId": employeeId,
         "firstName": firstName,
         "lastName": lastName,
         "phone": phone,
@@ -170,6 +181,7 @@ class BarberEntity extends Equatable {
   factory BarberEntity.fromRow(PlutoRow row) {
     return BarberEntity(
       id: row.cells["id"]?.value,
+      employeeId: row.cells["employeeId"]?.value,
       firstName: row.cells["firstName"]?.value,
       lastName: row.cells["lastName"]?.value,
       phone: row.cells["phone"]?.value,
@@ -189,6 +201,7 @@ class BarberEntity extends Equatable {
     return PlutoRow(cells: {
       'delete': PlutoCell(value: "Delete"),
       'id': PlutoCell(value: e.id),
+      'employeeId': PlutoCell(value: e.employeeId),
       'firstName': PlutoCell(value: e.firstName),
       'lastName': PlutoCell(value: e.lastName),
       'phone': PlutoCell(value: e.phone),
@@ -293,6 +306,7 @@ class BarberEntity extends Equatable {
   factory BarberEntity.fromFields() {
     return BarberEntity(
       id: fields["id"]?.val,
+      employeeId: fields["employeeId"]?.val,
       firstName: fields["firstName"]?.val,
       lastName: fields["lastName"]?.val,
       phone: fields["phone"]?.val,
@@ -312,6 +326,7 @@ class BarberEntity extends Equatable {
   factory BarberEntity.empty() {
     return BarberEntity(
       id: "",
+      employeeId: "",
       firstName: "",
       lastName: "",
       phone: 99,

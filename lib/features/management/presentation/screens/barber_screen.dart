@@ -1,6 +1,8 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/utils/animated_navigation.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/avatar/avatar_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/screens/barber_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -105,25 +107,30 @@ class _ContentWidgetState extends State<ContentWidget> {
     }
   }
 
-  void _editData(BarberEntity data) {
+  void _editData(BarberEntity data, {bool isCreate = true}) {
     BlocProvider.of<DataFormCubit>(context).editData(data.getFields());
 
-    if (ResponsiveBuilder.isMobile(context)) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              DataBarberForm(
-                saveData: _saveData,
-                closeForm: () {
-                  Navigator.pop(context);
-                },
-                fields: activeData.getFields(),
-              ),
-        ),
-      );
+    if (isCreate) {
+      if (ResponsiveBuilder.isMobile(context)) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DataBarberForm(
+              saveData: _saveData,
+              closeForm: () {
+                Navigator.pop(context);
+              },
+              fields: activeData.getFields(),
+            ),
+          ),
+        );
+      } else {
+        setState(() => isFormVisible = true);
+      }
     } else {
-      setState(() => isFormVisible = true);
+      AnimatedNavigation.push(
+          context: context,
+          page: BarberProfileScreen(barberId: data.id, barberEntity: data));
     }
   }
 
@@ -178,7 +185,9 @@ class _ContentWidgetState extends State<ContentWidget> {
     );
   }
 
-  fetch(int page,) async {
+  fetch(
+    int page,
+  ) async {
     BlocProvider.of<BarberCubit>(context).load("", page: page);
   }
 
@@ -190,7 +199,7 @@ class _ContentWidgetState extends State<ContentWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child:  BlocListener<AvatarCubit, AvatarState>(
+      child: BlocListener<AvatarCubit, AvatarState>(
         listener: (context, state) {
           if (state is AvatarSaved) {
             SuccessFlushBar("change_success".tr()).show(context);
@@ -202,12 +211,12 @@ class _ContentWidgetState extends State<ContentWidget> {
               duration: const Duration(milliseconds: 200),
               child: isSearch
                   ? SearchField(
-                onSearch: (value) {
-                  BlocProvider.of<BarberCubit>(context).load(
-                    value,
-                  );
-                },
-              )
+                      onSearch: (value) {
+                        BlocProvider.of<BarberCubit>(context).load(
+                          value,
+                        );
+                      },
+                    )
                   : const SizedBox(),
             ),
             BlocConsumer<BarberCubit, BarberState>(
@@ -262,13 +271,12 @@ class _ContentWidgetState extends State<ContentWidget> {
                       isEmpty: barbers.isEmpty,
                       onDelete: (id) {
                         final elementToDelete = barbers.firstWhereOrNull(
-                              (element) => element.id == id,
+                          (element) => element.id == id,
                         );
 
                         if (elementToDelete != null) {
                           debugPrint(
-                              "Element to delete is not null ${elementToDelete
-                                  .id}");
+                              "Element to delete is not null ${elementToDelete.id}");
                           _deleteData(elementToDelete);
                         }
                       },
@@ -280,7 +288,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                           selectedRow = data!;
                           final entity = BarberEntity.fromRow(selectedRow);
                           activeData = entity;
-                          _editData(entity);
+                          _editData(entity, isCreate: false);
                         }
                       },
                       form: DataBarberForm(
@@ -326,32 +334,32 @@ class _ContentWidgetState extends State<ContentWidget> {
                       barbers.isEmpty
                           ? const SizedBox()
                           : Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: RichText(
-                            text: TextSpan(
-                              style: GoogleFonts.nunito(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.blue,
-                                fontSize: 14,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: "${"DataCount".tr()}: ",
-                                ),
-                                TextSpan(
-                                  text: "$dataCount",
-                                  style: GoogleFonts.nunito(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: GoogleFonts.nunito(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.blue,
+                                      fontSize: 14,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: "${"DataCount".tr()}: ",
+                                      ),
+                                      TextSpan(
+                                        text: "$dataCount",
+                                        style: GoogleFonts.nunito(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
                       const SizedBox(width: 10),
                     ],
                   ),
