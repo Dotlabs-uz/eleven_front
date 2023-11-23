@@ -14,9 +14,12 @@ class EmployeeCubit extends Cubit<EmployeeState> {
   final SaveEmployeeWeeklySchedule saveEmployeeWeeklySchedule;
   final DeleteEmployee deleteData;
 
-  EmployeeCubit(this.getData, this.saveData, this.deleteData,
-      this.saveEmployeeWeeklySchedule)
-      : super(EmployeeInitial());
+  EmployeeCubit(
+    this.getData,
+    this.saveData,
+    this.deleteData,
+    this.saveEmployeeWeeklySchedule,
+  ) : super(EmployeeInitial());
 
   init() => emit(EmployeeInitial());
 
@@ -29,9 +32,10 @@ class EmployeeCubit extends Cubit<EmployeeState> {
     );
   }
 
-  void saveWeeklySchedule(
-      {required String employeeId,
-      required WeeklyScheduleResultsEntity weeklySchedule}) async {
+  void saveWeeklySchedule({
+    required String employeeId,
+    required WeeklyScheduleResultsEntity weeklySchedule,
+  }) async {
     emit(EmployeeLoading());
     var save = await saveEmployeeWeeklySchedule(
         SaveEmployeeWeeklyScheduleParams(

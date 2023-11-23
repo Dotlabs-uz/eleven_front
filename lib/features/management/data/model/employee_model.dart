@@ -13,6 +13,7 @@ class EmployeeModel extends EmployeeEntity {
     required super.lastName,
     required super.role,
     required super.phoneNumber,
+    required super.isCurrentFilial,
     required super.schedule,
     required super.password,
     required super.login,
@@ -56,6 +57,7 @@ class EmployeeModel extends EmployeeEntity {
       lastName: json['lastName'],
       avatar: json['avatar'],
       phoneNumber: json['phone'],
+      isCurrentFilial: json['isCurrentFilial'],
       role: json['role'],
       login: "",
       password: "",
@@ -79,6 +81,7 @@ class EmployeeModel extends EmployeeEntity {
     return EmployeeModel(
       id: entity.id,
       firstName: entity.firstName,
+      isCurrentFilial: entity.isCurrentFilial,
       lastName: entity.lastName,
       avatar: entity.avatar,
       phoneNumber: entity.phoneNumber,

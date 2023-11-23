@@ -18,6 +18,7 @@ class EmployeeEntity extends Equatable {
   final String password;
   final String avatar;
   final String role;
+  final bool isCurrentFilial;
   final int phoneNumber;
   final List<NotWorkingHoursEntity> notWorkingHours;
   final List<EmployeeScheduleEntity> schedule;
@@ -26,6 +27,7 @@ const  EmployeeEntity({
     required this.id,
     required this.firstName,
     required this.lastName,
+    required this.isCurrentFilial,
     required this.password,
     required this.login,
     required this.avatar,
@@ -98,6 +100,13 @@ const  EmployeeEntity({
       isForm: true,
       isRequired: true,
       val: 99,
+    ), "isCurrentFilial": FieldEntity<bool>(
+      label: "isCurrentFilial",
+      hintText: "isCurrentFilial",
+      type: Types.bool,
+      isForm: false,
+      isRequired: false,
+      val: false,
     ),
   };
 
@@ -118,6 +127,7 @@ const  EmployeeEntity({
         "role": role,
         "phone": phoneNumber,
         "avatar": avatar,
+        "isCurrentFilial": isCurrentFilial,
       }[key];
 
   factory EmployeeEntity.fromRow(PlutoRow row) {
@@ -130,6 +140,7 @@ const  EmployeeEntity({
       login: row.cells["login"]?.value,
       role: row.cells["role"]?.value,
       avatar: row.cells["avatar"]?.value,
+      isCurrentFilial: row.cells["isCurrentFilial"]?.value,
       schedule: [],
       notWorkingHours: [],
     );
@@ -146,6 +157,7 @@ const  EmployeeEntity({
       'phone': PlutoCell(value: e.phoneNumber),
       'role': PlutoCell(value: e.role),
       'avatar': PlutoCell(value: e.avatar),
+      'isCurrentFilial': PlutoCell(value: e.isCurrentFilial),
     });
   }
 
@@ -259,6 +271,7 @@ const  EmployeeEntity({
       login: fields["login"]?.val,
       role: fields["role"]?.val,
       avatar: fields["avatar"]?.val,
+      isCurrentFilial: fields["isCurrentFilial"]?.val,
       schedule: [],
       notWorkingHours: [],
     );
@@ -273,6 +286,7 @@ const  EmployeeEntity({
       password: "",
       login: "",
       phoneNumber: 99,
+      isCurrentFilial: true,
       role: "",
       schedule: [],
       notWorkingHours: [],

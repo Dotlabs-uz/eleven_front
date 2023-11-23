@@ -318,7 +318,7 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
       return Colors.grey.shade300;
     }
     if (isActive == false) {
-      return Colors.grey.shade500;
+      return Colors.grey.shade400;
     }
 
     return Colors.white;
