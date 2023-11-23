@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../../../core/components/bool_for_table_widget.dart';
 import '../../../../core/components/datetime_for_table_widget.dart';
 import '../../../../core/entities/field_entity.dart';
 import '../../../products/domain/entity/filial_entity.dart';
@@ -279,6 +280,7 @@ class BarberEntity extends Equatable {
         title: 'phoneNumber'.tr(),
         field: 'phone',
         readOnly: false,
+
         type: PlutoColumnType.number(
           format: "",
           allowFirstDot: false,
@@ -290,6 +292,7 @@ class BarberEntity extends Equatable {
         title: 'isActive'.tr(),
         field: 'isActive',
         readOnly: false,
+        renderer: (rendererContext) => BoolForTableWidget(data: rendererContext),
         type: PlutoColumnType.text(),
       ),
       PlutoColumn(
@@ -297,6 +300,7 @@ class BarberEntity extends Equatable {
         enableRowDrag: false,
         title: 'isOnline'.tr(),
         field: 'isOnline',
+        renderer: (rendererContext) => BoolForTableWidget(data: rendererContext),
         readOnly: false,
         type: PlutoColumnType.text(),
       ),
