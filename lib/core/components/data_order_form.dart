@@ -5,6 +5,7 @@ import 'package:eleven_crm/core/components/client_field_widget.dart';
 import 'package:eleven_crm/core/components/date_time_field_widget.dart';
 import 'package:eleven_crm/core/components/select_services_widget.dart';
 import 'package:eleven_crm/core/components/success_flash_bar.dart';
+import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/select_services/select_services_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
 import 'package:flutter/material.dart';
@@ -23,12 +24,14 @@ class DataOrderForm extends StatefulWidget {
   final Function(List<ServiceProductEntity> selectedServices, String barber,
       String client) saveData;
   final Function() closeForm;
+  final WebSocketsService webSocketsService;
 
   const DataOrderForm({
     Key? key,
     required this.saveData,
     required this.closeForm,
     required this.fields,
+    required this.webSocketsService,
   }) : super(key: key);
 
   @override
@@ -72,6 +75,7 @@ class DataOrderFormState extends State<DataOrderForm> {
 
     price = localPrice;
     duration = localDuration;
+
     setState(() {});
   }
 
@@ -153,8 +157,6 @@ class DataOrderFormState extends State<DataOrderForm> {
                 //   fieldEntity: widget.fields['orderEnd']!,
                 //   withTime: true,
                 // ),
-
-
 
                 const SizedBox(height: 10),
 
@@ -238,6 +240,23 @@ class DataOrderFormState extends State<DataOrderForm> {
                           SuccessFlushBar("change_success".tr()).show(context);
                         },
                       ),
+                      if(widget.fields['id']?.val != null && widget.fields['id']!.val.toString().isNotEmpty)const SizedBox(height: 10),
+                      if(widget.fields['id']?.val != null && widget.fields['id']!.val.toString().isNotEmpty)ButtonWidget(
+                          text: "delete".tr(),
+                          color: Colors.red,
+                          onPressed: () async {
+                            if (await confirm(
+                              super.context,
+                              title: const Text('confirming').tr(),
+                              content: const Text('deleteConfirm').tr(),
+                              textOK: const Text('yes').tr(),
+                              textCancel: const Text('cancel').tr(),
+                            )) {
+                              widget.webSocketsService.deleteFromSocket(
+                                {'_id': widget.fields['id']?.val},
+                              );
+                            }
+                          }),
                       const SizedBox(height: 20),
                     ],
                   ),

@@ -155,8 +155,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
       {'_id': orderId},
     );
 
-    // BlocProvider.of<OrderCubit>(context).save(
-    //     order: OrderEntity.fromFields(selectedServices: selectedServices));
+
   }
 
   void _onDeleteNotWorkingHours(
@@ -191,7 +190,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
             body: DataOrderForm(
               saveData: _saveOrder,
               closeForm: () => Navigator.pop(context),
-              fields: data.getFields(),
+              fields: data.getFields(), webSocketsService: webSocketService,
             ),
           ),
         ),
@@ -396,7 +395,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       listBarbers: listBarbers,
                                       onTapNotWorkingHour:
                                           _onDeleteNotWorkingHours,
-                                      onOrderDelete: _orderDelete,
                                       orderFilterQuery:
                                           BlocProvider.of<OrderFilterCubit>(
                                                   context)
@@ -501,6 +499,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                 child: DataOrderForm(
                                   fields: activeData.getFields(),
                                   saveData: _saveOrder,
+                                  webSocketsService: webSocketService,
                                   closeForm: () {
                                     BlocProvider.of<HomeScreenOrderFormCubit>(
                                             context)

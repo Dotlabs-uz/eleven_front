@@ -23,7 +23,6 @@ class OrderCardWidget extends StatefulWidget {
   final OrderEntity order;
   final bool isDragging;
   final Function() onOrderSize;
-  final Function(String id)? onOrderDelete;
   final Function(OrderEntity order)? onTopOrderEnd;
   final Function(OrderEntity order)? onBottomOrderEnd;
 
@@ -31,7 +30,6 @@ class OrderCardWidget extends StatefulWidget {
     Key? key,
     required this.order,
     required this.isDragging,
-    this.onOrderDelete,
     required this.onOrderSize,
     this.onTopOrderEnd,
     this.onBottomOrderEnd,
@@ -130,19 +128,6 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            GestureDetector(
-                              child: const MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                child: Icon(
-                                  Icons.delete,
-                                  color: AppColors.timeTableCardContentColor,
-                                  size: 12,
-                                ),
-                              ),
-                              onTap: () =>
-                                  widget.onOrderDelete?.call(widget.order.id),
                             ),
                           ],
                         ),
