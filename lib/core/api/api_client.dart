@@ -182,7 +182,7 @@ class ApiClient {
     if (response.statusCode == 400 ||
         response.statusCode == 403 ||
         response.statusCode == 405 ||
-        response.statusCode == 500) {
+        response.statusCode == 500 || response.statusCode == 409) {
       String msg = "unknown_error";
       var resp = jsonDecode(utf8.decode(response.bodyBytes));
       if (resp.containsKey("error")) {
