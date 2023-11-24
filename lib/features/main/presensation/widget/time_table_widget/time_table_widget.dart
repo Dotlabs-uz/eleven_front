@@ -122,7 +122,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: 2200,
+                      width: (MediaQuery.of(context).size.width - Constants.notSelectedBarbersWidth - Constants.sideMenuWidth) - 20,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -399,6 +399,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
             ),
     );
   }
+
 
   _barberUpperCardWidget(BarberEntity entity) {
     return Padding(
