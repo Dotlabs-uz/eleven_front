@@ -163,7 +163,7 @@ class DataBarberFormState extends State<DataBarberForm> {
                   ),
                 ),
               ],
-            ) : SizedBox(),
+            ) : const SizedBox(),
             const SizedBox(height: 20),
             DataTextFieldWidget(fieldEntity: widget.fields['firstName']!),
             DataTextFieldWidget(fieldEntity: widget.fields['lastName']!),

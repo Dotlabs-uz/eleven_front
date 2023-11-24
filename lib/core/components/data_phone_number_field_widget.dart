@@ -51,6 +51,12 @@ class _DataPhoneNumberFieldWidgetState
     super.initState();
   }
 
+  @override
+  void dispose() {
+    controllerField.dispose()
+;    super.dispose();
+  }
+
   initialize() {
     setState(() {
       controllerField.text = widget.fieldEntity?.val.toString() ?? "0";
@@ -137,9 +143,8 @@ class _DataPhoneNumberFieldWidgetState
                   try {
                     final formatted = int.parse(value.replaceAll("+", ""));
                     log("Field value  == $formatted");
-                    // widget.fieldEntity?.val = formatted;
-                    // widget.onChanged?.call(formatted);
-
+                    widget.fieldEntity?.val = formatted;
+                    widget.onChanged?.call(formatted);
                   } catch (e) {
                     debugPrint("Error $e");
                   }
