@@ -86,10 +86,10 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
           4,
           (index) {
             int minute =
-                (index) * 15; // 15, 30, 45, 60 (which will be converted to 0)
+                (index) * 15;
 
             if (minute >= 60) {
-              minute = 0; // Convert 60 to 0
+              minute = 0;
             }
             return Expanded(
               child: DragTarget<DragOrder>(

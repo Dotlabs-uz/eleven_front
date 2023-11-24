@@ -23,6 +23,21 @@ class GetEmployee extends UseCase<EmployeeResultsEntity, GetEmployeeParams> {
   }
 }
 
+
+class GetEmployeeEntity extends UseCase<EmployeeEntity, String> {
+  final ManagementRepository repository;
+
+  GetEmployeeEntity(this.repository);
+
+  @override
+  Future<Either<AppError, EmployeeEntity>> call(
+      String params,) async {
+    return await repository.getEmployeeEntity(
+      params,
+    );
+  }
+}
+
 class SaveEmployee extends UseCase<EmployeeEntity, EmployeeEntity>{
   final ManagementRepository repository;
 

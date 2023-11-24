@@ -93,8 +93,8 @@ class BarberEntity extends Equatable {
       label: "login",
       hintText: "login",
       type: Types.string,
-      isRequired: true,
-      isForm: true,
+      isRequired: false,
+      isForm: false,
       val: "",
     ),
     "avatar": FieldEntity<String>(
@@ -266,14 +266,14 @@ class BarberEntity extends Equatable {
         readOnly: false,
         type: PlutoColumnType.text(),
       ),
-      PlutoColumn(
-        enableColumnDrag: false,
-        enableRowDrag: false,
-        title: 'login'.tr(),
-        field: 'login',
-        readOnly: false,
-        type: PlutoColumnType.text(),
-      ),
+      // PlutoColumn(
+      //   enableColumnDrag: false,
+      //   enableRowDrag: false,
+      //   title: 'login'.tr(),
+      //   field: 'login',
+      //   readOnly: false,
+      //   type: PlutoColumnType.text(),
+      // ),
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,

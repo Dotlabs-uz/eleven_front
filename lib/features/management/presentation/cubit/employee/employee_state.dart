@@ -28,6 +28,15 @@ class EmployeeLoaded extends EmployeeState {
   List<Object> get props => [data, pageCount];
 }
 
+class EmployeeEntityLoaded extends EmployeeState {
+  final EmployeeEntity data;
+  const EmployeeEntityLoaded({
+    required this.data,
+  });
+  @override
+  List<Object> get props => [data];
+}
+
 class EmployeeSaved extends EmployeeState {
   final EmployeeEntity data;
 
@@ -38,7 +47,7 @@ class EmployeeSaved extends EmployeeState {
 
 class EmployeeWeeklyScheduleSaved extends EmployeeState {
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
 
 class EmployeeDeleted extends EmployeeState {
@@ -47,7 +56,9 @@ class EmployeeDeleted extends EmployeeState {
   const EmployeeDeleted({required this.id});
   @override
   List<Object> get props => [id];
-}class EmployeeDeletedFromTable extends EmployeeState {
+}
+
+class EmployeeDeletedFromTable extends EmployeeState {
   final String id;
 
   const EmployeeDeletedFromTable({required this.id});

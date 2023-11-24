@@ -23,7 +23,18 @@ class ColorHelper {
       return const Color(0xffDFBBBB);
     }
 
-      return Colors.transparent;
+    return Colors.transparent;
 
   }
+  static Color? getColorForScheduleByStatusForProfile(int status) {
+
+    if(status ==  EmployeeScheduleStatus.work.index) {
+      return const Color(0xff99C499);
+
+    }
+
+    return null;
+
+  }
+
 }

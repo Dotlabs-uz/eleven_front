@@ -10,11 +10,13 @@ part 'employee_state.dart';
 
 class EmployeeCubit extends Cubit<EmployeeState> {
   final GetEmployee getData;
+  final GetEmployeeEntity getEmployeeEntity;
   final SaveEmployee saveData;
   final SaveEmployeeWeeklySchedule saveEmployeeWeeklySchedule;
   final DeleteEmployee deleteData;
 
   EmployeeCubit(
+    this.getEmployeeEntity,
     this.getData,
     this.saveData,
     this.deleteData,
@@ -80,6 +82,21 @@ class EmployeeCubit extends Cubit<EmployeeState> {
           pageCount: data.pageCount,
           dataCount: data.count,
         ));
+      },
+    );
+    //loadingCubit.hide();
+  }
+
+  loadEmployee(String id) async {
+    //loadingCubit.show();
+    emit(EmployeeLoading());
+    final data = await getEmployeeEntity(
+      id,
+    );
+    data.fold(
+      (error) => emit(EmployeeError(message: error.errorMessage)),
+      (data) {
+        emit(EmployeeEntityLoaded(data: data));
       },
     );
     //loadingCubit.hide();

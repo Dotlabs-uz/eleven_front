@@ -57,7 +57,7 @@ class EmployeeModel extends EmployeeEntity {
       lastName: json['lastName'],
       avatar: json['avatar'],
       phoneNumber: json['phone'],
-      isCurrentFilial: json['isCurrentFilial'],
+      isCurrentFilial: json['isCurrentFilial'] ?? true,
       role: json['role'],
       login: "",
       password: "",

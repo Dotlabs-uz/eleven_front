@@ -55,6 +55,10 @@ abstract class ManagementRepository {
     int page,
     String searchText,
   );
+
+  Future<Either<AppError, EmployeeEntity>> getEmployeeEntity(
+      String employeeId,
+      );
   Future<Either<AppError, EmployeeEntity>> saveEmployee(EmployeeEntity data);
   Future<Either<AppError, bool>> saveEmployeeScheduleList(List<FieldSchedule> data);
   Future<Either<AppError, bool>> deleteEmployee(EmployeeEntity entity);

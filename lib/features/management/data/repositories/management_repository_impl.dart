@@ -111,6 +111,26 @@ class ManagementRepositoryImpl extends ManagementRepository {
   }
 
   //===Employee CRUD=======
+
+  @override
+  Future<Either<AppError, EmployeeEntity>> getEmployeeEntity(String employeeId)  async {
+    try {
+      final entity = await remoteDataSource.getEmployeeEntity(
+        employeeId,
+      );
+
+      return Right(entity);
+    } on SocketException {
+      return const Left(AppError(appErrorType: AppErrorType.network));
+    } on UnauthorisedException {
+      return const Left(AppError(appErrorType: AppErrorType.unauthorised));
+    } on ExceptionWithMessage catch (e) {
+      return Left(
+        AppError(appErrorType: AppErrorType.msgError, errorMessage: e.message),
+      );
+    }
+  }
+
   @override
   Future<Either<AppError, EmployeeResultsEntity>> getEmployee(
     int page,
@@ -322,4 +342,6 @@ class ManagementRepositoryImpl extends ManagementRepository {
           appErrorType: AppErrorType.msgError, errorMessage: e.message));
     }
   }
+
+
 }

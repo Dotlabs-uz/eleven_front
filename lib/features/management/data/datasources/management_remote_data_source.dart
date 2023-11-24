@@ -39,6 +39,10 @@ abstract class ManagementRemoteDataSource {
     String searchText,
   );
 
+  Future<EmployeeModel> getEmployeeEntity(
+      String employeeId,
+      );
+
   Future<EmployeeModel> saveEmployee(EmployeeModel data);
 
   Future<bool> deleteEmployee(String id);
@@ -141,6 +145,41 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     final response = await _client.get(
         '${ApiConstants.employee}?page=$page${searchText.isNotEmpty ? "&firstName=$searchText" : ""}');
     final results = EmployeeResultsModel.fromJson(response);
+
+    return results;
+
+    // const data = EmployeeResultsModel(count: 3, pageCount: 3, results: [
+    //   EmployeeModel(
+    //       id: "",
+    //       firstName: "firstName",
+    //       role: "manager",
+    //       phoneNumber: "+998931231212",
+    //       schedule: [],
+    //       lastName: 'Satt'),
+    //   EmployeeModel(
+    //       id: "",
+    //       firstName: "Alex",
+    //       role: "manager",
+    //       phoneNumber: "+998931231212",
+    //       schedule: [],
+    //       lastName: 'Satt'),
+    //   EmployeeModel(
+    //     id: "",
+    //     firstName: "Sammy",
+    //     role: "manager",
+    //     phoneNumber: "+998931231212",
+    //     schedule: [],
+    //     lastName: 'Satt',
+    //   ),
+    // ]);
+    // return data;
+  }
+
+  @override
+  Future<EmployeeModel> getEmployeeEntity(String employeeId) async {
+    final response = await _client.get(
+        '${ApiConstants.employee}/$employeeId');
+    final results = EmployeeModel.fromJson(response);
 
     return results;
 
@@ -308,4 +347,6 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
     return ManagerModel.fromJson(response);
   }
+
+
 }

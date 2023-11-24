@@ -46,7 +46,7 @@ class _ClientFieldWidgetState extends State<ClientFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => customerCubit,
+      create: (context) => customerCubit..load(""),
       child: _ContentWidget(
         fieldEntity: widget.fieldEntity,
         onChange: widget.onChange,
@@ -98,10 +98,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   initialize() {
-    BlocProvider.of<CustomerCubit>(context).load(
-      "",
-    );
-
     enabled = widget.enabled;
   }
 

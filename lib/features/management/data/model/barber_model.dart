@@ -75,7 +75,7 @@ class BarberModel extends BarberEntity {
       isActive: json['isActive'] ?? true,
       isOnline: json['isOnline'] ?? true,
       filial: FilialModel.fromJson(json['filial']),
-      login: json['login'],
+      login: "",
       inTimeTable: json['inTimeTable'] ?? false,
       password: "",
       notWorkingHours: json['notWorkingHours'] != null &&
@@ -118,8 +118,8 @@ class BarberModel extends BarberEntity {
     data['lastName'] = lastName;
     data['phone'] = phone;
     data['filial'] = filial.id;
-    data['login'] = login;
-    data['password'] = password;
+    data['login'] = "";
+    data['password'] = "";
     data['inTimeTable'] = inTimeTable;
     data['isActive'] = isActive;
     data['isOnline'] = isOnline;

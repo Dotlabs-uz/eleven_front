@@ -82,7 +82,7 @@ void setup() {
 
   // Employee
 
-  locator.registerFactory(() => EmployeeCubit(locator(), locator(), locator(), locator()));
+  locator.registerFactory(() => EmployeeCubit(locator(), locator(), locator(), locator(),locator()));
   locator.registerFactory(() => EmployeeScheduleCubit(
         locator(),
       ));
@@ -149,6 +149,7 @@ void setup() {
 
   // Employee
   locator.registerLazySingleton<GetEmployee>(() => GetEmployee(locator()));
+  locator.registerLazySingleton<GetEmployeeEntity>(() => GetEmployeeEntity(locator()));
   locator
       .registerLazySingleton<DeleteEmployee>(() => DeleteEmployee(locator()));
   locator.registerLazySingleton<SaveEmployee>(() => SaveEmployee(locator()));
