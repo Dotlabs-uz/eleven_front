@@ -69,7 +69,7 @@ class BarberModel extends BarberEntity {
     return BarberModel(
       id: json['_id'],
       firstName: json['firstName'],
-      employeeId: json['employeeId'],
+      employeeId: json['employeeId'] ?? "",
       lastName: json['lastName'],
       phone: json['phone'],
       isActive: json['isActive'] ?? true,
@@ -118,8 +118,8 @@ class BarberModel extends BarberEntity {
     data['lastName'] = lastName;
     data['phone'] = phone;
     data['filial'] = filial.id;
-    data['login'] = "test";
-    data['password'] = "test";
+    data['login'] = login;
+    data['password'] = password;
     data['inTimeTable'] = inTimeTable;
     data['isActive'] = isActive;
     data['isOnline'] = isOnline;

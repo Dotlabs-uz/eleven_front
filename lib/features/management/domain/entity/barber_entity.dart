@@ -321,8 +321,8 @@ class BarberEntity extends Equatable {
       avatar: fields["avatar"]?.val,
       isCurrentFilial: fields["isCurrentFilial"]?.val,
       inTimeTable: false,
-      isOnline: false,
-      isActive: false,
+      isOnline: fields["isOnline"]?.val,
+      isActive:fields["isActive"]?.val,
       notWorkingHours: [],
     );
   }
