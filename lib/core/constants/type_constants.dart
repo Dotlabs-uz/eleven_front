@@ -12,4 +12,8 @@ class TypeChooses {
     'reception',
     'barber',
   ];
+  static const List<String> roleForManagers = [
+    'reception',
+    'managers',
+  ];
 }

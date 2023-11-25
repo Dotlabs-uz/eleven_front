@@ -1,5 +1,7 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/page_not_allowed_widget.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import 'package:eleven_crm/features/management/domain/entity/manager_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -138,7 +140,9 @@ class _ContentWidgetState extends State<ContentWidget> {
     activeData = ManagerEntity.empty();
     customers = [];
 
-    BlocProvider.of<ManagerCubit>(context).load("");
+    if (BlocProvider.of<CurrentUserCubit>(context).isReception == false) {
+      BlocProvider.of<ManagerCubit>(context).load("");
+    }
     _setWidgetTop();
   }
 
@@ -176,7 +180,7 @@ class _ContentWidgetState extends State<ContentWidget> {
   fetch(
     int page,
   ) async {
-    BlocProvider.of<ManagerCubit>(context).load( "", page: page);
+    BlocProvider.of<ManagerCubit>(context).load("", page: page);
   }
 
   initCubit() {
@@ -185,157 +189,160 @@ class _ContentWidgetState extends State<ContentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
+    return BlocProvider.of<CurrentUserCubit>(context).isReception
+        ? const Center(child: PageNotAllowedWidget())
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              children: [
+                BlocConsumer<ManagerCubit, ManagerState>(
+                  listener: (context, state) {
+                    if (state is ManagerLoaded) {
+                      customers = state.data;
+                      dataCount = state.dataCount;
+                    }
 
-          BlocConsumer<ManagerCubit, ManagerState>(
-            listener: (context, state) {
-              if (state is ManagerLoaded) {
-                customers = state.data;
-                dataCount = state.dataCount;
-              }
-
-              {
-                if (state is ManagerSaved) {
-                  SuccessFlushBar("change_success".tr()).show(context);
-                } else if (state is ManagerDeleted) {
-                  SuccessFlushBar("data_deleted".tr()).show(context);
-                } else if (state is ManagerError) {
-                  ErrorFlushBar("change_error".tr(args: [state.message]))
-                      .show(context);
-                }
-              }
-            },
-            builder: (context, state) {
-              if (state is EmployeeLoading) {
-                return const Expanded(child: LoadingCircle());
-              } else {
-                if (state is ManagerSaved) {
-                  activeData = state.data;
-                  isFormVisible = false;
-
-                  // BlocProvider.of<DataFormCubit>(context)
-                  //     .editData(activeData.getFields());
-                  var ind = customers
-                      .indexWhere((element) => element.id == activeData.id);
-                  if (ind >= 0) {
-                    customers[ind] = activeData;
-                  } else {
-                    customers.insert(0, activeData);
-                  }
-                  initCubit();
-                } else if (state is ManagerDeleted) {
-                  var id = state.id;
-                  isFormVisible = false;
-
-                  var ind = customers.indexWhere((element) => element.id == id);
-                  if (ind >= 0) {
-                    customers.removeWhere((element) => element.id == id);
-                  }
-                  initCubit();
-                }
-                return Expanded(
-                  child: DataTableWithForm(
-                    data: customers,
-                    isEmpty: customers.isEmpty,
-                    onDelete: (id) {
-                      final elementToDelete = customers.firstWhereOrNull(
-                        (element) => element.id == id,
-                      );
-
-                      if (elementToDelete != null) {
-                        debugPrint(
-                            "Element to delete is not null ${elementToDelete.id}");
-                        _deleteData(elementToDelete);
+                    {
+                      if (state is ManagerSaved) {
+                        SuccessFlushBar("change_success".tr()).show(context);
+                      } else if (state is ManagerDeleted) {
+                        SuccessFlushBar("data_deleted".tr()).show(context);
+                      } else if (state is ManagerError) {
+                        ErrorFlushBar("change_error".tr(args: [state.message]))
+                            .show(context);
                       }
-                    },
-                    pageCount: pageCount,
-                    isFormVisible: isFormVisible,
-                    screenKey: HiveBoxKeysConstants.customerColumnSizes,
-                    onTap: (data) {
-                      if (data != null) {
-                        selectedRow = data!;
-                        final entity = ManagerEntity.fromRow(selectedRow);
-                        activeData = entity;
-                        _editData(entity);
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is EmployeeLoading) {
+                      return const Expanded(child: LoadingCircle());
+                    } else {
+                      if (state is ManagerSaved) {
+                        activeData = state.data;
+                        isFormVisible = false;
+
+                        // BlocProvider.of<DataFormCubit>(context)
+                        //     .editData(activeData.getFields());
+                        var ind = customers.indexWhere(
+                            (element) => element.id == activeData.id);
+                        if (ind >= 0) {
+                          customers[ind] = activeData;
+                        } else {
+                          customers.insert(0, activeData);
+                        }
+                        initCubit();
+                      } else if (state is ManagerDeleted) {
+                        var id = state.id;
+                        isFormVisible = false;
+
+                        var ind =
+                            customers.indexWhere((element) => element.id == id);
+                        if (ind >= 0) {
+                          customers.removeWhere((element) => element.id == id);
+                        }
+                        initCubit();
                       }
-                    },
-                    form: DataManagerForm(
-                      key: _formKey,
-                      closeForm: () {
-                        setState(() {
-                          isFormVisible = false;
-                        });
-                      },
-                      saveData: _saveData,
-                      fields: activeData.getFields(),
-                    ),
-                  ),
-                );
-              }
-            },
-          ),
-          BlocBuilder<ManagerCubit, ManagerState>(
-            builder: (context, state) {
-              if (state is ManagerLoaded) {
-                pageCount = state.pageCount;
-              }
-              return Padding(
-                padding: pageCount != 1 && pageCount != 0
-                    ? const EdgeInsets.only(bottom: 5)
-                    : EdgeInsets.zero,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (pageCount != 1 && pageCount != 0)
-                      Expanded(
-                        child: PageSelectorWidget(
-                          pageCount: pageCount,
-                          onChanged: (value) {
-                            BlocProvider.of<ManagerCubit>(context).load("", page: value);
+                      return Expanded(
+                        child: DataTableWithForm(
+                          data: customers,
+                          isEmpty: customers.isEmpty,
+                          onDelete: (id) {
+                            final elementToDelete = customers.firstWhereOrNull(
+                              (element) => element.id == id,
+                            );
+
+                            if (elementToDelete != null) {
+                              debugPrint(
+                                  "Element to delete is not null ${elementToDelete.id}");
+                              _deleteData(elementToDelete);
+                            }
                           },
+                          pageCount: pageCount,
+                          isFormVisible: isFormVisible,
+                          screenKey: HiveBoxKeysConstants.customerColumnSizes,
+                          onTap: (data) {
+                            if (data != null) {
+                              selectedRow = data!;
+                              final entity = ManagerEntity.fromRow(selectedRow);
+                              activeData = entity;
+                              _editData(entity);
+                            }
+                          },
+                          form: DataManagerForm(
+                            key: _formKey,
+                            closeForm: () {
+                              setState(() {
+                                isFormVisible = false;
+                              });
+                            },
+                            saveData: _saveData,
+                            fields: activeData.getFields(),
+                          ),
                         ),
-                      ),
-                    const SizedBox(width: 10),
-                    customers.isEmpty
-                        ? const SizedBox()
-                        : Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: RichText(
-                                text: TextSpan(
-                                  style: GoogleFonts.nunito(
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.blue,
-                                    fontSize: 14,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: "${"DataCount".tr()}: ",
-                                    ),
-                                    TextSpan(
-                                      text: "$dataCount",
-                                      style: GoogleFonts.nunito(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
+                      );
+                    }
+                  },
+                ),
+                  BlocBuilder<ManagerCubit, ManagerState>(
+                    builder: (context, state) {
+                      if (state is ManagerLoaded) {
+                        pageCount = state.pageCount;
+                      }
+                      return Padding(
+                        padding: pageCount != 1 && pageCount != 0
+                            ? const EdgeInsets.only(bottom: 5)
+                            : EdgeInsets.zero,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (pageCount != 1 && pageCount != 0)
+                              Expanded(
+                                child: PageSelectorWidget(
+                                  pageCount: pageCount,
+                                  onChanged: (value) {
+                                    BlocProvider.of<ManagerCubit>(context)
+                                        .load("", page: value);
+                                  },
                                 ),
                               ),
-                            ),
-                          ),
-                    const SizedBox(width: 10),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
+                            const SizedBox(width: 10),
+                            customers.isEmpty
+                                ? const SizedBox()
+                                : Padding(
+                                    padding: const EdgeInsets.only(bottom: 5),
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: GoogleFonts.nunito(
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.blue,
+                                            fontSize: 14,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: "${"DataCount".tr()}: ",
+                                            ),
+                                            TextSpan(
+                                              text: "$dataCount",
+                                              style: GoogleFonts.nunito(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(width: 10),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+              ],
+            ),
+          );
   }
 }

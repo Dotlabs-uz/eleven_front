@@ -424,7 +424,7 @@
   "groupIDLower": "ID группы (Низкая)",
   "PleaseEnterYourAccountPassword": "Пожалуйста введите пароль от вашего аккаунта",
   "PasswordIsIncorrect": "Введен неверный пароль. повторите попытку",
-  "isNotManagerText": "У вас нет прав для доступа к этим данным",
+  "pageNotAllowed": "У вас нет прав для доступа к этим данным",
   "dateJoinedHigher": "Дата регистрации (Высокая)",
   "dateJoinedLower": "Дата регистрации (Низкая)",
   "IsActive": "Активный",

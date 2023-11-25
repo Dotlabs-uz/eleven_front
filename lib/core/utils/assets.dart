@@ -10,11 +10,14 @@ class Assets {
   // Pngs
   static const String tLogo = "assets/images/logo.png";
   static const String tAvatarPlaceHolder = 'assets/images/placeholder.png';
+  static const String tLockerLock = 'assets/images/lock.png';
+
 
 
   // Icon
   static const String tWarningIcon = 'assets/icons/warning.svg';
   static const String tClosedEyeIcon = "assets/icons/eye_closed.svg";
+
 
   // Audio
 

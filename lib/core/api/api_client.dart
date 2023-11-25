@@ -163,7 +163,7 @@ class ApiClient {
 
     log("Post uri = $uri");
     log("Post header = $userHeader");
-    log("Post body =  ${jsonEncode(params)}");
+    print("Post body =  ${jsonEncode(params)}");
     final response = await _client.post(
       uri,
       body: jsonEncode(params),

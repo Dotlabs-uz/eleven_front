@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/role_for_managers_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -79,6 +80,7 @@ class DataManagerFormState extends State<DataManagerForm> {
             DataTextFieldWidget(fieldEntity: widget.fields['login']!),
             DataTextFieldWidget(fieldEntity: widget.fields['password']!),
             DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!),
+            RoleForManagersFieldWidget(fieldEntity: widget.fields['role']!),
             const SizedBox(height: 10),
             ButtonWidget(text: "save".tr(), onPressed: widget.saveData),
           ],

@@ -7,6 +7,7 @@ import 'package:eleven_crm/core/components/data_double_field_widget.dart';
 import 'package:eleven_crm/core/components/data_text_field_widget.dart';
 import 'package:eleven_crm/core/components/payment_type_field_widget.dart';
 import 'package:eleven_crm/core/components/responsive_builder.dart';
+import 'package:eleven_crm/core/components/role_for_managers_field_widget.dart';
 import 'package:eleven_crm/core/components/select_services_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -268,7 +269,12 @@ class DataFormWidgetState extends State<DataFormWidget> {
             ctrlWidgets.add(RoleFieldWidget(
               fieldEntity: field,
             ));
-          } else if (field.type == Types.barber) {
+          }
+          else if (field.type == Types.roleForManagers) {
+            ctrlWidgets.add(RoleForManagersFieldWidget(
+              fieldEntity: field,
+            ));
+          }else if (field.type == Types.barber) {
             ctrlWidgets.add(BarberFieldWidget(
               fieldEntity: field,
             ));

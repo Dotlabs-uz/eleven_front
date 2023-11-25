@@ -245,6 +245,14 @@ class EmployeeEntity extends Equatable {
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
+        title: 'login'.tr(),
+        field: 'login',
+        readOnly: true,
+        type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        enableColumnDrag: false,
+        enableRowDrag: false,
         title: 'phoneNumber'.tr(),
         field: 'phone',
         readOnly: true,

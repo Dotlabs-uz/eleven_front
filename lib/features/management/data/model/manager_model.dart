@@ -8,7 +8,7 @@ class ManagerModel extends ManagerEntity {
     required super.firstName,
     required super.lastName,
     required super.phone,
-    required super.filial,
+    required super.role,
     required super.password,
     required super.login,
   });
@@ -54,7 +54,7 @@ class ManagerModel extends ManagerEntity {
       firstName: json['firstName'],
       lastName: json['lastName'],
       phone: json['phone'],
-      filial: FilialModel.fromJson(json['filial']),
+      role: json['role'],
       login: json['login'],
       password: "",
     );
@@ -66,7 +66,7 @@ class ManagerModel extends ManagerEntity {
       firstName: entity.firstName,
       lastName: entity.lastName,
       phone: entity.phone,
-      filial: entity.filial,
+      role: entity.role,
       password: entity.password,
       login: entity.login,
     );
@@ -78,7 +78,7 @@ class ManagerModel extends ManagerEntity {
     data['firstName'] = firstName;
     data['lastName'] = lastName;
     data['phone'] = phone;
-    data['filial'] = filial.id;
+    data['role'] = role;
     data['login'] = login;
     data['password'] = password;
     return data;

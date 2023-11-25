@@ -18,6 +18,7 @@ enum Types {
   client,
   sex,
   role,
+  roleForManagers,
   choseServices,
   weeklySchedule,
 }

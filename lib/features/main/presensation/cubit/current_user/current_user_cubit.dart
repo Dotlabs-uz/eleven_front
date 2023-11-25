@@ -14,17 +14,24 @@ class CurrentUserCubit extends Cubit<CurrentUserState> {
   CurrentUserCubit(this.getCurrentUser, this.saveCurrentUser)
       : super(CurrentUserInitial());
 
+  static bool _isReception = false;
+
+  bool get isReception => _isReception;
+
   load() async {
     final data = await getCurrentUser.call(NoParams());
 
-    data.fold((l) => emit(CurrentUserError(message: l.errorMessage)), (r) {
-      debugPrint("Loaded $r");
-      emit(CurrentUserLoaded(r));
+    data.fold((l) => emit(CurrentUserError(message: l.errorMessage)), (entity) {
+      debugPrint("Loaded current user $entity");
+      _isReception = entity.role =="reception";
+
+      emit(CurrentUserLoaded(entity));
     });
   }
 
   save(CurrentUserEntity entity) async {
     final data = await saveCurrentUser.call(entity);
+
 
     data.fold((l) => emit(CurrentUserError(message: l.errorMessage)),
         (r) => emit(CurrentUserSaved()));

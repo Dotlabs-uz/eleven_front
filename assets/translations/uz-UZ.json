@@ -418,7 +418,7 @@
   "groupIDLower": "Guruh identifikatori (past)",
   "PleaseEnterYourAccountPassword": "Iltimos, hisob qaydnomangiz parolini kiriting",
   "PasswordIsIncorrect": "Noto'g'ri parol kiritildi. qayta urinib ko'ring",
-  "isNotManagerText": "Ushbu ma'lumotlarga kirish huquqiga ega emassiz",
+  "pageNotAllowed": "Ushbu ma'lumotlarga kirish huquqiga ega emassiz",
   "dateJoinedHigher": "Ro'yxatdan o'tish sanasi (yuqori)",
   "dateJoinedLower": "Ro'yxatdan o'tish sanasi (past)",
   "IsActive": "Faol",

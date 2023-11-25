@@ -3,10 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../../../core/components/datetime_for_table_widget.dart';
 import '../../../../core/entities/field_entity.dart';
-import '../../../products/domain/entity/filial_entity.dart';
-import 'employee_schedule_entity.dart';
 
 class ManagerEntity extends Equatable {
 
@@ -16,7 +13,7 @@ class ManagerEntity extends Equatable {
   final String password;
   final String login;
   final int phone;
-  final FilialEntity filial;
+  final String role;
 
   const ManagerEntity({
     required this.id,
@@ -25,7 +22,7 @@ class ManagerEntity extends Equatable {
     required this.password,
     required this.login,
     required this.phone,
-    required this.filial,
+    required this.role,
   });
 
   static Map<String, FieldEntity> fields = {
@@ -76,13 +73,13 @@ class ManagerEntity extends Equatable {
       isForm: true,
       val: 99,
     ),
-    "filial": FieldEntity<FilialEntity>(
-      label: "filial",
-      hintText: "filial",
-      type: Types.filial,
-      isRequired: true,
-      isForm: true,
-      val: FilialEntity.empty(),
+    "role": FieldEntity<String>(
+      label: "role",
+      hintText: "role",
+      type: Types.roleForManagers,
+      isRequired: false,
+      isForm: false,
+      val: "managers",
     ),
   };
 
@@ -99,7 +96,7 @@ class ManagerEntity extends Equatable {
         "firstName": firstName,
         "lastName": lastName,
         "phone": phone,
-        "filial": filial,
+        "role": role,
         "password": password,
         "login": login,
       }[key];
@@ -110,7 +107,7 @@ class ManagerEntity extends Equatable {
       firstName: row.cells["firstName"]?.value,
       lastName: row.cells["lastName"]?.value,
       phone: row.cells["phone"]?.value,
-      filial: row.cells["filial"]?.value,
+      role: row.cells["role"]?.value,
       // password: row.cells["password"]?.value,
       password: "",
       login: row.cells["login"]?.value,
@@ -124,7 +121,7 @@ class ManagerEntity extends Equatable {
       'firstName': PlutoCell(value: e.firstName),
       'lastName': PlutoCell(value: e.lastName),
       'phone': PlutoCell(value: e.phone),
-      'filial': PlutoCell(value: e.filial),
+      'role': PlutoCell(value: e.role),
       'password': PlutoCell(value: e.password),
       'login': PlutoCell(value: e.login),
     });
@@ -190,6 +187,14 @@ class ManagerEntity extends Equatable {
       PlutoColumn(
         enableColumnDrag: false,
         enableRowDrag: false,
+        title: 'role'.tr(),
+        field: 'role',
+        readOnly: false,
+        type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        enableColumnDrag: false,
+        enableRowDrag: false,
         title: 'phoneNumber'.tr(),
         field: 'phone',
         readOnly: false,
@@ -204,7 +209,7 @@ class ManagerEntity extends Equatable {
       firstName: fields["firstName"]?.val,
       lastName: fields["lastName"]?.val,
       phone: fields["phone"]?.val,
-      filial: fields["filial"]?.val,
+      role: fields["role"]?.val,
       login: fields["login"]?.val,
       password: fields["password"]?.val,
     );
@@ -216,7 +221,7 @@ class ManagerEntity extends Equatable {
       firstName: "",
       lastName: "",
       phone: 99,
-      filial: FilialEntity.empty(),
+      role: "managers",
       password: "",
       login: "",
     );
