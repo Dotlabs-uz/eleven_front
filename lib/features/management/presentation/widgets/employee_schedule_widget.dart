@@ -86,6 +86,14 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
     multiSelectedFields.clear();
     super.initState();
   }
+  @override
+  void dispose() {
+    currentMonth = DateTime.now().month;
+    currentYear = DateTime.now().year;
+    editedFields.clear();
+    multiSelectedFields.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -314,7 +322,7 @@ class _EmployeeScheduleTableWidgetState
                 ),
               ),
               Text(
-                widget.employeeEntity.role,
+                "+${widget.employeeEntity.phoneNumber}",
                 style: TextStyle(
                   color: Colors.grey.shade300,
                   fontSize: 11,
