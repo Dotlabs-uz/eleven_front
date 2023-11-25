@@ -659,5 +659,6 @@
   "masterActive" : "Usta faol",
   "showInOnline": "Onlayn ko'rsatish",
   "fromText": "Undan",
-  "toText": "Oldin"
+  "toText": "Oldin",
+  "editSchedule": "Jadvalni o'zgartirish"
 }

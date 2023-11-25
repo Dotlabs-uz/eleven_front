@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/string_helper.dart';
 
-import 'package:collection/collection.dart';
 
 class ScheduleCalendarWidget extends StatefulWidget {
   final List<EmployeeScheduleEntity> listSchedule;
@@ -42,6 +41,7 @@ class _ScheduleCalendarWidgetState extends State<ScheduleCalendarWidget> {
   }
 
   _initDaysOfMonth() {
+    listSchedule = widget.listSchedule;
     daysOfMonth.clear();
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, selectedMonth, 1);
@@ -147,13 +147,13 @@ class _ScheduleCalendarWidgetState extends State<ScheduleCalendarWidget> {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
-                    fontSize: 16,
+                    fontSize: 17,
                   ),
                 ),
               ),
           ],
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         GridView.builder(
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -186,7 +186,7 @@ class _DayItem extends StatefulWidget {
   final int month;
   final bool isWeekend;
   final bool isCurrentDate;
-  final List<EmployeeScheduleEntity>? listSchedule;
+  final List<EmployeeScheduleEntity> listSchedule;
 
   const _DayItem({
     required this.day,
@@ -226,24 +226,12 @@ class _DayItemState extends State<_DayItem> {
 
     initColor();
 
-    // final EmployeeScheduleEntity? element =
-    // widget.listSchedule?.firstWhereOrNull((element) {
-    //   final dt = DateTime.parse(element.date);
-    //   final formatted = DateTime(dt.year, dt.month, dt.day);
-    //
-    //   final condition = formatted.month  == month && formatted.day == widget.day;
-    //   print("Formatted $formatted condition $condition" );
-    //   return condition;
-    // });
   }
 
   initColor() {
     backgroundColor = null;
 
-    setState(() {
-
-    });
-    widget.listSchedule?.forEach((element) {
+    for (var element in widget.listSchedule) {
       final formatted = DateTime.parse(element.date);
       if (formatted.day == widget.day &&
           formatted.month == month &&
@@ -251,18 +239,18 @@ class _DayItemState extends State<_DayItem> {
         backgroundColor =
             ColorHelper.getColorForScheduleByStatusForProfile(element.status);
         setState(() {});
-      } else {
+      }else {
 
       }
-    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     initColor();
     return Container(
-      height: 30,
-      width: 30,
+      height: 20,
+      width: 20,
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(6),
@@ -272,7 +260,7 @@ class _DayItemState extends State<_DayItem> {
               child: Text(
                 "${widget.day}",
                 style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 18,
                   color: backgroundColor != null ? Colors.white : Colors.black,
                 ),
               ),
