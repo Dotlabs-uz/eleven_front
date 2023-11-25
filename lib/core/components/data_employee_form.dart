@@ -4,7 +4,8 @@ import 'package:eleven_crm/features/management/domain/entity/employee_entity.dar
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../features/management/presentation/screens/barber_profile_screen.dart';
+import '../../features/management/domain/entity/barber_entity.dart';
+import '../../features/management/presentation/screens/employee_profile_screen.dart';
 import '../entities/field_entity.dart';
 import '../utils/animated_navigation.dart';
 import 'button_widget.dart';
@@ -83,7 +84,19 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
             DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!),
             const SizedBox(height: 10),
             ButtonWidget(text: "save".tr(), onPressed: widget.saveData),
-
+            const SizedBox(height: 10),
+            const SizedBox(height: 10),
+            ButtonWidget(
+              text: "navigateToEmployeeProfile".tr(),
+              onPressed: () {
+                AnimatedNavigation.push(
+                  context: context,
+                  page: EmployeeProfileScreen(
+                    employeeEntity:EmployeeEntity.fromFields() ,
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),

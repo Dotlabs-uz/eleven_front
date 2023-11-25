@@ -9,6 +9,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../../core/entities/field_entity.dart';
 import 'employee_schedule_entity.dart';
 import 'not_working_hours_entity.dart';
+import 'weekly_schedule_results_entity.dart';
 
 class EmployeeEntity extends Equatable {
   final String id;
@@ -22,8 +23,9 @@ class EmployeeEntity extends Equatable {
   final int phoneNumber;
   final List<NotWorkingHoursEntity> notWorkingHours;
   final List<EmployeeScheduleEntity> schedule;
+  final WeeklyScheduleResultsEntity weeklySchedule;
 
-const  EmployeeEntity({
+  const EmployeeEntity({
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -35,6 +37,7 @@ const  EmployeeEntity({
     required this.phoneNumber,
     required this.notWorkingHours,
     required this.schedule,
+    required this.weeklySchedule,
   });
 
   static Map<String, FieldEntity> fields = {
@@ -100,13 +103,22 @@ const  EmployeeEntity({
       isForm: true,
       isRequired: true,
       val: 99,
-    ), "isCurrentFilial": FieldEntity<bool>(
+    ),
+    "isCurrentFilial": FieldEntity<bool>(
       label: "isCurrentFilial",
       hintText: "isCurrentFilial",
       type: Types.bool,
       isForm: false,
       isRequired: false,
       val: false,
+    ),
+    "weeklySchedule": FieldEntity<WeeklyScheduleResultsEntity>(
+      label: "weeklySchedule",
+      hintText: "weeklySchedule",
+      type: Types.weeklySchedule,
+      isRequired: false,
+      isForm: false,
+      val: WeeklyScheduleResultsEntity.empty(),
     ),
   };
 
@@ -128,6 +140,7 @@ const  EmployeeEntity({
         "phone": phoneNumber,
         "avatar": avatar,
         "isCurrentFilial": isCurrentFilial,
+        "weeklySchedule": weeklySchedule,
       }[key];
 
   factory EmployeeEntity.fromRow(PlutoRow row) {
@@ -143,6 +156,7 @@ const  EmployeeEntity({
       isCurrentFilial: row.cells["isCurrentFilial"]?.value,
       schedule: [],
       notWorkingHours: [],
+      weeklySchedule: row.cells["weeklySchedule"]?.value,
     );
   }
 
@@ -158,6 +172,7 @@ const  EmployeeEntity({
       'role': PlutoCell(value: e.role),
       'avatar': PlutoCell(value: e.avatar),
       'isCurrentFilial': PlutoCell(value: e.isCurrentFilial),
+      'weeklySchedule': PlutoCell(value: e.weeklySchedule),
     });
   }
 
@@ -274,11 +289,12 @@ const  EmployeeEntity({
       isCurrentFilial: fields["isCurrentFilial"]?.val,
       schedule: [],
       notWorkingHours: [],
+      weeklySchedule: fields["weeklySchedule"]?.val,
     );
   }
 
   factory EmployeeEntity.empty() {
-    return   const EmployeeEntity(
+    return EmployeeEntity(
       id: "",
       firstName: "",
       avatar: "",
@@ -290,6 +306,7 @@ const  EmployeeEntity({
       role: "",
       schedule: [],
       notWorkingHours: [],
+      weeklySchedule: WeeklyScheduleResultsEntity.empty(),
     );
   }
 

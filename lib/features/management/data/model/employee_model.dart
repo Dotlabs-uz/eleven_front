@@ -4,6 +4,7 @@ import '../../../../core/entities/field_entity.dart';
 import '../../domain/entity/employee_entity.dart';
 import 'employee_schedule_model.dart';
 import 'not_working_hours_model.dart';
+import 'weekly_schedule_results_model.dart';
 
 class EmployeeModel extends EmployeeEntity {
   const EmployeeModel({
@@ -18,6 +19,7 @@ class EmployeeModel extends EmployeeEntity {
     required super.password,
     required super.login,
     required super.notWorkingHours,
+    required super.weeklySchedule,
   });
 
   List<MobileFieldEntity> getFieldsAndValues() {
@@ -74,6 +76,8 @@ class EmployeeModel extends EmployeeEntity {
               .map((e) => NotWorkingHoursModel.fromJson(e))
               .toList()
           : [],
+      weeklySchedule: WeeklyScheduleResultsModel.fromJson( json['weeklySchedule']),
+
     );
   }
 
@@ -90,6 +94,8 @@ class EmployeeModel extends EmployeeEntity {
       login: entity.login,
       password: entity.password,
       notWorkingHours: entity.notWorkingHours,
+      weeklySchedule: entity.weeklySchedule,
+
     );
   }
 
