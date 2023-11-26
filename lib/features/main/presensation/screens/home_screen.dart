@@ -33,38 +33,20 @@ import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../widget/my_icon_button.dart';
 import '../widget/time_table_widget/time_table_widget.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  late NotWorkingHoursCubit notWorkingHoursCubit;
-  late BarberCubit barberCubit;
-  late SelectServicesCubit selectServicesCubit;
-
-  @override
-  void initState() {
-    notWorkingHoursCubit = locator();
-    selectServicesCubit = locator();
-    barberCubit = locator();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final notWorkingHoursCubit = locator<NotWorkingHoursCubit>();
+    final selectServicesCubit = locator<SelectServicesCubit>();
+    final barberCubit = locator<BarberCubit>()..load("");
+
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => notWorkingHoursCubit),
-        BlocProvider(create: (context) => selectServicesCubit),
-        BlocProvider(create: (context) => barberCubit..load("")),
+        BlocProvider.value(value: notWorkingHoursCubit),
+        BlocProvider.value(value: selectServicesCubit),
+        BlocProvider.value(value: barberCubit),
       ],
       child: const _ContentWidget(),
     );
@@ -108,30 +90,33 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     listBarbers.clear();
 
-    BlocProvider.of<CustomerCubit>(context).load(""); // Need to save local
     _setWidgetTop();
   }
 
   _setWidgetTop() {
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
-      TopMenuEntity(searchCubit: null, enableSearch: false, iconList: [
-        MyIconButton(
-          onPressed: () {
-            activeData = OrderEntity.empty(
-              month: filteredDate.month,
-              day: filteredDate.day
-            );
-            _editOrder(activeData);
-          },
-          icon: const Icon(Icons.add_box_rounded),
-        ),
-        MyIconButton(
-          onPressed: () {
-            webSocketService.addFilter({"orderStart": filteredDate.toIso8601String()});
-          },
-          icon: const Icon(Icons.refresh),
-        ),
-      ]),
+      TopMenuEntity(
+        searchCubit: null,
+        enableSearch: false,
+        iconList: [
+          MyIconButton(
+            onPressed: () {
+              activeData = OrderEntity.empty(
+                month: filteredDate.month,
+                day: filteredDate.day,
+              );
+              _editOrder(activeData);
+            },
+            icon: const Icon(Icons.add_box_rounded),
+          ),
+          MyIconButton(
+            onPressed: () {
+              webSocketService.addFilter({"orderStart": filteredDate.toIso8601String()});
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
     );
   }
 

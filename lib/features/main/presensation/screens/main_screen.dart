@@ -758,7 +758,7 @@ class _ContentWidgetState extends State<ContentWidget> {
 //
 // }
 
-class IconButtonBar extends StatefulWidget with PreferredSizeWidget {
+class IconButtonBar extends StatefulWidget  {
   const IconButtonBar({
     Key? key,
     required this.childSize,
