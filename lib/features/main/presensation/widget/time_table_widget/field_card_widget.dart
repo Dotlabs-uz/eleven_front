@@ -172,6 +172,25 @@ class Item extends StatefulWidget {
 
 class _ItemState extends State<Item> {
   bool isHover = false;
+  static List<DragOrder?> candidateData = [];
+
+  @override
+  void didUpdateWidget(covariant Item oldWidget) {
+
+    if(candidateData.length !=  widget.candidateData.length) {
+      candidateData = widget.candidateData;
+      isHover = false;
+    }
+
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    isHover = false;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
