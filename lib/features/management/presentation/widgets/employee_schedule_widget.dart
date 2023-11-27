@@ -325,7 +325,7 @@ class _EmployeeScheduleTableWidgetState
                 "+${widget.employeeEntity.phoneNumber}",
                 style: TextStyle(
                   color: Colors.grey.shade300,
-                  fontSize: 11,
+                  fontSize: 9,
                 ),
               )
             ],
