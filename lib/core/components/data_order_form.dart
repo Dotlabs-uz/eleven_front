@@ -93,9 +93,7 @@ class DataOrderFormState extends State<DataOrderForm> {
 
   @override
   void dispose() {
-    client = '';
-    barber = '';
-    selectedProducts.clear();
+    clearData( ) ;
 
     super.dispose();
   }
