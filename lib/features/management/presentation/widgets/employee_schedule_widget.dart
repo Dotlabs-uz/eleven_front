@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/utils/constants.dart';
 import 'package:eleven_crm/core/utils/dialogs.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:equatable/equatable.dart';
@@ -64,6 +65,8 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
 
   List<FieldSchedule> editedFields = [];
   List<FieldSchedule> multiSelectedFields = [];
+  late ScrollController scrollController;
+
 
   changeState(List<FieldSchedule> dataList) {
     Dialogs.scheduleField(
@@ -83,107 +86,145 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
 
   @override
   void initState() {
+    scrollController = ScrollController();
+
     multiSelectedFields.clear();
     super.initState();
   }
+
+
   @override
   void dispose() {
     currentMonth = DateTime.now().month;
     currentYear = DateTime.now().year;
     editedFields.clear();
+    scrollController.dispose();
     multiSelectedFields.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: FocusArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+    return Column(
+      children: [
+
+        Scrollbar(
+          interactive: true,
+          thumbVisibility: true,
+          trackVisibility: true,
+          scrollbarOrientation: ScrollbarOrientation.bottom,
+          thickness: 2,
+          controller: scrollController,
+          child: SingleChildScrollView(
+            controller: scrollController,
+            scrollDirection: Axis.horizontal,
+            child: Row(
               children: [
-                const SizedBox(width: 200),
-                MonthSelectorWithDatesWidget(
-                  onMonthChanged: (month) {
-                    widget.onMonthChanged?.call(month);
-                    currentMonth = month;
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(color: Colors.transparent),
 
-                    multiSelectedFields.clear();
-                    setState(() {});
-                  },
-                  currentMonth: currentMonth,
-                ),
+                  // decoration: const BoxDecoration(
+                  //   color: Colors.transparent,
+                  // ),
+                  // width: MediaQuery.of(context).size.width -
+                  //     (Constants.sideMenuWidth - 20), // Padding 20 (left, right)
+                  child: FocusArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const SizedBox(width: 200),
+                            MonthSelectorWithDatesWidget(
+                              onMonthChanged: (month) {
+                                widget.onMonthChanged?.call(month);
+                                currentMonth = month;
+
+                                multiSelectedFields.clear();
+                                setState(() {});
+                              },
+                              currentMonth: currentMonth,
+                            ),
+                          ],
+                        ),
+
+                        ...widget.listEmployee.map(
+                              (e) => _EmployeeScheduleTableWidget(
+                            employeeEntity: e,
+                            currentMonth: currentMonth,
+                            currentYear: currentYear,
+                            onFieldEdit: (
+                                int day,
+                                int month,
+                                int year,
+                                int status,
+                                String employee,
+                                ) {
+                              final dateTime = DateTime(year, month, day);
+                              final entity = FieldSchedule(dateTime, employee, status);
+
+                              editedFields.add(entity);
+                            },
+                            onHoverDrag: (field) {
+                              print("Drag field ${field.dateTime}");
+
+                              if (multiSelectedFields.contains(field) == false) {
+                                // multiSelectedFields.remove(field);
+                                multiSelectedFields.add(field);
+                                print("Fild field $field");
+                                setState(() {});
+                              }
+                            },
+                            listSelectedSchedule: multiSelectedFields,
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
-            ...widget.listEmployee.map(
-              (e) => _EmployeeScheduleTableWidget(
-                employeeEntity: e,
-                currentMonth: currentMonth,
-                currentYear: currentYear,
-                onFieldEdit: (
-                  int day,
-                  int month,
-                  int year,
-                  int status,
-                  String employee,
-                ) {
-                  final dateTime = DateTime(year, month, day);
-                  final entity = FieldSchedule(dateTime, employee, status);
-
-                  editedFields.add(entity);
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                widget.onSave?.call(editedFields);
+                editedFields.clear();
+              },
+              child: Text("save".tr()),
+            ),
+            const SizedBox(width: 10),
+            if (multiSelectedFields.isNotEmpty)
+              ElevatedButton(
+                onPressed: () {
+                  changeState(multiSelectedFields);
                 },
-                onHoverDrag: (field) {
-                  print("Drag field ${field.dateTime}");
-
-                  if (multiSelectedFields.contains(field) == false) {
-                    // multiSelectedFields.remove(field);
-                    multiSelectedFields.add(field);
-                    print("Fild field $field");
-                    setState(() {});
-                  }
-                },
-                listSelectedSchedule: multiSelectedFields,
+                child: Text("selectStatusForSelected".tr()),
               ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: () {
-                    widget.onSave?.call(editedFields);
-                    editedFields.clear();
-                  },
-                  child: Text("save".tr()),
-                ),
-                const SizedBox(width: 10),
-                if (multiSelectedFields.isNotEmpty)
-                  ElevatedButton(
-                    onPressed: () {
-                      changeState(multiSelectedFields);
-                    },
-                    child: Text("selectStatusForSelected".tr()),
-                  ),
-                const SizedBox(width: 10),
-                if (multiSelectedFields.isNotEmpty)
-                  ElevatedButton(
-                    onPressed: () {
-                      multiSelectedFields.clear();
-                      setState(() {});
-                    },
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                    child: Text("clearSelected".tr()),
-                  ),
-              ],
-            ),
+            const SizedBox(width: 10),
+            if (multiSelectedFields.isNotEmpty)
+              ElevatedButton(
+                onPressed: () {
+                  multiSelectedFields.clear();
+                  setState(() {});
+                },
+                style:
+                ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: Text("clearSelected".tr()),
+              ),
           ],
         ),
-      ),
+        const SizedBox(height: 20),
+
+      ],
     );
   }
 }
@@ -266,12 +307,11 @@ class _EmployeeScheduleTableWidgetState
 
             return RegionDetector(
               onFocused: () {
-                if(fieldSchedule.dateTime != null ) {
-
-                  if(fieldSchedule.dateTime!.isBefore(dateTimeNow)) return ;
-                    print("fieldSchedule datetime  ${fieldSchedule.dateTime} is after ${dateTimeNow}");
-                    widget.onHoverDrag.call(fieldSchedule);
-
+                if (fieldSchedule.dateTime != null) {
+                  if (fieldSchedule.dateTime!.isBefore(dateTimeNow)) return;
+                  print(
+                      "fieldSchedule datetime  ${fieldSchedule.dateTime} is after ${dateTimeNow}");
+                  widget.onHoverDrag.call(fieldSchedule);
                 }
               },
               child: _EmployeeScheduleFieldWidget(
@@ -300,11 +340,12 @@ class _EmployeeScheduleTableWidgetState
         children: [
           const SizedBox(width: 10),
           Container(
-            decoration:   BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey,image: DecorationImage(image: NetworkImage(widget.employeeEntity.avatar), fit: BoxFit.cover)
-            ),
-
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey,
+                image: DecorationImage(
+                    image: NetworkImage(widget.employeeEntity.avatar),
+                    fit: BoxFit.cover)),
             width: 30,
             height: 30,
             clipBehavior: Clip.antiAlias,
@@ -373,9 +414,9 @@ class _EmployeeScheduleFieldWidgetState
 
   changeState() {
     if (widget.fieldSchedule.dateTime != null) {
-
       final dt = DateTime.now();
-      if(widget.fieldSchedule.dateTime == DateTime(dt.year,dt.month,dt.day)) return;
+      if (widget.fieldSchedule.dateTime == DateTime(dt.year, dt.month, dt.day))
+        return;
       Dialogs.scheduleField(
         context: context,
         onConfirm: (val) {
@@ -447,7 +488,7 @@ class _EmployeeScheduleFieldWidgetState
         width: 35,
         height: 35,
         decoration: BoxDecoration(
-          color:widget.isFieldSElected
+          color: widget.isFieldSElected
               ? Colors.brown.shade300
               : ColorHelper.getColorForScheduleByStatus(status),
           border: Border.all(

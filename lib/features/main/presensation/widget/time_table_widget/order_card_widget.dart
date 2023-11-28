@@ -45,21 +45,21 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
 
   bool isDelete = true;
 
-  // @override
-  // void initState() {
-
-  // print("Card h ${TimeTableHelper.getCardHeight(
-  //   widget.order.orderStart,
-  //   widget.order.orderEnd,
-  // )}");
-  // super.initState();
-  // }
   void onDragTopUpdate(DragUpdateDetails details) {
     final minutesToChange =
         (details.delta.dy / Constants.sizeTimeTableFieldPerMinuteRound).round();
+
     final newOrderStart =
         widget.order.orderStart.add(Duration(minutes: minutesToChange));
 
+
+
+
+    print("(widget.order.orderEnd.difference(newOrderStart).inMinutes) ${(widget.order.orderEnd.difference(newOrderStart).inMinutes)}");
+
+    if((widget.order.orderEnd.difference(newOrderStart).inMinutes) <= 34)  {
+      return;
+    }
     if (newOrderStart.isBefore(widget.order.orderEnd)) {
       widget.order.orderStart = newOrderStart;
       topPosition = 0;
@@ -71,16 +71,25 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
   void onDragBottomUpdate(DragUpdateDetails details) {
     final minutesToChange =
         (details.delta.dy / Constants.sizeTimeTableFieldPerMinuteRound).round();
-    final newOrderEnd =
-        widget.order.orderEnd.add(Duration(minutes: minutesToChange));
 
-    if (newOrderEnd.isAfter(widget.order.orderStart)) {
+
+    final newOrderEnd =
+    widget.order.orderEnd.add(Duration(minutes: minutesToChange));
+
+
+    if((widget.order.orderStart.difference(newOrderEnd).inMinutes *  -1) <= 34){
+      return;
+    }
+    if (newOrderEnd.isAfter(widget.order.orderStart) ) {
       widget.order.orderEnd = newOrderEnd;
       bottomPosition = 0;
       setState(() {});
       widget.onOrderSize.call();
     }
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -134,15 +143,17 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                       ),
                       ...widget.order.services.map(
                         (e) => Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 3),
-                            child: Text(
-                              "${e.name} ${e.price}сум. ${e.duration}м.",
-                              style: GoogleFonts.nunito(
-                                color: AppColors.timeTableCardContentColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
+                          child: FittedBox(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 3),
+                              child: Text(
+                                "${e.name} ${e.price}сум. ${e.duration}м.",
+                                style: GoogleFonts.nunito(
+                                  color: AppColors.timeTableCardContentColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),

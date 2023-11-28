@@ -62,6 +62,18 @@ class DataOrderFormState extends State<DataOrderForm> {
     super.initState();
   }
 
+  clearData( ) {
+
+    client = "";
+    barber = "";
+    orderStart = DateTime.now();
+    selectedProducts.clear();
+
+    setState(() {
+
+    });
+  }
+
   getPriceAndDuration(List<ServiceProductEntity> listData) {
     double localPrice = 0;
     double localDuration = 0;
@@ -235,6 +247,7 @@ class DataOrderFormState extends State<DataOrderForm> {
 
                           widget.saveData
                               .call(selectedProducts, barber, client);
+                          clearData( );
                           BlocProvider.of<ShowSelectServicesCubit>(context)
                               .disable();
                           SuccessFlushBar("change_success".tr()).show(context);

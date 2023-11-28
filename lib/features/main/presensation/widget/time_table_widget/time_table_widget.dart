@@ -249,6 +249,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                       ],
                                                     ),
                                                   ),
+
+                                                  if(localOrders.isNotEmpty)
                                                   ...localOrders.map(
                                                     (orderEntity) {
                                                       return Positioned(
@@ -312,7 +314,9 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                       );
                                                     },
                                                   ),
-                                                  ...listNotWorkingHours
+                                                  if(listNotWorkingHours.isNotEmpty)
+
+                                                    ...listNotWorkingHours
                                                       .where(
                                                         (notWorkingHoursEntity) {
                                                           return TimeTableHelper

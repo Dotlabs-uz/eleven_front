@@ -83,6 +83,7 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   init() {
+
     BlocProvider.of<EmployeeCubit>(context).load("");
     _setWidgetTop();
   }
@@ -198,120 +199,85 @@ class _ContentWidgetState extends State<ContentWidget> {
     // ),
   ];
 
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          Expanded(
-            child: Column(
-              children: [
-                // SizedBox(
-                //   height: 40,
-                //   child: Row(
-                //     children: <Widget>[
-                //       const SizedBox(
-                //         width: 120,
-                //         child: Placeholder(),
-                //       ),
-                //       const SizedBox(width: 20),
-                //       const SizedBox(
-                //         width: 120,
-                //         child: Placeholder(),
-                //       ),
-                //       const SizedBox(width: 20),
-                //       ElevatedButton(
-                //         onPressed: () {},
-                //         child: const Text("Filter"),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // const SizedBox(height: 20),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      MultiBlocListener(
-                        listeners: [
-                          BlocListener<EmployeeScheduleCubit,
-                              EmployeeScheduleState>(
-                            listener: (context, state) {
-                              if (state is EmployeeScheduleSaved) {
-                                SuccessFlushBar("change_success".tr())
-                                    .show(context);
-                                BlocProvider.of<EmployeeCubit>(context)
-                                    .load("");
-                              } else if (state is EmployeeScheduleError) {
-                                ErrorFlushBar("change_error"
-                                    .tr(args: [state.message])).show(context);
-                              }
-                            },
-                          ),
-                          BlocListener<EmployeeCubit, EmployeeState>(
-                            listener: (context, state) {
-                              if (state is EmployeeSaved) {
-                                SuccessFlushBar("change_success".tr())
-                                    .show(context);
+          MultiBlocListener(
+            listeners: [
+              BlocListener<EmployeeScheduleCubit,
+                  EmployeeScheduleState>(
+                listener: (context, state) {
+                  if (state is EmployeeScheduleSaved) {
+                    SuccessFlushBar("change_success".tr())
+                        .show(context);
+                    BlocProvider.of<EmployeeCubit>(context)
+                        .load("");
+                  } else if (state is EmployeeScheduleError) {
+                    ErrorFlushBar("change_error"
+                        .tr(args: [state.message])).show(context);
+                  }
+                },
+              ),
+              BlocListener<EmployeeCubit, EmployeeState>(
+                listener: (context, state) {
+                  if (state is EmployeeSaved) {
+                    SuccessFlushBar("change_success".tr())
+                        .show(context);
 
-                                BlocProvider.of<EmployeeCubit>(context)
-                                    .load("");
-                              } else if (state is EmployeeError) {
-                                ErrorFlushBar("change_error"
-                                    .tr(args: [state.message])).show(context);
-                              }
-                            },
-                          ),
-                        ],
-                        child: BlocBuilder<EmployeeCubit, EmployeeState>(
-                          builder: (context, state) {
-                            if (state is EmployeeLoaded) {
-                              listEmployee = state.data;
-                            }else if (state is EmployeeLoading) {
-                              return const LoadingCircle();
-                            }
+                    BlocProvider.of<EmployeeCubit>(context)
+                        .load("");
+                  } else if (state is EmployeeError) {
+                    ErrorFlushBar("change_error"
+                        .tr(args: [state.message])).show(context);
+                  }
+                },
+              ),
+            ],
+            child: BlocBuilder<EmployeeCubit, EmployeeState>(
+              builder: (context, state) {
+                if (state is EmployeeLoaded) {
+                  listEmployee = state.data;
+                }else if (state is EmployeeLoading) {
+                  return const LoadingCircle();
+                }
 
-                            return EmployeeScheduleWidget(
-                              onSave: (listFields) {
-                                // debugPrint("List fields ${listFields.length}");
-                                //
-                                // for (var element in listFields) {
-                                //   debugPrint(
-                                //       "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employeeId}");
-                                // }
+                return EmployeeScheduleWidget(
+                  onSave: (listFields) {
+                    // debugPrint("List fields ${listFields.length}");
+                    //
+                    // for (var element in listFields) {
+                    //   debugPrint(
+                    //       "Day ${element.dateTime.day}, Month ${element.dateTime.month}, Status ${element.status}, Employee ${element.employeeId}");
+                    // }
 
-                                if (listFields.isNotEmpty) {
-                                  BlocProvider.of<EmployeeScheduleCubit>(
-                                          context)
-                                      .save(listData: listFields);
+                    if (listFields.isNotEmpty) {
+                      BlocProvider.of<EmployeeScheduleCubit>(
+                          context)
+                          .save(listData: listFields);
 
-                                  listFields.clear();
-                                }
-                              },
-                              onMultiSelectSave: (listMultiSelect) {
-                                if (listMultiSelect.isNotEmpty) {
-                                  BlocProvider.of<EmployeeScheduleCubit>(
-                                          context)
-                                      .save(listData: listMultiSelect);
+                      listFields.clear();
+                    }
+                  },
+                  onMultiSelectSave: (listMultiSelect) {
+                    if (listMultiSelect.isNotEmpty) {
+                      BlocProvider.of<EmployeeScheduleCubit>(
+                          context)
+                          .save(listData: listMultiSelect);
 
-                                  listMultiSelect.clear();
-                                }
-                              },
-                              listEmployee: listEmployee,
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // const SizedBox(height: 20),
-                const EmployeeScheduleStatusWidget(),
-              ],
+                      listMultiSelect.clear();
+                    }
+                  },
+                  listEmployee: listEmployee,
+                );
+              },
             ),
           ),
-          // const EmployeeScheduleStatusWidget(),
+          const EmployeeScheduleStatusWidget(),
         ],
       ),
     );
