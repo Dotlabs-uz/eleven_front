@@ -1,19 +1,11 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/core/components/loading_circle.dart';
-import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
-import 'package:eleven_crm/features/management/presentation/widgets/barber_profile_edit_body.dart';
-import 'package:eleven_crm/features/management/presentation/widgets/barber_profile_services_body.dart';
-import 'package:eleven_crm/features/management/presentation/widgets/checker_with_title_widget.dart';
 import 'package:eleven_crm/features/management/presentation/widgets/employee_profile_schedule_body.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/assets.dart';

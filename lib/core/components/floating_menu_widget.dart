@@ -1,7 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clean_calendar/clean_calendar.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/features/main/domain/entity/current_user_entity.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../features/auth/presentation/cubit/login_cubit.dart';
-import '../../features/main/domain/entity/order_entity.dart';
 import '../../features/main/presensation/cubit/order_filter_cubit.dart';
 import '../../features/main/presensation/widget/calendar_widget.dart';
-import '../api/api_constants.dart';
 import '../utils/app_colors.dart';
 import '../utils/assets.dart';
 import '../utils/dialogs.dart';
+import 'image_view_widget.dart';
 
 class FloatingMenuEntity {
   final String title;
@@ -110,27 +106,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            height: 60,
-                            width: 60,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: currentUserEntity.avatar.isEmpty
-                                  ? Assets.tAvatarPlaceHolder
-                                  : currentUserEntity.avatar,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) => const Icon(
-                                Icons.error,
-                                size: 30,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                          ImageViewWidget(avatar: currentUserEntity.avatar,),
                           const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

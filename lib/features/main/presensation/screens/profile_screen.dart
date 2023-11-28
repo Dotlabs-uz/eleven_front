@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/button_widget.dart';
 import 'package:eleven_crm/core/components/loading_circle.dart';
@@ -203,28 +202,17 @@ class _ContentWidgetState extends State<_ContentWidget> {
                           ],
                           color: Colors.white,
                         ),
-                        child: Center(
+                        child:   Center(
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: _file == null
-                                ? CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    imageUrl: entity.avatar.isEmpty
-                                        ? Assets.tAvatarPlaceHolder
-                                        : entity.avatar,
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(
-                                      Icons.error,
-                                      size: 30,
-                                      color: Colors.red,
-                                    ),
-                                  )
+                                ?  entity.avatar.contains("placeholder.png")
+                                  ? Image.asset(Assets.tAvatarPlaceHolder)
+                                  : Image.network(entity.avatar)
                                 : Image.memory(
-                                    webImage,
-                                    fit: BoxFit.cover,
-                                  ),
+                               webImage,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
@@ -233,7 +221,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     IconButton(
                       onPressed: _file != null
                           ? () {
+                        List<int> list = webImage.cast();
 
+                        BlocProvider.of<AvatarCubit>(context).setAvatar(
+                            filePath: list,
+                            userId: entity.id,
+                            role: 'managers');
                             }
                           : () async {
                               _pickImage();

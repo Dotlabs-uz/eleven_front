@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eleven_crm/core/components/image_view_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/management/domain/entity/barber_entity.dart';
@@ -76,43 +76,7 @@ class _NotSelectedBarbersListWidgetState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        height: 60,
-                        width: 60,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        // decoration:   BoxDecoration(
-                        //   shape: BoxShape.circle,
-                        //     image: entity.avatar.isEmpty
-                        //         ? const DecorationImage(
-                        //         image: AssetImage(
-                        //           Assets.tAvatarPlaceHolder,
-                        //         ),
-                        //         fit: BoxFit.cover)
-                        //         : DecorationImage(
-                        //       image: NetworkImage(
-                        //         entity.avatar,
-                        //       ),
-                        //       fit: BoxFit.cover,
-                        // ),
-                        // ),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: entity.avatar.isEmpty
-                              ? Assets.tAvatarPlaceHolder
-                              : entity.avatar,
-                          placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => const Icon(
-                            Icons.error,
-                            size: 30,
-                            color: Colors.red,
-                          ),
-                        ),
-
-                      ),
+                      ImageViewWidget(avatar: entity.avatar),
                       const SizedBox(height: 5),
                       Center(
                         child: Text(

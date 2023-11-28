@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/success_flash_bar.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
@@ -113,22 +112,9 @@ class DataBarberFormState extends State<DataBarberForm> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(60),
                         child: _file == null
-                            ? CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl: widget.fields['avatar']?.val == null
-                                    ? Assets.tAvatarPlaceHolder
-                                    : widget.fields['avatar']?.val.isEmpty
-                                        ? Assets.tAvatarPlaceHolder
-                                        : widget.fields['avatar']?.val,
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(
-                                  Icons.error,
-                                  size: 30,
-                                  color: Colors.red,
-                                ),
-                              )
+                            ?  widget.fields['avatar']!.val.toString().contains("placeholder.png")
+                            ? Image.asset(Assets.tAvatarPlaceHolder)
+                            : Image.network(widget.fields['avatar']?.val)
                             : Image.memory(
                                 webImage,
                                 fit: BoxFit.cover,

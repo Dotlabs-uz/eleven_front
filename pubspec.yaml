@@ -59,7 +59,6 @@ dependencies:
     git:
       url: https://github.com/Samir-Sattarov/clean_calendar.git
   image_picker: ^1.0.4
-  cached_network_image:
   dropdown_search: ^5.0.6
   confirm_dialog: ^1.0.2
   lottie: ^2.3.2
@@ -76,6 +75,7 @@ dependencies:
   assets_audio_player_web: ^3.1.1
   assets_audio_player: ^3.1.1
   multi_dropdown: ^2.0.0
+  image_network: ^2.5.4+1
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
@@ -512,27 +511,17 @@ class _AvatarWidgetState extends State<_AvatarWidget> {
         ),
         child: Stack(
           children: [
-            Center(
+           Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(60),
                 child: widget.file == null
-                    ? CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: widget.barberEntity.avatar.isEmpty
-                            ? Assets.tAvatarPlaceHolder
-                            : widget.barberEntity.avatar,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => const Icon(
-                          Icons.error,
-                          size: 30,
-                          color: Colors.red,
-                        ),
-                      )
+                    ?  widget.barberEntity.avatar.contains("placeholder.png")
+                    ? Image.asset(Assets.tAvatarPlaceHolder)
+                    : Image.network(widget.barberEntity.avatar)
                     : Image.memory(
-                        widget.webImage,
-                        fit: BoxFit.cover,
-                      ),
+                 widget. webImage,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Center(

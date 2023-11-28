@@ -1,12 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
-import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
-import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
-import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/past_time_card_widget.dart';
+import 'package:eleven_crm/core/components/image_view_widget.dart';
+ import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/past_time_card_widget.dart';
 import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/time_table_ruler_widget.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_network/image_network.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/assets.dart';
 import '../../../../../core/utils/constants.dart';
@@ -417,51 +416,16 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  height: 60,
-                  width: 60,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl: entity.avatar.isEmpty
-                        ? Assets.tAvatarPlaceHolder
-                        : entity.avatar,
-                    placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => const Icon(
-                      Icons.error,
-                      size: 30,
-                      color: Colors.red,
-                    ),
-                  ),
-
-                  // decoration: BoxDecoration(
-                  //   shape: BoxShape.circle,
-                  //   image: entity.avatar.isEmpty
-                  //       ? const DecorationImage(
-                  //           image: AssetImage(
-                  //             Assets.tAvatarPlaceHolder,
-                  //           ),
-                  //           fit: BoxFit.cover,
-                  //         )
-                  //       : DecorationImage(
-                  //           image: NetworkImage(
-                  //             entity.avatar,
-                  //           ),
-                  //           fit: BoxFit.cover,
-                  //         ),
-                  // ),
-                ),
+              ImageViewWidget(avatar: entity.avatar),
                 const SizedBox(height: 5),
-                Text("${entity.firstName} ${entity.lastName}", textAlign: TextAlign.center, style: const TextStyle(
-                  color: AppColors.sideMenu,
-                  fontSize: 12,
+                FittedBox(
+                  child: Text("${entity.firstName} ${entity.lastName}", textAlign: TextAlign.center, style: const TextStyle(
+                    color: AppColors.sideMenu,
+                    fontSize: 15,
 
-                  fontFamily: "Nunito",
-                ),),
+                    fontFamily: "Nunito",
+                  ),),
+                ),
               ],
             ),
           ),
