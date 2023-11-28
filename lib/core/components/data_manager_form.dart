@@ -79,7 +79,7 @@ class DataManagerFormState extends State<DataManagerForm> {
             DataTextFieldWidget(fieldEntity: widget.fields['lastName']!),
             DataTextFieldWidget(fieldEntity: widget.fields['login']!),
             DataTextFieldWidget(fieldEntity: widget.fields['password']!),
-            DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!),
+            DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!, id: widget.fields['id']?.val),
             RoleForManagersFieldWidget(fieldEntity: widget.fields['role']!),
             const SizedBox(height: 10),
             ButtonWidget(text: "save".tr(), onPressed: widget.saveData),

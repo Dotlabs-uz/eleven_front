@@ -164,7 +164,7 @@ class DataBarberFormState extends State<DataBarberForm> {
             DataTextFieldWidget(fieldEntity: widget.fields['lastName']!),
             // DataTextFieldWidget(fieldEntity: widget.fields['login']!),
             // DataTextFieldWidget(fieldEntity: widget.fields['password']!),
-            DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!),
+            DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!, id: widget.fields['id']?.val),
             FilialFieldWidget(fieldEntity: widget.fields['filial']!),
             const SizedBox(height: 10),
             ButtonWidget(

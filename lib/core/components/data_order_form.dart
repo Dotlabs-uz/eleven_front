@@ -250,6 +250,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                           clearData( );
                           BlocProvider.of<ShowSelectServicesCubit>(context)
                               .disable();
+                          widget.closeForm.call();
                           SuccessFlushBar("change_success".tr()).show(context);
                         },
                       ),

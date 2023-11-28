@@ -111,7 +111,7 @@ class BarberEntity extends Equatable {
       type: Types.phoneNumber,
       isRequired: true,
       isForm: true,
-      val: 99,
+      val: 998,
     ),
     "isCurrentFilial": FieldEntity<bool>(
       label: "isCurrentFilial",
@@ -119,7 +119,7 @@ class BarberEntity extends Equatable {
       type: Types.bool,
       isRequired: false,
       isForm: false,
-      val: false,
+      val: true,
     ),
     "isActive": FieldEntity<bool>(
       label: "isActive",
@@ -342,7 +342,7 @@ class BarberEntity extends Equatable {
       isOnline: true,
       notWorkingHours: [],
       avatar: '',
-      isCurrentFilial: false,
+      isCurrentFilial: true,
       weeklySchedule: WeeklyScheduleResultsEntity.empty(),
     );
   }

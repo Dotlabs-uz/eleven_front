@@ -44,7 +44,7 @@ class CustomerEntity extends Equatable {
       type: Types.phoneNumber,
       isRequired: true,
       isForm: true,
-      val: 99,
+      val: 998,
     ),
     "ordersCount": FieldEntity<int>(
       label: "ordersCount",

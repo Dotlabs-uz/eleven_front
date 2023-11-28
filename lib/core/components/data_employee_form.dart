@@ -81,7 +81,7 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
             // DataTextFieldWidget(fieldEntity: widget.fields['login']!),
             // DataTextFieldWidget(fieldEntity: widget.fields['password']!),
             RoleFieldWidget(fieldEntity: widget.fields['role']!),
-            DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!),
+            DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!, id: widget.fields['id']?.val),
             const SizedBox(height: 10),
             ButtonWidget(text: "save".tr(), onPressed: widget.saveData),
             const SizedBox(height: 10),

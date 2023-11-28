@@ -15,6 +15,7 @@ class DataPhoneNumberFieldWidget extends StatefulWidget {
 
   //final TextEditingController controller;
   final bool enabled;
+  final String id;
   final TextEditingController? controller;
   final Function(int?)? onChanged;
 
@@ -24,7 +25,7 @@ class DataPhoneNumberFieldWidget extends StatefulWidget {
     this.controller,
     this.onChanged,
     //required this.controller,
-    this.enabled = true,
+    this.enabled = true,   this.id   = "",
     // required this.callback,
   }) : super(key: key);
 
@@ -35,36 +36,23 @@ class DataPhoneNumberFieldWidget extends StatefulWidget {
 
 class _DataPhoneNumberFieldWidgetState
     extends State<DataPhoneNumberFieldWidget> {
-  final TextEditingController controllerField = TextEditingController();
 
-  static MaskTextInputFormatter phoneMaskFormatter = MaskTextInputFormatter(
-    mask: '+998#########',
-    filter: {
-      "#": RegExp(r'[0-9]'),
-    },
-  );
 
-  @override
-  void initState() {
-    controllerField.text = "";
-    initialize();
-    super.initState();
-  }
+  // static MaskTextInputFormatter phoneMaskFormatter = MaskTextInputFormatter(
+  //   mask: '+998#########',
+  //   filter: {
+  //     "#": RegExp(r'[0-9]'),
+  //   },
+  // );
 
-  @override
-  void dispose() {
-    controllerField.dispose()
-;    super.dispose();
-  }
 
-  initialize() {
-    setState(() {
-      controllerField.text = widget.fieldEntity?.val.toString() ?? "0";
-    });
-  }
+
+  late TextEditingController controllerField;
 
   @override
   Widget build(BuildContext context) {
+    controllerField =
+        TextEditingController(text: widget.fieldEntity?.val.toString());
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -99,18 +87,23 @@ class _DataPhoneNumberFieldWidgetState
           ),
           const SizedBox(height: 3),
           SizedBox(
-            height: 40,
+            height: 60,
             child: TextFormField(
                 controller: widget.controller ?? controllerField,
                 obscuringCharacter: '*',
                 keyboardType: TextInputType.number,
-                inputFormatters: [phoneMaskFormatter],
+                maxLength: 12,
+                // inputFormatters: (widget.controller ?? controllerField).text.isEmpty ?[] :[phoneMaskFormatter],
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 style: GoogleFonts.nunito(
                   color: widget.enabled
                       ? AppColors.enabledTextColor
                       : AppColors.disabledTextColor,
                 ),
                 decoration: InputDecoration(
+                  helperStyle: const TextStyle(
+                    height: 0.01,
+                  ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   hintText: widget.fieldEntity?.hintText.tr(),
                   enabledBorder: widget.fieldEntity!.isRequired
