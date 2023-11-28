@@ -87,6 +87,8 @@ class _ContentWidgetState extends State<ContentWidget> {
     final tab = listTabs[selectedTab];
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: () => Navigator.pop(context),icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,),),
+
         title: Text(
             "${widget.employeeEntity.firstName} ${widget.employeeEntity.lastName}"),
         backgroundColor: const Color(0xff071E32),
