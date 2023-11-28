@@ -31,6 +31,8 @@ import '../cubit/select_services/select_services_cubit.dart';
 import '../cubit/show_select_services/show_select_services_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../widget/my_icon_button.dart';
+import '../widget/time_table_widget/time_table_copy_two_widget.dart';
+import '../widget/time_table_widget/time_table_copy_widget.dart';
 import '../widget/time_table_widget/time_table_widget.dart';
 
 class HomeScreen extends StatelessWidget {

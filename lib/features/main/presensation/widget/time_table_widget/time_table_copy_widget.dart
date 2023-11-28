@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
-import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
-import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/past_time_card_widget.dart';
 import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/time_table_ruler_widget.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/assets.dart';
 import '../../../../../core/utils/constants.dart';
@@ -21,6 +19,8 @@ import 'no_working_hours_card_widget.dart';
 import 'order_card_widget.dart';
 
 // ignore: must_be_immutable
+
+
 
 class TimeTableCopyWidget extends StatefulWidget {
   final List<BarberEntity> listBarbers;
@@ -60,16 +60,15 @@ class _TimeTableCopyWidgetState extends State<TimeTableCopyWidget> {
   final DateTime to = DateTime(2023, 10, 7, 22);
 
   static final List<BarberEntity> listBarber = [];
-  static final List<OrderEntity> listOrders = [];
-  static List<NotWorkingHoursEntity> listNotWorkingHours = [];
+  late ScrollController scrollController = ScrollController();
+  late ScrollController _globalController;
+  static late LinkedScrollControllerGroup _controllers;
+
 
   @override
   void didUpdateWidget(covariant TimeTableCopyWidget oldWidget) {
     final newListEmployeeLen = widget.listBarbers.length;
-    final newListOrdersLen = widget.listOrders.length;
-
-    if (newListEmployeeLen != listBarber.length ||
-        newListOrdersLen != listOrders.length) {
+    if (newListEmployeeLen != listBarber.length) {
       initialize();
     }
     super.didUpdateWidget(oldWidget);
@@ -83,22 +82,22 @@ class _TimeTableCopyWidgetState extends State<TimeTableCopyWidget> {
 
   void initialize() {
     listBarber.clear();
-    listOrders.clear();
-    listNotWorkingHours.clear();
 
     final List<BarberEntity> employeeListData = widget.listBarbers
         .where((element) => element.inTimeTable == true)
         .toList();
 
     listBarber.addAll(employeeListData);
-    listOrders.addAll(widget.listOrders);
+    _controllers = LinkedScrollControllerGroup();
+
+    _globalController = _controllers.addAndGet();
   }
 
   @override
   void dispose() {
     listBarber.clear();
-    listOrders.clear();
-    listNotWorkingHours.clear();
+
+    scrollController.dispose();
 
     super.dispose();
   }
@@ -111,28 +110,51 @@ class _TimeTableCopyWidgetState extends State<TimeTableCopyWidget> {
           ? const EmptyWidget()
           : SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                physics: const ClampingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.listBarbers.length,
-                itemBuilder: (context, index) {
-                  final barberEntity = widget.listBarbers[index];
-                  return _Item(
-                    barberEntity: barberEntity,
-                    timeFrom: from,
-                    timeTo: to,
-                    index: index,
-                    onOrderDragEnd: widget.onOrderDragEnd,
-                    onFieldTap: widget.onFieldTap,
-                    onTapNotWorkingHours: widget.onTapNotWorkingHours,
-                    onOrderStartResizeEnd: widget.onOrderStartResizeEnd,
-                    onOrderEndResizeEnd: widget.onOrderEndResizeEnd,
-                    onNotWorkingHoursCreate: widget.onNotWorkingHoursCreate,
-                    onDeleteEmployeeFromTable: widget.onDeleteEmployeeFromTable,
-                    onOrderClick: widget.onOrderClick,
-                    orderFilterQuery: widget.orderFilterQuery, listOrders: [], listNotWorkingHours: [],
-                  );
-                },
+              child: Scrollbar(
+                controller: scrollController,
+                child: ListView.builder(
+                  controller: scrollController,
+                  physics: const ClampingScrollPhysics(),
+                  addAutomaticKeepAlives: true,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: widget.listBarbers.length,
+                  itemBuilder: (context, index) {
+                    final barberEntity = widget.listBarbers[index];
+                    List<OrderEntity> localOrders = [];
+                    List<NotWorkingHoursEntity> localNotWorkingHours = [];
+
+                    final barber = widget.listBarbers[index];
+
+                    localOrders = widget.listOrders.where(
+                      (element) {
+                        return barber.id == element.barberId;
+                      },
+                    ).toList();
+
+                    localNotWorkingHours = barber.notWorkingHours;
+                    return _Item(
+                      barberEntity: barberEntity,
+                      timeFrom: from,
+                      timeTo: to,
+                      isFirst: index == 0,
+                      onOrderDragEnd: widget.onOrderDragEnd,
+                      onFieldTap: widget.onFieldTap,
+                      onTapNotWorkingHours: widget.onTapNotWorkingHours,
+                      onOrderStartResizeEnd: widget.onOrderStartResizeEnd,
+                      onOrderEndResizeEnd: widget.onOrderEndResizeEnd,
+                      onNotWorkingHoursCreate: widget.onNotWorkingHoursCreate,
+                      onDeleteEmployeeFromTable:
+                          widget.onDeleteEmployeeFromTable,
+                      onOrderClick: widget.onOrderClick,
+                      orderFilterQuery: widget.orderFilterQuery,
+                      listOrders: localOrders,
+                      listNotWorkingHours: localNotWorkingHours,
+                      scrollController: _globalController,
+
+                    );
+                  },
+                ),
               ),
             ),
     );
@@ -143,9 +165,10 @@ class _Item extends StatefulWidget {
   final BarberEntity barberEntity;
   final DateTime timeFrom;
   final List<OrderEntity> listOrders;
+  final ScrollController scrollController;
   final List<NotWorkingHoursEntity> listNotWorkingHours;
   final DateTime timeTo;
-  final int index;
+  final bool isFirst;
   final Function(OrderEntity)? onOrderDragEnd;
   final Function(int hour, int minute, String barberId)? onFieldTap;
   final Function(NotWorkingHoursEntity, BarberEntity)? onTapNotWorkingHours;
@@ -163,7 +186,7 @@ class _Item extends StatefulWidget {
     required this.barberEntity,
     required this.timeFrom,
     required this.timeTo,
-    required this.index,
+    required this.isFirst,
     required this.onOrderDragEnd,
     required this.onFieldTap,
     required this.onTapNotWorkingHours,
@@ -172,7 +195,9 @@ class _Item extends StatefulWidget {
     required this.onNotWorkingHoursCreate,
     required this.onDeleteEmployeeFromTable,
     required this.onOrderClick,
-    required this.orderFilterQuery, required this.listNotWorkingHours,
+    required this.orderFilterQuery,
+    required this.scrollController,
+    required this.listNotWorkingHours,
   }) : super(key: key);
 
   @override
@@ -183,37 +208,29 @@ class _ItemState extends State<_Item> {
   static List<OrderEntity> localOrders = [];
   static List<NotWorkingHoursEntity> listNotWorkingHours = [];
 
-
-
-
   @override
   void didUpdateWidget(covariant _Item oldWidget) {
-
-    if(localOrders.length != widget.listOrders.length || listNotWorkingHours.length != widget.listNotWorkingHours.length) {
-
-  initialize();
+    if (localOrders.length != widget.listOrders.length ||
+        listNotWorkingHours.length != widget.listNotWorkingHours.length) {
+      initialize();
     }
 
     super.didUpdateWidget(oldWidget);
   }
 
-@override
+  @override
   initState() {
-  initialize();
-  super.initState();
-}
-
+    initialize();
+    super.initState();
+  }
 
   void initialize() {
     localOrders.clear();
     listNotWorkingHours.clear();
 
-
     localOrders = widget.listOrders;
     listNotWorkingHours = widget.listNotWorkingHours;
-
   }
-
 
   _onOrderSize() {
     setState(() {});
@@ -221,203 +238,212 @@ class _ItemState extends State<_Item> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          color: Colors.white,
-          child: Row(
-            children: [
-              if (widget.index == 0)
-                SizedBox(
-                  width: Constants.rulerWidth,
-                ),
-              if (widget.index == 0) Container(width: 10),
-              Expanded(
-                child: _barberUpperCardWidget(widget.barberEntity),
-              ),
-            ],
+    return SizedBox(
+      width: widget.isFirst ? Constants.rulerWidth + 200 : 200,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: Colors.white,
+            child: const Row(
+              children: [
+                // if (widget.index == 0)
+                //   SizedBox(
+                //     width: Constants.rulerWidth,
+                //   ),
+                // if (widget.index == 0) Container(width: 10),
+                // Expanded(
+                //   child: _barberUpperCardWidget(widget.barberEntity),
+                // ),
+              ],
+            ),
           ),
-        ),
-        // Expanded(
-        //   child: SingleChildScrollView(
-        //     padding: EdgeInsets.zero,
-        //     clipBehavior: Clip.antiAlias,
-        //     child: Column(
-        //       mainAxisAlignment: MainAxisAlignment.start,
-        //       crossAxisAlignment: CrossAxisAlignment.start,
-        //       children: [
-        //         Row(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: [
-        //             TimeTableRulerWidget(
-        //               timeFrom: widget.timeFrom,
-        //               timeTo: widget.timeTo,
-        //             ),
-        //             Expanded(
-        //               child: Padding(
-        //                 padding: const EdgeInsets.only(top: 24),
-        //                 child: Stack(
-        //                   children: [
-        //                     Container(
-        //                       decoration: BoxDecoration(
-        //                         border: Border(
-        //                           bottom: BorderSide(
-        //                             width: 1,
-        //                             color: Colors.grey.shade400,
-        //                           ),
-        //                           top: BorderSide(
-        //                             width: 1,
-        //                             color: Colors.grey.shade400,
-        //                           ),
-        //                         ),
-        //                       ),
-        //                       child: Column(
-        //                         children: [
-        //                           ...List.generate(
-        //                             IntHelper.getCountOfCardByWorkingHours(
-        //                                 widget.timeFrom, widget.timeTo),
-        //                             (localIndex) {
-        //                               final hour =
-        //                                   widget.timeFrom.hour + localIndex;
-        //
-        //                               return FieldCardWidget(
-        //                                 isFirstSection: widget.index == 0,
-        //                                 hour: hour,
-        //                                 barberId: widget.barberEntity.id,
-        //                                 onDragEnded: (localOrder, confirm) {
-        //                                   setState(() {});
-        //
-        //                                   if (confirm) {
-        //                                     widget.onOrderDragEnd
-        //                                         ?.call(localOrder);
-        //                                   }
-        //                                 },
-        //                                 notWorkingHours:
-        //                                     widget.barberEntity.notWorkingHours,
-        //                                 onFieldTap: (hour, minute) =>
-        //                                     widget.onFieldTap?.call(hour,
-        //                                         minute, widget.barberEntity.id),
-        //                               );
-        //                             },
-        //                           ),
-        //                         ],
-        //                       ),
-        //                     ),
-        //                     if (localOrders.isNotEmpty)
-        //                       ...localOrders.map(
-        //                         (orderEntity) {
-        //                           return Positioned(
-        //                             // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
-        //                             top: TimeTableHelper.getTopPositionForOrder(
-        //                               orderEntity,
-        //                             ),
-        //                             child: GestureDetector(
-        //                               onDoubleTap: () => widget.onOrderClick
-        //                                   ?.call(orderEntity),
-        //                               child: Draggable<DragOrder>(
-        //                                 data: DragOrder(
-        //                                   isResizing: false,
-        //                                   orderEntity: orderEntity,
-        //                                 ),
-        //                                 childWhenDragging: OrderCardWidget(
-        //                                   order: orderEntity,
-        //                                   isDragging: true,
-        //                                   onOrderSize: _onOrderSize,
-        //                                 ),
-        //                                 feedback: Opacity(
-        //                                   opacity: 0.6,
-        //                                   child: Material(
-        //                                     child: OrderCardWidget(
-        //                                       order: orderEntity,
-        //                                       isDragging: true,
-        //                                       onOrderSize: _onOrderSize,
-        //                                     ),
-        //                                   ),
-        //                                 ),
-        //                                 child: OrderCardWidget(
-        //                                   order: orderEntity,
-        //                                   isDragging: false,
-        //                                   onOrderSize: _onOrderSize,
-        //                                   onBottomOrderEnd:
-        //                                       widget.onOrderEndResizeEnd,
-        //                                   onTopOrderEnd:
-        //                                       widget.onOrderStartResizeEnd,
-        //                                 ),
-        //                               ),
-        //                             ),
-        //                           );
-        //                         },
-        //                       ),
-        //                     if (listNotWorkingHours.isNotEmpty)
-        //                       ...listNotWorkingHours
-        //                           .where(
-        //                             (notWorkingHoursEntity) {
-        //                               return TimeTableHelper
-        //                                   .notWorkingHourCondition(
-        //                                 notWorkingHoursEntity.dateFrom,
-        //                                 widget.orderFilterQuery,
-        //                               );
-        //                             },
-        //                           )
-        //                           .toList()
-        //                           .map(
-        //                             (notWorkingHoursEntity) {
-        //                               // if (widget.orderFilterQuery
-        //                               //     .isNotEmpty) {
-        //                               //   final dt = DateTime
-        //                               //       .tryParse(widget
-        //                               //           .orderFilterQuery);
-        //                               //   if (dt != null &&( notWorkingHoursEntity
-        //                               //             .dateTo
-        //                               //             .difference(dt)
-        //                               //             .inDays >=
-        //                               //         1 )) {
-        //                               //
-        //                               //     listNotWorkingHours.clear();
-        //                               //
-        //                               //
-        //                               //     print("Remove not working hours $notWorkingHoursEntity");
-        //                               //     return const SizedBox();
-        //                               //   }
-        //                               // }
-        //                               return Positioned(
-        //                                 top: TimeTableHelper
-        //                                     .getTopPositionForNotWorkingHours(
-        //                                   notWorkingHoursEntity,
-        //                                 ),
-        //                                 child: NotWorkingHoursCard(
-        //                                   notWorkingHoursEntity:
-        //                                       notWorkingHoursEntity,
-        //                                   onDoubleTap: (entity) =>
-        //                                       widget.onTapNotWorkingHours?.call(
-        //                                           entity, widget.barberEntity),
-        //                                 ),
-        //                               );
-        //                             },
-        //                           ),
-        //                     ...List.generate(
-        //                       IntHelper.getCountOfCardByWorkingHours(
-        //                           widget.timeFrom, widget.timeTo),
-        //                       (index) {
-        //                         return PastTimeCardWidget(
-        //                           dateTime: DateTime.tryParse(
-        //                             widget.orderFilterQuery,
-        //                           ),
-        //                         );
-        //                       },
-        //                     ),
-        //                   ],
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-      ],
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.zero,
+              clipBehavior: Clip.antiAlias,
+              controller: widget.scrollController,
+              physics: const ClampingScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.isFirst)
+                        TimeTableRulerWidget(
+                          timeFrom: widget.timeFrom,
+                          timeTo: widget.timeTo,
+                        ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 24),
+                          child: Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    top: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    ...List.generate(
+                                      IntHelper.getCountOfCardByWorkingHours(
+                                          widget.timeFrom, widget.timeTo),
+                                      (localIndex) {
+                                        final hour =
+                                            widget.timeFrom.hour + localIndex;
+
+                                        return FieldCardWidget(
+                                          isFirstSection: widget.isFirst,
+                                          hour: hour,
+                                          barberId: widget.barberEntity.id,
+                                          onDragEnded: (localOrder, confirm) {
+                                            setState(() {});
+
+                                            if (confirm) {
+                                              widget.onOrderDragEnd
+                                                  ?.call(localOrder);
+                                            }
+                                          },
+                                          notWorkingHours: widget
+                                              .barberEntity.notWorkingHours,
+                                          onFieldTap: (hour, minute) =>
+                                              widget.onFieldTap?.call(
+                                                  hour,
+                                                  minute,
+                                                  widget.barberEntity.id),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (localOrders.isNotEmpty)
+                                ...localOrders.map(
+                                  (orderEntity) {
+                                    return Positioned(
+                                      // top: Constants.timeTableItemHeight +Constants.timeTableItemHeight  ,
+                                      top: TimeTableHelper
+                                          .getTopPositionForOrder(
+                                        orderEntity,
+                                      ),
+                                      child: GestureDetector(
+                                        onDoubleTap: () => widget.onOrderClick
+                                            ?.call(orderEntity),
+                                        child: Draggable<DragOrder>(
+                                          data: DragOrder(
+                                            isResizing: false,
+                                            orderEntity: orderEntity,
+                                          ),
+                                          childWhenDragging: OrderCardWidget(
+                                            order: orderEntity,
+                                            isDragging: true,
+                                            onOrderSize: _onOrderSize,
+                                          ),
+                                          feedback: Opacity(
+                                            opacity: 0.6,
+                                            child: Material(
+                                              child: OrderCardWidget(
+                                                order: orderEntity,
+                                                isDragging: true,
+                                                onOrderSize: _onOrderSize,
+                                              ),
+                                            ),
+                                          ),
+                                          child: OrderCardWidget(
+                                            order: orderEntity,
+                                            isDragging: false,
+                                            onOrderSize: _onOrderSize,
+                                            onBottomOrderEnd:
+                                                widget.onOrderEndResizeEnd,
+                                            onTopOrderEnd:
+                                                widget.onOrderStartResizeEnd,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              if (listNotWorkingHours.isNotEmpty)
+                                ...listNotWorkingHours
+                                    .where(
+                                      (notWorkingHoursEntity) {
+                                        return TimeTableHelper
+                                            .notWorkingHourCondition(
+                                          notWorkingHoursEntity.dateFrom,
+                                          widget.orderFilterQuery,
+                                        );
+                                      },
+                                    )
+                                    .toList()
+                                    .map(
+                                      (notWorkingHoursEntity) {
+                                        // if (widget.orderFilterQuery
+                                        //     .isNotEmpty) {
+                                        //   final dt = DateTime
+                                        //       .tryParse(widget
+                                        //           .orderFilterQuery);
+                                        //   if (dt != null &&( notWorkingHoursEntity
+                                        //             .dateTo
+                                        //             .difference(dt)
+                                        //             .inDays >=
+                                        //         1 )) {
+                                        //
+                                        //     listNotWorkingHours.clear();
+                                        //
+                                        //
+                                        //     print("Remove not working hours $notWorkingHoursEntity");
+                                        //     return const SizedBox();
+                                        //   }
+                                        // }
+                                        return Positioned(
+                                          top: TimeTableHelper
+                                              .getTopPositionForNotWorkingHours(
+                                            notWorkingHoursEntity,
+                                          ),
+                                          child: NotWorkingHoursCard(
+                                            notWorkingHoursEntity:
+                                                notWorkingHoursEntity,
+                                            onDoubleTap: (entity) => widget
+                                                .onTapNotWorkingHours
+                                                ?.call(entity,
+                                                    widget.barberEntity),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                              ...List.generate(
+                                IntHelper.getCountOfCardByWorkingHours(
+                                    widget.timeFrom, widget.timeTo),
+                                (index) {
+                                  return PastTimeCardWidget(
+                                    dateTime: DateTime.tryParse(
+                                      widget.orderFilterQuery,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

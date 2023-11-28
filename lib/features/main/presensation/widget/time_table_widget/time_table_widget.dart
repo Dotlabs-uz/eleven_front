@@ -426,9 +426,10 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                   clipBehavior: Clip.antiAlias,
                   child: CachedNetworkImage(
                     fit: BoxFit.cover,
-                    imageUrl: entity.avatar.isEmpty
-                        ? Assets.tAvatarPlaceHolder
-                        : entity.avatar,
+
+                    imageUrl:
+                        entity.avatar,
+
                     placeholder: (context, url) =>
                     const CircularProgressIndicator(),
                     errorWidget: (context, url, error) => const Icon(
@@ -456,12 +457,14 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                   // ),
                 ),
                 const SizedBox(height: 5),
-                Text("${entity.firstName} ${entity.lastName}", textAlign: TextAlign.center, style: const TextStyle(
-                  color: AppColors.sideMenu,
-                  fontSize: 12,
-
-                  fontFamily: "Nunito",
-                ),),
+                FittedBox(
+                  child: Text("${entity.firstName} ${entity.lastName}", textAlign: TextAlign.center, style: const TextStyle(
+                    color: AppColors.sideMenu,
+                    fontSize: 15,
+                  
+                    fontFamily: "Nunito",
+                  ),),
+                ),
               ],
             ),
           ),

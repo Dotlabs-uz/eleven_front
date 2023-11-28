@@ -486,6 +486,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
+  linked_scroll_controller:
+    dependency: "direct main"
+    description:
+      name: linked_scroll_controller
+      sha256: e6020062bcf4ffc907ee7fd090fa971e65d8dfaac3c62baf601a3ced0b37986a
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   lints:
     dependency: transitive
     description:
@@ -828,6 +836,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  sync_scroll:
+    dependency: "direct main"
+    description:
+      name: sync_scroll
+      sha256: e2bc09228b0f4343f9a3f9723073b9a207ad083530df562a327d373f32f500b0
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0+2"
   syncfusion_flutter_calendar:
     dependency: "direct main"
     description:
