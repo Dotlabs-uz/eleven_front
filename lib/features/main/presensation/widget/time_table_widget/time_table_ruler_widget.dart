@@ -52,7 +52,7 @@ class TimeTableRulerWidget extends StatelessWidget {
           Text(
             '${time.hour}:00',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 12,
               color: Colors.grey.shade500,
               fontWeight: FontWeight.bold,
             ),
@@ -60,7 +60,7 @@ class TimeTableRulerWidget extends StatelessWidget {
           const SizedBox(width: 5),
           Container(
             height: 1,
-            width: 40,
+            width: 20,
             color: Colors.grey.shade600,
           ),
         ],
@@ -79,7 +79,7 @@ class TimeTableRulerWidget extends StatelessWidget {
           Text(
             "${time.hour}:30",
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 8,
               color: Colors.grey.shade500,
 
               fontWeight: FontWeight.bold,
@@ -89,7 +89,7 @@ class TimeTableRulerWidget extends StatelessWidget {
 
           Container(
             height: 1,
-            width: 20,
+            width: 5,
             color: Colors.grey.shade600,
           ),
         ],

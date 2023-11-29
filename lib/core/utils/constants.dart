@@ -1,5 +1,5 @@
 class Constants {
-  static double rulerWidth =100;
+  static double rulerWidth =60;
   static double startWork =8;
   static double endWork =22;
   static double timeTableItemWidth =300;
@@ -14,6 +14,7 @@ class Constants {
   static double onTimetableFieldItem =25;
 
   static double sizeOfBarberProfileCard =300;
+  static double sizeOfTimeTableColumn =300;
 
 
 

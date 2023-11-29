@@ -121,7 +121,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: (MediaQuery.of(context).size.width - Constants.notSelectedBarbersWidth - Constants.sideMenuWidth) - 20,
+                      width: (listBarber.length * Constants.sizeOfTimeTableColumn) - (Constants.notSelectedBarbersWidth - Constants.sideMenuWidth) - 40 - Constants.rulerWidth, // 40 padding
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -137,7 +137,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                   listBarber.length,
                                   (index) {
                                     final el = listBarber[index];
-                                    return Expanded(
+                                    return SizedBox(
+                                      width: Constants.sizeOfTimeTableColumn,
                                       child: _barberUpperCardWidget(el),
                                     );
                                   },
@@ -179,7 +180,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                           listNotWorkingHours =
                                               barber.notWorkingHours;
 
-                                          return Expanded(
+                                          return SizedBox(
+                                            width: Constants.sizeOfTimeTableColumn,
                                             child: Padding(
                                               padding: const EdgeInsets.only(
                                                   top: 24),
