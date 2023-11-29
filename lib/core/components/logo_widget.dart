@@ -8,6 +8,6 @@ class LogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(child: Image.asset(Assets.tLogo),height: height,);
+    return SizedBox(height: height,child: Image.asset(Assets.tLogo),);
   }
 }
