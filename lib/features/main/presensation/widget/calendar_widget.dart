@@ -27,6 +27,8 @@ class CalendarWidget extends StatefulWidget {
 
 class _CalendarWidgetState extends State<CalendarWidget> {
   final List<int?> daysOfMonth = [];
+
+  bool viewWaitText = false;
   final List<String> dayNames = [
     "monSmall",
     "tueSmall",
@@ -263,6 +265,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 if (day != null) {
                   selectedDate = DateTime(currentYear, selectedMonth, day);
 
+                  viewWaitText = true;
                   setState(() {});
                   localBlinked.remove(dateTime);
                   listBlinkedDates.remove(dateTime);
@@ -272,10 +275,62 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             );
           },
         ),
+
+        const SizedBox(height: 10),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+
+          child: viewWaitText ?  _WaitText(onTimerEnd: () {
+            print("wait text");
+            viewWaitText = false;
+            setState(() {
+
+            });
+          },) : SizedBox(),
+        ),
+
+
       ],
     );
   }
 }
+
+class _WaitText extends StatefulWidget {
+  final Function() onTimerEnd;
+  const _WaitText({Key? key, required this.onTimerEnd}) : super(key: key);
+
+  @override
+  State<_WaitText> createState() => _WaitTextState();
+}
+
+class _WaitTextState extends State<_WaitText> {
+
+  @override
+  void initState() {
+    initialize() ;
+    super.initState();
+  }
+
+  initialize()   {
+
+
+       Timer(const Duration(seconds: 4), () {
+         widget.onTimerEnd.call();
+       },);
+
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Text("pleaseWaitFilterIsInProcess".tr(), style: const TextStyle(
+      fontFamily: "Nunito",
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: Colors.white,
+
+    ),);
+  }
+}
+
 
 class _DayItem extends StatefulWidget {
   final int? day;

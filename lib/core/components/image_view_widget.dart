@@ -11,7 +11,7 @@ class ImageViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return avatar.contains("placeholder.png")
+    return avatar.contains("placeholder.png") || avatar.isEmpty
         ? Container(
             height: size,
             width: size,

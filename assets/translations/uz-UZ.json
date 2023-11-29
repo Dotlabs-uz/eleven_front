@@ -660,5 +660,6 @@
   "showInOnline": "Onlayn ko'rsatish",
   "fromText": "Undan",
   "toText": "Oldin",
-  "editSchedule": "Jadvalni o'zgartirish"
+  "editSchedule": "Jadvalni o'zgartirish",
+  "pleaseWaitFilterIsInProcess": "Filtrlash jarayonida kuting"
 }
