@@ -380,7 +380,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       listBarbers: listBarbers,
                                       onOrderTap: (order) {
                                         order.isNew = false;
-                                        webSocketService.sendData("update", OrderModel.fromEntity(order).toJson());
+                                        _updateOrder(order,withOrderEnd: false);
                                       },
                                       onTapNotWorkingHour:
                                           _onDeleteNotWorkingHours,
