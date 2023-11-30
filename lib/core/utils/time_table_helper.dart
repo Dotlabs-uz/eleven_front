@@ -107,7 +107,6 @@ class TimeTableHelper {
       final dt = DateTime.tryParse(query);
 
       if (dt != null) {
-        print("Date time dt$dt from $dateTimeFrom");
         if (dateTimeFrom.day == dt.day &&
             dateTimeFrom.month == dt.month &&
             dateTimeFrom.year == dt.year) {
