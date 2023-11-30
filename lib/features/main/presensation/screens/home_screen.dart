@@ -378,6 +378,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     }
                                     return TimeTableWidget(
                                       listBarbers: listBarbers,
+                                      onOrderTap: (order) {
+                                        order.isNew = false;
+                                        webSocketService.sendData("update", OrderModel.fromEntity(order).toJson());
+                                      },
                                       onTapNotWorkingHour:
                                           _onDeleteNotWorkingHours,
                                       orderFilterQuery:
@@ -396,7 +400,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         );
                                         _editOrder(activeData);
                                       },
-                                      onOrderClick: (entity) {
+                                      onOrderDoubleTap: (entity) {
                                         print("Entity $entity");
                                         activeData = entity;
                                         _editOrder(activeData);

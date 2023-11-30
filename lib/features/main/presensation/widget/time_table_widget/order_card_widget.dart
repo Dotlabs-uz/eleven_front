@@ -106,13 +106,13 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
         decoration: BoxDecoration(
           color: widget.isDragging
               ? Colors.grey.shade400.withOpacity(0.3)
-              : AppColors.timeTableCard,
+              : widget.order.isNew == true ? Colors.amber.shade300  : AppColors.timeTableCard,
 
-          border: const Border(
+          border:   Border(
 
             left: BorderSide(
               width: 3,
-              color: AppColors.timeTableCardSideColor,
+              color: widget.order.isNew == true ? Colors.amber.shade600  :  AppColors.timeTableCardSideColor,
 
             ),
           ),
@@ -133,7 +133,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                             Text(
                               "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
                               style: GoogleFonts.nunito(
-                                color: AppColors.timeTableCardContentColor,
+                                color:  widget.order.isNew == true ? Colors.black  :  AppColors.timeTableCardContentColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -150,7 +150,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                               child: Text(
                                 "${e.name} ${e.price}сум. ${e.duration}м.",
                                 style: GoogleFonts.nunito(
-                                  color: AppColors.timeTableCardContentColor,
+                                  color:  widget.order.isNew == true ? Colors.black  :  AppColors.timeTableCardContentColor,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
                                 ),

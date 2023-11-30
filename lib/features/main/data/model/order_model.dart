@@ -25,7 +25,6 @@ class OrderModel extends OrderEntity {
 
   factory OrderModel.fromJson(Map<String, dynamic> json,
       {bool withSubstract = false}) {
-    // print("Order form json ${DateTime.parse(json['orderEnd']).toString()}");
     return OrderModel(
       id: json['_id'] ?? "",
       orderStart: DateTime.parse(json['orderStart']).toLocal(),
@@ -43,7 +42,7 @@ class OrderModel extends OrderEntity {
       services: List.from(json['services'])
           .map((e) => ServiceProductModel.fromJson(e, false))
           .toList(),
-      isNew: json['isNew'],
+      isNew: json['isNew'] ?? true,
       price: json['price'] ?? 0,
       duration: json['duration'] ?? 0,
     );
@@ -71,18 +70,16 @@ class OrderModel extends OrderEntity {
     final data = <String, dynamic>{};
     data['orderStart'] = orderStart.toIso8601String();
     // data['orderEnd'] = orderEnd.toLocal().toIso8601String();
-    // data['price'] = price;
+    data['_id'] = id;
     data['barber'] = barberId;
     data['payments'] = paymentType.name;
     // data['discountPercent'] = discountPercent;
     // data['discount'] = discount;
     data['client'] = clientId;
+    data['isNew'] = isNew;
     // data['filial'] = "6541c7a7dc28ae268a77572f";
     print("Services $services");
     data['services'] = services.map((e) => e.id).toList();
-
-
-    print("Data $data");
 
     return data;
   }
