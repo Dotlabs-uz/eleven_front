@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/loading_circle.dart';
+import 'package:eleven_crm/features/management/presentation/provider/cross_in_employee_schedule_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/success_flash_bar.dart';
@@ -25,11 +27,13 @@ class EmployeeScheduleScreen extends StatefulWidget {
 class _EmployeeScheduleScreenState extends State<EmployeeScheduleScreen> {
   late EmployeeScheduleCubit employeeScheduleCubit;
   late EmployeeCubit employeeCubit;
+  late CrossInEmployeeScheduleProvider crossInEmployeeScheduleProvider;
 
   @override
   void initState() {
     employeeScheduleCubit = locator<EmployeeScheduleCubit>();
     employeeCubit = locator<EmployeeCubit>();
+    crossInEmployeeScheduleProvider = locator();
     super.initState();
   }
 
@@ -43,6 +47,7 @@ class _EmployeeScheduleScreenState extends State<EmployeeScheduleScreen> {
         BlocProvider<EmployeeCubit>(
           create: (context) => employeeCubit,
         ),
+        ChangeNotifierProvider(create: (context) => crossInEmployeeScheduleProvider),
       ],
       child: ContentWidget(
         employeeScheduleCubit: employeeScheduleCubit,

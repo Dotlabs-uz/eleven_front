@@ -19,6 +19,7 @@ import 'package:eleven_crm/features/management/domain/usecases/manager.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/manager/manager_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/provider/cross_in_employee_schedule_provider.dart';
 import 'package:eleven_crm/features/products/domain/usecases/filial.dart';
 import 'package:eleven_crm/features/products/domain/usecases/service_product_category.dart';
 import 'package:http/http.dart';
@@ -83,6 +84,7 @@ void setup() {
   // Employee
 
   locator.registerFactory(() => EmployeeCubit(locator(), locator(), locator(), locator(),locator()));
+  locator.registerFactory(() => CrossInEmployeeScheduleProvider());
   locator.registerFactory(() => EmployeeScheduleCubit(
         locator(),
       ));

@@ -7,9 +7,11 @@ import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.da
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/provider/cross_in_employee_schedule_provider.dart';
 import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import '../core/utils/app_colors.dart';
 import '../core/utils/route_constants.dart';
@@ -40,6 +42,8 @@ class _ApplicationState extends State<Application> {
   late OrderFilterCubit orderFilterCubit;
   late AvatarCubit avatarCubit;
   late CustomerCubit customerCubit;
+  late CrossInEmployeeScheduleProvider crossInEmployeeScheduleProvider;
+
   @override
   void initState() {
     _loginCubit = locator();
@@ -54,6 +58,7 @@ class _ApplicationState extends State<Application> {
     orderFilterCubit = locator();
     avatarCubit = locator();
     customerCubit = locator();
+    crossInEmployeeScheduleProvider = locator();
     super.initState();
   }
 
@@ -61,6 +66,7 @@ class _ApplicationState extends State<Application> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        ChangeNotifierProvider.value(value: crossInEmployeeScheduleProvider),
         BlocProvider.value(value: _loginCubit),
         BlocProvider.value(value: _menuCubit),
         BlocProvider.value(value: _topMenuCubit),
