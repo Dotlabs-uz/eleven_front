@@ -52,12 +52,10 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
     final newOrderStart =
         widget.order.orderStart.add(Duration(minutes: minutesToChange));
 
+    print(
+        "(widget.order.orderEnd.difference(newOrderStart).inMinutes) ${(widget.order.orderEnd.difference(newOrderStart).inMinutes)}");
 
-
-
-    print("(widget.order.orderEnd.difference(newOrderStart).inMinutes) ${(widget.order.orderEnd.difference(newOrderStart).inMinutes)}");
-
-    if((widget.order.orderEnd.difference(newOrderStart).inMinutes) <= 34)  {
+    if ((widget.order.orderEnd.difference(newOrderStart).inMinutes) <= 34) {
       return;
     }
     if (newOrderStart.isBefore(widget.order.orderEnd)) {
@@ -72,15 +70,14 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
     final minutesToChange =
         (details.delta.dy / Constants.sizeTimeTableFieldPerMinuteRound).round();
 
-
     final newOrderEnd =
-    widget.order.orderEnd.add(Duration(minutes: minutesToChange));
+        widget.order.orderEnd.add(Duration(minutes: minutesToChange));
 
-
-    if((widget.order.orderStart.difference(newOrderEnd).inMinutes *  -1) <= 34){
+    if ((widget.order.orderStart.difference(newOrderEnd).inMinutes * -1) <=
+        34) {
       return;
     }
-    if (newOrderEnd.isAfter(widget.order.orderStart) ) {
+    if (newOrderEnd.isAfter(widget.order.orderStart)) {
       widget.order.orderEnd = newOrderEnd;
       bottomPosition = 0;
       setState(() {});
@@ -88,17 +85,12 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
     }
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.move,
       child: Container(
-        width: widget.isDragging
-            ? Constants.timeTableItemWidth
-            : MediaQuery.of(context).size.width,
+        width: widget.isDragging ? 200 : MediaQuery.of(context).size.width,
         height: TimeTableHelper.getCardHeight(
           widget.order.orderStart,
           widget.order.orderEnd,
@@ -106,14 +98,19 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
         decoration: BoxDecoration(
           color: widget.isDragging
               ? Colors.grey.shade400.withOpacity(0.3)
-              : widget.order.isNew == true ? Colors.amber.shade300  : AppColors.timeTableCard,
-
-          border:   Border(
-
+              : widget.order.status == OrderStatus.waitingToView
+                  ? Colors.amber.shade300
+                  : widget.order.status == OrderStatus.timeLeft
+                      ? Colors.red.shade300
+                      : AppColors.timeTableCard,
+          border: Border(
             left: BorderSide(
               width: 3,
-              color: widget.order.isNew == true ? Colors.amber.shade600  :  AppColors.timeTableCardSideColor,
-
+              color: widget.order.status == OrderStatus.waitingToView
+                  ? Colors.amber.shade600
+                  : widget.order.status == OrderStatus.timeLeft
+                      ? Colors.red.shade600
+                      : AppColors.timeTableCardSideColor,
             ),
           ),
         ),
@@ -125,7 +122,8 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +131,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                             Text(
                               "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
                               style: GoogleFonts.nunito(
-                                color:  widget.order.isNew == true ? Colors.black  :  AppColors.timeTableCardContentColor,
+                                color: Colors.black,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -148,15 +146,14 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                           child: Text(
                             "${widget.order.client.fullName} | +${widget.order.client.phoneNumber}",
                             style: GoogleFonts.nunito(
-                              color:  widget.order.isNew == true ? Colors.black  :  AppColors.timeTableCardContentColor,
+                              color: Colors.black,
+
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
                       ),
-
-                      
                       ...widget.order.services.map(
                         (e) => Flexible(
                           child: FittedBox(
@@ -166,7 +163,8 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                               child: Text(
                                 "${e.name} ${e.price}сум. ${e.duration}м.",
                                 style: GoogleFonts.nunito(
-                                  color:  widget.order.isNew == true ? Colors.black  :  AppColors.timeTableCardContentColor,
+                                  color: Colors.black,
+
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
                                 ),

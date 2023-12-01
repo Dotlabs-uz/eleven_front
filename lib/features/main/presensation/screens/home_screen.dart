@@ -135,11 +135,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     //     order: OrderEntity.fromFields(selectedServices: selectedServices));
   }
 
-  void _orderDelete(String orderId) {
-    webSocketService.deleteFromSocket(
-      {'_id': orderId},
-    );
-  }
+
 
   void _onDeleteNotWorkingHours(
       NotWorkingHoursEntity entity, BarberEntity barberEntity) async {
@@ -381,7 +377,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           ? TimeTableWidget(
                                         listBarbers: listBarbers,
                                         onOrderTap: (order) {
-                                          order.isNew = false;
+                                          order.status = OrderStatus.waitingToView;
                                           _updateOrder(order,
                                               withOrderEnd: false);
                                         },

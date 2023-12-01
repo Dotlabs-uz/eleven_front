@@ -18,7 +18,7 @@ class OrderModel extends OrderEntity {
     // required super.price,
     required super.barberId,
     required super.services,
-    required super.isNew,
+    required super.status,
     required super.price,
     required super.duration,
   });
@@ -42,7 +42,7 @@ class OrderModel extends OrderEntity {
       services: List.from(json['services'])
           .map((e) => ServiceProductModel.fromJson(e, false))
           .toList(),
-      isNew: json['isNew'] ?? true,
+      status: OrderStatus.values[json['status']?? 1],
       price: json['price'] ?? 0,
       duration: json['duration'] ?? 0, client: CustomerModel.fromJson(json['client']),
     );
@@ -61,7 +61,7 @@ class OrderModel extends OrderEntity {
       clientId: entity.clientId,
       services: entity.services,
       client: entity.client,
-      isNew: entity.isNew,
+      status: entity.status,
       duration: entity.duration,
       price: entity.price,
     );
@@ -77,7 +77,7 @@ class OrderModel extends OrderEntity {
     // data['discountPercent'] = discountPercent;
     // data['discount'] = discount;
     data['client'] = clientId;
-    data['isNew'] = isNew;
+    data['status'] = status.index;
     // data['filial'] = "6541c7a7dc28ae268a77572f";
     print("Services $services");
     data['services'] = services.map((e) => e.id).toList();
@@ -90,6 +90,8 @@ class OrderModel extends OrderEntity {
     data['orderStart'] = orderStart.toIso8601String();
     data['_id'] = id;
     data['barber'] = barberId;
+    data['status'] = status.index;
+
     data['payments'] = paymentType.name;
     if (withOrderEnd) {
       data['orderEnd'] =
