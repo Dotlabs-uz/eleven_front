@@ -69,13 +69,7 @@ class DataOrderFormState extends State<DataOrderForm> {
     orderStart = DateTime.now();
     selectedProducts.clear();
 
-    if(mounted) {
-      Future.delayed(Duration.zero, () {
-        setState(() {
 
-        });
-      },);
-    }
 
   }
 
@@ -159,9 +153,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                     barber = value.id;
                   },
                 ),
-                PaymentTypeFieldWidget(
-                  fieldEntity: widget.fields['paymentType']!,
-                ),
+                // PaymentTypeFieldWidget(
+                //   fieldEntity: widget.fields['paymentType']!,
+                // ),
                 DateTimeFieldWidget(
                   fieldEntity: widget.fields['orderStart']!,
                   withTime: true,
