@@ -111,7 +111,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
           ),
           MyIconButton(
             onPressed: () {
-              webSocketService.addFilter({"orderStart": filteredDate.toIso8601String()});
+              webSocketService
+                  .addFilter({"orderStart": filteredDate.toIso8601String()});
             },
             icon: const Icon(Icons.refresh),
           ),
@@ -122,7 +123,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   void _saveOrder(List<ServiceProductEntity> selectedServices, String barber,
       String client) {
-
     final entity = OrderEntity.fromFieldsWithSelectedServices(
       selectedServices: selectedServices,
       barber: barber,
@@ -139,8 +139,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
     webSocketService.deleteFromSocket(
       {'_id': orderId},
     );
-
-
   }
 
   void _onDeleteNotWorkingHours(
@@ -175,7 +173,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
             body: DataOrderForm(
               saveData: _saveOrder,
               closeForm: () => Navigator.pop(context),
-              fields: data.getFields(), webSocketsService: webSocketService,
+              fields: data.getFields(),
+              webSocketsService: webSocketService,
             ),
           ),
         ),
@@ -251,26 +250,24 @@ class _ContentWidgetState extends State<_ContentWidget> {
             if (snapshot.hasData) {
               final listSnapData = List.from(snapshot.data);
 
-              if(listSnapData.isNotEmpty) {
+              if (listSnapData.isNotEmpty) {
                 final data = listSnapData
                     .map((e) => OrderModel.fromJson(e, withSubstract: true))
                     .toList();
 
-
                 orders = data;
                 print("Orders $orders");
               }
-
             }
             return MultiBlocListener(
               listeners: [
-                BlocListener<CustomerCubit, CustomerState>(listener: (context, state) {
-
-
-                  if(state is CustomerSaved) {
-                    SuccessFlushBar("change_success".tr()).show(context);
-                  }
-                },),
+                BlocListener<CustomerCubit, CustomerState>(
+                  listener: (context, state) {
+                    if (state is CustomerSaved) {
+                      SuccessFlushBar("change_success".tr()).show(context);
+                    }
+                  },
+                ),
                 BlocListener<BarberCubit, BarberState>(
                   listener: (context, state) {
                     if (state is BarberLoaded) {
@@ -279,9 +276,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
                           Duration.zero,
                           () {
                             setState(() {
-
                               final data = state.data.results;
-                              data.removeWhere((element) => element.isCurrentFilial == false);
+                              data.removeWhere((element) =>
+                                  element.isCurrentFilial == false);
                               listBarbers = data;
                             });
                           },
@@ -295,11 +292,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 BlocListener<OrderFilterCubit, OrderFilterHelper>(
                   listener: (context, state) {
                     if (state.query.isNotEmpty) {
+                      orders.clear();
                       webSocketService.addFilter({"orderStart": state.query});
-                      filteredDate= DateTime.parse(state.query);
+                      filteredDate = DateTime.parse(state.query);
                       print("Filter date init $filteredDate");
 
-                      orders.clear();
                     } else {
                       webSocketService.addFilter("");
                       orders.clear();
@@ -357,82 +354,94 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
                               Expanded(
                                 flex: 2,
-                                child: BlocBuilder<OrderCubit, OrderState>(
+                                child: BlocBuilder<OrderFilterCubit, OrderFilterHelper>(
                                   builder: (context, state) {
-                                    if (state is OrderDeleted) {
-                                      // final element = orders.firstWhere(
-                                      //     (element) =>
-                                      //         element.id == state.orderId);
-                                      //
-                                      // orders.remove(element);
-                                      // BlocProvider.of<OrderCubit>(context)
-                                      //     .init();
-                                    } else if (state is OrderSaved) {
-                                      // if (orders.contains(state.order) ==
-                                      //     false) {
-                                      //   orders.add(OrderModel.fromEntity(
-                                      //       state.order));
-                                      // }
-                                      // BlocProvider.of<OrderCubit>(context)
-                                      //     .init();
-                                    }
-                                    return TimeTableWidget(
-                                      listBarbers: listBarbers,
-                                      onOrderTap: (order) {
-                                        order.isNew = false;
-                                        _updateOrder(order,withOrderEnd: false);
-                                      },
-                                      onTapNotWorkingHour:
-                                          _onDeleteNotWorkingHours,
-                                      orderFilterQuery:
-                                          BlocProvider.of<OrderFilterCubit>(
-                                                  context)
-                                              .state
-                                              .query,
-                                      onFieldTap: (hour, minute, barberId) {
-                                        print("Filter date $filteredDate");
-                                        activeData = OrderEntity.empty(
-                                          hour: hour,
-                                          minute: minute,
-                                          barber: barberId,
-                                          month: filteredDate.month,
-                                          day: filteredDate.day,
-                                        );
-                                        _editOrder(activeData);
-                                      },
-                                      onOrderDoubleTap: (entity) {
-                                        print("Entity $entity");
-                                        activeData = entity;
-                                        _editOrder(activeData);
-                                      },
-                                      onDeleteEmployeeFromTable: (employeeId) {
-                                        _barberFromTimeTableCardAction(
-                                          employeeId,
-                                          false,
-                                        );
-                                      },
-                                      onNotWorkingHoursCreate: (
-                                        DateTime from,
-                                        DateTime to,
-                                        String employeeId,
-                                      ) {
-                                        BlocProvider.of<NotWorkingHoursCubit>(
-                                          context,
-                                        ).save(
-                                          dateFrom: from,
-                                          dateTo: to,
-                                          employeeId: employeeId,
-                                        );
-                                      },
-                                      listOrders: orders,
-                                      onOrderStartResizeEnd: (order) =>
-                                          _updateOrder(order),
-                                      onOrderEndResizeEnd: (order) =>
-                                          _updateOrder(order),
-                                      onOrderDragEnd: (order) {
-                                        print("Order drag end");
-                                        _updateOrder(order, withOrderEnd: true);
-                                      },
+                                    // if (state is OrderDeleted) {
+                                    //   // final element = orders.firstWhere(
+                                    //   //     (element) =>
+                                    //   //         element.id == state.orderId);
+                                    //   //
+                                    //   // orders.remove(element);
+                                    //   // BlocProvider.of<OrderCubit>(context)
+                                    //   //     .init();
+                                    // } else if (state is OrderSaved) {
+                                    //   // if (orders.contains(state.order) ==
+                                    //   //     false) {
+                                    //   //   orders.add(OrderModel.fromEntity(
+                                    //   //       state.order));
+                                    //   // }
+                                    //   // BlocProvider.of<OrderCubit>(context)
+                                    //   //     .init();
+                                    // }
+                                    return AnimatedSwitcher(
+                                      duration: const Duration(seconds: 2),
+                                      switchInCurve: Curves.easeIn,
+                                      switchOutCurve: Curves.easeIn,
+                                      child: orders.isNotEmpty
+                                          ? TimeTableWidget(
+                                        listBarbers: listBarbers,
+                                        onOrderTap: (order) {
+                                          order.isNew = false;
+                                          _updateOrder(order,
+                                              withOrderEnd: false);
+                                        },
+                                        onTapNotWorkingHour:
+                                        _onDeleteNotWorkingHours,
+                                        orderFilterQuery: BlocProvider.of<
+                                            OrderFilterCubit>(context)
+                                            .state
+                                            .query,
+                                        onFieldTap:
+                                            (hour, minute, barberId) {
+                                          print(
+                                              "Filter date $filteredDate");
+                                          activeData = OrderEntity.empty(
+                                            hour: hour,
+                                            minute: minute,
+                                            barber: barberId,
+                                            month: filteredDate.month,
+                                            day: filteredDate.day,
+                                          );
+                                          _editOrder(activeData);
+                                        },
+                                        onOrderDoubleTap: (entity) {
+                                          print("Entity $entity");
+                                          activeData = entity;
+                                          _editOrder(activeData);
+                                        },
+                                        onDeleteEmployeeFromTable:
+                                            (employeeId) {
+                                          _barberFromTimeTableCardAction(
+                                            employeeId,
+                                            false,
+                                          );
+                                        },
+                                        onNotWorkingHoursCreate: (
+                                            DateTime from,
+                                            DateTime to,
+                                            String employeeId,
+                                            ) {
+                                          BlocProvider.of<
+                                              NotWorkingHoursCubit>(
+                                            context,
+                                          ).save(
+                                            dateFrom: from,
+                                            dateTo: to,
+                                            employeeId: employeeId,
+                                          );
+                                        },
+                                        listOrders: orders,
+                                        onOrderStartResizeEnd: (order) =>
+                                            _updateOrder(order),
+                                        onOrderEndResizeEnd: (order) =>
+                                            _updateOrder(order),
+                                        onOrderDragEnd: (order) {
+                                          print("Order drag end");
+                                          _updateOrder(order,
+                                              withOrderEnd: true);
+                                        },
+                                      ) : const SizedBox.expand()
+                                          ,
                                     );
                                   },
                                 ),
@@ -493,7 +502,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     BlocProvider.of<HomeScreenOrderFormCubit>(
                                             context)
                                         .disable();
-
                                   },
                                 ),
                               )
@@ -512,16 +520,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
     final barber =
         listBarbers.firstWhere((element) => element.id == employeeId);
 
-
     barber.inTimeTable = hasInTimeTable;
 
-
-
-
     print("in time table $hasInTimeTable");
-    setState(() {
-
-    });
+    setState(() {});
 
     BlocProvider.of<BarberCubit>(context).save(barber: barber);
   }

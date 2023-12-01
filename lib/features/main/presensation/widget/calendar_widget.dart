@@ -423,6 +423,7 @@ class _DayItemState extends State<_DayItem> {
   }
 
   _startTimer(int duration) async {
+    if(_streamController.isClosed) return;
     for (var i = 0; i < duration; i++) {
       await Future.delayed(const Duration(seconds: 1));
       _streamController.add(i);

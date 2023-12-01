@@ -13,7 +13,6 @@ void main() async {
 
 
   final box = await Hive.openBox("orderFilter");
-
   box.put("filter", DateTime.now().toIso8601String());
 
 
