@@ -69,9 +69,14 @@ class DataOrderFormState extends State<DataOrderForm> {
     orderStart = DateTime.now();
     selectedProducts.clear();
 
-    setState(() {
+    if(mounted) {
+      Future.delayed(Duration.zero, () {
+        setState(() {
 
-    });
+        });
+      },);
+    }
+
   }
 
   getPriceAndDuration(List<ServiceProductEntity> listData) {

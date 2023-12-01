@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:eleven_crm/features/management/data/model/customer_model.dart';
 
 import '../../../products/data/model/service_product_model.dart';
 import '../../domain/entity/order_entity.dart';
@@ -9,6 +8,7 @@ import '../../domain/entity/order_entity.dart';
 class OrderModel extends OrderEntity {
   OrderModel({
     required super.id,
+    required super.client,
     required super.clientId,
     // required super.discount,
     // required super.discountPercent,
@@ -44,7 +44,7 @@ class OrderModel extends OrderEntity {
           .toList(),
       isNew: json['isNew'] ?? true,
       price: json['price'] ?? 0,
-      duration: json['duration'] ?? 0,
+      duration: json['duration'] ?? 0, client: CustomerModel.fromJson(json['client']),
     );
   }
 
@@ -60,6 +60,7 @@ class OrderModel extends OrderEntity {
       // discount: entity.discount,
       clientId: entity.clientId,
       services: entity.services,
+      client: entity.client,
       isNew: entity.isNew,
       duration: entity.duration,
       price: entity.price,

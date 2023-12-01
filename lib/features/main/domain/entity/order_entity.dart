@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/features/management/domain/entity/customer_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -20,6 +21,7 @@ class OrderEntity extends Equatable {
   DateTime orderStart;
   DateTime orderEnd;
   String barberId;
+  final CustomerEntity client;
   final String clientId;
   num price;
   num duration;
@@ -33,6 +35,7 @@ class OrderEntity extends Equatable {
     required this.orderEnd,
     required this.barberId,
     required this.isNew,
+    required this.client,
     required this.clientId,
     required this.services,
     required this.price,
@@ -135,6 +138,14 @@ class OrderEntity extends Equatable {
       isForm: false,
       val: 0,
     ),
+    "client": FieldEntity<CustomerEntity>(
+      label: "client",
+      hintText: "client",
+      type: Types.client,
+      isRequired: false,
+      isForm: false,
+      val: CustomerEntity.empty(),
+    ),
     "duration": FieldEntity<int>(
       label: "duration",
       hintText: "duration",
@@ -167,6 +178,7 @@ class OrderEntity extends Equatable {
         "isNew": isNew,
         "duration": duration,
         "price": price,
+        "client": client,
       }[key];
 
   factory OrderEntity.fromRow(PlutoRow row) {
@@ -184,6 +196,7 @@ class OrderEntity extends Equatable {
       isNew: row.cells["isNew"]?.value,
       duration: row.cells["duration"]?.value,
       price: row.cells["price"]?.value,
+      client  : row.cells["client"]?.value,
     );
   }
 
@@ -201,6 +214,7 @@ class OrderEntity extends Equatable {
       'clientId': PlutoCell(value: e.clientId),
       'services': PlutoCell(value: e.services),
       'isNew': PlutoCell(value: e.isNew),
+      'client': PlutoCell(value: e.client),
     });
   }
 
@@ -220,6 +234,7 @@ class OrderEntity extends Equatable {
       barberId: barber ?? fields["barberId"]?.val,
       clientId: client ?? fields["clientId"]?.val,
       isNew: fields["isNew"]?.val,
+      client: fields["client"]?.val,
       services: selectedServices != null && selectedServices.isNotEmpty
           ? selectedServices
           : List.from(fields["services"]?.val),
@@ -242,6 +257,7 @@ class OrderEntity extends Equatable {
       barberId: barber ?? fields["barberId"]?.val,
       clientId: client ?? fields["clientId"]?.val,
       isNew: fields["isNew"]?.val,
+      client: fields["client"]?.val,
       services: selectedServices,
       price: fields["price"]?.val, duration: fields["duration"]?.val,
     );
@@ -262,6 +278,7 @@ class OrderEntity extends Equatable {
       barberId: barber ?? "",
       clientId: "",
       isNew: true,
+      client: CustomerEntity.empty(),
       services: const [], price: 0, duration: 0,
     );
   }

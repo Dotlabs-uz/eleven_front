@@ -141,6 +141,22 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                           ],
                         ),
                       ),
+                      FittedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 3),
+                          child: Text(
+                            "${widget.order.client.fullName} | +${widget.order.client.phoneNumber}",
+                            style: GoogleFonts.nunito(
+                              color:  widget.order.isNew == true ? Colors.black  :  AppColors.timeTableCardContentColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      
                       ...widget.order.services.map(
                         (e) => Flexible(
                           child: FittedBox(
