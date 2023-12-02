@@ -10,6 +10,7 @@ class OrderModel extends OrderEntity {
     required super.id,
     required super.client,
     required super.clientId,
+    required super.fromSite,
     // required super.discount,
     // required super.discountPercent,
     required super.paymentType,
@@ -38,6 +39,7 @@ class OrderModel extends OrderEntity {
           json['payment'] == "cash" ? OrderPayment.cash : OrderPayment.card,
       // discountPercent: json['discountPer'],
       // discount: json['discount'],
+      fromSite: json['fromSite'] ?? false,
       clientId: json['client']!=null ? json['client']['_id']:  "",
       services: List.from(json['services'])
           .map((e) => ServiceProductModel.fromJson(e, false))
@@ -60,6 +62,7 @@ class OrderModel extends OrderEntity {
       // discount: entity.discount,
       clientId: entity.clientId,
       services: entity.services,
+      fromSite: entity.fromSite,
       client: entity.client,
       status: entity.status,
       duration: entity.duration,

@@ -29,6 +29,7 @@ class OrderEntity extends Equatable {
   final String clientId;
   num price;
   num duration;
+  final bool fromSite;
   OrderStatus status;
   final List<ServiceProductEntity> services;
 
@@ -36,6 +37,7 @@ class OrderEntity extends Equatable {
     required this.id,
     required this.paymentType,
     required this.orderStart,
+    required this.fromSite,
     required this.orderEnd,
     required this.barberId,
     required this.status,
@@ -158,6 +160,14 @@ class OrderEntity extends Equatable {
       isForm: false,
       val: 0,
     ),
+    "fromSite": FieldEntity<bool>(
+      label: "fromSite",
+      hintText: "fromSite",
+      type: Types.bool,
+      isRequired: false,
+      isForm: false,
+      val: false,
+    ),
   };
 
   Map<String, FieldEntity> getFields() {
@@ -182,6 +192,7 @@ class OrderEntity extends Equatable {
         "status": status,
         "duration": duration,
         "price": price,
+        "fromSite": fromSite,
         "client": client,
       }[key];
 
@@ -201,6 +212,7 @@ class OrderEntity extends Equatable {
       duration: row.cells["duration"]?.value,
       price: row.cells["price"]?.value,
       client  : row.cells["client"]?.value,
+      fromSite  : row.cells["fromSite"]?.value,
     );
   }
 
@@ -219,6 +231,7 @@ class OrderEntity extends Equatable {
       'services': PlutoCell(value: e.services),
       'status': PlutoCell(value: e.status),
       'client': PlutoCell(value: e.client),
+      'fromSite': PlutoCell(value: e.fromSite),
     });
   }
 
@@ -238,6 +251,7 @@ class OrderEntity extends Equatable {
       barberId: barber ?? fields["barberId"]?.val,
       clientId: client ?? fields["clientId"]?.val,
       status: fields["status"]?.val,
+      fromSite: fields["fromSite"]?.val,
       client: fields["client"]?.val,
       services: selectedServices != null && selectedServices.isNotEmpty
           ? selectedServices
@@ -256,6 +270,7 @@ class OrderEntity extends Equatable {
       // discountPercent: fields["discountPercent"]?.val,
       paymentType: fields["paymentType"]?.val,
       orderStart: fields["orderStart"]?.val,
+      fromSite: fields["fromSite"]?.val,
       orderEnd: fields["orderEnd"]?.val,
       // price: fields["price"]?.val,
       barberId: barber ?? fields["barberId"]?.val,
@@ -281,6 +296,7 @@ class OrderEntity extends Equatable {
       // price: 0,
       barberId: barber ?? "",
       clientId: "",
+      fromSite: false,
       status: OrderStatus.waitingToView,
       client: CustomerEntity.empty(),
       services: const [], price: 0, duration: 0,

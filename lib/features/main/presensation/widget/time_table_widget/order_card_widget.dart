@@ -136,6 +136,16 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+
+                            if(widget.order.fromSite)
+                              const SizedBox(width: 10),
+                            if(widget.order.fromSite)
+
+                              const Icon(
+                              Icons.cloud,
+                              color: Colors.black,
+                              size: 16,
+                            ),
                           ],
                         ),
                       ),
