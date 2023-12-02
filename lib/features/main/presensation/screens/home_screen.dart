@@ -95,7 +95,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     listBarbers.clear();
 
+
     _setWidgetTop();
+    await Future.delayed(const Duration(seconds: 10), () {
+      webSocketService.refresh();
+    },);
   }
 
   _setWidgetTop() {
@@ -386,7 +390,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       duration: const Duration(seconds: 2),
                                       switchInCurve: Curves.easeIn,
                                       switchOutCurve: Curves.easeIn,
-                                      child: TimeTableWidget(
+                                      child: orders.isNotEmpty
+                                          ? TimeTableWidget(
                                         listBarbers: listBarbers,
                                         onOrderTap: (order) {
                                           order.status = OrderStatus.viewed;
@@ -465,7 +470,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           },
                                         );
                                       },
-                                      ),
+                                      ) : const SizedBox.expand(),
                                       // child: orders.isNotEmpty
                                       //     ? TimeTableWidget(
                                       //   listBarbers: listBarbers,
