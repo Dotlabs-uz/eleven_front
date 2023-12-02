@@ -143,22 +143,13 @@ class _ContentWidgetState extends State<ContentWidget> {
     BlocProvider.of<TopMenuCubit>(context).setWidgets(
       TopMenuEntity(searchCubit: widget.customerCubit, iconList:      [
         MyIconButton(
-          onPressed: () => setState(() => isSearch = !isSearch),
-          icon: const Icon(Icons.search),
-        ),
-        MyIconButton(
           onPressed: () {
             activeData = CustomerEntity.empty();
             _editData(activeData);
           },
           icon: const Icon(Icons.add_box_rounded),
         ),
-        MyIconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.filter_alt,
-          ),
-        ),
+
         MyIconButton(
             onPressed: () {
               BlocProvider.of<CustomerCubit>(context).load(

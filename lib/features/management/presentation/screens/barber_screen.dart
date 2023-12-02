@@ -167,12 +167,6 @@ class _ContentWidgetState extends State<ContentWidget> {
             icon: const Icon(Icons.add_box_rounded),
           ),
           MyIconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.filter_alt,
-            ),
-          ),
-          MyIconButton(
             onPressed: () {
               BlocProvider.of<BarberCubit>(context).load(
                 "",
