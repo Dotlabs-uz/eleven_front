@@ -44,16 +44,16 @@ class DataOrderFormState extends State<DataOrderForm> {
   double price = 0;
   double duration = 0;
   // DateTime? orderEnd;
-  static String client = "";
-  static String barber = "";
+  static String clientId = "";
+  static String barberId = "";
   static DateTime orderStart = DateTime.now();
 
   @override
   void initState() {
     price = widget.fields['price']?.val ?? 0;
     duration = widget.fields['duration']?.val ?? 0;
-    client = widget.fields['clientId']?.val ?? "";
-    barber = widget.fields['barberId']?.val ?? "";
+    clientId = widget.fields['clientId']?.val ?? "";
+    barberId = widget.fields['barberId']?.val ?? "";
     orderStart = widget.fields['orderStart']?.val ?? DateTime.now();
     selectedProducts.clear();
 
@@ -64,8 +64,8 @@ class DataOrderFormState extends State<DataOrderForm> {
 
   clearData( ) {
 
-    client = "";
-    barber = "";
+    clientId = "";
+    barberId = "";
     orderStart = DateTime.now();
     selectedProducts.clear();
 
@@ -143,14 +143,17 @@ class DataOrderFormState extends State<DataOrderForm> {
                   },
                   onChange: (value) {
                     widget.fields['clientId']!.val = value.id;
-                    client = value.id;
+                    clientId = value.id;
                   },
                 ),
                 BarberFieldWidget(
                   fieldEntity: widget.fields['barberId']!,
                   onChange: (value) {
                     widget.fields['barberId']!.val = value.id;
-                    barber = value.id;
+                    barberId = value.id;
+                    setState(() {
+
+                    });
                   },
                 ),
                 // PaymentTypeFieldWidget(
@@ -161,7 +164,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                   withTime: true,
                   onChanged: (value) => orderStart = value,
                 ),
-                // const SizedBox(height: 10),
+                // const SizedBox(height: 10),`
                 // DateTimeFieldWidget(
                 //   fieldEntity: widget.fields['orderEnd']!,
                 //   withTime: true,
@@ -169,14 +172,14 @@ class DataOrderFormState extends State<DataOrderForm> {
 
                 const SizedBox(height: 10),
 
-                SelectServicesWidget(
+              if(barberId.isNotEmpty)  SelectServicesWidget(
                   fieldEntity: widget.fields["services"]!,
                   onChanged: (listData) {
                     selectedProducts = listData;
                     print("Selected services $selectedProducts");
                     widget.fields['services']!.val = selectedProducts;
                     getPriceAndDuration(selectedProducts);
-                  },
+                  }, barberId:  barberId,
                 ),
                 const SizedBox(height: 10),
                 const Spacer(),
@@ -202,7 +205,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                       ButtonWidget(
                         text: "save".tr(),
                         onPressed: () async {
-                          if (client.isEmpty) {
+                          if (clientId.isEmpty) {
                             await confirm(
                               context,
                               title: const Text('client').tr(),
@@ -211,7 +214,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                               enableCancel: false,
                             );
                             return;
-                          } else if (barber.isEmpty) {
+                          } else if (barberId.isEmpty) {
                             await confirm(
                               context,
                               title: const Text('barber').tr(),
@@ -243,7 +246,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                           }
 
                           widget.saveData
-                              .call(selectedProducts, barber, client);
+                              .call(selectedProducts, barberId, clientId);
                           clearData( );
                           BlocProvider.of<ShowSelectServicesCubit>(context)
                               .disable();

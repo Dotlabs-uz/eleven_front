@@ -10,10 +10,11 @@ import '../entities/field_entity.dart';
 class SelectServicesWidget extends StatefulWidget {
   final FieldEntity fieldEntity;
   final Function(List<ServiceProductEntity>) onChanged;
+  final String barberId;
   const SelectServicesWidget({
     Key? key,
     required this.onChanged,
-    required this.fieldEntity,
+    required this.fieldEntity, required this.barberId,
   }) : super(key: key);
 
   @override
@@ -22,6 +23,7 @@ class SelectServicesWidget extends StatefulWidget {
 
 class SelectServicesWidgetState extends State<SelectServicesWidget> {
   final List<ServiceProductEntity> selectedServices = [];
+  static String barberId = "";
 
   doSelectServiceActionByState(SelectServicesHelper state) {
     if (mounted) {
@@ -53,6 +55,17 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
     }
   }
 
+
+
+  @override
+  void didUpdateWidget(covariant SelectServicesWidget oldWidget) {
+    if(barberId != widget.barberId) {
+      initialize();
+      print("Barber id $barberId");
+
+    }
+    super.didUpdateWidget(oldWidget);
+  }
   @override
   void initState() {
     initialize();
@@ -60,7 +73,8 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
   }
 
   initialize() {
-    print("Widget field entity ${widget.fieldEntity.val}");
+    barberId = widget.barberId;
+    selectedServices.clear();
     selectedServices.addAll(widget.fieldEntity.val);
   }
 
@@ -82,7 +96,7 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
                   onTap: () {
                     print("Selected services len ${selectedServices.length}");
                     BlocProvider.of<ShowSelectServicesCubit>(context)
-                        .enable(selectedServices);
+                        .enable(selectedServices, barberId);
                   },
                   child: Container(
                     constraints: const BoxConstraints(

@@ -291,11 +291,6 @@ class DataFormWidgetState extends State<DataFormWidget> {
             ctrlWidgets.add(PaymentTypeFieldWidget(
               fieldEntity: field,
             ));
-          } else if (field.type == Types.choseServices) {
-            ctrlWidgets.add(SelectServicesWidget(
-              fieldEntity: field,
-              onChanged: (value) {},
-            ));
           }
         }
       }

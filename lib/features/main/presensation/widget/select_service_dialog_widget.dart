@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/products/domain/entity/service_product_category_entity.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,8 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
     return BlocBuilder<ShowSelectServicesCubit, ShowSelectedServiceHelper>(
       builder: (context, state) {
         addGlobalSelectedServicesToLocal(state.selectedServices);
+        final barberId = state.barberId;
+
 
         return Container(
           color: Colors.black.withOpacity(0.4),
@@ -112,80 +115,101 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                   ),
                   const SizedBox(height: 10),
                   Expanded(
-                    child: BlocConsumer<ServiceProductCategoryCubit,
-                        ServiceProductCategoryState>(
-                      listener: (context, state) {
-                        if (state is ServiceProductCategoryLoaded) {
-                          if (mounted) {
-                            Future.delayed(
-                              Duration.zero,
-                              () {
-                                setState(() {
-                                  listServiceCategories = state.data;
-                                });
-                              },
-                            );
-                          }
-                        }
-                      },
-                      builder: (context, state) {
-                        if (state is ServiceProductCategoryLoading) {
-                          return LoadingCircle();
-                        }
+                    child: barberId.isEmpty
+                        ? Center(
+                          child: Text(
+                              "pleaseSelectBarber".tr(),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontFamily: "Nunito",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                        )
+                        : BlocConsumer<ServiceProductCategoryCubit,
+                            ServiceProductCategoryState>(
+                            listener: (context, state) {
+                              if (state is ServiceProductCategoryLoaded) {
+                                if (mounted) {
+                                  Future.delayed(
+                                    Duration.zero,
+                                    () {
+                                      setState(() {
+                                        listServiceCategories = state.data;
+                                      });
+                                    },
+                                  );
+                                }
+                              }
+                            },
+                            builder: (context, state) {
+                              if (state is ServiceProductCategoryLoading) {
+                                return LoadingCircle();
+                              }
 
-                        return ListView.builder(
-                          physics: const ClampingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final category = listServiceCategories[index];
+                              return ListView.builder(
+                                physics: const ClampingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final category = listServiceCategories[index];
 
-                            // return const SizedBox();
-                            return Column(
-                              children: [
-                                _serviceProductCategoryCard(category.name),
-                                const SizedBox(height: 10),
-                                GridView.count(
-                                  shrinkWrap: true,
-                                  crossAxisCount: 2,
-                                  children: List.generate(
-                                      category.services.length, (index) {
-                                    final service = category.services[index];
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (listSelectedServices
-                                            .contains(service)) {
-                                          BlocProvider.of<SelectServicesCubit>(
-                                            context,
-                                          ).remove(service: service);
-                                        } else {
-                                          BlocProvider.of<SelectServicesCubit>(
-                                            context,
-                                          ).save(service: service);
-                                        }
-                                        setState(() {});
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            bottom: 10, right: 10),
-                                        child: _ServiceProductCard(
-                                          isSelected: listSelectedServices
-                                              .contains(service),
-                                          color: service.sex == "men"
-                                              ? Colors.blue
-                                              : Colors.pink,
-                                          item: service,
-                                          image: Assets.tLogo,
-                                        ),
+                                  final listServices = category.services;
+                                  final listFormattedServices = listServices
+                                      .where((element) => element.listBarberId
+                                          .contains(barberId))
+                                      .toList();
+                                  // return const SizedBox();
+                                  return Column(
+                                    children: [
+                                      _serviceProductCategoryCard(
+                                          category.name),
+                                      const SizedBox(height: 10),
+                                      GridView.count(
+                                        shrinkWrap: true,
+                                        crossAxisCount: 2,
+                                        children: List.generate(
+                                            listFormattedServices.length,
+                                            (index) {
+                                          final service =
+                                              category.services[index];
+                                          return GestureDetector(
+                                            onTap: () {
+                                              if (listSelectedServices
+                                                  .contains(service)) {
+                                                BlocProvider.of<
+                                                    SelectServicesCubit>(
+                                                  context,
+                                                ).remove(service: service);
+                                              } else {
+                                                BlocProvider.of<
+                                                    SelectServicesCubit>(
+                                                  context,
+                                                ).save(service: service);
+                                              }
+                                              setState(() {});
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 10, right: 10),
+                                              child: _ServiceProductCard(
+                                                isSelected: listSelectedServices
+                                                    .contains(service),
+                                                color: service.sex == "men"
+                                                    ? Colors.blue
+                                                    : Colors.pink,
+                                                item: service,
+                                                image: Assets.tLogo,
+                                              ),
+                                            ),
+                                          );
+                                        }),
                                       ),
-                                    );
-                                  }),
-                                ),
-                              ],
-                            );
-                          },
-                          itemCount: listServiceCategories.length,
-                        );
-                      },
-                    ),
+                                    ],
+                                  );
+                                },
+                                itemCount: listServiceCategories.length,
+                              );
+                            },
+                          ),
                   ),
                 ],
               ),
@@ -256,16 +280,22 @@ class _ServiceProductCardState extends State<_ServiceProductCard> {
       decoration: BoxDecoration(
         color: isSelected ? Colors.black45.withOpacity(0.4) : widget.color,
         borderRadius: BorderRadius.circular(8),
-
       ),
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Opacity(opacity: 0.3, child: Image.asset(widget.image, fit: BoxFit.cover,)),
-        if(!widget.isSelected)  Container(decoration: BoxDecoration(
-            color: widget.color.withOpacity(0.4),
-
-          ),),
+          Opacity(
+              opacity: 0.3,
+              child: Image.asset(
+                widget.image,
+                fit: BoxFit.cover,
+              )),
+          if (!widget.isSelected)
+            Container(
+              decoration: BoxDecoration(
+                color: widget.color.withOpacity(0.4),
+              ),
+            ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
