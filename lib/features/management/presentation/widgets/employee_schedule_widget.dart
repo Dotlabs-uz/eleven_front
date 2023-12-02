@@ -200,10 +200,12 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
                 widget.onSave?.call(editedFields);
                 editedFields.clear();
               },
-              child: Text("save".tr()),
+              child: Text("save".tr(), style: const TextStyle(
+                  color: Colors.white
+              ),),
             ),
             const SizedBox(width: 10),
-            if (multiSelectedFields.isNotEmpty)
+            if (multiSelectedFields.length >= 2)
               ElevatedButton(
                 onPressed: () {
                   changeState(multiSelectedFields);
@@ -211,14 +213,16 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
                 child: Text("selectStatusForSelected".tr()),
               ),
             const SizedBox(width: 10),
-            if (multiSelectedFields.isNotEmpty)
+            if (multiSelectedFields.length >= 2)
               ElevatedButton(
                 onPressed: () {
                   multiSelectedFields.clear();
                   setState(() {});
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: Text("clearSelected".tr()),
+                child: Text("clearSelected".tr(), style: const TextStyle(
+                  color: Colors.white
+                ),),
               ),
           ],
         ),
