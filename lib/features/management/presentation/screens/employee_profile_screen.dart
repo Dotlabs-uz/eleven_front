@@ -6,6 +6,7 @@ import 'package:eleven_crm/features/management/presentation/widgets/employee_pro
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/components/loading_circle.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/assets.dart';
@@ -16,6 +17,7 @@ import '../../../products/presensation/cubit/service_product/service_product_cub
 import '../../domain/entity/barber_entity.dart';
 import '../../domain/entity/barber_profile_tabs_entity.dart';
 import '../../domain/entity/employee_entity.dart';
+import '../cubit/employee_schedule/employee_schedule_cubit.dart';
 import '../widgets/barber_profile_schedule_body.dart';
 import '../widgets/schedule_calendar_widget.dart';
 
@@ -32,10 +34,12 @@ class EmployeeProfileScreen extends StatefulWidget {
 
 class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
   late EmployeeCubit employeeCubit;
+  late EmployeeScheduleCubit employeeScheduleCubit;
 
   @override
   void initState() {
     employeeCubit = locator();
+    employeeScheduleCubit = locator();
     super.initState();
   }
 
@@ -44,7 +48,11 @@ class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<EmployeeCubit>(
-          create: (context) => employeeCubit,
+          create: (context) =>               employeeCubit..loadEmployee(widget.employeeEntity.id),
+
+        ),
+        BlocProvider<EmployeeScheduleCubit>(
+          create: (context) => employeeScheduleCubit,
         ),
       ],
       child: ContentWidget(
@@ -79,8 +87,13 @@ class _ContentWidgetState extends State<ContentWidget> {
     final tab = listTabs[selectedTab];
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () => Navigator.pop(context),icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,),),
-
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.white,
+          ),
+        ),
         title: Text(
             "${widget.employeeEntity.firstName} ${widget.employeeEntity.lastName}"),
         backgroundColor: const Color(0xff071E32),
@@ -173,9 +186,22 @@ class _ContentWidgetState extends State<ContentWidget> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: ScheduleCalendarWidget(
-                    listSchedule: widget.employeeEntity.schedule,
-                    onRefreshTap: () {},
+                  child:  BlocBuilder<EmployeeCubit, EmployeeState>(
+                    builder: (context, state) {
+                      if (state is EmployeeEntityLoaded) {
+                        final data = state.data;
+                        return ScheduleCalendarWidget(
+                          listSchedule: data.schedule,
+                          onRefreshTap: () {},
+                          employeeId:
+                          widget.employeeEntity.id,
+                        );
+                      }
+
+                      return const Center(
+                        child: LoadingCircle(),
+                      );
+                    },
                   ),
                 ),
               ],

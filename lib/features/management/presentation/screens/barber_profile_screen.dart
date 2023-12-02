@@ -21,6 +21,7 @@ import '../../../main/presensation/cubit/avatar/avatar_cubit.dart';
 import '../../../products/presensation/cubit/service_product/service_product_cubit.dart';
 import '../../domain/entity/barber_entity.dart';
 import '../../domain/entity/barber_profile_tabs_entity.dart';
+import '../cubit/employee_schedule/employee_schedule_cubit.dart';
 import '../widgets/barber_profile_schedule_body.dart';
 import '../widgets/schedule_calendar_widget.dart';
 
@@ -41,12 +42,14 @@ class _BarberProfileScreenState extends State<BarberProfileScreen> {
   late BarberCubit barberCubit;
   late ServiceProductCubit serviceProductCubit;
   late EmployeeCubit employeeCubit;
+  late EmployeeScheduleCubit employeeScheduleCubit;
 
   @override
   void initState() {
     barberCubit = locator();
     employeeCubit = locator();
     serviceProductCubit = locator();
+    employeeScheduleCubit = locator();
     super.initState();
   }
 
@@ -58,10 +61,14 @@ class _BarberProfileScreenState extends State<BarberProfileScreen> {
           create: (context) => barberCubit,
         ),
         BlocProvider<EmployeeCubit>(
-          create: (context) => employeeCubit..loadEmployee(widget.barberEntity.employeeId),
+          create: (context) =>
+              employeeCubit..loadEmployee(widget.barberEntity.employeeId),
         ),
         BlocProvider<ServiceProductCubit>(
           create: (context) => serviceProductCubit,
+        ),
+        BlocProvider<EmployeeScheduleCubit>(
+          create: (context) => employeeScheduleCubit,
         ),
       ],
       child: ContentWidget(
@@ -148,25 +155,42 @@ class _ContentWidgetState extends State<ContentWidget> {
     final tab = listTabs[selectedTab];
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () => Navigator.pop(context),icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,),),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.white,
+          ),
+        ),
         title: Text(
             "${widget.barberEntity.firstName} ${widget.barberEntity.lastName}"),
         backgroundColor: const Color(0xff071E32),
       ),
       body: SingleChildScrollView(
-        child: BlocListener<BarberCubit, BarberState>(
-          listener: (context, state) {
-            {
-              if (state is BarberSaved) {
-                SuccessFlushBar("change_success".tr()).show(context);
-              } else if (state is BarberDeleted) {
-                SuccessFlushBar("data_deleted".tr()).show(context);
-              } else if (state is BarberError) {
-                ErrorFlushBar("change_error".tr(args: [state.message]))
-                    .show(context);
-              }
-            }
-          },
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<BarberCubit, BarberState>(
+              listener: (context, state) {
+                {
+                  if (state is BarberSaved) {
+                    SuccessFlushBar("change_success".tr()).show(context);
+                  } else if (state is BarberDeleted) {
+                    SuccessFlushBar("data_deleted".tr()).show(context);
+                  } else if (state is BarberError) {
+                    ErrorFlushBar("change_error".tr(args: [state.message]))
+                        .show(context);
+                  }
+                }
+              },
+            ),
+            BlocListener<EmployeeScheduleCubit, EmployeeScheduleState>(
+              listener: (context, state) {
+                if (state is EmployeeScheduleSaved) {
+                  SuccessFlushBar("change_success".tr()).show(context);
+                }
+              },
+            ),
+          ],
           child: BlocListener<AvatarCubit, AvatarState>(
             listener: (context, state) {
               if (state is AvatarSaved) {
@@ -185,8 +209,7 @@ class _ContentWidgetState extends State<ContentWidget> {
               BlocProvider.of<AvatarCubit>(context).init();
             },
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Column(
@@ -241,74 +264,72 @@ class _ContentWidgetState extends State<ContentWidget> {
                         _barberCardWithCheckers(widget.barberEntity),
                         const SizedBox(width: 20),
                         Expanded(
-                          child: Column(children: [
-                            Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        tab.title.tr(),
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: "Nunito",
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          tab.title.tr(),
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: "Nunito",
+                                          ),
                                         ),
-                                      ),
-                                      // if (tab.editTap != null)
-                                      //   ElevatedButton(
-                                      //     onPressed: tab.editTap,
-                                      //     child: Text("edit".tr()),
-                                      //   ),
-                                    ],
-                                  ),
-                                  const Divider(),
-                                  const SizedBox(height: 10),
-                                  _getBody(widget.barberEntity),
-                                  const SizedBox(height: 30),
-
-
-                                ],
+                                        // if (tab.editTap != null)
+                                        //   ElevatedButton(
+                                        //     onPressed: tab.editTap,
+                                        //     child: Text("edit".tr()),
+                                        //   ),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    const SizedBox(height: 10),
+                                    _getBody(widget.barberEntity),
+                                    const SizedBox(height: 30),
+                                  ],
+                                ),
                               ),
-                            ),
+                              const SizedBox(height: 20),
+                              Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child:
+                                    BlocBuilder<EmployeeCubit, EmployeeState>(
+                                  builder: (context, state) {
+                                    if (state is EmployeeEntityLoaded) {
+                                      final data = state.data;
+                                      return ScheduleCalendarWidget(
+                                        listSchedule: data.schedule,
+                                        onRefreshTap: () {},
+                                        employeeId:
+                                            widget.barberEntity.employeeId,
+                                      );
+                                    }
 
-                  const SizedBox(height: 20),
-
-
-                            Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: BlocBuilder<EmployeeCubit, EmployeeState>(
-                                builder: (context, state) {
-                                  if (state is EmployeeEntityLoaded) {
-                                    final data = state.data;
-                                    return ScheduleCalendarWidget(
-                                      listSchedule:data.schedule,
-                                      onRefreshTap: () {},
+                                    return const Center(
+                                      child: LoadingCircle(),
                                     );
-                                  }
-
-                                  return const Center(
-                                    child: LoadingCircle(),
-                                  );
-                                },
+                                  },
+                                ),
                               ),
-                            ),
-
-                          ]
-                            ,),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -511,17 +532,17 @@ class _AvatarWidgetState extends State<_AvatarWidget> {
         ),
         child: Stack(
           children: [
-           Center(
+            Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(60),
                 child: widget.file == null
-                    ?  widget.barberEntity.avatar.contains("placeholder.png")
-                    ? Image.asset(Assets.tAvatarPlaceHolder)
-                    : Image.network(widget.barberEntity.avatar)
+                    ? widget.barberEntity.avatar.contains("placeholder.png")
+                        ? Image.asset(Assets.tAvatarPlaceHolder)
+                        : Image.network(widget.barberEntity.avatar)
                     : Image.memory(
-                 widget. webImage,
-                  fit: BoxFit.cover,
-                ),
+                        widget.webImage,
+                        fit: BoxFit.cover,
+                      ),
               ),
             ),
             Center(

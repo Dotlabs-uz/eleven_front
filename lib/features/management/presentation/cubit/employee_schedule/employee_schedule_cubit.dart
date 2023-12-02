@@ -8,12 +8,13 @@ import '../../widgets/employee_schedule_widget.dart';
 part 'employee_schedule_state.dart';
 
 class EmployeeScheduleCubit extends Cubit<EmployeeScheduleState> {
-  final SaveEmployeeSchedule saveEmployeeSchedule;
-  EmployeeScheduleCubit(this.saveEmployeeSchedule)
+  final SaveEmployeeSchedule _saveEmployeeSchedule;
+  EmployeeScheduleCubit(this._saveEmployeeSchedule)
       : super(EmployeeScheduleInitial());
   init() => emit(EmployeeScheduleInitial());
   save({required List<FieldSchedule> listData}) async {
-    final data = await saveEmployeeSchedule.call(listData);
+    emit(EmployeeScheduleLoading());
+    final data = await _saveEmployeeSchedule.call(listData);
 
     data.fold(
       (l) => emit(EmployeeScheduleError(message: l.errorMessage)),

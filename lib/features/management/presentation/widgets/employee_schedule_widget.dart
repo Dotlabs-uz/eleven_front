@@ -1,11 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/image_view_widget.dart';
 import 'package:eleven_crm/core/utils/constants.dart';
 import 'package:eleven_crm/core/utils/dialogs.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:eleven_crm/features/management/presentation/provider/cross_in_employee_schedule_provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:region_detector/region_detector.dart';
 
@@ -20,8 +22,9 @@ class FieldSchedule extends Equatable {
   final DateTime? dateTime;
   final String employeeId;
   late int status;
+  Map<String, dynamic> workingHours;
 
-  FieldSchedule(this.dateTime, this.employeeId, this.status);
+  FieldSchedule(this.dateTime, this.employeeId, this.status, this.workingHours);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
@@ -30,6 +33,7 @@ class FieldSchedule extends Equatable {
     }
     data['employee'] = employeeId;
     data['status'] = status;
+    data['workingHours'] = workingHours;
     return data;
   }
 
@@ -71,14 +75,24 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
   changeState(List<FieldSchedule> dataList) {
     Dialogs.scheduleField(
       context: context,
-      onConfirm: (val) {
+      onConfirm: (
+        int status,
+        String fromHour,
+        String fromMinute,
+        String toHour,
+        String toMinute,
+      ) {
         for (var element in multiSelectedFields) {
-          element.status = val;
+          element.status = status;
+
+          element.workingHours = {
+            "from": "$fromHour:$fromMinute",
+            "to": "$toHour:$toMinute"
+          };
         }
 
-        print("On mutli select field updated ${multiSelectedFields.length}");
-
         widget.onMultiSelectSave?.call(dataList);
+
         multiSelectedFields.clear();
       },
     );
@@ -99,7 +113,7 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
     editedFields.clear();
     scrollController.dispose();
     multiSelectedFields.clear();
-    Provider.of<CrossInEmployeeScheduleProvider>(context).clear();
+    Provider.of<CrossInEmployeeScheduleProvider>(context, listen: false).clear();
     super.dispose();
   }
 
@@ -161,12 +175,15 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
                               int year,
                               int status,
                               String employee,
+                              Map<String, dynamic> workingHours,
                             ) {
                               final dateTime = DateTime(year, month, day);
-                              final entity =
-                                  FieldSchedule(dateTime, employee, status);
+                              final entity = FieldSchedule(
+                                  dateTime, employee, status, workingHours);
 
                               editedFields.add(entity);
+                              widget.onSave?.call(editedFields);
+                              editedFields.clear();
                             },
                             onHoverDrag: (field) {
                               print("Drag field ${field.dateTime}");
@@ -195,16 +212,6 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                widget.onSave?.call(editedFields);
-                editedFields.clear();
-              },
-              child: Text("save".tr(), style: const TextStyle(
-                  color: Colors.white
-              ),),
-            ),
-            const SizedBox(width: 10),
             if (multiSelectedFields.length >= 2)
               ElevatedButton(
                 onPressed: () {
@@ -220,9 +227,10 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
                   setState(() {});
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: Text("clearSelected".tr(), style: const TextStyle(
-                  color: Colors.white
-                ),),
+                child: Text(
+                  "clearSelected".tr(),
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
           ],
         ),
@@ -239,8 +247,14 @@ class _EmployeeScheduleTableWidget extends StatefulWidget {
   final int currentYear;
   final Function(FieldSchedule) onHoverDrag;
   final List<FieldSchedule> listSelectedSchedule;
-  final Function(int day, int month, int year, int status, String employee)
-      onFieldEdit;
+  final Function(
+    int day,
+    int month,
+    int year,
+    int status,
+    String employee,
+    Map<String, dynamic> workingHours,
+  ) onFieldEdit;
 
   const _EmployeeScheduleTableWidget({
     Key? key,
@@ -307,15 +321,16 @@ class _EmployeeScheduleTableWidgetState
                     DateTime.parse(entity.date).month,
                     DateTime.parse(entity.date).day);
 
-            final fieldSchedule = FieldSchedule(startDateParsing,
-                widget.employeeEntity.id, entity?.status ?? 0);
+            final fieldSchedule = FieldSchedule(
+                startDateParsing,
+                widget.employeeEntity.id,
+                entity?.status ?? 0,
+                entity?.workingHours ?? {"from": "8:00", "to": "22:00"});
 
             return RegionDetector(
               onFocused: () {
                 if (fieldSchedule.dateTime != null) {
                   if (fieldSchedule.dateTime!.isBefore(dateTimeNow)) return;
-                  print(
-                      "fieldSchedule datetime  ${fieldSchedule.dateTime} is after ${dateTimeNow}");
                   widget.onHoverDrag.call(fieldSchedule);
                 }
               },
@@ -346,17 +361,7 @@ class _EmployeeScheduleTableWidgetState
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(width: 10),
-          Container(
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.grey,
-                image: DecorationImage(
-                    image: NetworkImage(widget.employeeEntity.avatar),
-                    fit: BoxFit.cover)),
-            width: 30,
-            height: 30,
-            clipBehavior: Clip.antiAlias,
-          ),
+          ImageViewWidget(avatar: widget.employeeEntity.avatar, size: 30),
           const SizedBox(width: 8),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -392,8 +397,14 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
   final DateTime dateTime;
   final Function(FieldSchedule) onHoverDrag;
   final bool isFieldSElected;
-  final Function(int day, int month, int year, int status, String employee)
-      onFieldEdit;
+  final Function(
+    int day,
+    int month,
+    int year,
+    int status,
+    String employee,
+    Map<String, dynamic> workingHours,
+  ) onFieldEdit;
 
   const _EmployeeScheduleFieldWidget({
     Key? key,
@@ -415,7 +426,7 @@ class _EmployeeScheduleFieldWidgetState
     extends State<_EmployeeScheduleFieldWidget> {
   int status = 0;
   bool isDragging = false;
-  final blueWithOpacity= Colors.blue.withOpacity(0.4);
+  final blueWithOpacity = Colors.blue.withOpacity(0.4);
 
   @override
   void initState() {
@@ -427,15 +438,31 @@ class _EmployeeScheduleFieldWidgetState
   changeState() {
     if (widget.fieldSchedule.dateTime != null) {
       final dt = DateTime.now();
-      if (widget.fieldSchedule.dateTime == DateTime(dt.year, dt.month, dt.day)) {
+      if (widget.fieldSchedule.dateTime ==
+          DateTime(dt.year, dt.month, dt.day)) {
         return;
       }
       Dialogs.scheduleField(
         context: context,
-        onConfirm: (val) {
+        day: widget.fieldSchedule.dateTime!.day,
+        month: widget.fieldSchedule.dateTime!.month,
+        year: widget.fieldSchedule.dateTime!.year,
+        onConfirm: (
+          int status,
+          String fromHour,
+          String fromMinute,
+          String toHour,
+          String toMinute,
+        ) {
           setState(() {
-            status = val;
+            status = status;
+            widget.fieldSchedule.workingHours = {
+              "from": "$fromHour:$fromMinute",
+              "to": "$toHour:$toMinute"
+            };
           });
+
+
 
           widget.onFieldEdit.call(
             widget.fieldSchedule.dateTime!.day,
@@ -443,34 +470,38 @@ class _EmployeeScheduleFieldWidgetState
             widget.fieldSchedule.dateTime!.year,
             status,
             widget.fieldSchedule.employeeId,
+            widget.fieldSchedule.workingHours,
           );
         },
-        day: widget.fieldSchedule.dateTime!.day,
-        month: widget.fieldSchedule.dateTime!.month,
-        year: widget.fieldSchedule.dateTime!.year,
       );
     }
   }
 
-  onHover(bool hover ) {
-    if(hover) {
+  onHover(bool hover) {
+    if (hover) {
       Provider.of<CrossInEmployeeScheduleProvider>(context, listen: false)
-        .enableCross(hoveredRow: widget.row, hoveredDateTime: widget.dateTime);
-    }else {
+          .enableCross(
+              hoveredRow: widget.row, hoveredDateTime: widget.dateTime);
+    } else {
       Provider.of<CrossInEmployeeScheduleProvider>(context, listen: false)
-.clear();
+          .clear();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final hoverProvider = context.watch<CrossInEmployeeScheduleProvider>();
-    final bool hoverCondition =  hoverProvider.dateTime != null &&  hoverProvider.row == widget.row && hoverProvider.dateTime!.day == widget.dateTime.day
-        && hoverProvider.dateTime!.year == widget.dateTime.year && hoverProvider.dateTime!.month == widget.dateTime.month;
-    final bool beforeCondition = hoverProvider.dateTime != null && widget.dateTime.isBefore(hoverProvider.dateTime!) && hoverProvider.row == widget.row;
-    final bool topCondition = hoverProvider.dateTime != null && widget.dateTime.day == hoverProvider.dateTime?.day && widget.row <= hoverProvider.row;
-
-
+    final bool hoverCondition = hoverProvider.dateTime != null &&
+        hoverProvider.row == widget.row &&
+        hoverProvider.dateTime!.day == widget.dateTime.day &&
+        hoverProvider.dateTime!.year == widget.dateTime.year &&
+        hoverProvider.dateTime!.month == widget.dateTime.month;
+    final bool beforeCondition = hoverProvider.dateTime != null &&
+        widget.dateTime.isBefore(hoverProvider.dateTime!) &&
+        hoverProvider.row == widget.row;
+    final bool topCondition = hoverProvider.dateTime != null &&
+        widget.dateTime.day == hoverProvider.dateTime?.day &&
+        widget.row <= hoverProvider.row;
 
     if (widget.fieldSchedule.dateTime == null) {
       return InkWell(
@@ -480,8 +511,15 @@ class _EmployeeScheduleFieldWidgetState
           width: 35,
           height: 35,
           decoration: BoxDecoration(
-            color:  beforeCondition ?blueWithOpacity : topCondition ?blueWithOpacity :
-            hoverCondition ? Colors.blue : widget.isFieldSElected ? Colors.brown.shade200 : Colors.white,
+            color: beforeCondition
+                ? blueWithOpacity
+                : topCondition
+                    ? blueWithOpacity
+                    : hoverCondition
+                        ? Colors.blue
+                        : widget.isFieldSElected
+                            ? Colors.brown.shade200
+                            : Colors.white,
             // color: multiSelectedFields.contains(widget.fieldSchedule)
             //     ? Colors.brown
             //     : Colors.red,
@@ -498,15 +536,20 @@ class _EmployeeScheduleFieldWidgetState
             width: 35,
             height: 35,
             decoration: BoxDecoration(
-              color:  beforeCondition ?blueWithOpacity : topCondition ?blueWithOpacity :
-
-              hoverCondition ? Colors.blue :  widget.isFieldSElected
-                  ? Colors.brown.shade200
-                  : DateTime.now().day == widget.fieldSchedule.dateTime!.day &&
-                          widget.currentMonth ==
-                              widget.fieldSchedule.dateTime!.month
-                      ? Colors.blue.withOpacity(0.1)
-                      : Colors.white,
+              color: beforeCondition
+                  ? blueWithOpacity
+                  : topCondition
+                      ? blueWithOpacity
+                      : hoverCondition
+                          ? Colors.blue
+                          : widget.isFieldSElected
+                              ? Colors.brown.shade200
+                              : DateTime.now().day ==
+                                          widget.fieldSchedule.dateTime!.day &&
+                                      widget.currentMonth ==
+                                          widget.fieldSchedule.dateTime!.month
+                                  ? Colors.blue.withOpacity(0.1)
+                                  : Colors.white,
               // color: multiSelectedFields.contains(widget.fieldSchedule)
               //     ? Colors.brown
               //     : Colors.red,
@@ -520,16 +563,17 @@ class _EmployeeScheduleFieldWidgetState
     return InkWell(
       onTap: () => changeState(),
       onHover: onHover,
-
       child: Ink(
         width: 35,
         height: 35,
         decoration: BoxDecoration(
-          color:  beforeCondition ?blueWithOpacity : topCondition ?blueWithOpacity :
-
-          widget.isFieldSElected
-              ? Colors.brown.shade300
-              : ColorHelper.getColorForScheduleByStatus(status),
+          color: beforeCondition
+              ? blueWithOpacity
+              : topCondition
+                  ? blueWithOpacity
+                  : widget.isFieldSElected
+                      ? Colors.brown.shade300
+                      : ColorHelper.getColorForScheduleByStatus(status),
           border: Border.all(
             width: 1,
             color: Colors.grey.shade200,

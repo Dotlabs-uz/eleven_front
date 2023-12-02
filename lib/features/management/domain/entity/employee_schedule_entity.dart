@@ -11,12 +11,14 @@ class EmployeeScheduleEntity extends Equatable {
   final String date;
   int status;
   final String employee;
+  final Map<String,dynamic> workingHours;
   // final List<EmployeeScheduleRestEntity> rest;
 
   EmployeeScheduleEntity({
     required this.date,
     this.status = 0,
     this.employee = "",
+    this.workingHours = const {"from": "8:00","to": "22:00"},
     // required this.rest,
   });
 
@@ -26,6 +28,7 @@ class EmployeeScheduleEntity extends Equatable {
       // rest: [],
       status: 0,
       employee: "",
+      workingHours:  const {"from": "8:00","to": "22:00"},
     );
   }
   factory EmployeeScheduleEntity.emptyWithCustomValue(
@@ -34,6 +37,7 @@ class EmployeeScheduleEntity extends Equatable {
       date: entity.date,
       status: entity.status,
       employee: entity.employee,
+      workingHours: entity.workingHours,
     );
   }
 

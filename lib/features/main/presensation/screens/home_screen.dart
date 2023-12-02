@@ -11,6 +11,7 @@ import 'package:eleven_crm/features/main/presensation/widget/select_service_dial
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/not_working_hours_entity.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -18,8 +19,10 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../../core/components/data_order_form.dart';
 import '../../../../core/components/not_selected_employee_list_widget.dart';
 import '../../../../core/components/responsive_builder.dart';
+import '../../../../core/utils/dialogs.dart';
 import '../../../../get_it/locator.dart';
 import '../../../management/presentation/cubit/customer/customer_cubit.dart';
+import '../../../management/presentation/widgets/employee_schedule_widget.dart';
 import '../../../products/domain/entity/service_product_entity.dart';
 import '../../data/model/order_model.dart';
 import '../../domain/entity/order_entity.dart';
@@ -40,6 +43,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final notWorkingHoursCubit = locator<NotWorkingHoursCubit>();
     final selectServicesCubit = locator<SelectServicesCubit>();
+    final employeeScheduleCubit = locator<EmployeeScheduleCubit>();
     final barberCubit = locator<BarberCubit>()..load("");
 
     return MultiBlocProvider(
@@ -47,6 +51,7 @@ class HomeScreen extends StatelessWidget {
         BlocProvider.value(value: notWorkingHoursCubit),
         BlocProvider.value(value: selectServicesCubit),
         BlocProvider.value(value: barberCubit),
+        BlocProvider.value(value: employeeScheduleCubit),
       ],
       child: const _ContentWidget(),
     );
@@ -264,6 +269,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     }
                   },
                 ),
+                BlocListener<EmployeeScheduleCubit, EmployeeScheduleState>(
+                  listener: (context, state) {
+                    if (state is EmployeeScheduleSaved) {
+                      SuccessFlushBar("change_success".tr()).show(context);
+                    }
+                  },
+                ),
                 BlocListener<BarberCubit, BarberState>(
                   listener: (context, state) {
                     if (state is BarberLoaded) {
@@ -435,7 +447,24 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           print("Order drag end");
                                           _updateOrder(order,
                                               withOrderEnd: true);
-                                        },
+                                        }, onChangeEmployeeSchedule: (employeeId) {
+                                        final now = DateTime.now();
+                                        Dialogs.scheduleField(
+                                          context: context,
+                                          day: now.day,
+                                          month: now.month,
+                                          year: now.year,
+                                          onConfirm: (status, fromHour, fromMinute, toHour, toMinute) {
+                                            final fieldSchedule = FieldSchedule(
+                                              DateFormat("yyyy-MM-dd").parse(now.toString()),
+                                              employeeId,
+                                              status,
+                                              {"from": "$fromHour:$fromMinute", "to": "$toHour:$toMinute"},
+                                            );
+                                            BlocProvider.of<EmployeeScheduleCubit>(context).save(listData: [fieldSchedule]);
+                                          },
+                                        );
+                                      },
                                       ),
                                       // child: orders.isNotEmpty
                                       //     ? TimeTableWidget(

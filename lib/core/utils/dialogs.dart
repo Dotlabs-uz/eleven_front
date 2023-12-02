@@ -1,16 +1,51 @@
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/core/components/date_time_field_widget.dart';
 import 'package:eleven_crm/core/utils/responsive.dart';
+import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
+import 'package:eleven_crm/features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../features/management/domain/entity/employee_schedule_entity.dart';
+import '../../features/management/presentation/widgets/employee_schedule_widget.dart';
 import '../components/button_widget.dart';
 import '../components/time_field_widget.dart';
 import 'assets.dart';
 import 'selections.dart';
 import 'string_helper.dart';
+
+final List<String> _listTimes = [
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+];
+final List<String> _listMinutes = [
+  "00",
+  "5",
+  "10",
+  "15",
+  "20",
+  "25",
+  "30",
+  "35",
+  "40",
+  "45",
+  "50",
+  "55",
+  "60",
+];
 
 class Dialogs {
   static exitDialog({
@@ -22,10 +57,12 @@ class Dialogs {
       useSafeArea: true,
       builder: (context) => AlertDialog(
         alignment: Alignment.center,
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
         content: Container(
+          color: Colors.white,
           constraints: BoxConstraints(
             maxWidth: Responsive.isDesktop(context)
                 ? 100
@@ -106,10 +143,12 @@ class Dialogs {
     );
   }
 
-  static timeTableEmployeeDialog({
+  static timeTableBarberDialog({
     required BuildContext context,
     required Function(DateTime from, DateTime to) onTimeConfirm,
+    required Function() onChangeEmployeeSchedule,
     required Function() onDeleteEmployeeFromTable,
+    required String employeeId,
   }) {
     return showDialog(
       context: context,
@@ -119,12 +158,14 @@ class Dialogs {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        content: _TimeTableEmployeeDialogBody(
+        content: _TimeTableBarberDialogBody(
           onTimeSelected: (timeFrom, timeTo) => onTimeConfirm.call(
             timeFrom,
             timeTo,
           ),
           onDeleteEmployeeFromTable: onDeleteEmployeeFromTable,
+          employeeId: employeeId,
+          onChangeEmployeeSchedule: onChangeEmployeeSchedule,
         ),
       ),
     );
@@ -132,10 +173,17 @@ class Dialogs {
 
   static scheduleField({
     required BuildContext context,
-    required Function(int) onConfirm,
+    required Function(
+      int status,
+      String fromHour,
+      String fromMinute,
+      String toHour,
+      String toMinute,
+    ) onConfirm,
     int? day,
     int? month,
     int? year,
+    Map<String, dynamic>? workingHours,
   }) {
     return showDialog(
       context: context,
@@ -145,997 +193,366 @@ class Dialogs {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        content: Container(
-          constraints: BoxConstraints(
-            maxWidth: Responsive.isDesktop(context)
-                ? 100
-                : MediaQuery.of(context).size.width,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "pleaseSelectStatus".tr(),
-                style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
-              ),
-
-              const SizedBox(height: 5),
-              day != null
-                  ? Text(
-                      "$day ${month != null ? StringHelper.monthName(month: month) : ""} $year.",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
-                    )
-                  : const SizedBox(),
-              const SizedBox(height: 20),
-
-              ...Selections.listStatus.map((element) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    onConfirm.call(element.status.index);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 35,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            color: element.color,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Center(
-                            child: Text(
-                              element.title,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Nunito",
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          element.description,
-                          style: TextStyle(
-                            color: Colors.grey.shade700,
-                            fontFamily: "Nunito",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(width: 15),
-                      ],
-                    ),
-                  ),
-                );
-
-                return Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                    color: element.color,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Center(
-                    child: Text(
-                      element.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Nunito",
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              const SizedBox(height: 15),
-              SizedBox(
-                height: 35,
-                child: ButtonWidget(
-                  text: 'clear'.tr(),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    onConfirm.call(EmployeeScheduleStatus.notWork.index);
-                  },
-                  color: const Color(0xffABACAE),
-                ),
-              ),
-              // SizedBox(
-              //   height: 35,
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Expanded(
-              //         child: ButtonWidget(
-              //           text: 'back'.tr(),
-              //           onPressed: () => Navigator.pop(context),
-              //           color: const Color(0xffABACAE),
-              //         ),
-              //       ),
-              //       const SizedBox(width: 15),
-              //       Expanded(
-              //         child: ButtonWidget(
-              //           text: 'save'.tr(),
-              //           color: const Color(0xff99C499).withOpacity(0.75),
-              //           onPressed: () {
-              //             onConfirm.call();
-              //           },
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-            ],
-          ),
-        ),
+        content: _ScheduleFieldContentDialog(
+            day: day, month: month, year: year, onConfirm: onConfirm),
       ),
     );
   }
-
-  // static errorDialog({
-  //   required BuildContext context,
-  //   String? message,
-  //   Function()? onBack,
-  // }) {
-  //   return showDialog(
-  //     context: context,
-  //     useSafeArea: true,
-  //     builder: (context) => AlertDialog(
-  //       alignment: Alignment.center,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(20),
-  //       ),
-  //       content: Container(
-  //         constraints: BoxConstraints(
-  //           maxWidth: Responsive.isDesktop(context)
-  //               ? 100
-  //               : MediaQuery.of(context).size.width,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             const SizedBox(height: 33),
-  //             Container(
-  //               height: 123,
-  //               width: 123,
-  //               decoration: const BoxDecoration(
-  //                 color: Color(0xffFF6A6A),
-  //                 shape: BoxShape.circle,
-  //               ),
-  //               child: Center(
-  //                 child: SvgPicture.asset(
-  //                   Assets.tWarningCircle,
-  //                   height: 60,
-  //                   width: 60,
-  //                 ),
-  //               ),
-  //             ),
-  //             const SizedBox(height: 15),
-  //             Text(
-  //               'Error'.tr(),
-  //               textAlign: TextAlign.center,
-  //               style: GoogleFonts.nunito(
-  //                 fontSize: 18,
-  //                 fontWeight: FontWeight.bold,
-  //                 color: Colors.black,
-  //               ),
-  //             ),
-  //             const SizedBox(height: 10),
-  //             Align(
-  //               alignment: Alignment.center,
-  //               child: Text(
-  //                 message ?? 'SomeThingWentWrong'.tr(),
-  //                 textAlign: TextAlign.center,
-  //                 style: GoogleFonts.nunito(
-  //                   color: const Color(0xff696969),
-  //                   fontSize: 14,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //             ),
-  //             const SizedBox(height: 66),
-  //             SizedBox(
-  //               height: 34,
-  //               child: ButtonWidget(
-  //                 text: 'back'.tr(),
-  //                 color: const Color(0xffFF6A6A),
-  //                 onPressed: () {
-  //                   Navigator.pop(context);
-  //
-  //                   onBack?.call();
-  //                 },
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // static deleteDialog({
-  //   required BuildContext context,
-  //   Function()? onDelete,
-  // }) {
-  //   return showDialog(
-  //     context: context,
-  //     useSafeArea: true,
-  //     builder: (context) => AlertDialog(
-  //       alignment: Alignment.center,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(20),
-  //       ),
-  //       content: Container(
-  //         constraints: BoxConstraints(
-  //           maxWidth: Responsive.isDesktop(context)
-  //               ? 100
-  //               : MediaQuery.of(context).size.width,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             const SizedBox(height: 33),
-  //             Container(
-  //               height: 123,
-  //               width: 123,
-  //               decoration: const BoxDecoration(
-  //                 color: Color(0xffFF6A6A),
-  //                 shape: BoxShape.circle,
-  //               ),
-  //               child: Center(
-  //                 child: SvgPicture.asset(
-  //                   Assets.tWarningCircle,
-  //                   height: 60,
-  //                   width: 60,
-  //                 ),
-  //               ),
-  //             ),
-  //             const SizedBox(height: 15),
-  //             Text(
-  //               'DoYouWantDelete'.tr(),
-  //               textAlign: TextAlign.center,
-  //               style: GoogleFonts.nunito(
-  //                 fontSize: 18,
-  //                 fontWeight: FontWeight.bold,
-  //                 color: Colors.black,
-  //               ),
-  //             ),
-  //             const SizedBox(height: 10),
-  //             Align(
-  //               alignment: Alignment.center,
-  //               child: Text(
-  //                 'DeleteDialogsText'.tr(),
-  //                 textAlign: TextAlign.center,
-  //                 style: GoogleFonts.nunito(
-  //                   color: const Color(0xff696969),
-  //                   fontSize: 14,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //             ),
-  //             const SizedBox(height: 66),
-  //             SizedBox(
-  //               height: 34,
-  //               child: Row(
-  //                 children: [
-  //                   Expanded(
-  //                     child: ButtonWidget(
-  //                       text: 'back'.tr(),
-  //                       color: Colors.grey,
-  //                       onPressed: () {
-  //                         Navigator.pop(context);
-  //                       },
-  //                     ),
-  //                   ),
-  //                   const SizedBox(width: 10),
-  //                   Expanded(
-  //                     child: ButtonWidget(
-  //                       text: 'delete'.tr(),
-  //                       color: const Color(0xffFF6A6A),
-  //                       onPressed: () {
-  //                         Navigator.pop(context);
-  //
-  //                         onDelete?.call();
-  //                       },
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // static successDialog({
-  //   required BuildContext context,
-  //   Function()? onContinue,
-  // }) {
-  //   return showDialog(
-  //     context: context,
-  //     useSafeArea: true,
-  //     builder: (context) => AlertDialog(
-  //       alignment: Alignment.center,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(20),
-  //       ),
-  //       content: Container(
-  //         constraints: BoxConstraints(
-  //           maxWidth: Responsive.isDesktop(context)
-  //               ? 100
-  //               : MediaQuery.of(context).size.width,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             const SizedBox(height: 33),
-  //             Container(
-  //               height: 123,
-  //               width: 123,
-  //               decoration: const BoxDecoration(
-  //                 color: Color(0xff86FFA1),
-  //                 shape: BoxShape.circle,
-  //               ),
-  //               child: Center(
-  //                 child: SvgPicture.asset(
-  //                   Assets.tCheckedIcon,
-  //                   height: 60,
-  //                   width: 60,
-  //                 ),
-  //               ),
-  //             ),
-  //             const SizedBox(height: 15),
-  //             Text(
-  //               'success'.tr(),
-  //               textAlign: TextAlign.center,
-  //               style: GoogleFonts.nunito(
-  //                 fontSize: 18,
-  //                 fontWeight: FontWeight.bold,
-  //                 color: Colors.black,
-  //               ),
-  //             ),
-  //             const SizedBox(height: 10),
-  //             Align(
-  //               alignment: Alignment.center,
-  //               child: Text(
-  //                 'EverythingWentWell'.tr(),
-  //                 textAlign: TextAlign.center,
-  //                 style: GoogleFonts.nunito(
-  //                   color: const Color(0xff696969),
-  //                   fontSize: 14,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //             ),
-  //             const SizedBox(height: 66),
-  //             SizedBox(
-  //               height: 34,
-  //               child: ButtonWidget(
-  //                 text: 'Continue'.tr(),
-  //                 color: const Color(0xff86FFA1),
-  //                 onPressed: () {
-  //                   Navigator.pop(context);
-  //                   onContinue?.call();
-  //                 },
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // static infoDialog({
-  //   required BuildContext context,
-  //   required String message,
-  // }) {
-  //   return showDialog(
-  //     context: context,
-  //     useSafeArea: true,
-  //     builder: (context) => AlertDialog(
-  //       alignment: Alignment.center,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(20),
-  //       ),
-  //       content: Container(
-  //         constraints: BoxConstraints(
-  //           maxWidth: Responsive.isDesktop(context)
-  //               ? 100
-  //               : MediaQuery.of(context).size.width,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             const SizedBox(height: 33),
-  //             Container(
-  //               height: 123,
-  //               width: 123,
-  //               decoration: const BoxDecoration(
-  //                 color: Color(0xff416eff),
-  //                 shape: BoxShape.circle,
-  //               ),
-  //               child: const Center(
-  //                 child: SizedBox(
-  //                   height: 60,
-  //                   width: 60,
-  //                   child: Icon(
-  //                     Icons.info_outline_rounded,
-  //                     color: Colors.white,
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //             const SizedBox(height: 15),
-  //             Text(
-  //               'Info'.tr(),
-  //               textAlign: TextAlign.center,
-  //               style: GoogleFonts.nunito(
-  //                 fontSize: 18,
-  //                 fontWeight: FontWeight.bold,
-  //                 color: Colors.black,
-  //               ),
-  //             ),
-  //             const SizedBox(height: 10),
-  //             Align(
-  //               alignment: Alignment.center,
-  //               child: Text(
-  //                 message,
-  //                 textAlign: TextAlign.center,
-  //                 style: GoogleFonts.nunito(
-  //                   color: const Color(0xff696969),
-  //                   fontSize: 14,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //             ),
-  //             const SizedBox(height: 66),
-  //             SizedBox(
-  //               height: 34,
-  //               child: ButtonWidget(
-  //                 text: 'OK',
-  //                 color: const Color(0xff416eff),
-  //                 onPressed: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // static filterDialog({
-  //   required BuildContext context,
-  //   required List<Widget> listWidget,
-  // }) {
-  //   return showDialog(
-  //     context: context,
-  //     useSafeArea: true,
-  //     builder: (context) => AlertDialog(
-  //       alignment: Alignment.center,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(20),
-  //       ),
-  //       content: Container(
-  //         constraints: BoxConstraints(
-  //           maxHeight: 400,
-  //           maxWidth: Responsive.isDesktop(context)
-  //               ? 300
-  //               : MediaQuery.of(context).size.width,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             const SizedBox(height: 10),
-  //             Row(
-  //               children: [
-  //                 Text(
-  //                   "filter".tr(),
-  //                   style: GoogleFonts.nunito(
-  //                     fontWeight: FontWeight.w700,
-  //                     fontSize: 24,
-  //                   ),
-  //                 ),
-  //                 const Spacer(),
-  //               ],
-  //             ),
-  //             const SizedBox(height: 20),
-  //             Expanded(
-  //               child: SingleChildScrollView(
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: listWidget,
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // static deleteDataDialog({
-  //   required BuildContext context,
-  //   required List<int> listId,
-  //   required Function() onConfirm,
-  // }) {
-  //   return showDialog(
-  //     context: context,
-  //     useSafeArea: true,
-  //     builder: (context) => AlertDialog(
-  //       alignment: Alignment.center,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(20),
-  //       ),
-  //       content: Container(
-  //         constraints: BoxConstraints(
-  //           maxHeight: 400,
-  //           maxWidth: Responsive.isDesktop(context)
-  //               ? 300
-  //               : MediaQuery.of(context).size.width,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             const SizedBox(height: 10),
-  //             Row(
-  //               children: [
-  //                 Text(
-  //                   "deleteList".tr(),
-  //                   style: GoogleFonts.nunito(
-  //                     fontWeight: FontWeight.w700,
-  //                     fontSize: 24,
-  //                   ),
-  //                 ),
-  //                 const Spacer(),
-  //                 Text("${listId.length}"),
-  //               ],
-  //             ),
-  //             const SizedBox(height: 20),
-  //             Expanded(
-  //               child: SingleChildScrollView(
-  //                 child: Wrap(
-  //                   // crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     ...listId.map((e) => Container(
-  //                           padding: const EdgeInsets.all(10),
-  //                           margin: const EdgeInsets.all(4),
-  //                           decoration: const BoxDecoration(
-  //                               color: Colors.red,
-  //                               borderRadius:
-  //                                   BorderRadius.all(Radius.circular(6))),
-  //                           child: Center(
-  //                             child: Text(
-  //                               "#$e",
-  //                               style: const TextStyle(
-  //                                 fontSize: 16,
-  //                                 fontWeight: FontWeight.w500,
-  //                                 color: Colors.white,
-  //                               ),
-  //                             ),
-  //                           ),
-  //                         )),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //             ButtonWidget(
-  //               text: 'delete',
-  //               onPressed: () {
-  //                 Navigator.pop(context);
-  //                 onConfirm.call();
-  //               },
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // static listWidgetDialog({
-  //   required BuildContext context,
-  //   required List<Widget> listWidget,
-  //   String? title,
-  //   bool withExit = false,
-  // }) {
-  //   return showDialog(
-  //     context: context,
-  //     useSafeArea: true,
-  //     builder: (context) => AlertDialog(
-  //       alignment: Alignment.center,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(20),
-  //       ),
-  //       content: Container(
-  //         constraints: BoxConstraints(
-  //           maxHeight: 400,
-  //           maxWidth: Responsive.isDesktop(context)
-  //               ? 300
-  //               : MediaQuery.of(context).size.width,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             const SizedBox(height: 10),
-  //             if (title != null) const SizedBox(height: 20),
-  //             Expanded(
-  //               child: SingleChildScrollView(
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     ...listWidget,
-  //                     if (withExit)
-  //                       SizedBox(
-  //                         height: 60,
-  //                         child: Center(
-  //                           child: ButtonWidget(
-  //                             text: "back",
-  //                             color: Colors.red.shade700,
-  //                             onPressed: () => Navigator.pop(context),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // static selectDialog({
-  //   required BuildContext context,
-  //   required List<FilterDialogWidget> listWidget,
-  // }) {
-  //   return showDialog(
-  //     context: context,
-  //     useSafeArea: true,
-  //     builder: (context) => AlertDialog(
-  //       alignment: Alignment.center,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(20),
-  //       ),
-  //       content: Container(
-  //         constraints: BoxConstraints(
-  //           maxHeight: 400,
-  //           maxWidth: Responsive.isDesktop(context)
-  //               ? 100
-  //               : MediaQuery.of(context).size.width,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             const SizedBox(height: 20),
-  //             Expanded(
-  //               child: SingleChildScrollView(
-  //                 child: Column(
-  //                   children: listWidget,
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // static balanceDialog({
-  //   required BuildContext context,
-  //   required List<UserEmployeeEntity> listEntity,
-  //   required double balance,
-  // }) {
-  //   return showDialog(
-  //     context: context,
-  //     useSafeArea: true,
-  //     builder: (context) => AlertDialog(
-  //       alignment: Alignment.center,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(20),
-  //       ),
-  //       content: Container(
-  //         constraints: BoxConstraints(
-  //           maxHeight: 400,
-  //           maxWidth: Responsive.isDesktop(context)
-  //               ? 100
-  //               : MediaQuery.of(context).size.width,
-  //         ),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             const SizedBox(height: 20),
-  //             BalanceDialogItem(
-  //               title: 'Balance'.tr(),
-  //               balance: balance,
-  //             ),
-  //             Container(
-  //               height: 3,
-  //               color: Colors.grey.shade300,
-  //             ),
-  //             const SizedBox(height: 5),
-  //             Expanded(
-  //               child: SingleChildScrollView(
-  //                 child: Column(
-  //                   children: [
-  //                     ...listEntity.map(
-  //                       (data) => BalanceDialogItem(
-  //                         title: data.employeeTypeName ?? "",
-  //                         balance: data.salary ?? 0,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // static selectTwoDates({
-  //   required BuildContext context,
-  //   required Function(DateTime, DateTime) onSelect,
-  // }) {
-  //   DateTime? firstDT;
-  //   DateTime? secondDT;
-  //
-  //   return showDialog(
-  //     context: context,
-  //     useSafeArea: true,
-  //     builder: (context) => StatefulBuilder(
-  //       builder: (context, setState) {
-  //         return AlertDialog(
-  //           alignment: Alignment.center,
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(20),
-  //           ),
-  //           content: Container(
-  //             constraints: BoxConstraints(
-  //               maxHeight: 400,
-  //               maxWidth: Responsive.isDesktop(context)
-  //                   ? 100
-  //                   : MediaQuery.of(context).size.width,
-  //             ),
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 const SizedBox(height: 20),
-  //                 Padding(
-  //                   padding: const EdgeInsets.only(left: 3),
-  //                   child: Text(
-  //                     "firstDate".tr(),
-  //                     style: GoogleFonts.nunito(
-  //                       fontSize: 16,
-  //                       fontWeight: FontWeight.w600,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Row(
-  //                   children: [
-  //                     IconButton(
-  //                         onPressed: () async {
-  //                           firstDT =
-  //                               await DateTimeHelper.pickDateTime(context);
-  //                           setState(() {});
-  //                         },
-  //                         icon: const Icon(Icons.calendar_month)),
-  //                     Text(
-  //                       firstDT != null
-  //                           ? "${firstDT?.day}/${firstDT?.month}/${firstDT?.year}"
-  //                           : "-----",
-  //                       style: GoogleFonts.nunito(
-  //                         fontSize: 14,
-  //                         fontWeight: FontWeight.w600,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 const SizedBox(height: 30),
-  //                 Padding(
-  //                   padding: const EdgeInsets.only(left: 3),
-  //                   child: Text(
-  //                     "secondDate".tr(),
-  //                     style: GoogleFonts.nunito(
-  //                       fontSize: 16,
-  //                       fontWeight: FontWeight.w600,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Row(
-  //                   children: [
-  //                     IconButton(
-  //                         onPressed: () async {
-  //                           secondDT =
-  //                               await DateTimeHelper.pickDateTime(context);
-  //                           setState(() {});
-  //                         },
-  //                         icon: const Icon(Icons.calendar_month)),
-  //                     Text(
-  //                       secondDT != null
-  //                           ? "${secondDT?.day}/${secondDT?.month}/${secondDT?.year}"
-  //                           : "-----",
-  //                       style: GoogleFonts.nunito(
-  //                         fontSize: 14,
-  //                         fontWeight: FontWeight.w600,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 const SizedBox(height: 30),
-  //                 Row(
-  //                   children: [
-  //                     Expanded(
-  //                       child: TextButton(
-  //                         child: Text(
-  //                           "cancel".tr(),
-  //                           style: GoogleFonts.nunito(
-  //                             fontSize: 16,
-  //                             fontWeight: FontWeight.w700,
-  //                           ),
-  //                         ),
-  //                         onPressed: () {
-  //                           Navigator.pop(context);
-  //                         },
-  //                       ),
-  //                     ),
-  //                     const SizedBox(width: 10),
-  //                     Expanded(
-  //                       child: TextButton(
-  //                         child: Text(
-  //                           "select".tr(),
-  //                           style: GoogleFonts.nunito(
-  //                             fontSize: 16,
-  //                             color: firstDT != null && secondDT != null
-  //                                 ? Colors.green
-  //                                 : Colors.grey,
-  //                             fontWeight: FontWeight.w700,
-  //                           ),
-  //                         ),
-  //                         onPressed: () {
-  //                           if (firstDT != null && secondDT != null) {
-  //                             onSelect.call(firstDT!, secondDT!);
-  //                             Navigator.pop(context);
-  //                           }
-  //                         },
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 const SizedBox(height: 20),
-  //               ],
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
 }
 
-// class BalanceDialogItem extends StatelessWidget {
-//   final String title;
-//   final double balance;
-//
-//   const BalanceDialogItem({
-//     Key? key,
-//     required this.title,
-//     required this.balance,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.symmetric(vertical: 10),
-//       margin: const EdgeInsets.only(bottom: 10),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(12),
-//       ),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Text(
-//             title,
-//             style: GoogleFonts.nunito(
-//               color: Colors.black54,
-//               fontSize: 14,
-//               fontWeight: FontWeight.w600,
-//             ),
-//           ),
-//           const Spacer(),
-//           Text(
-//             NumberHelper.formatNumber(balance),
-//             style: GoogleFonts.nunito(
-//               color: Colors.black54,
-//               fontSize: 14,
-//               fontWeight: FontWeight.w600,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+class _ScheduleFieldContentDialog extends StatefulWidget {
+  final int? day;
+  final int? month;
+  final int? year;
+  final Map<String, dynamic>? workingHours;
 
-// class FilterDialogWidget extends StatelessWidget {
-//   final String title;
-//   final VoidCallback onTap;
-//
-//   const FilterDialogWidget({
-//     Key? key,
-//     required this.title,
-//     required this.onTap,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: () => onTap.call(),
-//       child: Container(
-//         width: MediaQuery.of(context).size.width,
-//         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-//         margin: const EdgeInsets.only(bottom: 10),
-//         decoration: BoxDecoration(
-//           color: Colors.blue,
-//           borderRadius: BorderRadius.circular(15),
-//         ),
-//         child: Text(
-//           title,
-//           style: GoogleFonts.nunito(
-//             fontWeight: FontWeight.w700,
-//             color: Colors.white,
-//             fontSize: 16,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-class _TimeTableEmployeeDialogBody extends StatefulWidget {
-  final Function(DateTime timeFrom, DateTime timeTo) onTimeSelected;
-  final Function() onDeleteEmployeeFromTable;
-  const _TimeTableEmployeeDialogBody(
+  final Function(
+    int status,
+    String fromHour,
+    String fromMinute,
+    String toHour,
+    String toMinute,
+  ) onConfirm;
+  const _ScheduleFieldContentDialog(
       {Key? key,
-      required this.onTimeSelected,
-      required this.onDeleteEmployeeFromTable})
+      this.day,
+      this.month,
+      this.year,
+      required this.onConfirm,
+      this.workingHours})
       : super(key: key);
 
   @override
-  State<_TimeTableEmployeeDialogBody> createState() =>
-      _TimeTableEmployeeDialogBodyState();
+  State<_ScheduleFieldContentDialog> createState() =>
+      _ScheduleFieldContentDialogState();
+}
+
+class _ScheduleFieldContentDialogState
+    extends State<_ScheduleFieldContentDialog> {
+  int selectedStatus = 0;
+  String selectedTimeFromHour = "8";
+  String selectedTimeFromMinute = "00";
+  String selectedTimeToHour = "22";
+  String selectedTimeToMinute = "00";
+
+  @override
+  void initState() {
+    if (widget.workingHours != null) {
+      print(widget.workingHours);
+      selectedTimeToMinute = _getMinutesTo(widget.workingHours!);
+      selectedTimeToHour = _getHoursTo(widget.workingHours!);
+      selectedTimeFromMinute = _getMinutesFrom(widget.workingHours!);
+      selectedTimeFromHour = _getHoursFrom(widget.workingHours!);
+    }
+    print('From: $selectedTimeFromHour:$selectedTimeFromMinute');
+    print('To: $selectedTimeToHour:$selectedTimeToMinute');
+    super.initState();
+  }
+
+  String _getHoursTo(Map<String, dynamic> workingHours) {
+    String toTime = workingHours['to'];
+    List<String> timeParts = toTime.split(':');
+    return timeParts[0];
+  }
+
+  String _getMinutesTo(Map<String, dynamic> workingHours) {
+    String toTime = workingHours['to'];
+    List<String> timeParts = toTime.split(':');
+    return timeParts[1];
+  }
+
+  String _getHoursFrom(Map<String, dynamic> workingHours) {
+    String fromTime = workingHours['from'];
+    List<String> timeParts = fromTime.split(':');
+    return timeParts[0];
+  }
+
+  String _getMinutesFrom(Map<String, dynamic> workingHours) {
+    String fromTime = workingHours['from'];
+    List<String> timeParts = fromTime.split(':');
+    return timeParts[1];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: Responsive.isDesktop(context)
+            ? 300
+            : MediaQuery.of(context).size.width,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "pleaseSelectStatus".tr(),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 5),
+          widget.day != null
+              ? Text(
+                  "${widget.day} ${widget.month != null ? StringHelper.monthName(month: widget.month!).tr() : ""} ${widget.year}.",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                )
+              : const SizedBox(),
+          const SizedBox(height: 15),
+
+          Text("typeDay".tr()),
+          const SizedBox(height: 10),
+
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Theme(
+              data: ThemeData(
+                fontFamily: "Nunito",
+              ),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black38, width: 1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: DropdownButton<int>(
+                  value: selectedStatus,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  underline: const SizedBox(),
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  items: Selections.listStatusIndex
+                      .map((StatusEmployeeScheduleEntity item) {
+                    return DropdownMenuItem<int>(
+                      value: item.status,
+                      child: Text(item.title),
+                    );
+                  }).toList(),
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      selectedStatus = newValue!;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 15),
+
+          Text("workingTime".tr()),
+          const SizedBox(height: 10),
+
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 40,
+            child: Theme(
+              data: ThemeData(
+                fontFamily: "Nunito",
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black38, width: 1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: DropdownButton<String>(
+                            value: selectedTimeFromHour,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            underline: const SizedBox(),
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            items: _listTimes.map((String items) {
+                              return DropdownMenuItem(
+                                value: items.toString(),
+                                child: Text(items.toString()),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedTimeFromHour = newValue!;
+                              });
+                            },
+                          ),
+                        ),
+                        const Text(
+                          "-",
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black38, width: 1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: DropdownButton<String>(
+                            value: selectedTimeFromMinute,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            underline: const SizedBox(),
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            items: _listMinutes.map((String items) {
+                              return DropdownMenuItem(
+                                value: items.toString(),
+                                child: Text(items.toString()),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedTimeFromMinute = newValue!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black38, width: 1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: DropdownButton<String>(
+                            value: selectedTimeToHour,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            underline: const SizedBox(),
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            items: _listTimes.map((String items) {
+                              return DropdownMenuItem(
+                                value: items.toString(),
+                                child: Text(items.toString()),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedTimeToHour = newValue!;
+                              });
+                            },
+                          ),
+                        ),
+                        const Text(
+                          "-",
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.black38, width: 1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: DropdownButton<String>(
+                            value: selectedTimeToMinute,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            underline: const SizedBox(),
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            items: _listMinutes.map((String items) {
+                              return DropdownMenuItem(
+                                value: items.toString(),
+                                child: Text(items.toString()),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedTimeToMinute = newValue!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 15),
+          SizedBox(
+            height: 40,
+            child: ButtonWidget(
+              text: 'save'.tr(),
+              onPressed: () {
+                Navigator.pop(context);
+                // required int status,
+                // required int fromHour,
+                // required int fromMinute,
+                // required int toHour,
+                // required int toMinute,
+                widget.onConfirm.call(
+                  selectedStatus,
+                  selectedTimeFromHour,
+                  selectedTimeFromMinute,
+                  selectedTimeToHour,
+                  selectedTimeToMinute,
+                );
+              },
+            ),
+          ),
+          // SizedBox(
+          //   height: 35,
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       Expanded(
+          //         child: ButtonWidget(
+          //           text: 'back'.tr(),
+          //           onPressed: () => Navigator.pop(context),
+          //           color: const Color(0xffABACAE),
+          //         ),
+          //       ),
+          //       const SizedBox(width: 15),
+          //       Expanded(
+          //         child: ButtonWidget(
+          //           text: 'save'.tr(),
+          //           color: const Color(0xff99C499).withOpacity(0.75),
+          //           onPressed: () {
+          //             onConfirm.call();
+          //           },
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TimeTableBarberDialogBody extends StatefulWidget {
+  final String employeeId;
+  final Function(DateTime timeFrom, DateTime timeTo) onTimeSelected;
+  final Function() onDeleteEmployeeFromTable;
+  final Function() onChangeEmployeeSchedule;
+  const _TimeTableBarberDialogBody({
+    Key? key,
+    required this.employeeId,
+    required this.onChangeEmployeeSchedule,
+    required this.onTimeSelected,
+    required this.onDeleteEmployeeFromTable,
+  }) : super(key: key);
+
+  @override
+  State<_TimeTableBarberDialogBody> createState() =>
+      _TimeTableBarberDialogBodyState();
 }
 
 enum _TimeTableEmployeeDialogState {
@@ -1144,8 +561,8 @@ enum _TimeTableEmployeeDialogState {
   another,
 }
 
-class _TimeTableEmployeeDialogBodyState
-    extends State<_TimeTableEmployeeDialogBody> {
+class _TimeTableBarberDialogBodyState
+    extends State<_TimeTableBarberDialogBody> {
   _TimeTableEmployeeDialogState state = _TimeTableEmployeeDialogState.initial;
 
   DateTime timeFrom = DateTime.now();
@@ -1170,7 +587,7 @@ class _TimeTableEmployeeDialogBodyState
         return _selectNotWorkingHours();
 
       case _TimeTableEmployeeDialogState.another:
-        return SizedBox();
+        return const SizedBox();
     }
   }
 
@@ -1183,7 +600,10 @@ class _TimeTableEmployeeDialogBodyState
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         GestureDetector(
-          child: const Icon(Icons.close, color: Colors.black,),
+          child: const Icon(
+            Icons.close,
+            color: Colors.black,
+          ),
           onTap: () {
             Navigator.pop(context);
           },
@@ -1194,6 +614,15 @@ class _TimeTableEmployeeDialogBodyState
           onPressed: () =>
               _changeState(_TimeTableEmployeeDialogState.selectNotWorkingTIme),
           color: const Color(0xffef906e),
+        ),
+        const SizedBox(height: 10),
+        ButtonWidget(
+          text: 'changeSchedule'.tr(),
+          onPressed: () {
+            Navigator.pop(context);
+            widget.onChangeEmployeeSchedule.call();
+          },
+          color: const Color(0xff95f132),
         ),
         const SizedBox(height: 10),
         ButtonWidget(

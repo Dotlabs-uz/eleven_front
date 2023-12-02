@@ -661,5 +661,7 @@
   "fromText": "Undan",
   "toText": "Oldin",
   "editSchedule": "Jadvalni o'zgartirish",
-  "pleaseWaitFilterIsInProcess": "Filtrlash jarayonida kuting"
+  "pleaseWaitFilterIsInProcess": "Filtrlash jarayonida kuting",
+  "typeDay": "Kun turi",
+  "workingTime": "Ish vaqti"
 }

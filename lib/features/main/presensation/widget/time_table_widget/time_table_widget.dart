@@ -35,10 +35,12 @@ class TimeTableWidget extends StatefulWidget {
   final Function(OrderEntity order)? onOrderStartResizeEnd;
   final Function(OrderEntity order)? onOrderEndResizeEnd;
   final Function(OrderEntity)? onOrderTap;
+  final Function(String employeeId) onChangeEmployeeSchedule;
 
   const TimeTableWidget({
     Key? key,
     required this.listBarbers,
+    required this.onChangeEmployeeSchedule,
     required this.onNotWorkingHoursCreate,
     this.onDeleteEmployeeFromTable,
     this.orderFilterQuery = "",
@@ -448,8 +450,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                 badges.Badge(
                   badgeContent: const Text(""),
                   badgeStyle: badges.BadgeStyle(
-                    badgeColor: entity.isActive ?Colors.green : Colors.red
-                  ),
+                      badgeColor: entity.isActive ? Colors.green : Colors.red),
                   position: badges.BadgePosition.bottomEnd(
                       end: entity.avatar.isEmpty ||
                               entity.avatar.contains("placeholder.png")
@@ -480,20 +481,24 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
             splashColor: Colors.transparent,
             hoverColor: Colors.transparent,
             onPressed: () {
-              Dialogs.timeTableEmployeeDialog(
+              Dialogs.timeTableBarberDialog(
                 context: context,
                 onTimeConfirm: (timeFrom, timeTo) {
                   widget.onNotWorkingHoursCreate.call(
                     timeFrom,
                     timeTo,
-                    entity.id,
+                    entity.employeeId,
                   );
                 },
                 onDeleteEmployeeFromTable: () {
                   listBarber.remove(entity);
                   widget.onDeleteEmployeeFromTable?.call(entity.id);
 
-                  setState(() {});
+                   setState(() {});
+                },
+                employeeId: entity.id,
+                onChangeEmployeeSchedule: () {
+                  widget.onChangeEmployeeSchedule.call(entity.id);
                 },
               );
             },

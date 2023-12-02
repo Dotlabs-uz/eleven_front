@@ -1,18 +1,27 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/core/utils/color_helper.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/dialogs.dart';
 import '../../../../core/utils/string_helper.dart';
-
+import '../cubit/employee/employee_cubit.dart';
+import '../cubit/employee_schedule/employee_schedule_cubit.dart';
+import 'employee_schedule_widget.dart';
 
 class ScheduleCalendarWidget extends StatefulWidget {
   final List<EmployeeScheduleEntity> listSchedule;
+  final String employeeId;
   final Function() onRefreshTap;
 
   const ScheduleCalendarWidget(
-      {Key? key, required this.listSchedule, required this.onRefreshTap})
+      {Key? key,
+      required this.listSchedule,
+      required this.onRefreshTap,
+      required this.employeeId})
       : super(key: key);
 
   @override
@@ -154,27 +163,38 @@ class _ScheduleCalendarWidgetState extends State<ScheduleCalendarWidget> {
           ],
         ),
         const SizedBox(height: 20),
-        GridView.builder(
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7,
-          ),
-          itemCount: daysOfMonth.length,
-          itemBuilder: (context, index) {
-            final day = daysOfMonth[index];
-            final isWeekend = index % 7 == 5 || index % 7 == 6;
-            final now = DateTime.now();
-            final isCurrentMonth = selectedMonth == now.month;
-            final isCurrentDate = isCurrentMonth && day == now.day;
+        BlocListener<EmployeeScheduleCubit, EmployeeScheduleState>(
+          listener: (context, state) {
 
-            return _DayItem(
-              day: day,
-              isWeekend: isWeekend,
-              isCurrentDate: isCurrentDate,
-              month: selectedMonth,
-              listSchedule: listSchedule,
-            );
+            if(state is EmployeeScheduleSaved ) {
+              BlocProvider.of<EmployeeCubit>(context).loadEmployee(widget.employeeId);
+              BlocProvider.of<EmployeeScheduleCubit>(context).init();
+
+            }
           },
+          child: GridView.builder(
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 7,
+                  ),
+                  itemCount: daysOfMonth.length,
+                  itemBuilder: (context, index) {
+                    final day = daysOfMonth[index];
+                    final isWeekend = index % 7 == 5 || index % 7 == 6;
+                    final now = DateTime.now();
+                    final isCurrentMonth = selectedMonth == now.month;
+                    final isCurrentDate = isCurrentMonth && day == now.day;
+
+                    return _DayItem(
+                      day: day,
+                      isWeekend: isWeekend,
+                      isCurrentDate: isCurrentDate,
+                      month: selectedMonth,
+                      listSchedule: listSchedule,
+                      employeeId: widget.employeeId,
+                    );
+                  },
+                ),
         ),
       ],
     );
@@ -186,12 +206,14 @@ class _DayItem extends StatefulWidget {
   final int month;
   final bool isWeekend;
   final bool isCurrentDate;
+  final String employeeId;
   final List<EmployeeScheduleEntity> listSchedule;
 
   const _DayItem({
     required this.day,
     required this.month,
     required this.isWeekend,
+    required this.employeeId,
     required this.isCurrentDate,
     required this.listSchedule,
   });
@@ -225,7 +247,6 @@ class _DayItemState extends State<_DayItem> {
     month = widget.month;
 
     initColor();
-
   }
 
   initColor() {
@@ -239,33 +260,58 @@ class _DayItemState extends State<_DayItem> {
         backgroundColor =
             ColorHelper.getColorForScheduleByStatusForProfile(element.status);
         setState(() {});
-      }else {
-
-      }
+      } else {}
     }
   }
 
   @override
   Widget build(BuildContext context) {
     initColor();
-    return Container(
-      height: 20,
-      width: 20,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: widget.day != null
-          ? Center(
-              child: Text(
-                "${widget.day}",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: backgroundColor != null ? Colors.white : Colors.black,
+    return GestureDetector(
+      onTap: () {
+        if (widget.day == null) return;
+        final now = DateTime.now();
+        final date = DateTime(now.year, widget.month, widget.day!);
+        Dialogs.scheduleField(
+          context: context,
+          day: date.day,
+          month: date.month,
+          year: date.year,
+          onConfirm: (status, fromHour, fromMinute, toHour, toMinute) {
+            backgroundColor =
+                ColorHelper.getColorForScheduleByStatusForProfile(status);
+            setState(() {});
+            final fieldSchedule = FieldSchedule(
+              DateFormat("yyyy-MM-dd").parse(date.toString()),
+              widget.employeeId,
+              status,
+              {"from": "$fromHour:$fromMinute", "to": "$toHour:$toMinute"},
+            );
+            BlocProvider.of<EmployeeScheduleCubit>(context)
+                .save(listData: [fieldSchedule]);
+          },
+        );
+      },
+      child: Container(
+        height: 20,
+        width: 20,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: widget.day != null
+            ? Center(
+                child: Text(
+                  "${widget.day}",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color:
+                        backgroundColor != null ? Colors.white : Colors.black,
+                  ),
                 ),
-              ),
-            )
-          : const SizedBox(),
+              )
+            : const SizedBox(),
+      ),
     );
   }
 }
