@@ -35,7 +35,7 @@ class OrderModel extends OrderEntity {
           : DateTime.parse(json['orderEnd']).toLocal(),
       barberId: json['barber']!=null ? json['barber']['_id']:  "",
       paymentType:
-          json['payment'] == "cash" ? OrderPayment.card : OrderPayment.card,
+          json['payment'] == "cash" ? OrderPayment.cash : OrderPayment.card,
       // discountPercent: json['discountPer'],
       // discount: json['discount'],
       clientId: json['client']!=null ? json['client']['_id']:  "",
@@ -71,7 +71,6 @@ class OrderModel extends OrderEntity {
     final data = <String, dynamic>{};
     data['orderStart'] = orderStart.toIso8601String();
     // data['orderEnd'] = orderEnd.toLocal().toIso8601String();
-    data['_id'] = id;
     data['barber'] = barberId;
     data['payments'] = paymentType.name;
     // data['discountPercent'] = discountPercent;

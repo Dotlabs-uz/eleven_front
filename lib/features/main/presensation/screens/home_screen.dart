@@ -289,12 +289,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
                   listener: (context, state) {
                     if (state.query.isNotEmpty) {
                       orders.clear();
-                      webSocketService.addFilter({"orderStart": state.query});
+                      webSocketService.refresh();
+                      // webSocketService.addFilter({"orderStart": state.query});
                       filteredDate = DateTime.parse(state.query);
                       print("Filter date init $filteredDate");
 
                     } else {
-                      webSocketService.addFilter("");
+                      webSocketService.refresh();
                       orders.clear();
                     }
                   },
@@ -373,11 +374,10 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                       duration: const Duration(seconds: 2),
                                       switchInCurve: Curves.easeIn,
                                       switchOutCurve: Curves.easeIn,
-                                      child: orders.isNotEmpty
-                                          ? TimeTableWidget(
+                                      child: TimeTableWidget(
                                         listBarbers: listBarbers,
                                         onOrderTap: (order) {
-                                          order.status = OrderStatus.waitingToView;
+                                          order.status = OrderStatus.viewed;
                                           _updateOrder(order,
                                               withOrderEnd: false);
                                         },
@@ -436,8 +436,72 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           _updateOrder(order,
                                               withOrderEnd: true);
                                         },
-                                      ) : const SizedBox.expand()
-                                          ,
+                                      ),
+                                      // child: orders.isNotEmpty
+                                      //     ? TimeTableWidget(
+                                      //   listBarbers: listBarbers,
+                                      //   onOrderTap: (order) {
+                                      //     order.status = OrderStatus.waitingToView;
+                                      //     _updateOrder(order,
+                                      //         withOrderEnd: false);
+                                      //   },
+                                      //   onTapNotWorkingHour:
+                                      //   _onDeleteNotWorkingHours,
+                                      //   orderFilterQuery: BlocProvider.of<
+                                      //       OrderFilterCubit>(context)
+                                      //       .state
+                                      //       .query,
+                                      //   onFieldTap:
+                                      //       (hour, minute, barberId) {
+                                      //     print(
+                                      //         "Filter date $filteredDate");
+                                      //     activeData = OrderEntity.empty(
+                                      //       hour: hour,
+                                      //       minute: minute,
+                                      //       barber: barberId,
+                                      //       month: filteredDate.month,
+                                      //       day: filteredDate.day,
+                                      //     );
+                                      //     _editOrder(activeData);
+                                      //   },
+                                      //   onOrderDoubleTap: (entity) {
+                                      //     print("Entity $entity");
+                                      //     activeData = entity;
+                                      //     _editOrder(activeData);
+                                      //   },
+                                      //   onDeleteEmployeeFromTable:
+                                      //       (employeeId) {
+                                      //     _barberFromTimeTableCardAction(
+                                      //       employeeId,
+                                      //       false,
+                                      //     );
+                                      //   },
+                                      //   onNotWorkingHoursCreate: (
+                                      //       DateTime from,
+                                      //       DateTime to,
+                                      //       String employeeId,
+                                      //       ) {
+                                      //     BlocProvider.of<
+                                      //         NotWorkingHoursCubit>(
+                                      //       context,
+                                      //     ).save(
+                                      //       dateFrom: from,
+                                      //       dateTo: to,
+                                      //       employeeId: employeeId,
+                                      //     );
+                                      //   },
+                                      //   listOrders: orders,
+                                      //   onOrderStartResizeEnd: (order) =>
+                                      //       _updateOrder(order),
+                                      //   onOrderEndResizeEnd: (order) =>
+                                      //       _updateOrder(order),
+                                      //   onOrderDragEnd: (order) {
+                                      //     print("Order drag end");
+                                      //     _updateOrder(order,
+                                      //         withOrderEnd: true);
+                                      //   },
+                                      // ) : const SizedBox.expand()
+                                      //     ,
                                     );
                                   },
                                 ),

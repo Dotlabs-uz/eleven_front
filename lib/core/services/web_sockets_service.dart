@@ -69,7 +69,7 @@ class WebSocketsService {
     localSoket.onConnect((_) {
       // print("websocket connected");
     });
-    localSoket.emit("getDates");
+    localSoket.emit("newDates");
 
     localSoket.emit("getAll");
 

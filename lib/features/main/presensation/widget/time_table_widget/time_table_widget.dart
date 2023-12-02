@@ -4,6 +4,7 @@ import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.d
 import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/past_time_card_widget.dart';
 import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/time_table_ruler_widget.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -195,18 +196,18 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                             final DateTime elementDt =
                                                 element.orderStart;
 
-
-                                              print("Last fitler Dt $lastFilteredDate element dt $elementDt");
+                                            print(
+                                                "Last fitler Dt $lastFilteredDate element dt $elementDt");
 
                                             return barber.id ==
                                                     element.barberId &&
                                                 lastFilterDt != null &&
                                                 (elementDt.day ==
-                                                    lastFilterDt.day &&
-                                                elementDt.month ==
-                                                    lastFilterDt.month &&
-                                                elementDt.year ==
-                                                    lastFilterDt.year);
+                                                        lastFilterDt.day &&
+                                                    elementDt.month ==
+                                                        lastFilterDt.month &&
+                                                    elementDt.year ==
+                                                        lastFilterDt.year);
                                           },
                                         ).toList();
 
@@ -444,8 +445,23 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ImageViewWidget(avatar: entity.avatar),
-                const SizedBox(height: 5),
+                badges.Badge(
+                  badgeContent: const Text(""),
+                  badgeStyle: badges.BadgeStyle(
+                    badgeColor: entity.isActive ?Colors.green : Colors.red
+                  ),
+                  position: badges.BadgePosition.bottomEnd(
+                      end: entity.avatar.isEmpty ||
+                              entity.avatar.contains("placeholder.png")
+                          ? 5
+                          : 115),
+                  child: ImageViewWidget(
+                    avatar: entity.avatar,
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
                 FittedBox(
                   child: Text(
                     "${entity.firstName} ${entity.lastName}",
