@@ -198,8 +198,6 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                             final DateTime elementDt =
                                                 element.orderStart;
 
-                                            print(
-                                                "Last fitler Dt $lastFilteredDate element dt $elementDt");
 
                                             return barber.id ==
                                                     element.barberId &&
@@ -498,7 +496,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                 },
                 employeeId: entity.id,
                 onChangeEmployeeSchedule: () {
-                  widget.onChangeEmployeeSchedule.call(entity.id);
+                  widget.onChangeEmployeeSchedule.call(entity.employeeId);
                 },
               );
             },
