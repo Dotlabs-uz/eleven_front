@@ -44,6 +44,7 @@ import '../features/main/domain/usecases/order.dart';
 import '../features/main/presensation/cubit/avatar/avatar_cubit.dart';
 import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import '../features/main/presensation/cubit/home_screen_form/home_screen_order_form_cubit.dart';
+import '../features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
 import '../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
 import '../features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../features/management/data/repositories/management_repository_impl.dart';
@@ -103,6 +104,7 @@ void setup() {
   locator.registerFactory(
       () => ServiceProductCategoryCubit(locator(), locator(), locator()));
 
+  locator.registerFactory(() => ShowOrderHistoryCubit());
   locator.registerFactory(() => ShowSelectServicesCubit());
   locator.registerFactory(() => SelectServicesCubit());
 

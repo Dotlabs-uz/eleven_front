@@ -471,71 +471,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         );
                                       },
                                       ) : const SizedBox.expand(),
-                                      // child: orders.isNotEmpty
-                                      //     ? TimeTableWidget(
-                                      //   listBarbers: listBarbers,
-                                      //   onOrderTap: (order) {
-                                      //     order.status = OrderStatus.waitingToView;
-                                      //     _updateOrder(order,
-                                      //         withOrderEnd: false);
-                                      //   },
-                                      //   onTapNotWorkingHour:
-                                      //   _onDeleteNotWorkingHours,
-                                      //   orderFilterQuery: BlocProvider.of<
-                                      //       OrderFilterCubit>(context)
-                                      //       .state
-                                      //       .query,
-                                      //   onFieldTap:
-                                      //       (hour, minute, barberId) {
-                                      //     print(
-                                      //         "Filter date $filteredDate");
-                                      //     activeData = OrderEntity.empty(
-                                      //       hour: hour,
-                                      //       minute: minute,
-                                      //       barber: barberId,
-                                      //       month: filteredDate.month,
-                                      //       day: filteredDate.day,
-                                      //     );
-                                      //     _editOrder(activeData);
-                                      //   },
-                                      //   onOrderDoubleTap: (entity) {
-                                      //     print("Entity $entity");
-                                      //     activeData = entity;
-                                      //     _editOrder(activeData);
-                                      //   },
-                                      //   onDeleteEmployeeFromTable:
-                                      //       (employeeId) {
-                                      //     _barberFromTimeTableCardAction(
-                                      //       employeeId,
-                                      //       false,
-                                      //     );
-                                      //   },
-                                      //   onNotWorkingHoursCreate: (
-                                      //       DateTime from,
-                                      //       DateTime to,
-                                      //       String employeeId,
-                                      //       ) {
-                                      //     BlocProvider.of<
-                                      //         NotWorkingHoursCubit>(
-                                      //       context,
-                                      //     ).save(
-                                      //       dateFrom: from,
-                                      //       dateTo: to,
-                                      //       employeeId: employeeId,
-                                      //     );
-                                      //   },
-                                      //   listOrders: orders,
-                                      //   onOrderStartResizeEnd: (order) =>
-                                      //       _updateOrder(order),
-                                      //   onOrderEndResizeEnd: (order) =>
-                                      //       _updateOrder(order),
-                                      //   onOrderDragEnd: (order) {
-                                      //     print("Order drag end");
-                                      //     _updateOrder(order,
-                                      //         withOrderEnd: true);
-                                      //   },
-                                      // ) : const SizedBox.expand()
-                                      //     ,
                                     );
                                   },
                                 ),
@@ -582,23 +517,16 @@ class _ContentWidgetState extends State<_ContentWidget> {
                       return AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
                         child: state.show
-                            ? Container(
-                                constraints: const BoxConstraints(
-                                  maxWidth: 300,
-                                ),
-                                color: Colors.white,
-                                height: MediaQuery.of(context).size.height,
-                                child: DataOrderForm(
-                                  fields: activeData.getFields(),
-                                  saveData: _saveOrder,
-                                  webSocketsService: webSocketService,
-                                  closeForm: () {
-                                    BlocProvider.of<HomeScreenOrderFormCubit>(
-                                            context)
-                                        .disable();
-                                  },
-                                ),
-                              )
+                            ? DataOrderForm(
+                              fields: activeData.getFields(),
+                              saveData: _saveOrder,
+                              webSocketsService: webSocketService,
+                              closeForm: () {
+                                BlocProvider.of<HomeScreenOrderFormCubit>(
+                                        context)
+                                    .disable();
+                              },
+                            )
                             : const SizedBox(),
                       );
                     },

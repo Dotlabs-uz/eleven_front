@@ -22,6 +22,7 @@ enum OrderStatus {
 class OrderEntity extends Equatable {
   final String id;
   final OrderPayment paymentType;
+  final DateTime createdAt;
   DateTime orderStart;
   DateTime orderEnd;
   String barberId;
@@ -46,6 +47,7 @@ class OrderEntity extends Equatable {
     required this.services,
     required this.price,
     required this.duration,
+    required this.createdAt,
   });
 
   static Map<String, FieldEntity> fields = {
@@ -94,6 +96,14 @@ class OrderEntity extends Equatable {
       type: Types.dateTime,
       isRequired: true,
       isForm: true,
+      val: DateTime.now(),
+    ),
+    "createdAt": FieldEntity<DateTime>(
+      label: "createdAt",
+      hintText: "createdAt",
+      type: Types.dateTime,
+      isRequired: false,
+      isForm: false,
       val: DateTime.now(),
     ),
     "orderEnd": FieldEntity<DateTime>(
@@ -194,6 +204,7 @@ class OrderEntity extends Equatable {
         "price": price,
         "fromSite": fromSite,
         "client": client,
+        "createdAt": createdAt,
       }[key];
 
   factory OrderEntity.fromRow(PlutoRow row) {
@@ -213,6 +224,7 @@ class OrderEntity extends Equatable {
       price: row.cells["price"]?.value,
       client  : row.cells["client"]?.value,
       fromSite  : row.cells["fromSite"]?.value,
+      createdAt  : row.cells["createdAt"]?.value,
     );
   }
 
@@ -231,6 +243,7 @@ class OrderEntity extends Equatable {
       'services': PlutoCell(value: e.services),
       'status': PlutoCell(value: e.status),
       'client': PlutoCell(value: e.client),
+      'createdAt': PlutoCell(value: e.createdAt),
       'fromSite': PlutoCell(value: e.fromSite),
     });
   }
@@ -239,7 +252,6 @@ class OrderEntity extends Equatable {
       {List<ServiceProductEntity>? selectedServices,
       String? barber,
       String? client}) {
-    print("Factory Fields services ${selectedServices}");
     return OrderEntity(
       id: fields["id"]?.val,
       // discount: fields["discount"]?.val,
@@ -247,6 +259,7 @@ class OrderEntity extends Equatable {
       paymentType: fields["paymentType"]?.val,
       orderStart: fields["orderStart"]?.val,
       orderEnd: fields["orderEnd"]?.val,
+      createdAt: fields["createdAt"]?.val,
       // price: fields["price"]?.val,
       barberId: barber ?? fields["barberId"]?.val,
       clientId: client ?? fields["clientId"]?.val,
@@ -272,6 +285,7 @@ class OrderEntity extends Equatable {
       orderStart: fields["orderStart"]?.val,
       fromSite: fields["fromSite"]?.val,
       orderEnd: fields["orderEnd"]?.val,
+      createdAt: fields["createdAt"]?.val,
       // price: fields["price"]?.val,
       barberId: barber ?? fields["barberId"]?.val,
       clientId: client ?? fields["clientId"]?.val,
@@ -292,6 +306,7 @@ class OrderEntity extends Equatable {
       // discountPercent: 0,
       paymentType: OrderPayment.cash,
       orderStart: dateTime,
+      createdAt: DateTime.now(),
       orderEnd: dateTime.add(const Duration(hours: 1)),
       // price: 0,
       barberId: barber ?? "",

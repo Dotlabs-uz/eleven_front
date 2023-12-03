@@ -18,6 +18,7 @@ import '../core/utils/route_constants.dart';
 import '../core/utils/routes.dart';
 import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import '../features/main/presensation/cubit/menu/menu_cubit.dart';
+import '../features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
 import '../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
 import '../features/main/presensation/widget/fade_page_route_builder.dart';
 import '../get_it/locator.dart';
@@ -38,6 +39,7 @@ class _ApplicationState extends State<Application> {
   late OrderCubit _orderCubit;
   late CurrentUserCubit currentUserCubit;
   late ShowSelectServicesCubit showSelectServicesCubit;
+  late ShowOrderHistoryCubit showOrderHistoryCubit;
   late HomeScreenOrderFormCubit homeScreenOrderFormCubit;
   late OrderFilterCubit orderFilterCubit;
   late AvatarCubit avatarCubit;
@@ -58,6 +60,7 @@ class _ApplicationState extends State<Application> {
     orderFilterCubit = locator();
     avatarCubit = locator();
     customerCubit = locator();
+    showOrderHistoryCubit = locator();
     crossInEmployeeScheduleProvider = locator();
     super.initState();
   }
@@ -79,6 +82,7 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: orderFilterCubit),
         BlocProvider.value(value: avatarCubit),
         BlocProvider.value(value: customerCubit),
+        BlocProvider.value(value: showOrderHistoryCubit),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

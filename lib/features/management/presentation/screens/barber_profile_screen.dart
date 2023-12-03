@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/image_view_widget.dart';
 import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
@@ -536,9 +537,7 @@ class _AvatarWidgetState extends State<_AvatarWidget> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(60),
                 child: widget.file == null
-                    ? widget.barberEntity.avatar.contains("placeholder.png")
-                        ? Image.asset(Assets.tAvatarPlaceHolder)
-                        : Image.network(widget.barberEntity.avatar)
+                    ? ImageViewWidget(avatar: widget.barberEntity.avatar ,size: 120,)
                     : Image.memory(
                         widget.webImage,
                         fit: BoxFit.cover,

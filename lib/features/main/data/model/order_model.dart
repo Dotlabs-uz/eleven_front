@@ -16,6 +16,7 @@ class OrderModel extends OrderEntity {
     required super.paymentType,
     required super.orderStart,
     required super.orderEnd,
+    required super.createdAt,
     // required super.price,
     required super.barberId,
     required super.services,
@@ -46,7 +47,7 @@ class OrderModel extends OrderEntity {
           .toList(),
       status: OrderStatus.values[json['status']?? 1],
       price: json['price'] ?? 0,
-      duration: json['duration'] ?? 0, client: CustomerModel.fromJson(json['client']),
+      duration: json['duration'] ?? 0, client: CustomerModel.fromJson(json['client']), createdAt: DateTime.parse(json['createdAt']),
     );
   }
 
@@ -65,6 +66,7 @@ class OrderModel extends OrderEntity {
       fromSite: entity.fromSite,
       client: entity.client,
       status: entity.status,
+      createdAt: entity.createdAt,
       duration: entity.duration,
       price: entity.price,
     );
