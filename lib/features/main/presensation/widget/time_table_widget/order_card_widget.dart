@@ -154,7 +154,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 3),
                           child: Text(
-                            "${widget.order.client.fullName} | +${widget.order.client.phoneNumber}",
+                            "${widget.order.clientName} | +${widget.order.clientPhone}",
                             style: GoogleFonts.nunito(
                               color: Colors.black,
 

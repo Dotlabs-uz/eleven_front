@@ -136,6 +136,7 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                                     () {
                                       setState(() {
                                         listServiceCategories = state.data;
+                                        print("${listServiceCategories.first.services} seererbicessss");
                                       });
                                     },
                                   );
@@ -144,7 +145,7 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                             },
                             builder: (context, state) {
                               if (state is ServiceProductCategoryLoading) {
-                                return LoadingCircle();
+                                return const LoadingCircle();
                               }
 
                               return ListView.builder(
@@ -171,6 +172,8 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                                             (index) {
                                           final service =
                                               category.services[index];
+
+                                          print("Service $service");
                                           return GestureDetector(
                                             onTap: () {
                                               if (listSelectedServices

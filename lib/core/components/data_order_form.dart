@@ -103,13 +103,15 @@ class DataOrderFormState extends State<DataOrderForm> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        BlocBuilder<ShowClientOrdersHistoryCubit, ShowClientOrdersHistoryHelper>(
+        BlocBuilder<ShowClientOrdersHistoryCubit,
+            ShowClientOrdersHistoryHelper>(
           builder: (context, state) {
             return state.show
                 ? const ClientOrdersHistoryMenuWidget()
                 : const SizedBox();
           },
-        ),BlocBuilder<ShowOrderHistoryCubit, ShowOrderHistoryHelper>(
+        ),
+        BlocBuilder<ShowOrderHistoryCubit, ShowOrderHistoryHelper>(
           builder: (context, state) {
             return state.show
                 ? const OrderHistoryMenuWidget()
@@ -152,18 +154,25 @@ class DataOrderFormState extends State<DataOrderForm> {
                                 widget.fields['createdAt']!.val;
                             final bool fromSite =
                                 widget.fields['fromSite']!.val;
-                            BlocProvider.of<ShowClientOrdersHistoryCubit>(context).disable();
+                            BlocProvider.of<ShowClientOrdersHistoryCubit>(
+                                    context)
+                                .disable();
                             BlocProvider.of<ShowOrderHistoryCubit>(context)
-                                .enable(selectedProducts, "+234234234234", // TODO CLIENT !!!!!
-                                    "Test", fromSite, createdAt);
+                                .enable(
+                                    selectedProducts,
+                                    "+234234234234", // TODO CLIENT !!!!!
+                                    "Test",
+                                    fromSite,
+                                    createdAt);
                           },
                           icon: const Icon(Icons.info_outline),
                         ),
                         IconButton(
                           onPressed: () {
-
-                            BlocProvider.of<ShowOrderHistoryCubit>(context).disable();
-                            BlocProvider.of<ShowClientOrdersHistoryCubit>(context)
+                            BlocProvider.of<ShowOrderHistoryCubit>(context)
+                                .disable();
+                            BlocProvider.of<ShowClientOrdersHistoryCubit>(
+                                    context)
                                 .enable(clientId);
                           },
                           icon: const Icon(Icons.info_outline),
@@ -171,8 +180,11 @@ class DataOrderFormState extends State<DataOrderForm> {
                         TextButton(
                           onPressed: () {
                             widget.closeForm.call();
-                            BlocProvider.of<ShowClientOrdersHistoryCubit>(context).disable();
-                            BlocProvider.of<ShowOrderHistoryCubit>(context).disable();
+                            BlocProvider.of<ShowClientOrdersHistoryCubit>(
+                                    context)
+                                .disable();
+                            BlocProvider.of<ShowOrderHistoryCubit>(context)
+                                .disable();
 
                             BlocProvider.of<ShowSelectServicesCubit>(context)
                                 .disable();
@@ -187,17 +199,27 @@ class DataOrderFormState extends State<DataOrderForm> {
                         )
                       ],
                     ),
-                    ClientSearchWidget( label: 'client'.tr(), onNameSubmit: (value ) {  }, onPhoneSubmit: (value ) {  },),
-                    ClientFieldWidget(
-                      fieldEntity: widget.fields['clientId']!,
-                      onCreate: () {
-                        widget.closeForm.call();
+                    ClientSearchWidget(
+                      label: 'client'.tr(),
+                      onNameSubmit: (value) {
+                        widget.fields['clientName']!.val = value;
                       },
-                      onChange: (value) {
-                        widget.fields['clientId']!.val = value.id;
-                        clientId = value.id;
+                      onPhoneSubmit: (value) {
+                        widget.fields['clientPhone']!.val = value;
                       },
+                      clientPhone:  widget.fields['clientPhone']!.val,
+                      clientName:  widget.fields['clientName']!.val,
                     ),
+                    // ClientFieldWidget(
+                    //   fieldEntity: widget.fields['clientId']!,
+                    //   onCreate: () {
+                    //     widget.closeForm.call();
+                    //   },
+                    //   onChange: (value) {
+                    //     widget.fields['clientId']!.val = value.id;
+                    //     clientId = value.id;
+                    //   },
+                    // ),
                     BarberFieldWidget(
                       fieldEntity: widget.fields['barberId']!,
                       onChange: (value) {

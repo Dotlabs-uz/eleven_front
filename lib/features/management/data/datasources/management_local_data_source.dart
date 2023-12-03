@@ -37,7 +37,6 @@ class ManagementLocalDataSourceImpl extends ManagementLocalDataSource {
     );
 
     await customerBox.put(HiveBoxKeysConstants.customerResult, data.toJson());
-    print("Save clients to local data sourse ");
 
     return true;
   }

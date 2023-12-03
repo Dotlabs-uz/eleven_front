@@ -8,7 +8,8 @@ import '../../domain/entity/order_entity.dart';
 class OrderModel extends OrderEntity {
   OrderModel({
     required super.id,
-    required super.client,
+    required super.clientName,
+    required super.clientPhone,
     required super.clientId,
     required super.fromSite,
     // required super.discount,
@@ -31,23 +32,24 @@ class OrderModel extends OrderEntity {
       id: json['_id'] ?? "",
       orderStart: DateTime.parse(json['orderStart']).toLocal(),
       orderEnd: withSubstract
-          ? DateTime.parse(json['orderEnd'])
-
-              .toLocal()
+          ? DateTime.parse(json['orderEnd']).toLocal()
           : DateTime.parse(json['orderEnd']).toLocal(),
-      barberId: json['barber']!=null ? json['barber']['_id']:  "",
+      barberId: json['barber'] != null ? json['barber']['_id'] : "",
       paymentType:
           json['payment'] == "cash" ? OrderPayment.cash : OrderPayment.card,
       // discountPercent: json['discountPer'],
       // discount: json['discount'],
       fromSite: json['fromSite'] ?? false,
-      clientId: json['client']!=null ? json['client']['_id']:  "",
+      clientId: json['client'] != null ? json['client']['_id'] : "",
       services: List.from(json['services'])
           .map((e) => ServiceProductModel.fromJson(e, false))
           .toList(),
-      status: OrderStatus.values[json['status']?? 1],
+      status: OrderStatus.values[json['status'] ?? 1],
       price: json['price'] ?? 0,
-      duration: json['duration'] ?? 0, client: CustomerModel.fromJson(json['client'], isForOrder: true), createdAt: DateTime.parse(json['createdAt']),
+      duration: json['duration'] ?? 0,
+      clientName: json['client']['name'],
+      clientPhone: int.parse(json['client']['phone']),
+      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 
@@ -64,7 +66,8 @@ class OrderModel extends OrderEntity {
       clientId: entity.clientId,
       services: entity.services,
       fromSite: entity.fromSite,
-      client: entity.client,
+      clientName: entity.clientName,
+      clientPhone: entity.clientPhone,
       status: entity.status,
       createdAt: entity.createdAt,
       duration: entity.duration,
@@ -80,7 +83,10 @@ class OrderModel extends OrderEntity {
     data['payments'] = paymentType.name;
     // data['discountPercent'] = discountPercent;
     // data['discount'] = discount;
-    data['client'] = clientId;
+    data['client'] = {
+      "name": clientName,
+      "phone": clientPhone,
+    };
     data['status'] = status.index;
     // data['filial'] = "6541c7a7dc28ae268a77572f";
     print("Services $services");
@@ -98,10 +104,12 @@ class OrderModel extends OrderEntity {
 
     data['payments'] = paymentType.name;
     if (withOrderEnd) {
-      data['orderEnd'] =
-          orderEnd.toIso8601String();
+      data['orderEnd'] = orderEnd.toIso8601String();
     }
-    data['client'] = clientId;
+    data['client'] = {
+      "name": clientName,
+      "phone": clientPhone,
+    };
     data['services'] = services.map((e) => e.id).toList();
 
     return data;
