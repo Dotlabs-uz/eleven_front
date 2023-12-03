@@ -1,4 +1,5 @@
 enum Types {
+  undefined,
   string,
   phoneNumber,
   int,

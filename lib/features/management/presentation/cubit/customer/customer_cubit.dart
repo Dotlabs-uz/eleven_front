@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,16 +8,17 @@ import '../../../domain/usecases/customer.dart';
 part 'customer_state.dart';
 
 class CustomerCubit extends Cubit<CustomerState> {
+  final GetCustomerById getCustomerById;
   final GetCustomer getData;
   final SaveCustomer saveData;
   final DeleteCustomer deleteData;
 
   CustomerCubit({
+    required this.getCustomerById,
     required this.getData,
     required this.saveData,
     required this.deleteData,
   }) : super(CustomerInitial());
-
 
   void init() {
     emit(CustomerInitial());
@@ -38,6 +38,15 @@ class CustomerCubit extends Cubit<CustomerState> {
     delete.fold(
       (error) => emit(CustomerError(message: error.errorMessage)),
       (data) => emit(CustomerDeleted(id: entity.id)),
+    );
+  }
+
+  void loadCustomer(String id) async {
+    final data = await getCustomerById.call(id);
+
+    data.fold(
+      (l) => emit(CustomerError(message: l.errorMessage)),
+      (r) => emit(CustomerByIdLoaded(entity: r)),
     );
   }
 

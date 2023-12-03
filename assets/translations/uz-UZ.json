@@ -665,5 +665,6 @@
   "typeDay": "Kun turi",
   "workingTime": "Ish vaqti",
   "orderHistory": "Buyurtma tarixi",
-  "clientCreatedOrderFromSite": "Mijoz veb-saytdan buyurtma yaratdi"
+  "clientCreatedOrderFromSite": "Mijoz veb-saytdan buyurtma yaratdi",
+  "clientOrdersHistory": "Mijoz buyurtmalari tarixi"
 }

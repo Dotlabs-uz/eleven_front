@@ -1,18 +1,15 @@
+import 'package:eleven_crm/features/main/data/model/order_for_client_history_model.dart';
+
 import '../../../../core/entities/field_entity.dart';
 import '../../domain/entity/customer_entity.dart';
 
 class CustomerModel extends CustomerEntity {
-  const CustomerModel({
-    required String id,
-    required String fullName,
-    required int phoneNumber,
-    required int ordersCount,
-  }) : super(
-          id: id,
-          fullName: fullName,
-          phoneNumber: phoneNumber,
-          ordersCount: ordersCount,
-        );
+  const CustomerModel(
+      {required super.id,
+      required super.fullName,
+      required super.phoneNumber,
+      required super.ordersCount,
+      required super.orders});
 
   List<MobileFieldEntity> getFieldsAndValues() {
     return [
@@ -39,13 +36,17 @@ class CustomerModel extends CustomerEntity {
     ];
   }
 
-  factory CustomerModel.fromJson(Map<String, dynamic> json) {
+  factory CustomerModel.fromJson(Map<String, dynamic> json,
+      {bool isForOrder = false}) {
 
     return CustomerModel(
-      id: json['_id']  ?? "",
+      id: json['_id'] ?? "",
       fullName: json['name'] ?? "",
-      phoneNumber: json['phone']??99,
-      ordersCount: json['ordersCount'] ?? 0,
+      phoneNumber: json['phone'] ?? 99,
+      ordersCount:isForOrder ?0 : List.from(json['orders']).length,
+      orders: isForOrder ? [] : List.from(json['orders'])
+          .map((e) => OrderForClientModel.fromJson(e))
+          .toList(),
     );
   }
 
@@ -55,6 +56,7 @@ class CustomerModel extends CustomerEntity {
       fullName: entity.fullName,
       phoneNumber: entity.phoneNumber,
       ordersCount: entity.ordersCount,
+      orders: entity.orders,
     );
   }
 

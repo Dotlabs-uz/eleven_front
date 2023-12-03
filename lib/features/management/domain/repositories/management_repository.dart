@@ -24,6 +24,8 @@ abstract class ManagementRepository {
     String? startDate,
     String? endDate,
   );
+
+  Future<Either<AppError, CustomerEntity>> getCustomerById(String id);
   Future<Either<AppError, CustomerEntity>> saveCustomer(CustomerEntity data);
   Future<Either<AppError, bool>> deleteCustomer(CustomerEntity entity);
 

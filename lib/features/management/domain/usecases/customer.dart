@@ -24,6 +24,19 @@ class GetCustomer extends UseCase<CustomerResultsEntity, CustomerParams> {
     );
   }
 }
+class GetCustomerById extends UseCase<CustomerEntity, String> {
+  final ManagementRepository repository;
+
+  GetCustomerById(this.repository);
+
+  @override
+  Future<Either<AppError, CustomerEntity>> call(
+      String params) async {
+    return await repository.getCustomerById(
+      params,
+    );
+  }
+}
 
 class SaveCustomer extends UseCase<CustomerEntity, CustomerEntity> {
   final ManagementRepository repository;

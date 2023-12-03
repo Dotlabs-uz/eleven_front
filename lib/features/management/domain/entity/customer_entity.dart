@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/entities/field_entity.dart';
+import '../../../main/domain/entity/order_for_client_history_entity.dart';
 
 class CustomerEntity extends Equatable {
 
@@ -11,12 +12,14 @@ class CustomerEntity extends Equatable {
   final String fullName;
   final int phoneNumber;
   final int ordersCount;
+  final List<OrderForClientEntity> orders;
 
   const CustomerEntity({
     required this.id,
     required this.fullName,
     required this.phoneNumber,
     required this.ordersCount,
+    required this.orders,
   });
 
 
@@ -53,6 +56,13 @@ class CustomerEntity extends Equatable {
       isForm: false,
       isRequired: false,
       val:0,
+    ),"orders": FieldEntity<dynamic>(
+      label: "orders",
+      hintText: "orders",
+      type: Types.undefined,
+      isForm: false,
+      isRequired: false,
+      val:[],
     ),
   };
 
@@ -69,6 +79,7 @@ class CustomerEntity extends Equatable {
     "fullName": fullName,
     "phoneNumber": phoneNumber,
     "ordersCount": ordersCount,
+    "orders": orders,
   }[key];
 
   factory CustomerEntity.fromRow(PlutoRow row) {
@@ -77,6 +88,7 @@ class CustomerEntity extends Equatable {
       fullName: row.cells["fullName"]?.value,
       phoneNumber: row.cells["phoneNumber"]?.value,
       ordersCount: row.cells["ordersCount"]?.value,
+      orders: row.cells["orders"]?.value,
 
     );
   }
@@ -88,6 +100,7 @@ class CustomerEntity extends Equatable {
       'fullName': PlutoCell(value: e.fullName),
       'phoneNumber': PlutoCell(value: e.phoneNumber),
       'ordersCount': PlutoCell(value: e.ordersCount),
+      'orders': PlutoCell(value: e.orders),
     });
   }
 
@@ -185,6 +198,7 @@ class CustomerEntity extends Equatable {
       fullName: fields["fullName"]?.val,
       phoneNumber: fields["phoneNumber"]?.val,
       ordersCount: fields["ordersCount"]?.val,
+      orders: fields["orders"]?.val,
     );
   }
 
@@ -194,6 +208,7 @@ class CustomerEntity extends Equatable {
       fullName: "",
       phoneNumber: 99,
       ordersCount:0,
+      orders:[],
     );
   }
 

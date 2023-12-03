@@ -28,6 +28,7 @@ abstract class ManagementRemoteDataSource {
     String? endDate,
   );
 
+  Future<CustomerModel> getCustomerById(String id );
   Future<CustomerModel> saveCustomer(CustomerModel data);
 
   Future<bool> deleteCustomer(String id);
@@ -113,6 +114,17 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
     // ]);
     //
     // return data;
+  }
+
+
+  @override
+  Future<CustomerModel> getCustomerById( String id,
+      ) async {
+    final response = await _client.get(
+        '${ApiConstants.clients}/$id');
+    final results = CustomerModel.fromJson(List.from(response['results']).first, isForOrder: false);
+
+    return results;
   }
 
   @override

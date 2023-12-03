@@ -25,6 +25,16 @@ class CustomerLoaded extends CustomerState {
   @override
   List<Object> get props => [data];
 }
+class CustomerByIdLoaded extends CustomerState {
+  final CustomerEntity entity;
+
+  const CustomerByIdLoaded({
+    required this.entity,
+  });
+
+  @override
+  List<Object> get props => [entity.id];
+}
 
 class CustomerSaved extends CustomerState {
   final CustomerEntity data;

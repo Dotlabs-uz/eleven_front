@@ -96,6 +96,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
 
     initLastFilterDate();
 
+    print("${listBarber.length} list barbers");
     listBarber.addAll(employeeListData);
     listOrders.addAll(widget.listOrders);
   }

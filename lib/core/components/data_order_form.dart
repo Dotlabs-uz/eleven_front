@@ -7,8 +7,10 @@ import 'package:eleven_crm/core/components/select_services_widget.dart';
 import 'package:eleven_crm/core/components/success_flash_bar.dart';
 import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/select_services/select_services_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/show_client_orders_history/show_client_orders_history_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/widget/client_orders_history_menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,6 +21,7 @@ import '../../features/management/presentation/cubit/customer/customer_cubit.dar
 import '../../features/products/domain/entity/service_product_entity.dart';
 import '../entities/field_entity.dart';
 import 'button_widget.dart';
+import 'client_search_widget.dart';
 import 'data_int_field_widget.dart';
 import 'payment_type_field_widget.dart';
 
@@ -100,7 +103,13 @@ class DataOrderFormState extends State<DataOrderForm> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        BlocBuilder<ShowOrderHistoryCubit, ShowOrderHistoryHelper>(
+        BlocBuilder<ShowClientOrdersHistoryCubit, ShowClientOrdersHistoryHelper>(
+          builder: (context, state) {
+            return state.show
+                ? const ClientOrdersHistoryMenuWidget()
+                : const SizedBox();
+          },
+        ),BlocBuilder<ShowOrderHistoryCubit, ShowOrderHistoryHelper>(
           builder: (context, state) {
             return state.show
                 ? const OrderHistoryMenuWidget()
@@ -143,16 +152,28 @@ class DataOrderFormState extends State<DataOrderForm> {
                                 widget.fields['createdAt']!.val;
                             final bool fromSite =
                                 widget.fields['fromSite']!.val;
-
+                            BlocProvider.of<ShowClientOrdersHistoryCubit>(context).disable();
                             BlocProvider.of<ShowOrderHistoryCubit>(context)
-                                .enable(selectedProducts, "+234234234234",
-                                    "Test", true, createdAt);
+                                .enable(selectedProducts, "+234234234234", // TODO CLIENT !!!!!
+                                    "Test", fromSite, createdAt);
+                          },
+                          icon: const Icon(Icons.info_outline),
+                        ),
+                        IconButton(
+                          onPressed: () {
+
+                            BlocProvider.of<ShowOrderHistoryCubit>(context).disable();
+                            BlocProvider.of<ShowClientOrdersHistoryCubit>(context)
+                                .enable(clientId);
                           },
                           icon: const Icon(Icons.info_outline),
                         ),
                         TextButton(
                           onPressed: () {
                             widget.closeForm.call();
+                            BlocProvider.of<ShowClientOrdersHistoryCubit>(context).disable();
+                            BlocProvider.of<ShowOrderHistoryCubit>(context).disable();
+
                             BlocProvider.of<ShowSelectServicesCubit>(context)
                                 .disable();
                           },
@@ -166,6 +187,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                         )
                       ],
                     ),
+                    ClientSearchWidget(controller: TextEditingController(), label: 'test',),
                     ClientFieldWidget(
                       fieldEntity: widget.fields['clientId']!,
                       onCreate: () {

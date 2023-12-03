@@ -47,7 +47,7 @@ class OrderModel extends OrderEntity {
           .toList(),
       status: OrderStatus.values[json['status']?? 1],
       price: json['price'] ?? 0,
-      duration: json['duration'] ?? 0, client: CustomerModel.fromJson(json['client']), createdAt: DateTime.parse(json['createdAt']),
+      duration: json['duration'] ?? 0, client: CustomerModel.fromJson(json['client'], isForOrder: true), createdAt: DateTime.parse(json['createdAt']),
     );
   }
 

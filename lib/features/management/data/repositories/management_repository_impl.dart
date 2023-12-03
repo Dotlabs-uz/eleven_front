@@ -72,6 +72,28 @@ class ManagementRepositoryImpl extends ManagementRepository {
     }
   }
 
+
+  @override
+  Future<Either<AppError, CustomerEntity>> getCustomerById(
+      String id,
+      ) async {
+    try {
+
+      final entity = await remoteDataSource.getCustomerById(
+        id,
+      );
+
+      return Right(entity);
+    } on SocketException {
+      return const Left(AppError(appErrorType: AppErrorType.network));
+    } on UnauthorisedException {
+      return const Left(AppError(appErrorType: AppErrorType.unauthorised));
+    } on ExceptionWithMessage catch (e) {
+      return Left(
+        AppError(appErrorType: AppErrorType.msgError, errorMessage: e.message),
+      );
+    }
+  }
   @override
   Future<Either<AppError, CustomerEntity>> saveCustomer(
     CustomerEntity data,
