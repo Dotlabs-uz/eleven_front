@@ -187,7 +187,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                         )
                       ],
                     ),
-                    ClientSearchWidget(controller: TextEditingController(), label: 'test',),
+                    ClientSearchWidget( label: 'client'.tr(), onNameSubmit: (value ) {  }, onPhoneSubmit: (value ) {  },),
                     ClientFieldWidget(
                       fieldEntity: widget.fields['clientId']!,
                       onCreate: () {

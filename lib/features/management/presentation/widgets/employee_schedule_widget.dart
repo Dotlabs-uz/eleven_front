@@ -7,7 +7,6 @@ import 'package:eleven_crm/features/management/domain/entity/employee_schedule_e
 import 'package:eleven_crm/features/management/presentation/provider/cross_in_employee_schedule_provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:region_detector/region_detector.dart';
 
@@ -16,7 +15,6 @@ import '../../../../core/utils/string_helper.dart';
 import '../../domain/entity/employee_entity.dart';
 import 'month_selector_with_dates_widget.dart';
 
-import 'package:flutter/material.dart';
 
 class FieldSchedule extends Equatable {
   final DateTime? dateTime;
