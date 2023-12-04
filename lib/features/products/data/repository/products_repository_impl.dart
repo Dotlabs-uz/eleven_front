@@ -130,20 +130,9 @@ class ProductsRepositoryImpl extends ProductsRepository {
       getServiceProductCategory(int page, String searchText, String? ordering,
           bool withServiceCategoryParsing, bool fetchGlobal) async {
     try {
-
-      if(fetchGlobal == false) {
-        final localData = await localDataSource.getServiceProductCategory(
-            searchText, withServiceCategoryParsing);
-
-        if (localData != null) {
-          print("local data ");
-          return Right(localData);
-        }
-      }
       final results = await remoteDataSource.getServiceProductCategory(
           page, searchText, ordering, withServiceCategoryParsing);
 
-      await localDataSource.saveServiceProductCategory(results);
 
       return Right(results);
     } on SocketException {
