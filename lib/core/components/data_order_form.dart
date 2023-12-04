@@ -205,12 +205,12 @@ class DataOrderFormState extends State<DataOrderForm> {
                     ),
                     ClientSearchWidget(
                       label: 'client'.tr(),
-                      onNameSubmit: (value) {
+                      onNameChanged: (value) {
                         widget.fields['clientName']!.val = value;
                         clientName = value;
                         setState(() {});
                       },
-                      onPhoneSubmit: (value) {
+                      onPhoneChanged: (value) {
                         widget.fields['clientPhone']!.val = value;
                         clientPhone = value;
                         setState(() {});

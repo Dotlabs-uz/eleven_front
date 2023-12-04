@@ -7,16 +7,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ClientSearchWidget extends StatefulWidget {
-  final Function(String) onNameSubmit;
-  final Function(int) onPhoneSubmit;
+  final Function(String) onNameChanged;
+  final Function(int) onPhoneChanged;
   final String label;
   final String clientName;
   final int clientPhone;
 
   const ClientSearchWidget({
     Key? key,
-    required this.onNameSubmit,
-    required this.onPhoneSubmit,
+    required this.onNameChanged,
+    required this.onPhoneChanged,
     required this.clientPhone,
     required this.clientName,
     required this.label,
@@ -127,11 +127,14 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                             );
                           },
                           suggestionsBuilder:
-                              (BuildContext context, SearchController controller)async  {
+                              (BuildContext context, SearchController controller)   {
 
+                            widget.onNameChanged.call(controller.text);
                             BlocProvider.of<CustomerCubit>(context)
                                 .load(controller.text);
-                            
+
+
+
                             return List<ListTile>.generate(listCustomers.length,
                                 (int index) {
                               final CustomerEntity item = listCustomers[index];
@@ -148,7 +151,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                     controller.closeView(item.fullName);
                                     searchControllerPhone.text =
                                         item.phoneNumber.toString();
-                                    widget.onNameSubmit.call(item.fullName);
+                                    widget.onNameChanged.call(item.fullName);
                                   });
                                 },
                               );
@@ -208,7 +211,9 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           },
                           suggestionsBuilder:
                               (BuildContext context, SearchController controller) {
-                            BlocProvider.of<CustomerCubit>(context)
+                                widget.onPhoneChanged.call(int.parse(controller.text));
+
+                                BlocProvider.of<CustomerCubit>(context)
                                 .load(controller.text);
 
                             return List<ListTile>.generate(listCustomers.length,
@@ -230,7 +235,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                         .closeView(item.phoneNumber.toString());
                                     searchControllerName.text = item.fullName;
                                     print("search controller name ${item.fullName}")
-;                                    widget.onPhoneSubmit.call(item.phoneNumber);
+;                                    widget.onPhoneChanged.call(item.phoneNumber);
 
                                   });
                                 },
