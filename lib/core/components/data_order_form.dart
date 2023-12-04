@@ -50,7 +50,8 @@ class DataOrderFormState extends State<DataOrderForm> {
   double price = 0;
   double duration = 0;
   // DateTime? orderEnd;
-  static String clientId = "";
+  static String clientName = "";
+  static int clientPhone = 998;
   static String barberId = "";
   static DateTime orderStart = DateTime.now();
 
@@ -58,10 +59,12 @@ class DataOrderFormState extends State<DataOrderForm> {
   void initState() {
     price = widget.fields['price']?.val ?? 0;
     duration = widget.fields['duration']?.val ?? 0;
-    clientId = widget.fields['clientId']?.val ?? "";
+    clientName = widget.fields['clientName']?.val ?? "";
+    clientPhone = widget.fields['clientPhone']?.val ?? 998;
     barberId = widget.fields['barberId']?.val ?? "";
     orderStart = widget.fields['orderStart']?.val ?? DateTime.now();
     selectedProducts.clear();
+    setState(() {});
 
     print("Duration $duration");
 
@@ -69,7 +72,8 @@ class DataOrderFormState extends State<DataOrderForm> {
   }
 
   clearData() {
-    clientId = "";
+    clientName = "";
+    clientPhone = 998;
     barberId = "";
     orderStart = DateTime.now();
     selectedProducts.clear();
@@ -160,8 +164,8 @@ class DataOrderFormState extends State<DataOrderForm> {
                             BlocProvider.of<ShowOrderHistoryCubit>(context)
                                 .enable(
                                     selectedProducts,
-                                    "+234234234234", // TODO CLIENT !!!!!
-                                    "Test",
+                                    clientPhone.toString(), // TODO CLIENT !!!!!
+                                    clientName,
                                     fromSite,
                                     createdAt);
                           },
@@ -173,7 +177,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                                 .disable();
                             BlocProvider.of<ShowClientOrdersHistoryCubit>(
                                     context)
-                                .enable(clientId);
+                                .enable(clientName);
                           },
                           icon: const Icon(Icons.info_outline),
                         ),
@@ -203,12 +207,16 @@ class DataOrderFormState extends State<DataOrderForm> {
                       label: 'client'.tr(),
                       onNameSubmit: (value) {
                         widget.fields['clientName']!.val = value;
+                        clientName = value;
+                        setState(() {});
                       },
                       onPhoneSubmit: (value) {
                         widget.fields['clientPhone']!.val = value;
+                        clientPhone = value;
+                        setState(() {});
                       },
-                      clientPhone:  widget.fields['clientPhone']!.val,
-                      clientName:  widget.fields['clientName']!.val,
+                      clientPhone: clientPhone,
+                      clientName: clientName,
                     ),
                     // ClientFieldWidget(
                     //   fieldEntity: widget.fields['clientId']!,
@@ -279,12 +287,16 @@ class DataOrderFormState extends State<DataOrderForm> {
                           ButtonWidget(
                             text: "save".tr(),
                             onPressed: () async {
-                              if (clientId.isEmpty) {
+                              print(
+                                  "Client name $clientName client phone $clientPhone");
+                              if (clientName.isEmpty &&
+                                  clientPhone.toString() == "998") {
                                 await confirm(
                                   context,
                                   title: const Text('client').tr(),
-                                  content:
-                                      const Text('pleaseSelectClient').tr(),
+                                  content: const Text(
+                                          'pleaseEnterClientNameAndPhone')
+                                      .tr(),
                                   textOK: const Text('ok').tr(),
                                   enableCancel: false,
                                 );
@@ -323,7 +335,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                               }
 
                               widget.saveData
-                                  .call(selectedProducts, barberId, clientId);
+                                  .call(selectedProducts, barberId, clientName);
                               clearData();
                               BlocProvider.of<ShowSelectServicesCubit>(context)
                                   .disable();

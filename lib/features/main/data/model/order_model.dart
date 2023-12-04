@@ -48,7 +48,7 @@ class OrderModel extends OrderEntity {
       price: json['price'] ?? 0,
       duration: json['duration'] ?? 0,
       clientName: json['client']['name'],
-      clientPhone: int.parse(json['client']['phone']),
+      clientPhone: json['client']['phone'],
       createdAt: DateTime.parse(json['createdAt']),
     );
   }

@@ -666,5 +666,6 @@
   "workingTime": "Ish vaqti",
   "orderHistory": "Buyurtma tarixi",
   "clientCreatedOrderFromSite": "Mijoz veb-saytdan buyurtma yaratdi",
-  "clientOrdersHistory": "Mijoz buyurtmalari tarixi"
+  "clientOrdersHistory": "Mijoz buyurtmalari tarixi",
+  "pleaseEnterClientNameAndPhone": "Iltimos, mijoz nomi va raqamini kiriting"
 }

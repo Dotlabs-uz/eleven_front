@@ -31,7 +31,6 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
   final SearchController searchControllerName = SearchController();
   final SearchController searchControllerPhone = SearchController();
 
-
   @override
   void initState() {
     initialize();
@@ -230,7 +229,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                     controller
                                         .closeView(item.phoneNumber.toString());
                                     searchControllerName.text = item.fullName;
-                                    widget.onPhoneSubmit.call(item.phoneNumber);
+                                    print("search controller name ${item.fullName}")
+;                                    widget.onPhoneSubmit.call(item.phoneNumber);
 
                                   });
                                 },

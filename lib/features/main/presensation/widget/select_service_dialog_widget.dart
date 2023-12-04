@@ -173,7 +173,6 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                                           final service =
                                               category.services[index];
 
-                                          print("Service $service");
                                           return GestureDetector(
                                             onTap: () {
                                               if (listSelectedServices
