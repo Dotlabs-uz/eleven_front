@@ -122,7 +122,7 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
       ) async {
     final response = await _client.get(
         '${ApiConstants.clients}/$id');
-    final results = CustomerModel.fromJson(List.from(response['results']).first, isForOrder: false);
+    final results = CustomerModel.fromJson(response, isForOrder: false);
 
     return results;
   }

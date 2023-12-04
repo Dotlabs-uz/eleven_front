@@ -34,7 +34,7 @@ class ApiClient {
       queryParameters: params,
     );
 
-    log("Pth $pth");
+    print("Pth $pth");
 
     final header = {
       'Authorization': sessionId,

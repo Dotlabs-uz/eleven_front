@@ -95,11 +95,13 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     listBarbers.clear();
 
-
     _setWidgetTop();
-    await Future.delayed(const Duration(seconds: 10), () {
-      webSocketService.refresh();
-    },);
+    await Future.delayed(
+      const Duration(seconds: 10),
+      () {
+        webSocketService.refresh();
+      },
+    );
   }
 
   _setWidgetTop() {
@@ -143,8 +145,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
     // BlocProvider.of<OrderCubit>(context).save(
     //     order: OrderEntity.fromFields(selectedServices: selectedServices));
   }
-
-
 
   void _onDeleteNotWorkingHours(
       NotWorkingHoursEntity entity, BarberEntity barberEntity) async {
@@ -367,191 +367,191 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
                               Expanded(
                                 flex: 2,
-                                child: BlocBuilder<OrderFilterCubit, OrderFilterHelper>(
+                                child: BlocBuilder<OrderFilterCubit,
+                                    OrderFilterHelper>(
                                   builder: (context, state) {
-                                    // if (state is OrderDeleted) {
-                                    //   // final element = orders.firstWhere(
-                                    //   //     (element) =>
-                                    //   //         element.id == state.orderId);
-                                    //   //
-                                    //   // orders.remove(element);
-                                    //   // BlocProvider.of<OrderCubit>(context)
-                                    //   //     .init();
-                                    // } else if (state is OrderSaved) {
-                                    //   // if (orders.contains(state.order) ==
-                                    //   //     false) {
-                                    //   //   orders.add(OrderModel.fromEntity(
-                                    //   //       state.order));
-                                    //   // }
-                                    //   // BlocProvider.of<OrderCubit>(context)
-                                    //   //     .init();
-                                    // }
                                     return AnimatedSwitcher(
-                                      duration: const Duration(seconds: 2),
-                                      switchInCurve: Curves.easeIn,
-                                      switchOutCurve: Curves.easeIn,
-                                      child: TimeTableWidget(
-                                        listBarbers: listBarbers,
-                                        onOrderTap: (order) {
-                                          order.status = OrderStatus.viewed;
-                                          _updateOrder(order,
-                                              withOrderEnd: false);
-                                        },
-                                        onTapNotWorkingHour:
-                                        _onDeleteNotWorkingHours,
-                                        orderFilterQuery: BlocProvider.of<
-                                            OrderFilterCubit>(context)
-                                            .state
-                                            .query,
-                                        onFieldTap:
-                                            (hour, minute, barberId) {
-                                          print(
-                                              "Filter date $filteredDate");
-                                          activeData = OrderEntity.empty(
-                                            hour: hour,
-                                            minute: minute,
-                                            barber: barberId,
-                                            month: filteredDate.month,
-                                            day: filteredDate.day,
-                                          );
-                                          _editOrder(activeData);
-                                        },
-                                        onOrderDoubleTap: (entity) {
-                                          print("Entity $entity");
-                                          activeData = entity;
-                                          _editOrder(activeData);
-                                        },
-                                        onDeleteEmployeeFromTable:
-                                            (employeeId) {
-                                          _barberFromTimeTableCardAction(
-                                            employeeId,
-                                            false,
-                                          );
-                                        },
-                                        onNotWorkingHoursCreate: (
+                                        duration: const Duration(seconds: 1),
+                                        switchInCurve: Curves.easeIn,
+                                        switchOutCurve: Curves.easeIn,
+                                        child: orders.isEmpty ? const SizedBox(): TimeTableWidget(
+                                          listBarbers: listBarbers,
+                                          onOrderTap: (order) {
+                                            order.status = OrderStatus.viewed;
+                                            _updateOrder(order,
+                                                withOrderEnd: false);
+                                          },
+                                          onTapNotWorkingHour:
+                                              _onDeleteNotWorkingHours,
+                                          orderFilterQuery:
+                                              BlocProvider.of<OrderFilterCubit>(
+                                                      context)
+                                                  .state
+                                                  .query,
+                                          onFieldTap: (hour, minute, barberId) {
+                                            print("Filter date $filteredDate");
+                                            activeData = OrderEntity.empty(
+                                              hour: hour,
+                                              minute: minute,
+                                              barber: barberId,
+                                              month: filteredDate.month,
+                                              day: filteredDate.day,
+                                            );
+                                            _editOrder(activeData);
+                                          },
+                                          onOrderDoubleTap: (entity) {
+                                            print("Entity $entity");
+                                            activeData = entity;
+                                            _editOrder(activeData);
+                                          },
+                                          onDeleteEmployeeFromTable:
+                                              (employeeId) {
+                                            _barberFromTimeTableCardAction(
+                                              employeeId,
+                                              false,
+                                            );
+                                          },
+                                          onNotWorkingHoursCreate: (
                                             DateTime from,
                                             DateTime to,
                                             String employeeId,
-                                            ) {
-                                          BlocProvider.of<
-                                              NotWorkingHoursCubit>(
-                                            context,
-                                          ).save(
-                                            dateFrom: from,
-                                            dateTo: to,
-                                            employeeId: employeeId,
-                                          );
-                                        },
-                                        listOrders: orders,
-                                        onOrderStartResizeEnd: (order) =>
-                                            _updateOrder(order),
-                                        onOrderEndResizeEnd: (order) =>
-                                            _updateOrder(order),
-                                        onOrderDragEnd: (order) {
-                                          print("Order drag end");
-                                          _updateOrder(order,
-                                              withOrderEnd: true);
-                                        }, onChangeEmployeeSchedule: (employeeId) {
-                                        final now = DateTime.now();
-                                        Dialogs.scheduleField(
-                                          context: context,
-                                          day: now.day,
-                                          month: now.month,
-                                          year: now.year,
-                                          onConfirm: (status, fromHour, fromMinute, toHour, toMinute) {
-                                            final fieldSchedule = FieldSchedule(
-                                              DateFormat("yyyy-MM-dd").parse(now.toString()),
-                                              employeeId,
-                                              status,
-                                              {"from": "$fromHour:$fromMinute", "to": "$toHour:$toMinute"},
+                                          ) {
+                                            BlocProvider.of<
+                                                NotWorkingHoursCubit>(
+                                              context,
+                                            ).save(
+                                              dateFrom: from,
+                                              dateTo: to,
+                                              employeeId: employeeId,
                                             );
-                                            BlocProvider.of<EmployeeScheduleCubit>(context).save(listData: [fieldSchedule]);
                                           },
+                                          listOrders: orders,
+                                          onOrderStartResizeEnd: (order) =>
+                                              _updateOrder(order),
+                                          onOrderEndResizeEnd: (order) =>
+                                              _updateOrder(order),
+                                          onOrderDragEnd: (order) {
+                                            print("Order drag end");
+                                            _updateOrder(order,
+                                                withOrderEnd: true);
+                                          },
+                                          onChangeEmployeeSchedule:
+                                              (employeeId) {
+                                            final now = DateTime.now();
+                                            Dialogs.scheduleField(
+                                              context: context,
+                                              day: now.day,
+                                              month: now.month,
+                                              year: now.year,
+                                              onConfirm: (status,
+                                                  fromHour,
+                                                  fromMinute,
+                                                  toHour,
+                                                  toMinute) {
+                                                final fieldSchedule =
+                                                    FieldSchedule(
+                                                  DateFormat("yyyy-MM-dd")
+                                                      .parse(now.toString()),
+                                                  employeeId,
+                                                  status,
+                                                  {
+                                                    "from":
+                                                        "$fromHour:$fromMinute",
+                                                    "to": "$toHour:$toMinute"
+                                                  },
+                                                );
+                                                BlocProvider.of<
+                                                            EmployeeScheduleCubit>(
+                                                        context)
+                                                    .save(listData: [
+                                                  fieldSchedule
+                                                ]);
+                                              },
+                                            );
+                                          },
+                                        )
+                                        // child: orders.isNotEmpty
+                                        //     ? TimeTableWidget(
+                                        //   listBarbers: listBarbers,
+                                        //   onOrderTap: (order) {
+                                        //     order.status = OrderStatus.viewed;
+                                        //     _updateOrder(order,
+                                        //         withOrderEnd: false);
+                                        //   },
+                                        //   onTapNotWorkingHour:
+                                        //   _onDeleteNotWorkingHours,
+                                        //   orderFilterQuery: BlocProvider.of<
+                                        //       OrderFilterCubit>(context)
+                                        //       .state
+                                        //       .query,
+                                        //   onFieldTap:
+                                        //       (hour, minute, barberId) {
+                                        //     print(
+                                        //         "Filter date $filteredDate");
+                                        //     activeData = OrderEntity.empty(
+                                        //       hour: hour,
+                                        //       minute: minute,
+                                        //       barber: barberId,
+                                        //       month: filteredDate.month,
+                                        //       day: filteredDate.day,
+                                        //     );
+                                        //     _editOrder(activeData);
+                                        //   },
+                                        //   onOrderDoubleTap: (entity) {
+                                        //     print("Entity $entity");
+                                        //     activeData = entity;
+                                        //     _editOrder(activeData);
+                                        //   },
+                                        //   onDeleteEmployeeFromTable:
+                                        //       (employeeId) {
+                                        //     _barberFromTimeTableCardAction(
+                                        //       employeeId,
+                                        //       false,
+                                        //     );
+                                        //   },
+                                        //   onNotWorkingHoursCreate: (
+                                        //       DateTime from,
+                                        //       DateTime to,
+                                        //       String employeeId,
+                                        //       ) {
+                                        //     BlocProvider.of<
+                                        //         NotWorkingHoursCubit>(
+                                        //       context,
+                                        //     ).save(
+                                        //       dateFrom: from,
+                                        //       dateTo: to,
+                                        //       employeeId: employeeId,
+                                        //     );
+                                        //   },
+                                        //   listOrders: orders,
+                                        //   onOrderStartResizeEnd: (order) =>
+                                        //       _updateOrder(order),
+                                        //   onOrderEndResizeEnd: (order) =>
+                                        //       _updateOrder(order),
+                                        //   onOrderDragEnd: (order) {
+                                        //     print("Order drag end");
+                                        //     _updateOrder(order,
+                                        //         withOrderEnd: true);
+                                        //   }, onChangeEmployeeSchedule: (employeeId) {
+                                        //   final now = DateTime.now();
+                                        //   Dialogs.scheduleField(
+                                        //     context: context,
+                                        //     day: now.day,
+                                        //     month: now.month,
+                                        //     year: now.year,
+                                        //     onConfirm: (status, fromHour, fromMinute, toHour, toMinute) {
+                                        //       final fieldSchedule = FieldSchedule(
+                                        //         DateFormat("yyyy-MM-dd").parse(now.toString()),
+                                        //         employeeId,
+                                        //         status,
+                                        //         {"from": "$fromHour:$fromMinute", "to": "$toHour:$toMinute"},
+                                        //       );
+                                        //       BlocProvider.of<EmployeeScheduleCubit>(context).save(listData: [fieldSchedule]);
+                                        //     },
+                                        //   );
+                                        // },
+                                        // ) : const SizedBox.expand(),
                                         );
-                                      },
-                                      ) ,
-                                      // child: orders.isNotEmpty
-                                      //     ? TimeTableWidget(
-                                      //   listBarbers: listBarbers,
-                                      //   onOrderTap: (order) {
-                                      //     order.status = OrderStatus.viewed;
-                                      //     _updateOrder(order,
-                                      //         withOrderEnd: false);
-                                      //   },
-                                      //   onTapNotWorkingHour:
-                                      //   _onDeleteNotWorkingHours,
-                                      //   orderFilterQuery: BlocProvider.of<
-                                      //       OrderFilterCubit>(context)
-                                      //       .state
-                                      //       .query,
-                                      //   onFieldTap:
-                                      //       (hour, minute, barberId) {
-                                      //     print(
-                                      //         "Filter date $filteredDate");
-                                      //     activeData = OrderEntity.empty(
-                                      //       hour: hour,
-                                      //       minute: minute,
-                                      //       barber: barberId,
-                                      //       month: filteredDate.month,
-                                      //       day: filteredDate.day,
-                                      //     );
-                                      //     _editOrder(activeData);
-                                      //   },
-                                      //   onOrderDoubleTap: (entity) {
-                                      //     print("Entity $entity");
-                                      //     activeData = entity;
-                                      //     _editOrder(activeData);
-                                      //   },
-                                      //   onDeleteEmployeeFromTable:
-                                      //       (employeeId) {
-                                      //     _barberFromTimeTableCardAction(
-                                      //       employeeId,
-                                      //       false,
-                                      //     );
-                                      //   },
-                                      //   onNotWorkingHoursCreate: (
-                                      //       DateTime from,
-                                      //       DateTime to,
-                                      //       String employeeId,
-                                      //       ) {
-                                      //     BlocProvider.of<
-                                      //         NotWorkingHoursCubit>(
-                                      //       context,
-                                      //     ).save(
-                                      //       dateFrom: from,
-                                      //       dateTo: to,
-                                      //       employeeId: employeeId,
-                                      //     );
-                                      //   },
-                                      //   listOrders: orders,
-                                      //   onOrderStartResizeEnd: (order) =>
-                                      //       _updateOrder(order),
-                                      //   onOrderEndResizeEnd: (order) =>
-                                      //       _updateOrder(order),
-                                      //   onOrderDragEnd: (order) {
-                                      //     print("Order drag end");
-                                      //     _updateOrder(order,
-                                      //         withOrderEnd: true);
-                                      //   }, onChangeEmployeeSchedule: (employeeId) {
-                                      //   final now = DateTime.now();
-                                      //   Dialogs.scheduleField(
-                                      //     context: context,
-                                      //     day: now.day,
-                                      //     month: now.month,
-                                      //     year: now.year,
-                                      //     onConfirm: (status, fromHour, fromMinute, toHour, toMinute) {
-                                      //       final fieldSchedule = FieldSchedule(
-                                      //         DateFormat("yyyy-MM-dd").parse(now.toString()),
-                                      //         employeeId,
-                                      //         status,
-                                      //         {"from": "$fromHour:$fromMinute", "to": "$toHour:$toMinute"},
-                                      //       );
-                                      //       BlocProvider.of<EmployeeScheduleCubit>(context).save(listData: [fieldSchedule]);
-                                      //     },
-                                      //   );
-                                      // },
-                                      // ) : const SizedBox.expand(),
-                                    );
                                   },
                                 ),
                               ),
@@ -598,15 +598,15 @@ class _ContentWidgetState extends State<_ContentWidget> {
                         duration: const Duration(milliseconds: 300),
                         child: state.show
                             ? DataOrderForm(
-                              fields: activeData.getFields(),
-                              saveData: _saveOrder,
-                              webSocketsService: webSocketService,
-                              closeForm: () {
-                                BlocProvider.of<HomeScreenOrderFormCubit>(
-                                        context)
-                                    .disable();
-                              },
-                            )
+                                fields: activeData.getFields(),
+                                saveData: _saveOrder,
+                                webSocketsService: webSocketService,
+                                closeForm: () {
+                                  BlocProvider.of<HomeScreenOrderFormCubit>(
+                                          context)
+                                      .disable();
+                                },
+                              )
                             : const SizedBox(),
                       );
                     },

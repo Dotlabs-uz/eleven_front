@@ -6,15 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../features/main/presensation/cubit/show_client_orders_history/show_client_orders_history_cubit.dart';
+import '../../features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
+
 class ClientSearchWidget extends StatefulWidget {
   final Function(String) onNameChanged;
   final Function(int) onPhoneChanged;
+  final Function() onHistoryTap;
+  final bool enableHistoryButton;
   final String label;
   final String clientName;
   final int clientPhone;
 
   const ClientSearchWidget({
     Key? key,
+    required this.enableHistoryButton,
+    required this.onHistoryTap,
     required this.onNameChanged,
     required this.onPhoneChanged,
     required this.clientPhone,
@@ -72,12 +79,24 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.label, style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Nunito",
-            ),),
+            Row(
+              children: [
+                if (widget.enableHistoryButton)
+                  IconButton(
+                    onPressed: () {
+                   widget.onHistoryTap.call();
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20,),
+                  ),
+                const SizedBox(width: 10),
+                Text(widget.label, style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "Nunito",
+                ),),
+              ],
+            ),
 
             const SizedBox(height: 10),
             BlocBuilder<CustomerCubit, CustomerState>(

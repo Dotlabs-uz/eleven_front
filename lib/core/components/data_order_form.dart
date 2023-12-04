@@ -150,8 +150,8 @@ class DataOrderFormState extends State<DataOrderForm> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        // if (widget.fields['id']?.val != null &&
-                        //     widget.fields['id']!.val.toString().isNotEmpty)
+                        if (widget.fields['id']?.val != null &&
+                            widget.fields['id']!.val.toString().isNotEmpty)
                         IconButton(
                           onPressed: () {
                             final DateTime createdAt =
@@ -169,18 +169,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                                     fromSite,
                                     createdAt);
                           },
-                          icon: const Icon(Icons.info_outline),
+                          icon: const Icon(Icons.history),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            BlocProvider.of<ShowOrderHistoryCubit>(context)
-                                .disable();
-                            BlocProvider.of<ShowClientOrdersHistoryCubit>(
-                                    context)
-                                .enable(clientName);
-                          },
-                          icon: const Icon(Icons.info_outline),
-                        ),
+
                         TextButton(
                           onPressed: () {
                             widget.closeForm.call();
@@ -216,7 +207,14 @@ class DataOrderFormState extends State<DataOrderForm> {
                         setState(() {});
                       },
                       clientPhone: clientPhone,
-                      clientName: clientName,
+                      clientName: clientName, enableHistoryButton: widget.fields['id']?.val != null &&
+                        widget.fields['id']!.val.toString().isNotEmpty, onHistoryTap: () {
+                      BlocProvider.of<ShowOrderHistoryCubit>(context)
+                          .disable();
+                      BlocProvider.of<ShowClientOrdersHistoryCubit>(
+                          context)
+                          .enable(widget.fields['clientId']?.val);
+                    },
                     ),
                     // ClientFieldWidget(
                     //   fieldEntity: widget.fields['clientId']!,
