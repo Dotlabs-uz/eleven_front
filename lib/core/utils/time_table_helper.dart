@@ -47,7 +47,7 @@ class TimeTableHelper {
 
     final h = (differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound).toDouble();
 
-    return h > 1600 ? 1600 : h;
+    return h >= 1400 ? 1400 : h;
   }
 
   static double getTopPositionForOrder(OrderEntity order) {

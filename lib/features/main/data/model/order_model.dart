@@ -28,6 +28,7 @@ class OrderModel extends OrderEntity {
 
   factory OrderModel.fromJson(Map<String, dynamic> json,
       {bool withSubstract = false}) {
+
     return OrderModel(
       id: json['_id'] ?? "",
       orderStart: DateTime.parse(json['orderStart']).toLocal(),
@@ -47,8 +48,8 @@ class OrderModel extends OrderEntity {
       status: OrderStatus.values[json['status'] ?? 1],
       price: json['price'] ?? 0,
       duration: json['duration'] ?? 0,
-      clientName: json['client']['name'],
-      clientPhone: json['client']['phone'],
+      clientName: json['client']['name'] ?? "",
+      clientPhone: json['client']['phone'] ?? "",
       createdAt: DateTime.parse(json['createdAt']),
     );
   }
