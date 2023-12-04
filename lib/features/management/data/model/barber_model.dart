@@ -66,7 +66,9 @@ class BarberModel extends BarberEntity {
   }
 
   factory BarberModel.fromJson(Map<String, dynamic> json) {
-    return BarberModel(
+
+    print("Json barber ${json['firstName']} ${json['notWorkingHours']}")
+;    return BarberModel(
       id: json['_id'],
       firstName: json['firstName'],
       employeeId: json['employeeId'] ?? "",

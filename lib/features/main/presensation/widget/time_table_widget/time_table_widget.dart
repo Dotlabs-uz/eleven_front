@@ -64,7 +64,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
 
   static final List<BarberEntity> listBarber = [];
   static final List<OrderEntity> listOrders = [];
-  static List<NotWorkingHoursEntity> listNotWorkingHours = [];
+  static List<NotWorkingHoursEntity> listAllNotWorkingHoursForBarber = [];
   static String lastFilteredDate = "";
 
   @override
@@ -88,7 +88,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
   void initialize() {
     listBarber.clear();
     listOrders.clear();
-    listNotWorkingHours.clear();
+    listAllNotWorkingHoursForBarber.clear();
 
     final List<BarberEntity> employeeListData = widget.listBarbers
         .where((element) => element.inTimeTable == true)
@@ -109,7 +109,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
   void dispose() {
     listBarber.clear();
     listOrders.clear();
-    listNotWorkingHours.clear();
+    listAllNotWorkingHoursForBarber.clear();
 
     super.dispose();
   }
@@ -199,7 +199,6 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                             final DateTime elementDt =
                                                 element.orderStart;
 
-
                                             return barber.id ==
                                                     element.barberId &&
                                                 lastFilterDt != null &&
@@ -212,7 +211,9 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                           },
                                         ).toList();
 
-                                        listNotWorkingHours =
+                                        listAllNotWorkingHoursForBarber =
+                                            barber.notWorkingHours;
+                                        final localNotWorkingHours =
                                             barber.notWorkingHours;
 
                                         return SizedBox(
@@ -348,9 +349,9 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                       );
                                                     },
                                                   ),
-                                                if (listNotWorkingHours
+                                                if (listAllNotWorkingHoursForBarber
                                                     .isNotEmpty)
-                                                  ...listNotWorkingHours
+                                                  ...localNotWorkingHours
                                                       .where(
                                                         (notWorkingHoursEntity) {
                                                           return TimeTableHelper
@@ -493,7 +494,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                   listBarber.remove(entity);
                   widget.onDeleteEmployeeFromTable?.call(entity.id);
 
-                   setState(() {});
+                  setState(() {});
                 },
                 employeeId: entity.id,
                 onChangeEmployeeSchedule: () {

@@ -331,7 +331,6 @@ class _DataTableWithFormState extends State<DataTableWithForm> {
 
     PlutoColumn? columnItem;
 
-    debugPrint("set risize $sizes");
     // debugPrint("Sizes $sizes");
 
     if (sizes != null) {

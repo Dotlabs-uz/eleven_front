@@ -110,7 +110,7 @@ class TimeTableHelper {
         if (dateTimeFrom.day == dt.day &&
             dateTimeFrom.month == dt.month &&
             dateTimeFrom.year == dt.year) {
-          print("Remove not working hours $dateTimeFrom");
+          print("get working hours $dateTimeFrom");
           return true;
         }
         return false;
@@ -121,7 +121,7 @@ class TimeTableHelper {
     if (dateTimeFrom.day == nowDateTime.day &&
         dateTimeFrom.month == nowDateTime.month &&
         dateTimeFrom.year == nowDateTime.year) {
-      print("Remove not working hours $dateTimeFrom");
+      print("get working hours $dateTimeFrom");
       return true;
     }
     return false;
