@@ -54,6 +54,29 @@ class StringHelper {
     return Weekday.values[dayOfWeek];
   }
 
+
+  static String getDayOfWeekTypeForBarberProfile(int day) {
+
+    switch (day) {
+      case 1:
+        return "monSmall";
+      case 2:
+        return "tueSmall";
+      case 3:
+        return "wedSmall";
+      case 4:
+        return "thSmall";
+      case 5:
+        return "frSmall";
+      case 6:
+        return "saSmall";
+      case 0:
+        return "suSmall";
+      default:
+        return "Неверный день недели";
+    }
+  }
+
   static String getDayOfWeekType(DateTime dateTime) {
     final date = dateTime;
     final dayOfWeek = date.weekday;
