@@ -358,8 +358,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                               .notWorkingHourCondition(
                                                             notWorkingHoursEntity
                                                                 .dateFrom,
-                                                            widget
-                                                                .orderFilterQuery,
+                                                            BlocProvider.of<OrderFilterCubit>(context).state.query,
                                                           );
                                                         },
                                                       )

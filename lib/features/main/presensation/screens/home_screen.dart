@@ -374,7 +374,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         duration: const Duration(seconds: 1),
                                         switchInCurve: Curves.easeIn,
                                         switchOutCurve: Curves.easeIn,
-                                        child: orders.isEmpty ? const SizedBox(): TimeTableWidget(
+                                        child: orders.isEmpty ? const EmptyWidget(): TimeTableWidget(
                                           listBarbers: listBarbers,
                                           onOrderTap: (order) {
                                             order.status = OrderStatus.viewed;
