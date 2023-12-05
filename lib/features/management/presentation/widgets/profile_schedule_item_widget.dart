@@ -48,8 +48,8 @@ class _ProfileScheduleItemWidgetState extends State<ProfileScheduleItemWidget> {
         const SizedBox(width: 20),
         SizedBox(
           width: 30,
-          child: Text(StringHelper.getDayOfWeekType(
-                  DateTime.now().copyWith(day: widget.day - 1))
+          child: Text(StringHelper.getDayOfWeekTypeForBarberProfile(
+                  widget.day)
               .tr()),
         ),
         const SizedBox(width: 70),
