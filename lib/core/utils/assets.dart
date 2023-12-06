@@ -23,6 +23,7 @@ class Assets {
 
   static const String tNewOrderVoiceDaler = 'assets/voices/new-order-daler.mp3';
   static const String tNewOrderVoiceBeka = 'assets/voices/new-order-beka.mp3';
+  static const String tNewOrderVoiceAirport = 'assets/voices/order-new.mp3';
 
 
 

@@ -47,7 +47,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   static List<DateTime> listBlinkedDates = [];
   static final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer()
     ..open(
-      Audio.file(Assets.tNewOrderVoiceBeka),
+      Audio.file(Assets.tNewOrderVoiceAirport),
       volume: 1,
       loopMode: LoopMode.none,
       forceOpen: true,
