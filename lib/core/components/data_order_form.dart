@@ -64,9 +64,13 @@ class DataOrderFormState extends State<DataOrderForm> {
     barberId = widget.fields['barberId']?.val ?? "";
     orderStart = widget.fields['orderStart']?.val ?? DateTime.now();
     selectedProducts.clear();
-    setState(() {});
 
-    print("Duration $duration");
+    if(mounted) {
+      Future.delayed(Duration.zero,() {
+
+    setState(() {});
+      },);
+    }
 
     super.initState();
   }
@@ -240,7 +244,18 @@ class DataOrderFormState extends State<DataOrderForm> {
                     DateTimeFieldWidget(
                       fieldEntity: widget.fields['orderStart']!,
                       withTime: true,
-                      onChanged: (value) => orderStart = value,
+                      onChanged: (value) {
+
+                         if(mounted) {
+                           Future.delayed(Duration.zero, () {
+                             setState(() {
+                               orderStart = value;
+
+                             });
+                           },);
+
+                         }
+                      },
                     ),
                     // const SizedBox(height: 10),`
                     // DateTimeFieldWidget(

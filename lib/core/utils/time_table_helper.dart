@@ -105,7 +105,6 @@ class TimeTableHelper {
   static notWorkingHourCondition(DateTime dateTimeFrom, String query) {
 
 
-    print("Query $query");
     if (query.isNotEmpty) {
       final dt = DateTime.tryParse(query);
 
