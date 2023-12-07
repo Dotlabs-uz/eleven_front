@@ -15,7 +15,7 @@ class NotWorkingHoursCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: () => onDoubleTap?.call(notWorkingHoursEntity),
+      // onDoubleTap: () => onDoubleTap?.call(notWorkingHoursEntity),
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: TimeTableHelper.getCardHeight(

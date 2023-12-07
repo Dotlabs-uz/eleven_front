@@ -166,6 +166,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                             _debouncer(() {
                               widget.onNameChanged.call(controller.text);
 
+
                               if(listCustomers.isEmpty  || controller.text.isEmpty) {
                                 BlocProvider.of<CustomerCubit>(context)
                                     .load(controller.text);
@@ -201,6 +202,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                     searchControllerPhone.text =
                                         item.phoneNumber.toString();
                                     widget.onNameChanged.call(item.fullName);
+                                    widget.onPhoneChanged.call(item.phoneNumber);
+
                                   });
                                 },
                               );
@@ -303,6 +306,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                         "search controller name ${item.fullName}");
                                     widget.onPhoneChanged
                                         .call(item.phoneNumber);
+
+                                    widget.onNameChanged.call(item.fullName);
                                   });
                                 },
                               );
