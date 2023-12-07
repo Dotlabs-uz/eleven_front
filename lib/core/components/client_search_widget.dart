@@ -40,7 +40,6 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
   final SearchController searchControllerPhone = SearchController();
   final _debouncer = DebouncerService(milliseconds: 500);
 
-
   @override
   void initState() {
     initialize();
@@ -60,7 +59,6 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
     _debouncer.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -105,220 +103,206 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
               ],
             ),
             const SizedBox(height: 10),
-            BlocBuilder<CustomerCubit, CustomerState>(
-              builder: (context, state) {
-                if (state is CustomerLoaded) {
-                  listCustomers = state.data;
-                  if(mounted) {
-                    Future.delayed(Duration.zero, () {
-                      setState(() {
-
-                      });
-                    },);
-                  }
-                  BlocProvider.of<CustomerCubit>(context).init();
-                }
-
-                return Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 40,
-                        child: SearchAnchor(
-                          searchController: searchControllerName,
-                          viewShape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          viewConstraints: const BoxConstraints(
-                              maxWidth: 130, minWidth: 130, maxHeight: 400),
-                          builder: (BuildContext context,
-                              SearchController controller) {
-                            return SearchBar(
-                              trailing: [],
-                              controller: controller,
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              hintText: "name".tr(),
-                              elevation: MaterialStateProperty.all(0),
-                              shape: MaterialStatePropertyAll<OutlinedBorder>(
-                                RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      width: 1, color: Colors.black26),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                              side: const MaterialStatePropertyAll<BorderSide>(
-                                BorderSide.none,
-                              ),
-                              padding:
-                                  const MaterialStatePropertyAll<EdgeInsets>(
-                                EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 0),
-                              ),
-                              onTap: () => controller.openView(),
-                              onChanged: (nameQuery) => controller.openView(),
-                              leading: const SizedBox(),
-                            );
-                          },
-                          suggestionsBuilder: (BuildContext context,
-                              SearchController controller) {
-
-                            _debouncer(() {
-                              widget.onNameChanged.call(controller.text);
-
-
-                              if(listCustomers.isEmpty  || controller.text.isEmpty) {
-                                BlocProvider.of<CustomerCubit>(context)
-                                    .load(controller.text);
-                              } else {
-                                listCustomers.removeWhere((element) => !element.fullName.contains(controller.text));
-                                if(mounted) {
-                                  Future.delayed(Duration.zero,() {
-                                    setState(() {
-
-                                    });
-                                  },);
-                                }
-
-                              }
-
-                            });
-
-
-                            return List<ListTile>.generate(listCustomers.length,
-                                (int index) {
-                              final CustomerEntity item = listCustomers[index];
-
-                              return ListTile(
-                                title: Text(
-                                  item.fullName,
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                  ),
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    controller.closeView(item.fullName);
-                                    searchControllerPhone.text =
-                                        item.phoneNumber.toString();
-                                    widget.onNameChanged.call(item.fullName);
-                                    widget.onPhoneChanged.call(item.phoneNumber);
-
-                                  });
-                                },
-                              );
-                            });
-                          },
-                        ),
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: SearchAnchor(
+                      searchController: searchControllerName,
+                      viewShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: SizedBox(
-                        height: 40,
-                        child: SearchAnchor(
-                          searchController: searchControllerPhone,
-                          viewShape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
+                      viewConstraints: const BoxConstraints(
+                          maxWidth: 130, minWidth: 130, maxHeight: 400),
+                      builder:
+                          (BuildContext context, SearchController controller) {
+                        return SearchBar(
+                          trailing: [],
+                          controller: controller,
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          hintText: "name".tr(),
+                          elevation: MaterialStateProperty.all(0),
+                          shape: MaterialStatePropertyAll<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  width: 1, color: Colors.black26),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
                           ),
-                          viewConstraints: const BoxConstraints(
-                              maxWidth: 130, minWidth: 130, maxHeight: 400),
-                          builder: (BuildContext context,
-                              SearchController controller) {
-                            return SearchBar(
-                              trailing: [],
-                              controller: controller,
-                              hintText: "phone".tr(),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              elevation: MaterialStateProperty.all(0),
-                              shape: MaterialStatePropertyAll<OutlinedBorder>(
-                                RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      width: 1, color: Colors.black26),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                              side: const MaterialStatePropertyAll<BorderSide>(
-                                BorderSide.none,
-                              ),
-                              padding:
-                                  const MaterialStatePropertyAll<EdgeInsets>(
-                                EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 0),
-                              ),
-                              onTap: () => controller.openView(),
-                              onChanged: (phoneQuery) {
-                                print("Phone query $phoneQuery");
+                          side: const MaterialStatePropertyAll<BorderSide>(
+                            BorderSide.none,
+                          ),
+                          padding: const MaterialStatePropertyAll<EdgeInsets>(
+                            EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                          ),
+                          onTap: () => controller.openView(),
+                          onChanged: (nameQuery) => controller.openView(),
+                          leading: const SizedBox(),
+                        );
+                      },
+                      suggestionsBuilder:
+                          (BuildContext context, SearchController controller) {
+                        _debouncer(() {
+                          widget.onNameChanged.call(controller.text);
 
-                                controller.openView();
-                                BlocProvider.of<CustomerCubit>(context)
-                                    .load("&phone=$phoneQuery");
-                              },
-                              leading: const SizedBox(),
-                            );
-                          },
-                          suggestionsBuilder: (BuildContext context,
-                              SearchController controller) {
+                          BlocProvider.of<CustomerCubit>(context)
+                              .load(controller.text);
+                        });
 
-                            _debouncer(() {
-
-                              print("controller text ${controller.text}");
-                              widget.onPhoneChanged
-                                  .call(int.parse(controller.text));
-
-
-                              if(listCustomers.isEmpty  || controller.text.isEmpty) {
-                                BlocProvider.of<CustomerCubit>(context)
-                                    .load(controller.text);
-                              } else {
-                                listCustomers.removeWhere((element) => !element.phoneNumber.toString().contains(controller.text));
-                                if(mounted) {
-                                  Future.delayed(Duration.zero,() {
-                                    setState(() {
-
-                                    });
-                                  },);
-                                }
+                        return BlocBuilder<CustomerCubit, CustomerState>(
+                          builder: (context, state) {
+                            if (state is CustomerLoaded) {
+                              listCustomers = state.data;
+                              if (mounted) {
+                                Future.delayed(
+                                  Duration.zero,
+                                  () {
+                                    setState(() {});
+                                  },
+                                );
                               }
-                            });
+                              BlocProvider.of<CustomerCubit>(context).init();
+                            }
+                            return ListView(
+                              children: List<ListTile>.generate(
+                                  listCustomers.length, (int index) {
+                                final CustomerEntity item =
+                                    listCustomers[index];
 
-
-                            return List<ListTile>.generate(listCustomers.length,
-                                (int index) {
-                              final CustomerEntity item = listCustomers[index];
-
-                              return ListTile(
-                                title: FittedBox(
-                                  child: Text(
-                                    item.phoneNumber.toString(),
+                                return ListTile(
+                                  title: Text(
+                                    item.fullName,
                                     style: const TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 11,
                                     ),
                                   ),
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    controller
-                                        .closeView(item.phoneNumber.toString());
-                                    searchControllerName.text = item.fullName;
-                                    print(
-                                        "search controller name ${item.fullName}");
-                                    widget.onPhoneChanged
-                                        .call(item.phoneNumber);
-
-                                    widget.onNameChanged.call(item.fullName);
-                                  });
-                                },
-                              );
-                            });
+                                  onTap: () {
+                                    setState(() {
+                                      controller.closeView(item.fullName);
+                                      searchControllerPhone.text =
+                                          item.phoneNumber.toString();
+                                      widget.onNameChanged.call(item.fullName);
+                                      widget.onPhoneChanged
+                                          .call(item.phoneNumber);
+                                    });
+                                  },
+                                );
+                              }),
+                            );
                           },
-                        ),
-                      ),
+                        );
+                      },
                     ),
-                  ],
-                );
-              },
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: SearchAnchor(
+                      searchController: searchControllerPhone,
+                      viewShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      viewConstraints: const BoxConstraints(
+                          maxWidth: 130, minWidth: 130, maxHeight: 400),
+                      builder:
+                          (BuildContext context, SearchController controller) {
+                        return SearchBar(
+                          trailing: [],
+                          controller: controller,
+                          hintText: "phone".tr(),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          elevation: MaterialStateProperty.all(0),
+                          shape: MaterialStatePropertyAll<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  width: 1, color: Colors.black26),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                          side: const MaterialStatePropertyAll<BorderSide>(
+                            BorderSide.none,
+                          ),
+                          padding: const MaterialStatePropertyAll<EdgeInsets>(
+                            EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                          ),
+                          onTap: () => controller.openView(),
+                          onChanged: (phoneQuery) {
+                            print("Phone query $phoneQuery");
+
+                            controller.openView();
+                            BlocProvider.of<CustomerCubit>(context)
+                                .load("&phone=$phoneQuery");
+                          },
+                          leading: const SizedBox(),
+                        );
+                      },
+                      suggestionsBuilder:
+                          (BuildContext context, SearchController controller) {
+                        _debouncer(() {
+                          widget.onPhoneChanged
+                              .call(int.parse(controller.text));
+
+                          BlocProvider.of<CustomerCubit>(context)
+                              .load(controller.text);
+                        });
+
+                        return BlocBuilder<CustomerCubit, CustomerState>(
+                          builder: (context, state) {
+                            if (state is CustomerLoaded) {
+                              listCustomers = state.data;
+                              if (mounted) {
+                                Future.delayed(
+                                  Duration.zero,
+                                  () {
+                                    setState(() {});
+                                  },
+                                );
+                              }
+                              BlocProvider.of<CustomerCubit>(context).init();
+                            }
+                            return ListView(
+                              children: List<ListTile>.generate(
+                                  listCustomers.length, (int index) {
+                                final CustomerEntity item =
+                                    listCustomers[index];
+
+                                return ListTile(
+                                  title: FittedBox(
+                                    child: Text(
+                                      item.phoneNumber.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      controller.closeView(
+                                          item.phoneNumber.toString());
+                                      searchControllerName.text = item.fullName;
+                                      print(
+                                          "search controller name ${item.fullName}");
+                                      widget.onPhoneChanged
+                                          .call(item.phoneNumber);
+
+                                      widget.onNameChanged.call(item.fullName);
+                                    });
+                                  },
+                                );
+                              }),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
