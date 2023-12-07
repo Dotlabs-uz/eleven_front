@@ -80,116 +80,112 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
           }
         }
       },
-      child: BlocBuilder<LocaleCubit, Locale>(
-        builder: (context, state) {
-          return Container(
-            width: isOpen ? 300 : 100,
-            height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-              color: AppColors.sideMenu,
+      child: Container(
+        width: isOpen ? 300 : 100,
+        height: MediaQuery.of(context).size.height,
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          color: AppColors.sideMenu,
 
-              // color: AppColor.menuBgColor,
-              // borderRadius: BorderRadius.circular(15),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding:
-                        // !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
-                        const EdgeInsets.only(left: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () => widget.onProfileTap.call(),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+          // color: AppColor.menuBgColor,
+          // borderRadius: BorderRadius.circular(15),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const SizedBox(height: 10),
+              Padding(
+                padding:
+                // !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
+                const EdgeInsets.only(left: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => widget.onProfileTap.call(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ImageViewWidget(
+                            avatar: currentUserEntity.avatar,
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ImageViewWidget(
-                                avatar: currentUserEntity.avatar,
+                              Text(
+                                "${currentUserEntity.firstName} ${currentUserEntity.lastName}",
+                                style: const TextStyle(
+                                  fontFamily: "Nunito",
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
                               ),
-                              const SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${currentUserEntity.firstName} ${currentUserEntity.lastName}",
-                                    style: const TextStyle(
-                                      fontFamily: "Nunito",
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 3),
-                                  Text(
-                                    currentUserEntity.role.tr(),
-                                    style: const TextStyle(
-                                      fontFamily: "Nunito",
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
+                              const SizedBox(height: 3),
+                              Text(
+                                currentUserEntity.role.tr(),
+                                style: const TextStyle(
+                                  fontFamily: "Nunito",
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          splashColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          onPressed: () {
-                            Dialogs.exitDialog(
-                              context: context,
-                              onExit: () {
-                                BlocProvider.of<LoginCubit>(context).logout();
-                              },
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.exit_to_app,
-                            color: Colors.white,
-                          ),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  ...List.generate(widget.listEntity.length, (index) {
-                    return FloatingMenuItemWidget(
-                      entity: widget.listEntity[index],
-                      currentIndex: widget.selectedIndex,
-                      onTap: (value) => widget.onChanged?.call(value),
-                      isOpen: isOpen,
-                    );
-                  }),
-                  CalendarWidget(
-                    onRefreshTap: () {
-                      BlocProvider.of<OrderFilterCubit>(context).setFilter(
-                        query: DateTime.now().toIso8601String(),
-                      );
-                    },
-                    onDateTap: (DateTime dateTime) {
-                      BlocProvider.of<OrderFilterCubit>(context).setFilter(
-                        query: dateTime.toIso8601String(),
-                      );
-                    },
-                    listBlinkDates: listBlinkDates,
-                  ),
-                ],
+                    const Spacer(),
+                    IconButton(
+                      splashColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      onPressed: () {
+                        Dialogs.exitDialog(
+                          context: context,
+                          onExit: () {
+                            BlocProvider.of<LoginCubit>(context).logout();
+                          },
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.exit_to_app,
+                        color: Colors.white,
+                      ),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+              const SizedBox(height: 30),
+              ...List.generate(widget.listEntity.length, (index) {
+                return FloatingMenuItemWidget(
+                  entity: widget.listEntity[index],
+                  currentIndex: widget.selectedIndex,
+                  onTap: (value) => widget.onChanged?.call(value),
+                  isOpen: isOpen,
+                );
+              }),
+              CalendarWidget(
+                onRefreshTap: () {
+                  BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                    query: DateTime.now().toIso8601String(),
+                  );
+                },
+                onDateTap: (DateTime dateTime) {
+                  BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                    query: dateTime.toIso8601String(),
+                  );
+                },
+                listBlinkDates: listBlinkDates,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -203,7 +199,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
   }
 }
 
-class FloatingMenuItemWidget extends StatelessWidget {
+class FloatingMenuItemWidget extends StatefulWidget {
   final FloatingMenuEntity entity;
   final int currentIndex;
   final bool isOpen;
@@ -218,12 +214,17 @@ class FloatingMenuItemWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<FloatingMenuItemWidget> createState() => _FloatingMenuItemWidgetState();
+}
+
+class _FloatingMenuItemWidgetState extends State<FloatingMenuItemWidget> {
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: GestureDetector(
         onTap: () {
-          onTap.call(entity);
+          widget.onTap.call(widget.entity);
         },
         child: Container(
           padding: const EdgeInsets.all(10),
@@ -233,25 +234,25 @@ class FloatingMenuItemWidget extends StatelessWidget {
             //     ? AppColors.sideMenuSelected
             //     : null),
           ),
-          child: !isOpen
-              ? _icon(entity.index == currentIndex)
+          child: !widget.isOpen
+              ? _icon(widget.entity.index == widget.currentIndex)
               : Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    _icon(entity.index == currentIndex),
+                    _icon(widget.entity.index == widget.currentIndex),
                     const SizedBox(width: 10),
                     FittedBox(
                       child: Text(
-                        entity.title,
+                        widget.entity.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.nunito(
-                          color: entity.index == currentIndex
+                          color: widget.entity.index == widget.currentIndex
                               ? Colors.white
                               : Colors.grey.shade300,
                           fontSize: 16,
-                          fontWeight: entity.index == currentIndex
+                          fontWeight: widget.entity.index == widget.currentIndex
                               ? FontWeight.w700
                               : FontWeight.w400,
                         ),
@@ -268,7 +269,7 @@ class FloatingMenuItemWidget extends StatelessWidget {
     return SizedBox(
       child: Center(
         child: Icon(
-          entity.icon,
+          widget.entity.icon,
           size: 30,
           color: selected ? Colors.white : Colors.grey.shade300,
         ),

@@ -87,11 +87,11 @@ initialize();
   }
 
   initialize() async {
+    listBlinkedDates.clear();
+    _initDaysOfMonth();
     final authenticationBox = await Hive.openBox('authenticationBox');
     final token = await authenticationBox.get('session_id');
     webSocketService.connect(token);
-    listBlinkedDates.clear();
-    _initDaysOfMonth();
   }
 
   _initDaysOfMonth() {
