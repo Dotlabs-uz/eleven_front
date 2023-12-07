@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/core/utils/constants.dart';
+import 'package:eleven_crm/core/utils/number_helper.dart';
 import 'package:eleven_crm/features/main/domain/entity/order_for_client_history_entity.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/show_client_orders_history/show_client_orders_history_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
@@ -126,6 +127,7 @@ class _HistoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -139,7 +141,7 @@ class _HistoryItem extends StatelessWidget {
         children: [
           Flexible(
             child: Text(
-              DateFormat("yyyy-MM-dd hh:mm:ss").format(entity.createdAt),
+              DateFormat("yyyy/MMM/dd  hh:mm a").format(entity.createdAt),
             ),
           ),
           Flexible(
@@ -149,7 +151,7 @@ class _HistoryItem extends StatelessWidget {
             (e) => Flexible(child: Text(e.name)),
           ),
           Flexible(
-            child: Text("${entity.price}сум | ${entity.duration}мин"),
+            child: Text("${NumberHelper.formatNumber(entity.price.toInt())}сум | ${entity.duration}мин"),
           ),
           if (entity.fromSite)
             const Icon(
