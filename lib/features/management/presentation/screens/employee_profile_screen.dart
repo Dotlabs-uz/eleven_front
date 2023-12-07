@@ -6,6 +6,7 @@ import 'package:eleven_crm/features/management/presentation/widgets/employee_pro
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/loading_circle.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/app_colors.dart';
@@ -98,7 +99,14 @@ class _ContentWidgetState extends State<ContentWidget> {
             "${widget.employeeEntity.firstName} ${widget.employeeEntity.lastName}"),
         backgroundColor: const Color(0xff071E32),
       ),
-      body: SingleChildScrollView(
+      body: BlocListener<EmployeeScheduleCubit, EmployeeScheduleState>(
+  listener: (context, state) {
+    if(state is EmployeeScheduleError) {
+      ErrorFlushBar("change_error".tr(args: [state.message]))
+          .show(context);
+    }
+  },
+  child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           child: SizedBox(
@@ -209,6 +217,7 @@ class _ContentWidgetState extends State<ContentWidget> {
           ),
         ),
       ),
+),
     );
   }
 

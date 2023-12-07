@@ -189,6 +189,10 @@ class _ContentWidgetState extends State<ContentWidget> {
                 if (state is EmployeeScheduleSaved) {
                   SuccessFlushBar("change_success".tr()).show(context);
                 }
+                if(state is EmployeeScheduleError) {
+                  ErrorFlushBar("change_error".tr(args: [state.message]))
+                      .show(context);
+                }
               },
             ),
           ],
@@ -312,6 +316,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                                 ),
                                 child:
                                     BlocBuilder<EmployeeCubit, EmployeeState>(
+
                                   builder: (context, state) {
                                     if (state is EmployeeEntityLoaded) {
                                       final data = state.data;
