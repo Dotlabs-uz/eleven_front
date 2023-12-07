@@ -40,25 +40,25 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
       final notWorkingStart = notWorkingHour.dateFrom;
       final notWorkingEnd = notWorkingHour.dateTo;
 
-      if (orderStart.isBefore(notWorkingStart) &&
-          orderEnd.isAfter(notWorkingEnd)) {
-        return false; // Время заказа пересекается с "Not Working Hours", не разрешаем перенос
-      }
-
-      if (orderStart.isAfter(notWorkingStart) &&
-          orderStart.isBefore(notWorkingEnd)) {
-        return false; // Время заказа начинается во время "Not Working Hours", не разрешаем перенос
-      }
-
-      if (orderEnd.isAfter(notWorkingStart) &&
-          orderEnd.isBefore(notWorkingEnd)) {
-        return false; // Время заказа заканчивается во время "Not Working Hours", не разрешаем перенос
-      }
-
-      if (orderStart.isAtSameMomentAs(notWorkingStart) ||
-          orderEnd.isAtSameMomentAs(notWorkingEnd)) {
-        return false; // Время заказа точно соответствует началу или концу "Not Working Hours", не разрешаем перенос
-      }
+      // if (orderStart.isAfter(notWorkingStart) &&
+      //     orderEnd.isBefore(notWorkingEnd)) {
+      //   return true; // Время заказа пересекается с "Not Working Hours", не разрешаем перенос
+      // }
+      //
+      // if (orderStart.isAfter(notWorkingStart) &&
+      //     orderStart.isBefore(notWorkingEnd)) {
+      //   return false; // Время заказа начинается во время "Not Working Hours", не разрешаем перенос
+      // }
+      //
+      // if (orderEnd.isAfter(notWorkingStart) &&
+      //     orderEnd.isBefore(notWorkingEnd)) {
+      //   return false; // Время заказа заканчивается во время "Not Working Hours", не разрешаем перенос
+      // }
+      //
+      // if (orderStart.isAtSameMomentAs(notWorkingStart) ||
+      //     orderEnd.isAtSameMomentAs(notWorkingEnd)) {
+      //   return false; // Время заказа точно соответствует началу или концу "Not Working Hours", не разрешаем перенос
+      // }
     }
 
     return true; // Время заказа не пересекается с "Not Working Hours", разрешаем перенос
