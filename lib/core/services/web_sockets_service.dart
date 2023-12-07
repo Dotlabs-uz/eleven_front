@@ -59,7 +59,10 @@ class WebSocketsService {
     _socketOrderResponse.close();
   }
 
-  Stream<dynamic> connect() {
+  Stream<dynamic> connect(String token ) {
+
+
+
     IO.Socket localSoket =
         IO.io(url, OptionBuilder().setTransports(['websocket']).build());
 
@@ -69,6 +72,7 @@ class WebSocketsService {
     localSoket.onConnect((_) {
       // print("websocket connected");
     });
+    localSoket.emit("join", {"token" : token});
     localSoket.emit("newDates");
 
     localSoket.emit("getAll");

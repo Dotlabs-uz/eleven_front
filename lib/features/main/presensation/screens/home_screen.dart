@@ -14,6 +14,7 @@ import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_
 import 'package:eleven_crm/features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/components/data_order_form.dart';
@@ -86,7 +87,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
   }
 
   initialize() async {
-    webSocketService.connect();
+    final authenticationBox = await Hive.openBox('authenticationBox');
+     final token = await authenticationBox.get('session_id');
+    webSocketService.connect(token);
     print("Saved ");
 
     activeData = OrderEntity.empty();

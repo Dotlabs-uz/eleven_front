@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:hive/hive.dart';
 import '../../../../core/api/api_constants.dart';
 import '../../../../core/services/web_sockets_service.dart';
 import '../../../../core/utils/app_colors.dart';
@@ -81,10 +82,16 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   void initState() {
-    webSocketService.connect();
+initialize();
+    super.initState();
+  }
+
+  initialize() async {
+    final authenticationBox = await Hive.openBox('authenticationBox');
+    final token = await authenticationBox.get('session_id');
+    webSocketService.connect(token);
     listBlinkedDates.clear();
     _initDaysOfMonth();
-    super.initState();
   }
 
   _initDaysOfMonth() {
