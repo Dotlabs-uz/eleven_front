@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/date_time_helper.dart';
+import '../../../../core/utils/dialogs.dart';
 import '../../../../core/utils/string_helper.dart';
 import '../../domain/entity/employee_schedule_entity.dart';
 import '../../domain/entity/weekly_schedule_item_entity.dart';
@@ -18,61 +19,211 @@ class ProfileScheduleItemWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ProfileScheduleItemWidget> createState() => _ProfileScheduleItemWidgetState();
+  State<ProfileScheduleItemWidget> createState() =>
+      _ProfileScheduleItemWidgetState();
 }
 
 class _ProfileScheduleItemWidgetState extends State<ProfileScheduleItemWidget> {
+  String selectedHourFrom = "8";
+  String selectedMinuteFrom = "00";
+  String selectedHourTo = "22";
+  String selectedMinuteTo = "00";
+
+  @override
+  void initState() {
+
+
+    initialize() ;
+    super.initState();
+  }
+
+  initialize() {
+
+    final from = widget.weeklyScheduleItemEntity.workingHours.first.dateFrom;
+    final to = widget.weeklyScheduleItemEntity.workingHours.first.dateTo;
+
+    print("Widget ${widget.weeklyScheduleItemEntity.workingHours.length}  ${widget.weeklyScheduleItemEntity.workingHours} ${widget.weeklyScheduleItemEntity.workingHours.first.dateTo.minute}");
+    selectedHourFrom = int.parse(from.hour.toString()).toString();
+    selectedMinuteFrom = from.minute.toString() == "0" ? "00":  from.minute.toString();
+    selectedHourTo =int.parse(  to.hour.toString()).toString();
+    selectedMinuteTo =to.minute.toString() == "0" ? "00":  from.minute.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Checkbox(
-          value:
-              widget.weeklyScheduleItemEntity.status.index == 1 ? true : false,
-          activeColor: AppColors.accent,
-          onChanged: (value) {
-            if (value == null) return;
+    return Theme(
+      data: ThemeData(
+        fontFamily: "Nunito",
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Checkbox(
+            value: widget.weeklyScheduleItemEntity.status.index == 1
+                ? true
+                : false,
+            activeColor: AppColors.accent,
+            onChanged: (value) {
+              if (value == null) return;
 
-            if (value) {
-              widget.weeklyScheduleItemEntity.status =
-                  EmployeeScheduleStatus.work;
-            } else {
-              widget.weeklyScheduleItemEntity.status =
-                  EmployeeScheduleStatus.notWork;
-            }
-            setState(() {});
-          },
-        ),
-        const SizedBox(width: 20),
-        SizedBox(
-          width: 30,
-          child: Text(StringHelper.getDayOfWeekTypeForBarberProfile(
-                  widget.day)
-              .tr()),
-        ),
-        const SizedBox(width: 70),
-        _SchedulePicker(
-          onSelect: (dt) {
-            widget.weeklyScheduleItemEntity.workingHours[widget.day].dateFrom =
-                dt;
-          },
-          title: 'fromText',
-          hour: Constants.startWork.toInt(),
-        ),
-        const SizedBox(width: 20),
-        _SchedulePicker(
-          onSelect: (dt) {
-            widget.weeklyScheduleItemEntity.workingHours[widget.day].dateTo =
-                dt;
-          },
-          title: 'toText',
-          hour: Constants.endWork.toInt(),
-        ),
-        const SizedBox(width: 20),
-        const Spacer(),
-      ],
+              if (value) {
+                widget.weeklyScheduleItemEntity.status =
+                    EmployeeScheduleStatus.work;
+              } else {
+                widget.weeklyScheduleItemEntity.status =
+                    EmployeeScheduleStatus.notWork;
+              }
+              setState(() {});
+            },
+          ),
+          const SizedBox(width: 20),
+          SizedBox(
+            width: 30,
+            child: Text(
+                StringHelper.getDayOfWeekTypeForBarberProfile(widget.day).tr()),
+          ),
+          const SizedBox(width: 70),
+          Text("fromText".tr()),
+          const SizedBox(width: 10),
+          Row(
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black38, width: 1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: DropdownButton<String>(
+                  value: selectedHourFrom,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  underline: const SizedBox(),
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  items: listTimes.map((String items) {
+                    return DropdownMenuItem(
+                      value: items.toString(),
+                      child: Text(items.toString()),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedHourFrom = newValue!;
+                      widget.weeklyScheduleItemEntity.workingHours[widget.day]
+                          .dateFrom = DateTime.now().copyWith(
+                        hour: int.parse(selectedHourFrom ), minute: 0 ,
+                      );
+                    });
+                  },
+                ),
+              ),
+              const Text(
+                "-",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black38, width: 1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: DropdownButton<String>(
+                  value: selectedMinuteFrom,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  underline: const SizedBox(),
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  items: listMinutes.map((String items) {
+                    return DropdownMenuItem(
+                      value: items.toString(),
+                      child: Text(items.toString()),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedMinuteFrom = newValue!;
+                      widget.weeklyScheduleItemEntity.workingHours[widget.day]
+                          .dateFrom = DateTime.now().copyWith(
+                        minute: int.parse(selectedMinuteFrom),
+                      );
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 30),
+          Text("toText".tr()),
+          const SizedBox(width: 10),
+          Row(
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black38, width: 1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: DropdownButton<String>(
+                  value: selectedHourTo,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  underline: const SizedBox(),
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  items: listTimes.map((String items) {
+                    return DropdownMenuItem(
+                      value: items.toString(),
+                      child: Text(items.toString()),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedHourTo = newValue!;
+                      widget.weeklyScheduleItemEntity.workingHours[widget.day]
+                          .dateTo = DateTime.now().copyWith(
+                        hour: int.parse(selectedHourTo ), minute: 0 ,
+                      );
+                    });
+                  },
+                ),
+              ),
+              const Text(
+                "-",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black38, width: 1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: DropdownButton<String>(
+                  value: selectedMinuteTo,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  underline: const SizedBox(),
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  items: listMinutes.map((String items) {
+                    return DropdownMenuItem(
+                      value: items.toString(),
+                      child: Text(items.toString()),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedMinuteTo = newValue!;
+                      widget.weeklyScheduleItemEntity.workingHours[widget.day]
+                          .dateTo = DateTime.now().copyWith(
+                        minute: int.parse(selectedMinuteTo),
+                      );
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          const Spacer(),
+        ],
+      ),
     );
   }
 }
