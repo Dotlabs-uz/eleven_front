@@ -14,7 +14,7 @@ import 'assets.dart';
 import 'selections.dart';
 import 'string_helper.dart';
 
-final List<String> _listTimes = [
+final List<String> listTimes = [
   "8",
   "9",
   "10",
@@ -31,7 +31,7 @@ final List<String> _listTimes = [
   "21",
   "22",
 ];
-final List<String> _listMinutes = [
+final List<String> listMinutes = [
   "00",
   "5",
   "10",
@@ -372,7 +372,7 @@ class _ScheduleFieldContentDialogState
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             underline: const SizedBox(),
                             icon: const Icon(Icons.keyboard_arrow_down),
-                            items: _listTimes.map((String items) {
+                            items: listTimes.map((String items) {
                               return DropdownMenuItem(
                                 value: items.toString(),
                                 child: Text(items.toString()),
@@ -402,7 +402,7 @@ class _ScheduleFieldContentDialogState
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             underline: const SizedBox(),
                             icon: const Icon(Icons.keyboard_arrow_down),
-                            items: _listMinutes.map((String items) {
+                            items: listMinutes.map((String items) {
                               return DropdownMenuItem(
                                 value: items.toString(),
                                 child: Text(items.toString()),
@@ -433,7 +433,7 @@ class _ScheduleFieldContentDialogState
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             underline: const SizedBox(),
                             icon: const Icon(Icons.keyboard_arrow_down),
-                            items: _listTimes.map((String items) {
+                            items: listTimes.map((String items) {
                               return DropdownMenuItem(
                                 value: items.toString(),
                                 child: Text(items.toString()),
@@ -463,7 +463,7 @@ class _ScheduleFieldContentDialogState
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             underline: const SizedBox(),
                             icon: const Icon(Icons.keyboard_arrow_down),
-                            items: _listMinutes.map((String items) {
+                            items: listMinutes.map((String items) {
                               return DropdownMenuItem(
                                 value: items.toString(),
                                 child: Text(items.toString()),

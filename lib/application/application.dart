@@ -17,6 +17,7 @@ import '../core/utils/app_colors.dart';
 import '../core/utils/route_constants.dart';
 import '../core/utils/routes.dart';
 import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
+import '../features/main/presensation/cubit/locale/locale_cubit.dart';
 import '../features/main/presensation/cubit/menu/menu_cubit.dart';
 import '../features/main/presensation/cubit/show_client_orders_history/show_client_orders_history_cubit.dart';
 import '../features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
@@ -47,6 +48,7 @@ class _ApplicationState extends State<Application> {
   late AvatarCubit avatarCubit;
   late CustomerCubit customerCubit;
   late CrossInEmployeeScheduleProvider crossInEmployeeScheduleProvider;
+  late LocaleCubit   localeCubit;
 
   @override
   void initState() {
@@ -65,6 +67,7 @@ class _ApplicationState extends State<Application> {
     showOrderHistoryCubit = locator();
     crossInEmployeeScheduleProvider = locator();
     showClientOrdersHistoryCubit = locator();
+    localeCubit = locator();
     super.initState();
   }
 
@@ -87,6 +90,7 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: customerCubit),
         BlocProvider.value(value: showOrderHistoryCubit),
         BlocProvider.value(value: showClientOrdersHistoryCubit),
+        BlocProvider.value(value: localeCubit),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -23,6 +23,7 @@ import '../../../../core/utils/responsive.dart';
 import '../../../../get_it/locator.dart';
 import '../../../management/presentation/cubit/employee/employee_cubit.dart';
 import '../cubit/current_user/current_user_cubit.dart';
+import '../cubit/locale/locale_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -105,33 +106,32 @@ class _ContentWidgetState extends State<_ContentWidget> {
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           child: MultiBlocListener(
-  listeners: [
-    BlocListener<CurrentUserCubit, CurrentUserState>(
-            listener: (context, state) {
-              if (state is CurrentUserLoaded) {
-                entity = state.entity;
+            listeners: [
+              BlocListener<CurrentUserCubit, CurrentUserState>(
+                listener: (context, state) {
+                  if (state is CurrentUserLoaded) {
+                    entity = state.entity;
 
-                controllerFirstName.text = entity.firstName;
-                controllerLastName.text = entity.lastName;
-                controllerPhoneNumber.text = entity.phoneNumber.toString();
-                controllerUsername.text = entity.login;
-                controllerRole.text = entity.role;
-              }
-              if (state is CurrentUserSaved) {
-                SuccessFlushBar("change_success".tr()).show(context);
-              }
-            },
-),
-    BlocListener<AvatarCubit, AvatarState>(
-      listener: (context, state) {
-        if(state is AvatarSaved) {
-          SuccessFlushBar("change_success".tr()).show(context);
-
-        }
-      },
-    ),
-  ],
-  child: Column(
+                    controllerFirstName.text = entity.firstName;
+                    controllerLastName.text = entity.lastName;
+                    controllerPhoneNumber.text = entity.phoneNumber.toString();
+                    controllerUsername.text = entity.login;
+                    controllerRole.text = entity.role;
+                  }
+                  if (state is CurrentUserSaved) {
+                    SuccessFlushBar("change_success".tr()).show(context);
+                  }
+                },
+              ),
+              BlocListener<AvatarCubit, AvatarState>(
+                listener: (context, state) {
+                  if (state is AvatarSaved) {
+                    SuccessFlushBar("change_success".tr()).show(context);
+                  }
+                },
+              ),
+            ],
+            child: Column(
               children: [
                 const SizedBox(height: 10),
                 Row(
@@ -149,6 +149,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                             context.setLocale(const Locale('ru', 'RU'));
                           }
                         });
+                        BlocProvider.of<LocaleCubit>(context)
+                            .change(context.locale);
                       },
                       child: SizedBox(
                         width: 50,
@@ -202,17 +204,17 @@ class _ContentWidgetState extends State<_ContentWidget> {
                           ],
                           color: Colors.white,
                         ),
-                        child:   Center(
+                        child: Center(
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: _file == null
-                                ?  entity.avatar.contains("placeholder.png")
-                                  ? Image.asset(Assets.tAvatarPlaceHolder)
-                                  : Image.network(entity.avatar)
+                                ? entity.avatar.contains("placeholder.png")
+                                    ? Image.asset(Assets.tAvatarPlaceHolder)
+                                    : Image.network(entity.avatar)
                                 : Image.memory(
-                               webImage,
-                              fit: BoxFit.cover,
-                            ),
+                                    webImage,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                       ),
@@ -221,12 +223,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     IconButton(
                       onPressed: _file != null
                           ? () {
-                        List<int> list = webImage.cast();
+                              List<int> list = webImage.cast();
 
-                        BlocProvider.of<AvatarCubit>(context).setAvatar(
-                            filePath: list,
-                            userId: entity.id,
-                            role: 'managers');
+                              BlocProvider.of<AvatarCubit>(context).setAvatar(
+                                  filePath: list,
+                                  userId: entity.id,
+                                  role: 'managers');
                             }
                           : () async {
                               _pickImage();
@@ -310,7 +312,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 ),
               ],
             ),
-),
+          ),
         ),
       ),
     );

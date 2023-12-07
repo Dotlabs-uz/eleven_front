@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/main/domain/entity/current_user_entity.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/current_user/current_user_cubit.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/locale/locale_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -79,110 +80,116 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
           }
         }
       },
-      child: Container(
-        width: isOpen ? 300 : 100,
-        height: MediaQuery.of(context).size.height,
-        padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
-          color: AppColors.sideMenu,
+      child: BlocBuilder<LocaleCubit, Locale>(
+        builder: (context, state) {
+          return Container(
+            width: isOpen ? 300 : 100,
+            height: MediaQuery.of(context).size.height,
+            padding: const EdgeInsets.all(10),
+            decoration: const BoxDecoration(
+              color: AppColors.sideMenu,
 
-          // color: AppColor.menuBgColor,
-          // borderRadius: BorderRadius.circular(15),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const SizedBox(height: 10),
-              Padding(
-                padding:
-                    // !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
-                    const EdgeInsets.only(left: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () => widget.onProfileTap.call(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ImageViewWidget(avatar: currentUserEntity.avatar,),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+              // color: AppColor.menuBgColor,
+              // borderRadius: BorderRadius.circular(15),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding:
+                        // !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
+                        const EdgeInsets.only(left: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () => widget.onProfileTap.call(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                "${currentUserEntity.firstName} ${currentUserEntity.lastName}",
-                                style: const TextStyle(
-                                  fontFamily: "Nunito",
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
+                              ImageViewWidget(
+                                avatar: currentUserEntity.avatar,
                               ),
-                              const SizedBox(height: 3),
-                              Text(
-                                currentUserEntity.role.tr(),
-                                style: const TextStyle(
-                                  fontFamily: "Nunito",
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${currentUserEntity.firstName} ${currentUserEntity.lastName}",
+                                    style: const TextStyle(
+                                      fontFamily: "Nunito",
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    currentUserEntity.role.tr(),
+                                    style: const TextStyle(
+                                      fontFamily: "Nunito",
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      splashColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      onPressed: () {
-                        Dialogs.exitDialog(
-                          context: context,
-                          onExit: () {
-                            BlocProvider.of<LoginCubit>(context).logout();
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          splashColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          onPressed: () {
+                            Dialogs.exitDialog(
+                              context: context,
+                              onExit: () {
+                                BlocProvider.of<LoginCubit>(context).logout();
+                              },
+                            );
                           },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.exit_to_app,
-                        color: Colors.white,
-                      ),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                          icon: const Icon(
+                            Icons.exit_to_app,
+                            color: Colors.white,
+                          ),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 30),
+                  ...List.generate(widget.listEntity.length, (index) {
+                    return FloatingMenuItemWidget(
+                      entity: widget.listEntity[index],
+                      currentIndex: widget.selectedIndex,
+                      onTap: (value) => widget.onChanged?.call(value),
+                      isOpen: isOpen,
+                    );
+                  }),
+                  CalendarWidget(
+                    onRefreshTap: () {
+                      BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                        query: DateTime.now().toIso8601String(),
+                      );
+                    },
+                    onDateTap: (DateTime dateTime) {
+                      BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                        query: dateTime.toIso8601String(),
+                      );
+                    },
+                    listBlinkDates: listBlinkDates,
+                  ),
+                ],
               ),
-              const SizedBox(height: 30),
-              ...List.generate(widget.listEntity.length, (index) {
-                return FloatingMenuItemWidget(
-                  entity: widget.listEntity[index],
-                  currentIndex: widget.selectedIndex,
-                  onTap: (value) => widget.onChanged?.call(value),
-                  isOpen: isOpen,
-                );
-              }),
-              CalendarWidget(
-                onRefreshTap: () {
-                  BlocProvider.of<OrderFilterCubit>(context).setFilter(
-                    query: DateTime.now().toIso8601String(),
-                  );
-                },
-                onDateTap: (DateTime dateTime) {
-                  BlocProvider.of<OrderFilterCubit>(context).setFilter(
-                    query: dateTime.toIso8601String(),
-                  );
-                },
-                listBlinkDates: listBlinkDates,
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -163,7 +163,8 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
                         ),
                         ...List.generate(widget.listEmployee.length, (index) {
                           final e = widget.listEmployee[index];
-                          return _EmployeeScheduleTableWidget(
+
+                          return e.isCurrentFilial  == false?const SizedBox() : _EmployeeScheduleTableWidget(
                             employeeEntity: e,
                             currentMonth: currentMonth,
                             currentYear: currentYear,

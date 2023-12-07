@@ -44,6 +44,7 @@ import '../features/main/domain/usecases/order.dart';
 import '../features/main/presensation/cubit/avatar/avatar_cubit.dart';
 import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import '../features/main/presensation/cubit/home_screen_form/home_screen_order_form_cubit.dart';
+import '../features/main/presensation/cubit/locale/locale_cubit.dart';
 import '../features/main/presensation/cubit/show_client_orders_history/show_client_orders_history_cubit.dart';
 import '../features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
 import '../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
@@ -72,6 +73,7 @@ void setup() {
         passwordChange: locator(),
       ));
   locator.registerFactory(() => AvatarCubit(locator()));
+  locator.registerFactory(() => LocaleCubit());
   locator.registerFactory(() => MenuCubit());
   locator.registerFactory(() => TopMenuCubit());
   locator.registerFactory(() => DataFormCubit());
