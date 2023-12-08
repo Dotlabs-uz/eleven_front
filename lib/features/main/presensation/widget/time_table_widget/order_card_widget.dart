@@ -119,7 +119,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                                 : AppColors.timeTableCardSideColor,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 7,
-                          vertical: 4,
+                          vertical: 2,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
