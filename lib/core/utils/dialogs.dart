@@ -1,6 +1,7 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/utils/responsive.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
 import 'package:flutter/material.dart';
@@ -234,6 +235,7 @@ class _ScheduleFieldContentDialogState
   String selectedTimeFromMinute = "00";
   String selectedTimeToHour = "22";
   String selectedTimeToMinute = "00";
+  String lastFilteredQuery = "";
 
   @override
   void initState() {
@@ -244,6 +246,8 @@ class _ScheduleFieldContentDialogState
       selectedTimeFromMinute = _getMinutesFrom(widget.workingHours!);
       selectedTimeFromHour = _getHoursFrom(widget.workingHours!);
     }
+
+    lastFilteredQuery = BlocProvider.of<OrderFilterCubit>(context).state.query;
     print('From: $selectedTimeFromHour:$selectedTimeFromMinute');
     print('To: $selectedTimeToHour:$selectedTimeToMinute');
     super.initState();
@@ -297,7 +301,9 @@ class _ScheduleFieldContentDialogState
           const SizedBox(height: 5),
           widget.day != null
               ? Text(
-                  "${widget.day} ${widget.month != null ? StringHelper.monthName(month: widget.month!).tr() : ""} ${widget.year}.",
+                  DateTime.tryParse(lastFilteredQuery) != null
+                      ? "${DateTime.parse(lastFilteredQuery).day} ${StringHelper.monthName(month: DateTime.parse(lastFilteredQuery).month).tr()} ${DateTime.parse(lastFilteredQuery).year}."
+                      : "${widget.day} ${widget.month != null ? StringHelper.monthName(month: widget.month!).tr() : ""} ${widget.year}.",
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
