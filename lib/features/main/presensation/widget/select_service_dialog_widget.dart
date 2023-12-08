@@ -62,116 +62,124 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
         final barberId = state.barberId;
 
 
-        return Container(
-          color: Colors.black.withOpacity(0.4),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: Container(
-              constraints: const BoxConstraints(
-                maxWidth: 500,
-                maxHeight: 600,
+        return Stack(
+          children: [
+            GestureDetector(
+              onTap: () {
+                BlocProvider.of<ShowSelectServicesCubit>(context).disable();
+              },
+              child: Container(
+                color: Colors.black.withOpacity(0.4),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
               ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                          onTap: () =>
-                              BlocProvider.of<ServiceProductCategoryCubit>(
-                                      context)
-                                  .load(
-                            "",
-                            fetchGlobal: true,
-                          ),
-                          child: const Icon(
-                            Icons.refresh,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                          onTap: () =>
-                              BlocProvider.of<ShowSelectServicesCubit>(context)
-                                  .disable(),
-                          child: const Icon(
-                            Icons.close,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: barberId.isEmpty
-                        ? Center(
-                          child: Text(
-                              "pleaseSelectBarber".tr(),
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontFamily: "Nunito",
-                                fontWeight: FontWeight.w600,
-                              ),
+            ),
+            Center(
+              child: Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 500,
+                  maxHeight: 600,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () =>
+                                BlocProvider.of<ServiceProductCategoryCubit>(
+                                    context)
+                                    .load(
+                                  "",
+                                  fetchGlobal: true,
+                                ),
+                            child: const Icon(
+                              Icons.refresh,
+                              color: Colors.black,
                             ),
-                        )
-                        : BlocConsumer<ServiceProductCategoryCubit,
-                            ServiceProductCategoryState>(
-                            listener: (context, state) {
-                              if (state is ServiceProductCategoryLoaded) {
-                                if (mounted) {
-                                  Future.delayed(
-                                    Duration.zero,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () =>
+                                BlocProvider.of<ShowSelectServicesCubit>(context)
+                                    .disable(),
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: barberId.isEmpty
+                          ? Center(
+                        child: Text(
+                          "pleaseSelectBarber".tr(),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontFamily: "Nunito",
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      )
+                          : BlocConsumer<ServiceProductCategoryCubit,
+                          ServiceProductCategoryState>(
+                        listener: (context, state) {
+                          if (state is ServiceProductCategoryLoaded) {
+                            if (mounted) {
+                              Future.delayed(
+                                Duration.zero,
                                     () {
-                                      setState(() {
-                                        listServiceCategories = state.data;
-                                        print("${listServiceCategories.first.services} seererbicessss");
-                                      });
-                                    },
-                                  );
-                                }
-                              }
-                            },
-                            builder: (context, state) {
-                              if (state is ServiceProductCategoryLoading) {
-                                return const LoadingCircle();
-                              }
+                                  setState(() {
+                                    listServiceCategories = state.data;
+                                    print("${listServiceCategories.first.services} seererbicessss");
+                                  });
+                                },
+                              );
+                            }
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is ServiceProductCategoryLoading) {
+                            return const LoadingCircle();
+                          }
 
-                              return ListView.builder(
-                                physics: const ClampingScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  final category = listServiceCategories[index];
+                          return ListView.builder(
+                            physics: const ClampingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final category = listServiceCategories[index];
 
-                                  final listServices = category.services;
-                                  final listFormattedServices = listServices
-                                      .where((element) => element.listBarberId
-                                          .contains(barberId))
-                                      .toList();
-                                  // return const SizedBox();
-                                  return Column(
-                                    children: [
-                                      _serviceProductCategoryCard(
-                                          category.name),
-                                      const SizedBox(height: 10),
-                                      GridView.count(
-                                        shrinkWrap: true,
-                                        crossAxisCount: 2,
-                                        children: List.generate(
-                                            listFormattedServices.length,
+                              final listServices = category.services;
+                              final listFormattedServices = listServices
+                                  .where((element) => element.listBarberId
+                                  .contains(barberId))
+                                  .toList();
+                              // return const SizedBox();
+                              return Column(
+                                children: [
+                                  _serviceProductCategoryCard(
+                                      category.name),
+                                  const SizedBox(height: 10),
+                                  GridView.count(
+                                    shrinkWrap: true,
+                                    crossAxisCount: 2,
+                                    children: List.generate(
+                                        listFormattedServices.length,
                                             (index) {
                                           final service =
-                                              category.services[index];
+                                          category.services[index];
 
                                           return GestureDetector(
                                             onTap: () {
@@ -204,19 +212,20 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                                             ),
                                           );
                                         }),
-                                      ),
-                                    ],
-                                  );
-                                },
-                                itemCount: listServiceCategories.length,
+                                  ),
+                                ],
                               );
                             },
-                          ),
-                  ),
-                ],
+                            itemCount: listServiceCategories.length,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
+          ],
         );
       },
     );
