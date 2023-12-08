@@ -172,11 +172,13 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
               }),
               CalendarWidget(
                 onRefreshTap: () {
+                  Navigator.pushNamed(context, "/home");
                   BlocProvider.of<OrderFilterCubit>(context).setFilter(
                     query: DateTime.now().toIso8601String(),
                   );
                 },
                 onDateTap: (DateTime dateTime) {
+                  Navigator.pushNamed(context, "/home");
                   BlocProvider.of<OrderFilterCubit>(context).setFilter(
                     query: dateTime.toIso8601String(),
                   );
