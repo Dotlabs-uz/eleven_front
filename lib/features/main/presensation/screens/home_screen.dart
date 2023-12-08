@@ -42,14 +42,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notWorkingHoursCubit = locator<NotWorkingHoursCubit>();
     final selectServicesCubit = locator<SelectServicesCubit>();
     final employeeScheduleCubit = locator<EmployeeScheduleCubit>();
     final barberCubit = locator<BarberCubit>()..load("");
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: notWorkingHoursCubit),
         BlocProvider.value(value: selectServicesCubit),
         BlocProvider.value(value: barberCubit),
         BlocProvider.value(value: employeeScheduleCubit),
@@ -85,6 +83,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     super.initState();
   }
+
 
   initialize() async {
     final authenticationBox = await Hive.openBox('authenticationBox');
@@ -232,6 +231,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
     selectedValue = 0;
     activeData = OrderEntity.empty();
     showSelectServices = false;
+    BlocProvider.of<HomeScreenOrderFormCubit>(context).disable();
+
 
     webSocketService.dispose();
 
@@ -279,6 +280,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 BlocListener<EmployeeScheduleCubit, EmployeeScheduleState>(
                   listener: (context, state) {
                     if (state is EmployeeScheduleSaved) {
+                      SuccessFlushBar("change_success".tr()).show(context);
+                    }
+                  },
+                ),
+                BlocListener<NotWorkingHoursCubit, NotWorkingHoursState>(
+                  listener: (context, state) {
+                    print("Not working hours state $state");
+                    if (state is NotWorkingHoursSaved) {
                       SuccessFlushBar("change_success".tr()).show(context);
                     }
                   },

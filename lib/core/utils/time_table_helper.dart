@@ -118,15 +118,18 @@ class TimeTableHelper {
         return false;
       }
     }
-
-    final nowDateTime = DateTime.now();
-    if (dateTimeFrom.day == nowDateTime.day &&
-        dateTimeFrom.month == nowDateTime.month &&
-        dateTimeFrom.year == nowDateTime.year) {
-      print("get working hours $dateTimeFrom");
-      return true;
+    else {
+      final nowDateTime = DateTime.now();
+      if (dateTimeFrom.day == nowDateTime.day &&
+          dateTimeFrom.month == nowDateTime.month &&
+          dateTimeFrom.year == nowDateTime.year) {
+        print("get working hours $dateTimeFrom");
+        return true;
+      }
+      return false;
     }
-    return false;
+
+
   }
 
   static OrderEntity onAccept(OrderEntity order, int hour, int minute, String barberId,

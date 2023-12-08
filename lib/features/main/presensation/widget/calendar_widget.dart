@@ -49,7 +49,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   static final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer()
     ..open(
       Audio.file(Assets.tNewOrderVoiceAirport),
-      volume: 01,
+      volume: 0,
       loopMode: LoopMode.none,
       forceOpen: true,
     );

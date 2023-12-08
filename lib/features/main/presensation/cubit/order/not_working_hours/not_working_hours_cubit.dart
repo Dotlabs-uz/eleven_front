@@ -11,6 +11,8 @@ class NotWorkingHoursCubit extends Cubit<NotWorkingHoursState> {
   NotWorkingHoursCubit(this.saveNotWorkingHours)
       : super(NotWorkingHoursInitial());
 
+
+  init() => emit(NotWorkingHoursInitial());
   void save({
     required DateTime dateFrom,
     required DateTime dateTo,
@@ -19,16 +21,16 @@ class NotWorkingHoursCubit extends Cubit<NotWorkingHoursState> {
     emit(NotWorkingHoursLoading());
     final data = await saveNotWorkingHours.call(
       SaveNotWorkingHoursParams(
-          from: dateFrom, to: dateTo, employeeId: employeeId,),
+        from: dateFrom,
+        to: dateTo,
+        employeeId: employeeId,
+      ),
     );
 
     data.fold(
       (l) => emit(NotWorkingHoursError(message: l.errorMessage)),
-      (r)   {
-
-        print("Not working hours saved");
-          emit(NotWorkingHoursSaved());
-
+      (r) {
+        emit(NotWorkingHoursSaved(dateFrom: dateFrom, dateTo: dateTo, employeeId: employeeId));
       },
     );
   }

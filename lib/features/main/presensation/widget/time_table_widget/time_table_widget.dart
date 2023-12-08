@@ -1,5 +1,6 @@
 import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/core/components/image_view_widget.dart';
+import 'package:eleven_crm/features/main/presensation/cubit/order/not_working_hours/not_working_hours_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/past_time_card_widget.dart';
 import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/time_table_ruler_widget.dart';
@@ -13,6 +14,7 @@ import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/dialogs.dart';
 import '../../../../../core/utils/int_helper.dart';
 import '../../../../../core/utils/time_table_helper.dart';
+import '../../../../management/data/model/not_working_hours_model.dart';
 import '../../../../management/domain/entity/not_working_hours_entity.dart';
 import '../../../domain/entity/order_entity.dart';
 import 'field_card_widget.dart';
@@ -35,7 +37,8 @@ class TimeTableWidget extends StatefulWidget {
   final Function(OrderEntity order)? onOrderStartResizeEnd;
   final Function(OrderEntity order)? onOrderEndResizeEnd;
   final Function(OrderEntity)? onOrderTap;
-  final Function(String employeeId, BarberEntity entity) onChangeEmployeeSchedule;
+  final Function(String employeeId, BarberEntity entity)
+      onChangeEmployeeSchedule;
 
   const TimeTableWidget({
     Key? key,
@@ -133,10 +136,32 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
       duration: const Duration(milliseconds: 300),
       child: listBarber.isEmpty
           ? const EmptyWidget()
-          : BlocListener<OrderFilterCubit, OrderFilterHelper>(
-              listener: (context, state) {
-                initLastFilterDate();
-              },
+          : MultiBlocListener(
+              listeners: [
+                BlocListener<OrderFilterCubit, OrderFilterHelper>(
+                  listener: (context, state) {
+                    initLastFilterDate();
+                  },
+                ),
+                BlocListener<NotWorkingHoursCubit, NotWorkingHoursState>(
+                  listener: (context, state) {
+                    if (state is NotWorkingHoursSaved) {
+                      listAllNotWorkingHoursForBarber.add(NotWorkingHoursModel(
+                          dateFrom: state.dateFrom, dateTo: state.dateTo));
+
+                      if (mounted) {
+                        Future.delayed(
+                          Duration.zero,
+                          () {
+                            setState(() {});
+                          },
+                        );
+                      }
+                      BlocProvider.of<NotWorkingHoursCubit>(context).init();
+                    }
+                  },
+                ),
+              ],
               child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Scrollbar(
@@ -172,7 +197,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                       (index) {
                                         final el = listBarber[index];
                                         return SizedBox(
-                                          width: Constants.sizeOfTimeTableColumn,
+                                          width:
+                                              Constants.sizeOfTimeTableColumn,
                                           child: _barberUpperCardWidget(el),
                                         );
                                       },
@@ -185,7 +211,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                 physics: const ClampingScrollPhysics(),
                                 children: [
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       TimeTableRulerWidget(
                                         timeFrom: from,
@@ -196,7 +223,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                         (barberIndex) {
                                           List<OrderEntity> localOrders = [];
 
-                                          final barber = listBarber[barberIndex];
+                                          final barber =
+                                              listBarber[barberIndex];
 
                                           localOrders = widget.listOrders.where(
                                             (element) {
@@ -220,15 +248,13 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
 
                                           listAllNotWorkingHoursForBarber =
                                               barber.notWorkingHours;
-                                          final localNotWorkingHours =
-                                              barber.notWorkingHours;
 
                                           return SizedBox(
                                             width:
                                                 Constants.sizeOfTimeTableColumn,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 24),
+                                              padding: const EdgeInsets.only(
+                                                  top: 24),
                                               child: Stack(
                                                 children: [
                                                   Container(
@@ -254,14 +280,16 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                                   from, to),
                                                           (index) {
                                                             final hour =
-                                                                from.hour + index;
+                                                                from.hour +
+                                                                    index;
 
                                                             return FieldCardWidget(
                                                               isFirstSection:
                                                                   barberIndex ==
                                                                       0,
                                                               hour: hour,
-                                                              barberId: barber.id,
+                                                              barberId:
+                                                                  barber.id,
                                                               onDragEnded:
                                                                   (localOrder,
                                                                       confirm) {
@@ -274,8 +302,9 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                                           localOrder);
                                                                 }
                                                               },
-                                                              notWorkingHours: barber
-                                                                  .notWorkingHours,
+                                                              notWorkingHours:
+                                                                  barber
+                                                                      .notWorkingHours,
                                                               onFieldTap: (hour,
                                                                       minute) =>
                                                                   widget
@@ -300,7 +329,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                               .getTopPositionForOrder(
                                                             orderEntity,
                                                           ),
-                                                          child: GestureDetector(
+                                                          child:
+                                                              GestureDetector(
                                                             onTap: () => widget
                                                                 .onOrderTap
                                                                 ?.call(
@@ -312,7 +342,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                             child: Draggable<
                                                                 DragOrder>(
                                                               data: DragOrder(
-                                                                isResizing: false,
+                                                                isResizing:
+                                                                    false,
                                                                 orderEntity:
                                                                     orderEntity,
                                                               ),
@@ -320,7 +351,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                                   OrderCardWidget(
                                                                 order:
                                                                     orderEntity,
-                                                                isDragging: true,
+                                                                isDragging:
+                                                                    true,
                                                                 onOrderSize:
                                                                     _onOrderSize,
                                                               ),
@@ -342,14 +374,16 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                                   OrderCardWidget(
                                                                 order:
                                                                     orderEntity,
-                                                                isDragging: false,
+                                                                isDragging:
+                                                                    false,
                                                                 onOrderSize:
                                                                     _onOrderSize,
                                                                 onBottomOrderEnd:
                                                                     widget
                                                                         .onOrderEndResizeEnd,
-                                                                onTopOrderEnd: widget
-                                                                    .onOrderStartResizeEnd,
+                                                                onTopOrderEnd:
+                                                                    widget
+                                                                        .onOrderStartResizeEnd,
                                                               ),
                                                             ),
                                                           ),
@@ -358,14 +392,18 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                     ),
                                                   if (listAllNotWorkingHoursForBarber
                                                       .isNotEmpty)
-                                                    ...localNotWorkingHours
+                                                    ...listAllNotWorkingHoursForBarber
                                                         .where(
                                                           (notWorkingHoursEntity) {
                                                             return TimeTableHelper
                                                                 .notWorkingHourCondition(
                                                               notWorkingHoursEntity
                                                                   .dateFrom,
-                                                              BlocProvider.of<OrderFilterCubit>(context).state.query,
+                                                              BlocProvider.of<
+                                                                          OrderFilterCubit>(
+                                                                      context)
+                                                                  .state
+                                                                  .query,
                                                             );
                                                           },
                                                         )
@@ -399,12 +437,11 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                                   NotWorkingHoursCard(
                                                                 notWorkingHoursEntity:
                                                                     notWorkingHoursEntity,
-                                                                onDoubleTap:
-                                                                    (entity) => widget
-                                                                        .onTapNotWorkingHour
-                                                                        ?.call(
-                                                                            entity,
-                                                                            barber),
+                                                                onDoubleTap: (entity) => widget
+                                                                    .onTapNotWorkingHour
+                                                                    ?.call(
+                                                                        entity,
+                                                                        barber),
                                                               ),
                                                             );
                                                           },
@@ -417,7 +454,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                                                       return PastTimeCardWidget(
                                                         dateTime:
                                                             DateTime.tryParse(
-                                                          widget.orderFilterQuery,
+                                                          widget
+                                                              .orderFilterQuery,
                                                         ),
                                                       );
                                                     },
@@ -505,7 +543,8 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                 },
                 employeeId: entity.id,
                 onChangeEmployeeSchedule: () {
-                  widget.onChangeEmployeeSchedule.call(entity.employeeId, entity);
+                  widget.onChangeEmployeeSchedule
+                      .call(entity.employeeId, entity);
                 },
               );
             },

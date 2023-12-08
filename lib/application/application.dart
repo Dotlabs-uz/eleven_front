@@ -19,6 +19,7 @@ import '../core/utils/routes.dart';
 import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import '../features/main/presensation/cubit/locale/locale_cubit.dart';
 import '../features/main/presensation/cubit/menu/menu_cubit.dart';
+import '../features/main/presensation/cubit/order/not_working_hours/not_working_hours_cubit.dart';
 import '../features/main/presensation/cubit/show_client_orders_history/show_client_orders_history_cubit.dart';
 import '../features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
 import '../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
@@ -48,7 +49,8 @@ class _ApplicationState extends State<Application> {
   late AvatarCubit avatarCubit;
   late CustomerCubit customerCubit;
   late CrossInEmployeeScheduleProvider crossInEmployeeScheduleProvider;
-  late LocaleCubit   localeCubit;
+  late LocaleCubit localeCubit;
+  late NotWorkingHoursCubit notWorkingHoursCubit;
 
   @override
   void initState() {
@@ -68,6 +70,8 @@ class _ApplicationState extends State<Application> {
     crossInEmployeeScheduleProvider = locator();
     showClientOrdersHistoryCubit = locator();
     localeCubit = locator();
+    notWorkingHoursCubit = locator();
+
     super.initState();
   }
 
@@ -91,6 +95,7 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: showOrderHistoryCubit),
         BlocProvider.value(value: showClientOrdersHistoryCubit),
         BlocProvider.value(value: localeCubit),
+        BlocProvider.value(value: notWorkingHoursCubit),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -104,7 +109,7 @@ class _ApplicationState extends State<Application> {
           // backgroundColor: Colors.white,
 
           iconTheme: const IconThemeData(color: Colors.blue),
-          appBarTheme:   const AppBarTheme(
+          appBarTheme: const AppBarTheme(
             // color: AppColor.menuBgColor,
             backgroundColor: AppColors.sideMenu,
           ),

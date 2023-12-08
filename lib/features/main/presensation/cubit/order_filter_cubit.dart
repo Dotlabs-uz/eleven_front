@@ -1,12 +1,18 @@
 import 'dart:html';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 
-class OrderFilterHelper {
+class OrderFilterHelper extends Equatable{
   final String query;
 
   const OrderFilterHelper({this.query = ""});
+
+  @override
+  List<Object?> get props => [query];
+
+
 }
 
 class OrderFilterCubit extends Cubit<OrderFilterHelper> {

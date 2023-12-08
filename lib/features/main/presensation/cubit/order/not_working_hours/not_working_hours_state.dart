@@ -12,6 +12,11 @@ class NotWorkingHoursError extends NotWorkingHoursState {
   const NotWorkingHoursError({required this.message});
 }
 class NotWorkingHoursSaved extends NotWorkingHoursState {
+  final DateTime dateFrom;
+  final     DateTime dateTo;
+  final String employeeId;
+
+  NotWorkingHoursSaved({required this.dateFrom, required this.dateTo, required this.employeeId});
 }
 class NotWorkingHoursLoading extends NotWorkingHoursState {
 }
