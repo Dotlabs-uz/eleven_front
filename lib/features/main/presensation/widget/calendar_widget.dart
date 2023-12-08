@@ -82,7 +82,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   void initState() {
-initialize();
+    initialize();
     super.initState();
   }
 
@@ -274,29 +274,27 @@ initialize();
 
                   viewWaitText = true;
                   setState(() {});
-                  localBlinked.remove(dateTime);
-                  listBlinkedDates.remove(dateTime);
+                  // localBlinked.remove(dateTime);
+                  // listBlinkedDates.remove(dateTime);
                   widget.onDateTap.call(selectedDate);
                 }
               },
             );
           },
         ),
-
         const SizedBox(height: 10),
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 250),
-
-          child: viewWaitText ?  _WaitText(onTimerEnd: () {
-            print("wait text");
-            viewWaitText = false;
-            setState(() {
-
-            });
-          },) : SizedBox(),
+          child: viewWaitText
+              ? _WaitText(
+                  onTimerEnd: () {
+                    print("wait text");
+                    viewWaitText = false;
+                    setState(() {});
+                  },
+                )
+              : SizedBox(),
         ),
-
-
       ],
     );
   }
@@ -311,33 +309,34 @@ class _WaitText extends StatefulWidget {
 }
 
 class _WaitTextState extends State<_WaitText> {
-
   @override
   void initState() {
-    initialize() ;
+    initialize();
     super.initState();
   }
 
-  initialize()   {
-
-
-       Timer(const Duration(seconds: 4), () {
-         widget.onTimerEnd.call();
-       },);
-
+  initialize() {
+    Timer(
+      const Duration(seconds: 4),
+      () {
+        widget.onTimerEnd.call();
+      },
+    );
   }
+
   @override
   Widget build(BuildContext context) {
-    return Text("pleaseWaitFilterIsInProcess".tr(), style: const TextStyle(
-      fontFamily: "Nunito",
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      color: Colors.white,
-
-    ),);
+    return Text(
+      "pleaseWaitFilterIsInProcess".tr(),
+      style: const TextStyle(
+        fontFamily: "Nunito",
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: Colors.white,
+      ),
+    );
   }
 }
-
 
 class _DayItem extends StatefulWidget {
   final int? day;
@@ -414,7 +413,7 @@ class _DayItemState extends State<_DayItem> {
 
     if (_streamController.isClosed == false &&
         (condition && widget.selectedDate != dt)) {
-      if(_streamController.hasListener == false) {
+      if (_streamController.hasListener == false) {
         _startTimer(10000000);
       }
       _streamController.stream.listen((value) {
@@ -430,7 +429,7 @@ class _DayItemState extends State<_DayItem> {
   }
 
   _startTimer(int duration) async {
-    if(_streamController.isClosed) return;
+    if (_streamController.isClosed) return;
     for (var i = 0; i < duration; i++) {
       await Future.delayed(const Duration(seconds: 1));
       _streamController.add(i);
@@ -460,9 +459,7 @@ class _DayItemState extends State<_DayItem> {
                 (widget.day == null
                     ? null
                     : widget.isSelectedDate
-                        ?
-                 AppColors.accent
-
+                        ? AppColors.accent
                         : widget.isCurrentDate
                             ? Colors.blue.shade200
                             : null),
