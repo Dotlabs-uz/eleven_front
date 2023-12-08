@@ -29,24 +29,35 @@ class _ProfileScheduleItemWidgetState extends State<ProfileScheduleItemWidget> {
   String selectedHourTo = "22";
   String selectedMinuteTo = "00";
 
+  static int day = -1;
+  @override
+  void didUpdateWidget(covariant ProfileScheduleItemWidget oldWidget) {
+    if (day != widget.day) {
+      initialize();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   void initState() {
-
-
-    initialize() ;
+    initialize();
     super.initState();
   }
 
   initialize() {
+    day = widget.day;
 
     final from = widget.weeklyScheduleItemEntity.workingHours.first.dateFrom;
     final to = widget.weeklyScheduleItemEntity.workingHours.first.dateTo;
 
-    print("Widget ${widget.weeklyScheduleItemEntity.workingHours.length}  ${widget.weeklyScheduleItemEntity.workingHours} ${widget.weeklyScheduleItemEntity.workingHours.first.dateTo.minute}");
+    print(
+        "Widget  day :${widget.day}  ${widget.weeklyScheduleItemEntity.workingHours.length}  ${widget.weeklyScheduleItemEntity.workingHours} ${widget.weeklyScheduleItemEntity.workingHours.first.dateTo.minute}");
     selectedHourFrom = int.parse(from.hour.toString()).toString();
-    selectedMinuteFrom = from.minute.toString() == "0" ? "00":  from.minute.toString();
-    selectedHourTo =int.parse(  to.hour.toString()).toString();
-    selectedMinuteTo =to.minute.toString() == "0" ? "00":  from.minute.toString();
+    selectedMinuteFrom =
+        from.minute.toString() == "0" ? "00" : from.minute.toString();
+    selectedHourTo = int.parse(to.hour.toString()).toString();
+    selectedMinuteTo =
+        to.minute.toString() == "0" ? "00" : from.minute.toString();
   }
 
   @override
@@ -108,9 +119,10 @@ class _ProfileScheduleItemWidgetState extends State<ProfileScheduleItemWidget> {
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedHourFrom = newValue!;
-                      widget.weeklyScheduleItemEntity.workingHours[widget.day]
+                      widget.weeklyScheduleItemEntity.workingHours.first
                           .dateFrom = DateTime.now().copyWith(
-                        hour: int.parse(selectedHourFrom ), minute: 0 ,
+                        hour: int.parse(selectedHourFrom),
+                        minute: 0,
                       );
                     });
                   },
@@ -142,7 +154,7 @@ class _ProfileScheduleItemWidgetState extends State<ProfileScheduleItemWidget> {
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedMinuteFrom = newValue!;
-                      widget.weeklyScheduleItemEntity.workingHours[widget.day]
+                      widget.weeklyScheduleItemEntity.workingHours.first
                           .dateFrom = DateTime.now().copyWith(
                         minute: int.parse(selectedMinuteFrom),
                       );
@@ -177,9 +189,10 @@ class _ProfileScheduleItemWidgetState extends State<ProfileScheduleItemWidget> {
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedHourTo = newValue!;
-                      widget.weeklyScheduleItemEntity.workingHours[widget.day]
+                      widget.weeklyScheduleItemEntity.workingHours.first
                           .dateTo = DateTime.now().copyWith(
-                        hour: int.parse(selectedHourTo ), minute: 0 ,
+                        hour: int.parse(selectedHourTo),
+                        minute: 0,
                       );
                     });
                   },
@@ -211,7 +224,7 @@ class _ProfileScheduleItemWidgetState extends State<ProfileScheduleItemWidget> {
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedMinuteTo = newValue!;
-                      widget.weeklyScheduleItemEntity.workingHours[widget.day]
+                      widget.weeklyScheduleItemEntity.workingHours.first
                           .dateTo = DateTime.now().copyWith(
                         minute: int.parse(selectedMinuteTo),
                       );

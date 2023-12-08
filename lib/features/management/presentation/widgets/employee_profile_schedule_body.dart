@@ -5,11 +5,12 @@ import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../domain/entity/employee_entity.dart';
 import '../../domain/entity/weekly_schedule_item_entity.dart';
+import '../../domain/entity/working_hours_for_barber_schedule_entity.dart';
 import '../cubit/employee/employee_cubit.dart';
 import 'profile_schedule_item_widget.dart';
 
 class EmployeeProfileScheduleBody extends StatelessWidget {
-  final EmployeeEntity  employeeEntity;
+  final EmployeeEntity employeeEntity;
   const EmployeeProfileScheduleBody({Key? key, required this.employeeEntity})
       : super(key: key);
 
@@ -34,7 +35,10 @@ class EmployeeProfileScheduleBody extends StatelessWidget {
               return Column(
                 children: [
                   const SizedBox(height: 10),
-                  ProfileScheduleItemWidget(weeklyScheduleItemEntity: element, day: index),
+                  ProfileScheduleItemWidget(
+                    weeklyScheduleItemEntity: element,
+                    day: index,
+                  ),
                   const SizedBox(height: 10),
                   const Divider(),
                 ],
@@ -67,4 +71,3 @@ class EmployeeProfileScheduleBody extends StatelessWidget {
     );
   }
 }
-

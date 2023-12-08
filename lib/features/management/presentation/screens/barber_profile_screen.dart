@@ -188,8 +188,11 @@ class _ContentWidgetState extends State<ContentWidget> {
               listener: (context, state) {
                 if (state is EmployeeScheduleSaved) {
                   SuccessFlushBar("change_success".tr()).show(context);
+                  BlocProvider.of<EmployeeCubit>(context)
+                      .loadEmployee(widget.barberEntity.employeeId);
+                  BlocProvider.of<EmployeeScheduleCubit>(context).init();
                 }
-                if(state is EmployeeScheduleError) {
+                if (state is EmployeeScheduleError) {
                   ErrorFlushBar("change_error".tr(args: [state.message]))
                       .show(context);
                 }
@@ -316,7 +319,6 @@ class _ContentWidgetState extends State<ContentWidget> {
                                 ),
                                 child:
                                     BlocBuilder<EmployeeCubit, EmployeeState>(
-
                                   builder: (context, state) {
                                     if (state is EmployeeEntityLoaded) {
                                       final data = state.data;
@@ -542,7 +544,10 @@ class _AvatarWidgetState extends State<_AvatarWidget> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(60),
                 child: widget.file == null
-                    ? ImageViewWidget(avatar: widget.barberEntity.avatar ,size: 120,)
+                    ? ImageViewWidget(
+                        avatar: widget.barberEntity.avatar,
+                        size: 120,
+                      )
                     : Image.memory(
                         widget.webImage,
                         fit: BoxFit.cover,

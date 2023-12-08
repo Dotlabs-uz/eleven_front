@@ -49,8 +49,8 @@ class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<EmployeeCubit>(
-          create: (context) =>               employeeCubit..loadEmployee(widget.employeeEntity.id),
-
+          create: (context) =>
+              employeeCubit..loadEmployee(widget.employeeEntity.id),
         ),
         BlocProvider<EmployeeScheduleCubit>(
           create: (context) => employeeScheduleCubit,
@@ -100,124 +100,129 @@ class _ContentWidgetState extends State<ContentWidget> {
         backgroundColor: const Color(0xff071E32),
       ),
       body: BlocListener<EmployeeScheduleCubit, EmployeeScheduleState>(
-  listener: (context, state) {
-    if(state is EmployeeScheduleError) {
-      ErrorFlushBar("change_error".tr(args: [state.message]))
-          .show(context);
-    }
-  },
-  child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Container(
-                  height: 60,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ...List.generate(listTabs.length, (index) {
-                          final tab = listTabs[index];
+        listener: (context, state) {
+          if (state is EmployeeScheduleSaved) {
+            SuccessFlushBar("change_success".tr()).show(context);
+            BlocProvider.of<EmployeeCubit>(context)
+                .loadEmployee(widget.employeeEntity.id);
+            BlocProvider.of<EmployeeScheduleCubit>(context).init();
+          }
+          if (state is EmployeeScheduleError) {
+            ErrorFlushBar("change_error".tr(args: [state.message]))
+                .show(context);
+          }
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ...List.generate(listTabs.length, (index) {
+                            final tab = listTabs[index];
 
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 15),
-                            child: MouseRegion(
-                              child: GestureDetector(
-                                onTap: () => setState(() {
-                                  selectedTab = index;
-                                }),
-                                child: Text(
-                                  tab.title.tr(),
-                                  style: TextStyle(
-                                    color: selectedTab == index
-                                        ? AppColors.accent
-                                        : Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Nunito",
-                                    fontSize: 16,
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 15),
+                              child: MouseRegion(
+                                child: GestureDetector(
+                                  onTap: () => setState(() {
+                                    selectedTab = index;
+                                  }),
+                                  child: Text(
+                                    tab.title.tr(),
+                                    style: TextStyle(
+                                      color: selectedTab == index
+                                          ? AppColors.accent
+                                          : Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "Nunito",
+                                      fontSize: 16,
+                                    ),
                                   ),
                                 ),
                               ),
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              tab.title.tr(),
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Nunito",
+                              ),
                             ),
-                          );
-                        }),
+                          ],
+                        ),
+                        const Divider(),
+                        const SizedBox(height: 10),
+                        _getBody(widget.employeeEntity),
+                        const SizedBox(height: 30),
                       ],
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            tab.title.tr(),
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: "Nunito",
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Divider(),
-                      const SizedBox(height: 10),
-                      _getBody(widget.employeeEntity),
-                      const SizedBox(height: 30),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child:  BlocBuilder<EmployeeCubit, EmployeeState>(
-                    builder: (context, state) {
-                      if (state is EmployeeEntityLoaded) {
-                        final data = state.data;
-                        return ScheduleCalendarWidget(
-                          listSchedule: data.schedule,
-                          onRefreshTap: () {},
-                          employeeId:
-                          widget.employeeEntity.id,
-                        );
-                      }
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: BlocBuilder<EmployeeCubit, EmployeeState>(
+                      builder: (context, state) {
+                        if (state is EmployeeEntityLoaded) {
+                          final data = state.data;
+                          return ScheduleCalendarWidget(
+                            listSchedule: data.schedule,
+                            onRefreshTap: () {},
+                            employeeId: widget.employeeEntity.id,
+                          );
+                        }
 
-                      return const Center(
-                        child: LoadingCircle(),
-                      );
-                    },
+                        return const Center(
+                          child: LoadingCircle(),
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
-),
     );
   }
 
