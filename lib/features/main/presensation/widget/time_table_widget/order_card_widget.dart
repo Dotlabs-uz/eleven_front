@@ -103,16 +103,6 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                   : widget.order.status == OrderStatus.timeLeft
                       ? Colors.red.shade300
                       : AppColors.timeTableCard,
-          border: Border(
-            left: BorderSide(
-              width: 3,
-              color: widget.order.status == OrderStatus.waitingToView
-                  ? Colors.amber.shade600
-                  : widget.order.status == OrderStatus.timeLeft
-                      ? Colors.red.shade600
-                      : AppColors.timeTableCardSideColor,
-            ),
-          ),
         ),
         child: !widget.isDragging
             ? Stack(
@@ -121,9 +111,16 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
+                      Container(
+                        color: widget.order.status == OrderStatus.waitingToView
+                            ? Colors.amber.shade600
+                            : widget.order.status == OrderStatus.timeLeft
+                                ? Colors.red.shade600
+                                : AppColors.timeTableCardSideColor,
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
+                          horizontal: 7,
+                          vertical: 4,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,21 +128,19 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                             Text(
                               "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
                               style: GoogleFonts.nunito(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-
-                            if(widget.order.fromSite)
+                            if (widget.order.fromSite)
                               const SizedBox(width: 10),
-                            if(widget.order.fromSite)
-
+                            if (widget.order.fromSite)
                               const Icon(
-                              Icons.cloud,
-                              color: Colors.black,
-                              size: 16,
-                            ),
+                                Icons.cloud,
+                                color: Colors.white,
+                                size: 16,
+                              ),
                           ],
                         ),
                       ),
@@ -157,7 +152,6 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                             "${widget.order.clientName} | +${widget.order.clientPhone}",
                             style: GoogleFonts.nunito(
                               color: Colors.black,
-
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
                             ),
@@ -174,7 +168,6 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                                 "${e.name} ${e.price}сум. ${e.duration}м.",
                                 style: GoogleFonts.nunito(
                                   color: Colors.black,
-
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
                                 ),
