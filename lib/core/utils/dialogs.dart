@@ -186,8 +186,7 @@ class Dialogs {
     int? month,
     int? year,
     Map<String, dynamic>? workingHours,
-      List<WeeklyScheduleItemEntity>? schedule,
-
+    List<WeeklyScheduleItemEntity>? schedule,
   }) {
     return showDialog(
       context: context,
@@ -198,7 +197,12 @@ class Dialogs {
           borderRadius: BorderRadius.circular(20),
         ),
         content: _ScheduleFieldContentDialog(
-            day: day, month: month, year: year, onConfirm: onConfirm, schedule:schedule ,),
+          day: day,
+          month: month,
+          year: year,
+          onConfirm: onConfirm,
+          schedule: schedule,
+        ),
       ),
     );
   }
@@ -241,45 +245,44 @@ class _ScheduleFieldContentDialogState
 
   @override
   void initState() {
-
     lastFilteredQuery = BlocProvider.of<OrderFilterCubit>(context).state.query;
     final formattedFilterQuery = DateTime.tryParse(lastFilteredQuery);
 
     int weekDay = 1;
-    if(formattedFilterQuery == null) {
-     weekDay =    DateTime.now().weekday;
-    }else {
+    if (formattedFilterQuery == null) {
+      weekDay = DateTime.now().weekday;
+    } else {
+      final dt = DateTime(formattedFilterQuery.year, formattedFilterQuery.month,
+          formattedFilterQuery.day);
+      final now = DateTime.now()
+          .copyWith(hour: 0, minute: 0, millisecond: 0, microsecond: 0);
 
-      final dt = DateTime(formattedFilterQuery.year, formattedFilterQuery.month, formattedFilterQuery.day);
-      final now = DateTime.now().copyWith(hour: 0,minute: 0,millisecond: 0,microsecond: 0);
-
-      if(now.difference(dt).inDays  == 0 ) {
-        weekDay =    DateTime.now().weekday;
-
-      }else {
-      weekDay =   StringHelper.getWeekDayByDate(formattedFilterQuery.day, formattedFilterQuery.month, formattedFilterQuery.year).index;
-
+      if (now.difference(dt).inDays == 0) {
+        weekDay = DateTime.now().weekday;
+      } else {
+        weekDay = StringHelper.getWeekDayByDate(formattedFilterQuery.day,
+                formattedFilterQuery.month, formattedFilterQuery.year)
+            .index;
       }
-
     }
 
-
-    if(widget.schedule != null) {
-    final schedule = widget.schedule![weekDay  + 1];
+    if (widget.schedule != null) {
+      final schedule = widget.schedule![weekDay + 1];
       selectedTimeToMinute = _getMinutesTo(schedule.workingHours.first.dateTo);
       selectedTimeToHour = _getHoursTo(schedule.workingHours.first.dateTo);
-      selectedTimeFromMinute = _getMinutesFrom(schedule.workingHours.first.dateFrom);
-      selectedTimeFromHour = _getHoursFrom(schedule.workingHours.first.dateFrom);
+      selectedTimeFromMinute =
+          _getMinutesFrom(schedule.workingHours.first.dateFrom);
+      selectedTimeFromHour =
+          _getHoursFrom(schedule.workingHours.first.dateFrom);
     }
 
-
-
-      if(mounted) {
-        Future.delayed(Duration.zero,() {
-          setState(() {
-
-          });
-        },);
+    if (mounted) {
+      Future.delayed(
+        Duration.zero,
+        () {
+          setState(() {});
+        },
+      );
     }
 
     lastFilteredQuery = BlocProvider.of<OrderFilterCubit>(context).state.query;
@@ -289,22 +292,19 @@ class _ScheduleFieldContentDialogState
   }
 
   String _getHoursTo(DateTime dt) {
-
     return dt.hour.toString();
   }
 
   String _getMinutesTo(DateTime dt) {
-    return dt.minute.toString() == "0" ? "00": dt.minute.toString() ;
+    return dt.minute.toString() == "0" ? "00" : dt.minute.toString();
   }
 
-  String _getHoursFrom(DateTime dt ) {
+  String _getHoursFrom(DateTime dt) {
     return dt.hour.toString();
-
   }
 
   String _getMinutesFrom(DateTime dt) {
-    return dt.minute.toString() == "0" ? "00": dt.minute.toString() ;
-
+    return dt.minute.toString() == "0" ? "00" : dt.minute.toString();
   }
 
   @override
@@ -601,8 +601,32 @@ class _TimeTableBarberDialogBodyState
     extends State<_TimeTableBarberDialogBody> {
   _TimeTableEmployeeDialogState state = _TimeTableEmployeeDialogState.initial;
 
+  String selectedHourFrom = "8";
+  String selectedMinuteFrom = "00";
+  String selectedHourTo = "22";
+  String selectedMinuteTo = "00";
+
   DateTime timeFrom = DateTime.now();
   DateTime timeTo = DateTime.now();
+
+  @override
+  void initState() {
+    final lastFilterOrderDateTime = DateTime.tryParse(
+        BlocProvider.of<OrderFilterCubit>(context).state.query);
+
+    if (lastFilterOrderDateTime != null) {
+      timeFrom = timeFrom.copyWith(
+        day: lastFilterOrderDateTime.day,
+        month: lastFilterOrderDateTime.month,
+      );
+      timeTo = timeTo.copyWith(
+        day: lastFilterOrderDateTime.day,
+        month: lastFilterOrderDateTime.month,
+      );
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -676,31 +700,143 @@ class _TimeTableBarberDialogBodyState
 
   _selectNotWorkingHours() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 33),
-        TimeFieldWithoutFieldWidget(
-          label: "selectTimeFrom".tr(),
-          value: TimeOfDay.fromDateTime(timeFrom),
-          onSelected: (value) {
-            if (value != null) {
-              timeFrom = value;
-            }
-          },
+        Text("fromText".tr()),
+        const SizedBox(width: 10),
+        Row(
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black38, width: 1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: DropdownButton<String>(
+                value: selectedHourFrom,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                underline: const SizedBox(),
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: listTimes.map((String items) {
+                  return DropdownMenuItem(
+                    value: items.toString(),
+                    child: Text(items.toString()),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedHourFrom = newValue!;
+                    timeFrom = timeFrom.copyWith(
+                        hour: int.parse(selectedHourFrom), minute: 0);
+
+                    print("Time from $timeFrom");
+                  });
+                },
+              ),
+            ),
+            const Text(
+              "-",
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black38, width: 1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: DropdownButton<String>(
+                value: selectedMinuteFrom,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                underline: const SizedBox(),
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: listMinutes.map((String items) {
+                  return DropdownMenuItem(
+                    value: items.toString(),
+                    child: Text(items.toString()),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedMinuteFrom = newValue!;
+                    timeFrom.copyWith(minute: int.parse(selectedMinuteFrom));
+                  });
+                },
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 10),
-        TimeFieldWithoutFieldWidget(
-          label: "selectTimeTo".tr(),
-          value: TimeOfDay.fromDateTime(timeTo),
-          onSelected: (value) {
-            if (value != null) {
-              timeTo = value;
-            }
-          },
+        const SizedBox(width: 30),
+        Text("toText".tr()),
+        const SizedBox(width: 10),
+        Row(
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black38, width: 1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: DropdownButton<String>(
+                value: selectedHourTo,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                underline: const SizedBox(),
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: listTimes.map((String items) {
+                  return DropdownMenuItem(
+                    value: items.toString(),
+                    child: Text(items.toString()),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedHourTo = newValue!;
+                    timeTo = timeTo.copyWith(
+                        hour: int.parse(selectedHourTo), minute: 0);
+                    print("Time to $timeTo");
+                  });
+                },
+              ),
+            ),
+            const Text(
+              "-",
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black38, width: 1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: DropdownButton<String>(
+                value: selectedMinuteTo,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                underline: const SizedBox(),
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: listMinutes.map((String items) {
+                  return DropdownMenuItem(
+                    value: items.toString(),
+                    child: Text(items.toString()),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedMinuteTo = newValue!;
+                    timeTo.copyWith(minute: int.parse(selectedMinuteTo));
+                  });
+                },
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 35,
+          height: 40,
           child: Row(
             children: [
               Expanded(
