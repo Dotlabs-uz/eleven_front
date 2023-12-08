@@ -35,7 +35,7 @@ class TimeTableWidget extends StatefulWidget {
   final Function(OrderEntity order)? onOrderStartResizeEnd;
   final Function(OrderEntity order)? onOrderEndResizeEnd;
   final Function(OrderEntity)? onOrderTap;
-  final Function(String employeeId) onChangeEmployeeSchedule;
+  final Function(String employeeId, BarberEntity entity) onChangeEmployeeSchedule;
 
   const TimeTableWidget({
     Key? key,
@@ -505,7 +505,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                 },
                 employeeId: entity.id,
                 onChangeEmployeeSchedule: () {
-                  widget.onChangeEmployeeSchedule.call(entity.employeeId);
+                  widget.onChangeEmployeeSchedule.call(entity.employeeId, entity);
                 },
               );
             },

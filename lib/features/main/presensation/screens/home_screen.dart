@@ -439,13 +439,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                 withOrderEnd: true);
                                           },
                                           onChangeEmployeeSchedule:
-                                              (employeeId) {
+                                              (employeeId, barber) {
                                             final now = DateTime.now();
                                             Dialogs.scheduleField(
                                               context: context,
                                               day: now.day,
                                               month: now.month,
                                               year: now.year,
+                                              schedule: barber.weeklySchedule.schedule,
                                               onConfirm: (status,
                                                   fromHour,
                                                   fromMinute,

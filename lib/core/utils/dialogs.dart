@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../features/management/domain/entity/weekly_schedule_item_entity.dart';
 import '../../features/management/presentation/widgets/employee_schedule_widget.dart';
 import '../components/button_widget.dart';
 import '../components/time_field_widget.dart';
@@ -185,6 +186,8 @@ class Dialogs {
     int? month,
     int? year,
     Map<String, dynamic>? workingHours,
+      List<WeeklyScheduleItemEntity>? schedule,
+
   }) {
     return showDialog(
       context: context,
@@ -195,7 +198,7 @@ class Dialogs {
           borderRadius: BorderRadius.circular(20),
         ),
         content: _ScheduleFieldContentDialog(
-            day: day, month: month, year: year, onConfirm: onConfirm),
+            day: day, month: month, year: year, onConfirm: onConfirm, schedule:schedule ,),
       ),
     );
   }
@@ -205,8 +208,7 @@ class _ScheduleFieldContentDialog extends StatefulWidget {
   final int? day;
   final int? month;
   final int? year;
-  final Map<String, dynamic>? workingHours;
-
+  final List<WeeklyScheduleItemEntity>? schedule;
   final Function(
     int status,
     String fromHour,
@@ -220,7 +222,7 @@ class _ScheduleFieldContentDialog extends StatefulWidget {
       this.month,
       this.year,
       required this.onConfirm,
-      this.workingHours})
+      required this.schedule})
       : super(key: key);
 
   @override
@@ -230,7 +232,7 @@ class _ScheduleFieldContentDialog extends StatefulWidget {
 
 class _ScheduleFieldContentDialogState
     extends State<_ScheduleFieldContentDialog> {
-  int selectedStatus = 0;
+  int selectedStatus = 1;
   String selectedTimeFromHour = "8";
   String selectedTimeFromMinute = "00";
   String selectedTimeToHour = "22";
@@ -239,12 +241,45 @@ class _ScheduleFieldContentDialogState
 
   @override
   void initState() {
-    if (widget.workingHours != null) {
-      print(widget.workingHours);
-      selectedTimeToMinute = _getMinutesTo(widget.workingHours!);
-      selectedTimeToHour = _getHoursTo(widget.workingHours!);
-      selectedTimeFromMinute = _getMinutesFrom(widget.workingHours!);
-      selectedTimeFromHour = _getHoursFrom(widget.workingHours!);
+
+    lastFilteredQuery = BlocProvider.of<OrderFilterCubit>(context).state.query;
+    final formattedFilterQuery = DateTime.tryParse(lastFilteredQuery);
+
+    int weekDay = 1;
+    if(formattedFilterQuery == null) {
+     weekDay =    DateTime.now().weekday;
+    }else {
+
+      final dt = DateTime(formattedFilterQuery.year, formattedFilterQuery.month, formattedFilterQuery.day);
+      final now = DateTime.now().copyWith(hour: 0,minute: 0,millisecond: 0,microsecond: 0);
+
+      if(now.difference(dt).inDays  == 0 ) {
+        weekDay =    DateTime.now().weekday;
+
+      }else {
+      weekDay =   StringHelper.getWeekDayByDate(formattedFilterQuery.day, formattedFilterQuery.month, formattedFilterQuery.year).index;
+
+      }
+
+    }
+
+
+    if(widget.schedule != null) {
+    final schedule = widget.schedule![weekDay  + 1];
+      selectedTimeToMinute = _getMinutesTo(schedule.workingHours.first.dateTo);
+      selectedTimeToHour = _getHoursTo(schedule.workingHours.first.dateTo);
+      selectedTimeFromMinute = _getMinutesFrom(schedule.workingHours.first.dateFrom);
+      selectedTimeFromHour = _getHoursFrom(schedule.workingHours.first.dateFrom);
+    }
+
+
+
+      if(mounted) {
+        Future.delayed(Duration.zero,() {
+          setState(() {
+
+          });
+        },);
     }
 
     lastFilteredQuery = BlocProvider.of<OrderFilterCubit>(context).state.query;
@@ -253,28 +288,23 @@ class _ScheduleFieldContentDialogState
     super.initState();
   }
 
-  String _getHoursTo(Map<String, dynamic> workingHours) {
-    String toTime = workingHours['to'];
-    List<String> timeParts = toTime.split(':');
-    return timeParts[0];
+  String _getHoursTo(DateTime dt) {
+
+    return dt.hour.toString();
   }
 
-  String _getMinutesTo(Map<String, dynamic> workingHours) {
-    String toTime = workingHours['to'];
-    List<String> timeParts = toTime.split(':');
-    return timeParts[1];
+  String _getMinutesTo(DateTime dt) {
+    return dt.minute.toString() == "0" ? "00": dt.minute.toString() ;
   }
 
-  String _getHoursFrom(Map<String, dynamic> workingHours) {
-    String fromTime = workingHours['from'];
-    List<String> timeParts = fromTime.split(':');
-    return timeParts[0];
+  String _getHoursFrom(DateTime dt ) {
+    return dt.hour.toString();
+
   }
 
-  String _getMinutesFrom(Map<String, dynamic> workingHours) {
-    String fromTime = workingHours['from'];
-    List<String> timeParts = fromTime.split(':');
-    return timeParts[1];
+  String _getMinutesFrom(DateTime dt) {
+    return dt.minute.toString() == "0" ? "00": dt.minute.toString() ;
+
   }
 
   @override
