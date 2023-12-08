@@ -611,18 +611,26 @@ class _TimeTableBarberDialogBodyState
 
   @override
   void initState() {
+    timeFrom = timeFrom.copyWith(
+        hour: int.parse(selectedHourFrom),
+        minute: int.parse(selectedMinuteFrom));
+    timeTo = timeFrom.copyWith(
+        hour: int.parse(selectedHourTo), minute: int.parse(selectedMinuteTo));
+
     final lastFilterOrderDateTime = DateTime.tryParse(
         BlocProvider.of<OrderFilterCubit>(context).state.query);
 
     if (lastFilterOrderDateTime != null) {
       timeFrom = timeFrom.copyWith(
-        day: lastFilterOrderDateTime.day,
-        month: lastFilterOrderDateTime.month,
-      );
+          day: lastFilterOrderDateTime.day,
+          month: lastFilterOrderDateTime.month,
+          hour: int.parse(selectedHourFrom),
+          minute: int.parse(selectedMinuteFrom));
       timeTo = timeTo.copyWith(
-        day: lastFilterOrderDateTime.day,
-        month: lastFilterOrderDateTime.month,
-      );
+          day: lastFilterOrderDateTime.day,
+          month: lastFilterOrderDateTime.month,
+          hour: int.parse(selectedHourTo),
+          minute: int.parse(selectedMinuteTo));
     }
     super.initState();
   }
@@ -762,7 +770,8 @@ class _TimeTableBarberDialogBodyState
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedMinuteFrom = newValue!;
-                    timeFrom.copyWith(minute: int.parse(selectedMinuteFrom));
+                    timeFrom = timeFrom.copyWith(
+                        minute: int.parse(selectedMinuteFrom));
                   });
                 },
               ),
@@ -827,7 +836,8 @@ class _TimeTableBarberDialogBodyState
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedMinuteTo = newValue!;
-                    timeTo.copyWith(minute: int.parse(selectedMinuteTo));
+                    timeTo =
+                        timeTo.copyWith(minute: int.parse(selectedMinuteTo));
                   });
                 },
               ),
