@@ -463,7 +463,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                               year: now.year,
                                               schedule: barber
                                                   .weeklySchedule.schedule,
-                                              onConfirm: (status,
+                                              onConfirm: (dateTime,status,
                                                   fromHour,
                                                   fromMinute,
                                                   toHour,
@@ -471,7 +471,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                 final fieldSchedule =
                                                     FieldSchedule(
                                                   DateFormat("yyyy-MM-dd")
-                                                      .parse(now.toString()),
+                                                      .parse(dateTime.toString()),
                                                   employeeId,
                                                   status,
                                                   {

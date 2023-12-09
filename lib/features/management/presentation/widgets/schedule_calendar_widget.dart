@@ -277,7 +277,7 @@ class _DayItemState extends State<_DayItem> {
           day: date.day,
           month: date.month,
           year: date.year,
-          onConfirm: (status, fromHour, fromMinute, toHour, toMinute) {
+          onConfirm: (dateTime,status, fromHour, fromMinute, toHour, toMinute) {
             backgroundColor =
                 ColorHelper.getColorForScheduleByStatusForProfile(status);
             setState(() {});

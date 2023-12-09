@@ -64,23 +64,20 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
     if (mounted) {
       Future.delayed(
         Duration.zero,
-            () {
+        () {
           setState(() {
-            if(listCustomers.length == 1) {
+            if (listCustomers.length == 1) {
               final element = listCustomers.first;
               widget.onNameChanged.call(element.fullName);
               widget.onPhoneChanged.call(element.phoneNumber);
-              searchControllerName.text =  element.fullName;
+              searchControllerName.text = element.fullName;
               searchControllerPhone.text = element.phoneNumber.toString();
-
-
             }
           });
         },
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -177,12 +174,10 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           builder: (context, state) {
                             if (state is CustomerLoaded) {
                               listCustomers = state.data;
-                              
-                              
-                              print("List customers ${listCustomers.length}")
-;
 
-                   _update();
+                              print("List customers ${listCustomers.length}");
+
+                              _update();
                               BlocProvider.of<CustomerCubit>(context).init();
                             }
                             return ListView(
@@ -214,6 +209,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           },
                         );
                       },
+                      listItemInMenu: listCustomers,
                     ),
                   ),
                 ),
@@ -226,8 +222,17 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                       viewShape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
+                      viewTrailing: [
+                        SizedBox(
+                          width: 10,
+                          height: 10,
+                        )
+                      ],
                       viewConstraints: const BoxConstraints(
-                          maxWidth: 130, minWidth: 130, maxHeight: 400),
+                          maxWidth: 130,
+                          minWidth: 130,
+                          maxHeight: 400,
+                          minHeight: 0),
                       builder:
                           (BuildContext context, SearchController controller) {
                         return SearchBar(
@@ -270,13 +275,12 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                             if (state is CustomerLoaded) {
                               listCustomers = state.data;
 
-
-
                               _update();
 
                               BlocProvider.of<CustomerCubit>(context).init();
                             }
                             return ListView(
+                              shrinkWrap: true,
                               children: List<ListTile>.generate(
                                   listCustomers.length, (int index) {
                                 final CustomerEntity item =
@@ -310,6 +314,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           },
                         );
                       },
+                      listItemInMenu: listCustomers,
                     ),
                   ),
                 ),

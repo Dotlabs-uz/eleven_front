@@ -74,6 +74,7 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
     Dialogs.scheduleField(
       context: context,
       onConfirm: (
+        DateTime _,
         int status,
         String fromHour,
         String fromMinute,
@@ -447,6 +448,7 @@ class _EmployeeScheduleFieldWidgetState
         month: widget.fieldSchedule.dateTime!.month,
         year: widget.fieldSchedule.dateTime!.year,
         onConfirm: (
+          DateTime _,
           int status,
           String fromHour,
           String fromMinute,
