@@ -150,15 +150,16 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                       listAllNotWorkingHoursForBarber.add(NotWorkingHoursModel(
                           dateFrom: state.dateFrom, dateTo: state.dateTo));
 
-                      if (mounted) {
-                        Future.delayed(
-                          Duration.zero,
-                          () {
-                            setState(() {});
-                          },
-                        );
+
+
+
+                      if(lastFilteredDate.isEmpty) {
+                      BlocProvider.of<OrderFilterCubit>(context).setFilter(query: DateTime.now().toIso8601String());
+
                       }
-                      BlocProvider.of<NotWorkingHoursCubit>(context).init();
+                      // else {
+                      //   BlocProvider.of<OrderFilterCubit>(context).setFilter(query: lastFilteredDate);
+                      // }
                     }
                   },
                 ),
