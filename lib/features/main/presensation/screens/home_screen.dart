@@ -402,13 +402,18 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                   .state
                                                   .query,
                                           onFieldTap: (hour, minute, barberId) {
-                                            print("Filter date $filteredDate");
+                                            final dt =   DateTime.tryParse(BlocProvider.of<OrderFilterCubit>(
+                                                context)
+                                                .state
+                                                .query);
+
+
                                             activeData = OrderEntity.empty(
                                               hour: hour,
                                               minute: minute,
                                               barber: barberId,
-                                              month: filteredDate.month,
-                                              day: filteredDate.day,
+                                              month: dt?.month,
+                                              day: dt?.day,
                                             );
                                             _editOrder(activeData);
                                           },
@@ -446,7 +451,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           onOrderDragEnd: (order) {
                                             print("Order drag end");
                                             _updateOrder(order,
-                                                withOrderEnd: true);
+                                                `withOrderEnd: true);
                                           },
                                           onChangeEmployeeSchedule:
                                               (employeeId, barber) {
