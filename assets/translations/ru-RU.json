@@ -679,6 +679,6 @@
   "clientOrdersHistory": "История заказов клиента",
   "pleaseEnterClientNameAndPhone": "Пожалуйста введите имя и номер клиента",
   "changeSchedule": "Изменить рассписание",
-  "data": "data",
+  "checked": "Проверено",
   "data": "data"
 }

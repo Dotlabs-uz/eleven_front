@@ -390,9 +390,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         child: TimeTableWidget(
                                           listBarbers: listBarbers,
                                           onOrderTap: (order) {
-                                            order.status = OrderStatus.viewed;
-                                            _updateOrder(order,
-                                                withOrderEnd: false);
+                                            // order.status = OrderStatus.viewed;
+                                            // _updateOrder(order,
+                                            //     withOrderEnd: false);
                                           },
                                           onTapNotWorkingHour:
                                               _onDeleteNotWorkingHours,
@@ -451,7 +451,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           onOrderDragEnd: (order) {
                                             print("Order drag end");
                                             _updateOrder(order,
-                                                `withOrderEnd: true);
+                                                withOrderEnd: true);
                                           },
                                           onChangeEmployeeSchedule:
                                               (employeeId, barber) {

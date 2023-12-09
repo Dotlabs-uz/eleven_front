@@ -1,5 +1,6 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/api/api_constants.dart';
 import 'package:eleven_crm/core/components/barber_field_widget.dart';
 import 'package:eleven_crm/core/components/client_field_widget.dart';
 import 'package:eleven_crm/core/components/date_time_field_widget.dart';
@@ -17,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../features/main/data/model/order_model.dart';
+import '../../features/main/domain/entity/order_entity.dart';
 import '../../features/main/presensation/widget/order_history_menu_widget.dart';
 import '../../features/main/presensation/widget/select_service_dialog_widget.dart';
 import '../../features/management/presentation/cubit/customer/customer_cubit.dart';
@@ -34,7 +37,6 @@ class DataOrderForm extends StatefulWidget {
       String client) saveData;
   final Function() closeForm;
   final WebSocketsService webSocketsService;
-
 
   const DataOrderForm({
     Key? key,
@@ -68,8 +70,6 @@ class DataOrderFormState extends State<DataOrderForm> {
     barberId = widget.fields['barberId']?.val ?? "";
     orderStart = widget.fields['orderStart']?.val ?? DateTime.now();
     selectedProducts.clear();
-
-
 
     if (mounted) {
       Future.delayed(
@@ -150,7 +150,7 @@ class DataOrderFormState extends State<DataOrderForm> {
               )
             ],
           ),
-          child:   Column(
+          child: Column(
             children: [
               Expanded(
                 child: SingleChildScrollView(
@@ -172,16 +172,16 @@ class DataOrderFormState extends State<DataOrderForm> {
                                 final bool fromSite =
                                     widget.fields['fromSite']!.val;
                                 BlocProvider.of<ShowClientOrdersHistoryCubit>(
-                                    context)
+                                        context)
                                     .disable();
                                 BlocProvider.of<ShowOrderHistoryCubit>(context)
                                     .enable(
-                                    selectedProducts,
-                                    clientPhone
-                                        .toString(), // TODO CLIENT !!!!!
-                                    clientName,
-                                    fromSite,
-                                    createdAt);
+                                        selectedProducts,
+                                        clientPhone
+                                            .toString(), // TODO CLIENT !!!!!
+                                        clientName,
+                                        fromSite,
+                                        createdAt);
                               },
                               icon: const Icon(Icons.history),
                             ),
@@ -189,11 +189,11 @@ class DataOrderFormState extends State<DataOrderForm> {
                             onPressed: () {
                               widget.closeForm.call();
                               BlocProvider.of<ShowClientOrdersHistoryCubit>(
-                                  context)
+                                      context)
                                   .disable();
                               BlocProvider.of<ShowOrderHistoryCubit>(context)
                                   .disable();
-                                
+
                               BlocProvider.of<ShowSelectServicesCubit>(context)
                                   .disable();
                             },
@@ -261,7 +261,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                           if (mounted) {
                             Future.delayed(
                               Duration.zero,
-                                  () {
+                              () {
                                 setState(() {
                                   orderStart = value;
                                 });
@@ -275,9 +275,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                       //   fieldEntity: widget.fields['orderEnd']!,
                       //   withTime: true,
                       // ),
-                                
+
                       const SizedBox(height: 10),
-                                
+
                       if (barberId.isNotEmpty)
                         SelectServicesWidget(
                           fieldEntity: widget.fields["services"]!,
@@ -289,12 +289,9 @@ class DataOrderFormState extends State<DataOrderForm> {
                           },
                           barberId: barberId,
                         ),
-                                
-                      const SizedBox(height: 10),
-                                
 
+                      const SizedBox(height: 10),
                     ],
-                                
                   ),
                 ),
               ),
@@ -315,7 +312,8 @@ class DataOrderFormState extends State<DataOrderForm> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     const SizedBox(height: 20),
-                    _infoWidget("${'price'.tr()}:", NumberHelper.formatNumber(price.toInt()), "сум"),
+                    _infoWidget("${'price'.tr()}:",
+                        NumberHelper.formatNumber(price.toInt()), "сум"),
                     const SizedBox(height: 15),
                     _infoWidget("${'duration'.tr()}:", duration, "мин"),
                     const SizedBox(height: 30),
@@ -329,8 +327,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                           await confirm(
                             context,
                             title: const Text('client').tr(),
-                            content: const Text(
-                                'pleaseEnterClientNameAndPhone')
+                            content: const Text('pleaseEnterClientNameAndPhone')
                                 .tr(),
                             textOK: const Text('ok').tr(),
                             enableCancel: false,
@@ -340,8 +337,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                           await confirm(
                             context,
                             title: const Text('barber').tr(),
-                            content:
-                            const Text('pleaseSelectBarber').tr(),
+                            content: const Text('pleaseSelectBarber').tr(),
                             textOK: const Text('ok').tr(),
                             enableCancel: false,
                           );
@@ -350,8 +346,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                           await confirm(
                             context,
                             title: const Text('services').tr(),
-                            content:
-                            const Text('pleaseSelectServices').tr(),
+                            content: const Text('pleaseSelectServices').tr(),
                             textOK: const Text('ok').tr(),
                             enableCancel: false,
                           );
@@ -361,7 +356,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                             context,
                             title: const Text('orderStart').tr(),
                             content: const Text(
-                                'youCantChooseThisOrderStartInThisTime')
+                                    'youCantChooseThisOrderStartInThisTime')
                                 .tr(),
                             textOK: const Text('ok').tr(),
                             enableCancel: false,
@@ -375,8 +370,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                         BlocProvider.of<ShowSelectServicesCubit>(context)
                             .disable();
                         widget.closeForm.call();
-                        SuccessFlushBar("change_success".tr())
-                            .show(context);
+                        SuccessFlushBar("change_success".tr()).show(context);
                       },
                     ),
                     if (widget.fields['id']?.val != null &&
@@ -384,33 +378,63 @@ class DataOrderFormState extends State<DataOrderForm> {
                       const SizedBox(height: 10),
                     if (widget.fields['id']?.val != null &&
                         widget.fields['id']!.val.toString().isNotEmpty)
-                      ButtonWidget(
-                          text: "delete".tr(),
-                          color: Colors.red,
-                          onPressed: () async {
-                            if (await confirm(
-                              super.context,
-                              title: const Text('confirming').tr(),
-                              content: const Text('deleteConfirm').tr(),
-                              textOK: const Text('yes').tr(),
-                              textCancel: const Text('cancel').tr(),
-                            )) {
-                              widget.webSocketsService.deleteFromSocket(
-                                {'_id': widget.fields['id']?.val},
-                              );
-                            }
-                          }),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ButtonWidget(
+                                text: "delete".tr(),
+                                color: Colors.red,
+                                onPressed: () async {
+                                  if (await confirm(
+                                    super.context,
+                                    title: const Text('confirming').tr(),
+                                    content: const Text('deleteConfirm').tr(),
+                                    textOK: const Text('yes').tr(),
+                                    textCancel: const Text('cancel').tr(),
+                                  )) {
+                                    widget.webSocketsService.deleteFromSocket(
+                                      {'_id': widget.fields['id']?.val},
+                                    );
+                                  }
+                                }),
+                          ),
+                          if (widget.fields['status']?.val != null &&
+                              widget.fields['status']!.val == OrderStatus.waitingToView )  const SizedBox(width: 10),
+                          if (widget.fields['status']?.val != null &&
+                              widget.fields['status']!.val == OrderStatus.waitingToView )     Expanded(
+                            child: ButtonWidget(
+                              text: "checked".tr(),
+                              color: Colors.blue,
+                              onPressed: () async {
+
+                                _updateOrder(OrderEntity.fromFields());
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     const SizedBox(height: 20),
                   ],
                 ),
               ),
-
             ],
           ),
         ),
       ],
     );
   }
+
+  void _updateOrder(OrderEntity order, {bool withOrderEnd = true}) {
+    order.status = OrderStatus.viewed;
+    WebSocketsService(ApiConstants.baseApiUrl).sendData(
+      "update",
+      {
+        "data": OrderModel.fromEntity(order)
+            .toJsonUpdate(withOrderEnd: withOrderEnd),
+      },
+    );
+  }
+
 
   _infoWidget(String title, dynamic value, String valueText) {
     return Row(
@@ -425,7 +449,7 @@ class DataOrderFormState extends State<DataOrderForm> {
           ),
         ),
         Text(
-          value.toString() + " " + valueText,
+          "$value $valueText",
           style: const TextStyle(
             color: Colors.black,
             fontSize: 16,

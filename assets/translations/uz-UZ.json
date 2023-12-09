@@ -668,5 +668,6 @@
   "clientCreatedOrderFromSite": "Mijoz veb-saytdan buyurtma yaratdi",
   "clientOrdersHistory": "Mijoz buyurtmalari tarixi",
   "pleaseEnterClientNameAndPhone": "Iltimos, mijoz nomi va raqamini kiriting",
-  "changeSchedule": "Jadvalni o'zgartirish"
+  "changeSchedule": "Jadvalni o'zgartirish",
+  "checked": "Tasdiqlangan"
 }
