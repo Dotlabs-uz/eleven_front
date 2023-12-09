@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/utils/assets.dart';
+import '../../../../core/utils/number_helper.dart';
 import '../../../../get_it/locator.dart';
 import '../../../products/domain/entity/service_product_entity.dart';
 import '../../../products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
@@ -144,7 +145,6 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                                     () {
                                   setState(() {
                                     listServiceCategories = state.data;
-                                    print("${listServiceCategories.first.services} seererbicessss");
                                   });
                                 },
                               );
@@ -319,7 +319,15 @@ class _ServiceProductCardState extends State<_ServiceProductCard> {
                   fontSize: 18,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
+              Text(
+                "${NumberHelper.formatNumber(widget.item.price.toInt())} сум",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
               Text(
                 "${widget.item.duration} мин",
                 style: const TextStyle(
