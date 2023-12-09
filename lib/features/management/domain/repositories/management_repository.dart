@@ -44,6 +44,7 @@ abstract class ManagementRepository {
 
   Future<Either<AppError, BarberResultsEntity>> getBarber(
     int page,
+    int limit,
     String searchText,
     String? ordering,
   );

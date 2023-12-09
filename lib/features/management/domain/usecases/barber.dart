@@ -19,6 +19,7 @@ class GetBarber extends UseCase<BarberResultsEntity, GetBarberParams> {
       GetBarberParams params) async {
     return await repository.getBarber(
       params.page,
+      params.limit,
       params.searchText,
       params.ordering,
     );
@@ -50,12 +51,14 @@ class DeleteBarber extends UseCase<void, BarberEntity> {
 
 class GetBarberParams extends Equatable {
   final int page;
+  final int limit;
   final String searchText;
   final String? ordering;
 
   const GetBarberParams({
     required this.page,
     this.searchText = '',
+    required this.limit ,
     this.ordering,
   });
 

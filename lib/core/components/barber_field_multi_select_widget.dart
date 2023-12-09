@@ -145,7 +145,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     List<BarberEntity> listData = [];
     final data = await getBarbers.call(GetBarberParams(
       searchText: filter,
-      page: 1,
+      page: 1, limit: 20,
     ));
 
     data.fold(

@@ -72,7 +72,7 @@ class BarberModel extends BarberEntity {
       firstName: json['firstName'],
       employeeId: json['employeeId'] ?? "",
       lastName: json['lastName'],
-      phone: json['phone'],
+      phone: json['phone'] ?? 998,
       isActive: json['isActive'] ?? true,
       isOnline: json['isOnline'] ?? true,
       filial: FilialModel.fromJson(json['filial']),
@@ -86,7 +86,7 @@ class BarberModel extends BarberEntity {
               .toList()
           : [],
       avatar: json['avatar'] ?? "",
-      isCurrentFilial: json['isCurrentFilial'] ?? false,
+      isCurrentFilial: json['isCurrentFilial'] ?? true,
       weeklySchedule: WeeklyScheduleResultsModel.fromJson( json['weeklySchedule']),
     );
   }

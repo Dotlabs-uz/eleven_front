@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final selectServicesCubit = locator<SelectServicesCubit>();
     final employeeScheduleCubit = locator<EmployeeScheduleCubit>();
-    final barberCubit = locator<BarberCubit>()..load("");
+    final barberCubit = locator<BarberCubit>()..load("", limit: 100);
 
     return MultiBlocProvider(
       providers: [
@@ -83,7 +83,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     super.initState();
   }
-
 
   initialize() async {
     final authenticationBox = await Hive.openBox('authenticationBox');
@@ -126,6 +125,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
             onPressed: () {
               webSocketService
                   .addFilter({"orderStart": filteredDate.toIso8601String()});
+
+              BlocProvider.of<BarberCubit>(context).load("", limit: 100);
             },
             icon: const Icon(Icons.refresh),
           ),
@@ -233,7 +234,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
     showSelectServices = false;
     BlocProvider.of<HomeScreenOrderFormCubit>(context).disable();
 
-
     webSocketService.dispose();
 
     super.dispose();
@@ -295,6 +295,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 BlocListener<BarberCubit, BarberState>(
                   listener: (context, state) {
                     if (state is BarberLoaded) {
+
+                      print("Barber loadded " );
                       if (mounted) {
                         Future.delayed(
                           Duration.zero,
@@ -385,116 +387,104 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                         duration: const Duration(seconds: 1),
                                         switchInCurve: Curves.easeIn,
                                         switchOutCurve: Curves.easeIn,
-                                        child: orders.isEmpty
-                                            ? const EmptyWidget()
-                                            : TimeTableWidget(
-                                                listBarbers: listBarbers,
-                                                onOrderTap: (order) {
-                                                  order.status =
-                                                      OrderStatus.viewed;
-                                                  _updateOrder(order,
-                                                      withOrderEnd: false);
-                                                },
-                                                onTapNotWorkingHour:
-                                                    _onDeleteNotWorkingHours,
-                                                orderFilterQuery: BlocProvider
-                                                        .of<OrderFilterCubit>(
-                                                            context)
-                                                    .state
-                                                    .query,
-                                                onFieldTap:
-                                                    (hour, minute, barberId) {
-                                                  print(
-                                                      "Filter date $filteredDate");
-                                                  activeData =
-                                                      OrderEntity.empty(
-                                                    hour: hour,
-                                                    minute: minute,
-                                                    barber: barberId,
-                                                    month: filteredDate.month,
-                                                    day: filteredDate.day,
-                                                  );
-                                                  _editOrder(activeData);
-                                                },
-                                                onOrderDoubleTap: (entity) {
-                                                  print("Entity $entity");
-                                                  activeData = entity;
-                                                  _editOrder(activeData);
-                                                },
-                                                onDeleteEmployeeFromTable:
-                                                    (employeeId) {
-                                                  _barberFromTimeTableCardAction(
-                                                    employeeId,
-                                                    false,
-                                                  );
-                                                },
-                                                onNotWorkingHoursCreate: (
-                                                  DateTime from,
-                                                  DateTime to,
-                                                  String employeeId,
-                                                ) {
-                                                  BlocProvider.of<
-                                                      NotWorkingHoursCubit>(
-                                                    context,
-                                                  ).save(
-                                                    dateFrom: from,
-                                                    dateTo: to,
-                                                    employeeId: employeeId,
-                                                  );
-                                                },
-                                                listOrders: orders,
-                                                onOrderStartResizeEnd:
-                                                    (order) =>
-                                                        _updateOrder(order),
-                                                onOrderEndResizeEnd:
-                                                    (order) =>
-                                                        _updateOrder(order),
-                                                onOrderDragEnd: (order) {
-                                                  print("Order drag end");
-                                                  _updateOrder(order,
-                                                      withOrderEnd: true);
-                                                },
-                                                onChangeEmployeeSchedule:
-                                                    (employeeId, barber) {
-                                                  final now = DateTime.now();
-                                                  Dialogs.scheduleField(
-                                                    context: context,
-                                                    day: now.day,
-                                                    month: now.month,
-                                                    year: now.year,
-                                                    schedule: barber
-                                                        .weeklySchedule
-                                                        .schedule,
-                                                    onConfirm: (status,
-                                                        fromHour,
-                                                        fromMinute,
-                                                        toHour,
-                                                        toMinute) {
-                                                      final fieldSchedule =
-                                                          FieldSchedule(
-                                                        DateFormat(
-                                                                "yyyy-MM-dd")
-                                                            .parse(now
-                                                                .toString()),
-                                                        employeeId,
-                                                        status,
-                                                        {
-                                                          "from":
-                                                              "$fromHour:$fromMinute",
-                                                          "to":
-                                                              "$toHour:$toMinute"
-                                                        },
-                                                      );
-                                                      BlocProvider.of<
-                                                                  EmployeeScheduleCubit>(
-                                                              context)
-                                                          .save(listData: [
-                                                        fieldSchedule
-                                                      ]);
-                                                    },
-                                                  );
-                                                },
-                                              )
+                                        child: TimeTableWidget(
+                                          listBarbers: listBarbers,
+                                          onOrderTap: (order) {
+                                            order.status = OrderStatus.viewed;
+                                            _updateOrder(order,
+                                                withOrderEnd: false);
+                                          },
+                                          onTapNotWorkingHour:
+                                              _onDeleteNotWorkingHours,
+                                          orderFilterQuery:
+                                              BlocProvider.of<OrderFilterCubit>(
+                                                      context)
+                                                  .state
+                                                  .query,
+                                          onFieldTap: (hour, minute, barberId) {
+                                            print("Filter date $filteredDate");
+                                            activeData = OrderEntity.empty(
+                                              hour: hour,
+                                              minute: minute,
+                                              barber: barberId,
+                                              month: filteredDate.month,
+                                              day: filteredDate.day,
+                                            );
+                                            _editOrder(activeData);
+                                          },
+                                          onOrderDoubleTap: (entity) {
+                                            print("Entity $entity");
+                                            activeData = entity;
+                                            _editOrder(activeData);
+                                          },
+                                          onDeleteEmployeeFromTable:
+                                              (employeeId) {
+                                            _barberFromTimeTableCardAction(
+                                              employeeId,
+                                              false,
+                                            );
+                                          },
+                                          onNotWorkingHoursCreate: (
+                                            DateTime from,
+                                            DateTime to,
+                                            String employeeId,
+                                          ) {
+                                            BlocProvider.of<
+                                                NotWorkingHoursCubit>(
+                                              context,
+                                            ).save(
+                                              dateFrom: from,
+                                              dateTo: to,
+                                              employeeId: employeeId,
+                                            );
+                                          },
+                                          listOrders: orders,
+                                          onOrderStartResizeEnd: (order) =>
+                                              _updateOrder(order),
+                                          onOrderEndResizeEnd: (order) =>
+                                              _updateOrder(order),
+                                          onOrderDragEnd: (order) {
+                                            print("Order drag end");
+                                            _updateOrder(order,
+                                                withOrderEnd: true);
+                                          },
+                                          onChangeEmployeeSchedule:
+                                              (employeeId, barber) {
+                                            final now = DateTime.now();
+                                            Dialogs.scheduleField(
+                                              context: context,
+                                              day: now.day,
+                                              month: now.month,
+                                              year: now.year,
+                                              schedule: barber
+                                                  .weeklySchedule.schedule,
+                                              onConfirm: (status,
+                                                  fromHour,
+                                                  fromMinute,
+                                                  toHour,
+                                                  toMinute) {
+                                                final fieldSchedule =
+                                                    FieldSchedule(
+                                                  DateFormat("yyyy-MM-dd")
+                                                      .parse(now.toString()),
+                                                  employeeId,
+                                                  status,
+                                                  {
+                                                    "from":
+                                                        "$fromHour:$fromMinute",
+                                                    "to": "$toHour:$toMinute"
+                                                  },
+                                                );
+                                                BlocProvider.of<
+                                                            EmployeeScheduleCubit>(
+                                                        context)
+                                                    .save(listData: [
+                                                  fieldSchedule
+                                                ]);
+                                              },
+                                            );
+                                          },
+                                        )
                                         // child: orders.isNotEmpty
                                         //     ? TimeTableWidget(
                                         //   listBarbers: listBarbers,
@@ -584,14 +574,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                   HomeScreenOrderFormHelper>(
                                 builder: (context, state) {
                                   return AnimatedSwitcher(
-                                    duration:
-                                        const Duration(milliseconds: 300),
+                                    duration: const Duration(milliseconds: 300),
                                     child: state.show == false
                                         ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 5),
-                                            child:
-                                                NotSelectedBarbersListWidget(
+                                            padding:
+                                                const EdgeInsets.only(left: 5),
+                                            child: NotSelectedBarbersListWidget(
                                               listBarbers: listBarbers,
                                               onTap: (String barberId) {
                                                 _barberFromTimeTableCardAction(

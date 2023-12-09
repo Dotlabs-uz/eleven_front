@@ -236,10 +236,10 @@ class ManagementRepositoryImpl extends ManagementRepository {
 
   @override
   Future<Either<AppError, BarberResultsEntity>> getBarber(
-      int page, String searchText, String? ordering) async {
+      int page,int limit, String searchText, String? ordering) async {
     try {
       final result =
-          await remoteDataSource.getBarber(page, searchText, ordering);
+          await remoteDataSource.getBarber(page,limit ,searchText, ordering);
 
       return Right(result);
     } on SocketException {

@@ -6,6 +6,7 @@ import 'package:eleven_crm/features/main/presensation/cubit/home_screen_form/hom
 import 'package:eleven_crm/features/main/presensation/cubit/order/order_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
+import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/provider/cross_in_employee_schedule_provider.dart';
 import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
@@ -51,6 +52,7 @@ class _ApplicationState extends State<Application> {
   late CrossInEmployeeScheduleProvider crossInEmployeeScheduleProvider;
   late LocaleCubit localeCubit;
   late NotWorkingHoursCubit notWorkingHoursCubit;
+  late BarberCubit barberCubit;
 
   @override
   void initState() {
@@ -71,6 +73,7 @@ class _ApplicationState extends State<Application> {
     showClientOrdersHistoryCubit = locator();
     localeCubit = locator();
     notWorkingHoursCubit = locator();
+    barberCubit = locator();
 
     super.initState();
   }

@@ -63,6 +63,7 @@ abstract class ManagementRemoteDataSource {
 
   Future<BarberResultsModel> getBarber(
     int page,
+    int limit,
     String searchText,
     String? ordering,
   );
@@ -252,9 +253,9 @@ class ManagementRemoteDataSourceImpl extends ManagementRemoteDataSource {
 
   @override
   Future<BarberResultsModel> getBarber(
-      int page, String searchText, String? ordering) async {
+      int page,int limit, String searchText, String? ordering) async {
     final response = await _client.get(
-      "${ApiConstants.barbers}?page=$page${searchText.isNotEmpty ? "&firstName=$searchText" : ""}${ordering ?? ""}",
+      "${ApiConstants.barbers}?page=$page${searchText.isNotEmpty ? "&firstName=$searchText" : ""}${ordering ?? ""}&limit=$limit",
     );
     final results = BarberResultsModel.fromJson(response);
 

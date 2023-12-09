@@ -36,6 +36,7 @@ class BarberCubit extends Cubit<BarberState> {
     String searchText, {
     String? ordering,
     int page = 1,
+    int limit = 20,
   }) async {
     emit(BarberLoading());
     searchText = searchText;
@@ -43,6 +44,7 @@ class BarberCubit extends Cubit<BarberState> {
       page: page,
       searchText: searchText,
       ordering: ordering,
+      limit: limit,
     ));
     data.fold(
       (error) => emit(BarberError(message: error.errorMessage)),
