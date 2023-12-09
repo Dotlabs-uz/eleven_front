@@ -38,7 +38,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
   List<CustomerEntity> listCustomers = [];
   final SearchController searchControllerName = SearchController();
   final SearchController searchControllerPhone = SearchController();
-  final _debouncer = DebouncerService(milliseconds: 500);
+  final _debouncer = DebouncerService(milliseconds: 300);
 
   @override
   void initState() {
@@ -59,6 +59,28 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
     _debouncer.dispose();
     super.dispose();
   }
+
+  _update() {
+    if (mounted) {
+      Future.delayed(
+        Duration.zero,
+            () {
+          setState(() {
+            if(listCustomers.length == 1) {
+              final element = listCustomers.first;
+              widget.onNameChanged.call(element.fullName);
+              widget.onPhoneChanged.call(element.phoneNumber);
+              searchControllerName.text =  element.fullName;
+              searchControllerPhone.text = element.phoneNumber.toString();
+
+
+            }
+          });
+        },
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -155,14 +177,12 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           builder: (context, state) {
                             if (state is CustomerLoaded) {
                               listCustomers = state.data;
-                              if (mounted) {
-                                Future.delayed(
-                                  Duration.zero,
-                                  () {
-                                    setState(() {});
-                                  },
-                                );
-                              }
+                              
+                              
+                              print("List customers ${listCustomers.length}")
+;
+
+                   _update();
                               BlocProvider.of<CustomerCubit>(context).init();
                             }
                             return ListView(
@@ -231,13 +251,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                             EdgeInsets.symmetric(horizontal: 6, vertical: 0),
                           ),
                           onTap: () => controller.openView(),
-                          onChanged: (phoneQuery) {
-                            print("Phone query $phoneQuery");
-
-                            controller.openView();
-                            BlocProvider.of<CustomerCubit>(context)
-                                .load("&phone=$phoneQuery");
-                          },
+                          onChanged: (phoneQuery) => controller.openView(),
                           leading: const SizedBox(),
                         );
                       },
@@ -248,21 +262,18 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                               .call(int.parse(controller.text));
 
                           BlocProvider.of<CustomerCubit>(context)
-                              .load(controller.text);
+                              .load("&phoneNumber=${controller.text}");
                         });
 
                         return BlocBuilder<CustomerCubit, CustomerState>(
                           builder: (context, state) {
                             if (state is CustomerLoaded) {
                               listCustomers = state.data;
-                              if (mounted) {
-                                Future.delayed(
-                                  Duration.zero,
-                                  () {
-                                    setState(() {});
-                                  },
-                                );
-                              }
+
+
+
+                              _update();
+
                               BlocProvider.of<CustomerCubit>(context).init();
                             }
                             return ListView(
