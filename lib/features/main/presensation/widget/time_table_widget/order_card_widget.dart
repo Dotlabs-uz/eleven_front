@@ -176,6 +176,22 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                           ),
                         ),
                       ),
+                      Flexible(
+                        child: FittedBox(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 3),
+                            child: Text(
+                              widget.order.description,
+                              style: GoogleFonts.nunito(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   Positioned(

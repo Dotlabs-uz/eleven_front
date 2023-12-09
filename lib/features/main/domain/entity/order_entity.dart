@@ -29,6 +29,7 @@ class OrderEntity extends Equatable {
   DateTime orderEnd;
   String barberId;
   final String clientName;
+  final String description;
   final int clientPhone;
   final String clientId;
   num price;
@@ -42,6 +43,7 @@ class OrderEntity extends Equatable {
     required this.paymentType,
     required this.orderStart,
     required this.fromSite,
+    required this.description,
     required this.orderEnd,
     required this.barberId,
     required this.status,
@@ -122,6 +124,15 @@ class OrderEntity extends Equatable {
       label: "barberId",
       hintText: "barberId",
       type: Types.barber,
+      isRequired: true,
+      isForm: true,
+      val: "",
+    ),
+
+    "description": FieldEntity<String>(
+      label: "description",
+      hintText: "description",
+      type: Types.string,
       isRequired: true,
       isForm: true,
       val: "",
@@ -217,6 +228,7 @@ class OrderEntity extends Equatable {
         "fromSite": fromSite,
         "clientName": clientName,
         "clientPhone": clientPhone,
+        "description": description,
         "createdAt": createdAt,
       }[key];
 
@@ -239,6 +251,7 @@ class OrderEntity extends Equatable {
       clientPhone: row.cells["clientPhone"]?.value,
       fromSite: row.cells["fromSite"]?.value,
       createdAt: row.cells["createdAt"]?.value,
+      description: row.cells["description"]?.value,
     );
   }
 
@@ -260,6 +273,7 @@ class OrderEntity extends Equatable {
       'clientPhone': PlutoCell(value: e.clientPhone),
       'createdAt': PlutoCell(value: e.createdAt),
       'fromSite': PlutoCell(value: e.fromSite),
+      'description': PlutoCell(value: e.description),
     });
   }
 
@@ -285,7 +299,9 @@ class OrderEntity extends Equatable {
       services: selectedServices != null && selectedServices.isNotEmpty
           ? selectedServices
           : List.from(fields["services"]?.val),
-      price: fields["price"]?.val, duration: fields["duration"]?.val,
+      price: fields["price"]?.val,
+      duration: fields["duration"]?.val,
+      description: fields["description"]?.val,
     );
   }
 
@@ -309,7 +325,9 @@ class OrderEntity extends Equatable {
       clientName: fields["clientName"]?.val,
       clientPhone: fields["clientPhone"]?.val,
       services: selectedServices,
-      price: fields["price"]?.val, duration: fields["duration"]?.val,
+      price: fields["price"]?.val,
+      duration: fields["duration"]?.val,
+      description: fields["description"]?.val,
     );
   }
 
@@ -332,6 +350,7 @@ class OrderEntity extends Equatable {
       status: OrderStatus.waitingToView,
       clientPhone: 998,
       clientName: "",
+      description: "",
       services: const [], price: 0, duration: 0,
     );
   }
