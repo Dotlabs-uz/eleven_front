@@ -35,6 +35,8 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   late LoginCubit _loginCubit;
   late MenuCubit _menuCubit;
   late TopMenuCubit _topMenuCubit;
@@ -106,6 +108,8 @@ class _ApplicationState extends State<Application> {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         title: 'Eleven CRM',
+        navigatorKey: navigatorKey,
+
         theme: ThemeData(
           primaryColor: Colors.red,
           scaffoldBackgroundColor: AppColors.scaffoldColor,

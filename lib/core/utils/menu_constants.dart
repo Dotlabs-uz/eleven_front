@@ -28,6 +28,11 @@ class Menus {
       // page: const SizedBox(),
       page: const HomeScreen(),
     ),
+    SubMenu(
+      icon: const Icon(Icons.display_settings_rounded),
+      text: 'employee_schedule',
+      page: const EmployeeScheduleScreen(),
+    ),
     // SubMenu(
     //   icon: const Icon(Icons.category),
     //   text: 'order_payments',
@@ -63,11 +68,7 @@ class Menus {
       text: 'employee',
       page: const EmployeeScreen(),
     ),
-    SubMenu(
-      icon: const Icon(Icons.display_settings_rounded),
-      text: 'employee_schedule',
-      page: const EmployeeScheduleScreen(),
-    ),
+
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'barbers',

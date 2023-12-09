@@ -481,7 +481,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                     .save(listData: [
                                                   fieldSchedule
                                                 ]);
-                                              },
+                                              }, isEmployeeScheduleScreen: false,
                                             );
                                           },
                                         )

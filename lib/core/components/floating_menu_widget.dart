@@ -16,6 +16,7 @@ import '../../features/main/presensation/widget/calendar_widget.dart';
 import '../utils/app_colors.dart';
 import '../utils/assets.dart';
 import '../utils/dialogs.dart';
+import '../utils/route_constants.dart';
 import 'image_view_widget.dart';
 
 class FloatingMenuEntity {
@@ -56,16 +57,19 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
   String version = "";
   static CurrentUserEntity currentUserEntity = CurrentUserEntity.empty();
 
+  int currentMenuSelectedIndex = 0;
   List<DateTime> listBlinkDates = [];
 
   @override
   void initState() {
+    currentMenuSelectedIndex = widget.selectedIndex;
     BlocProvider.of<CurrentUserCubit>(context).load();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _getIndexByRoute();
     return BlocListener<CurrentUserCubit, CurrentUserState>(
       listener: (context, state) {
         if (state is CurrentUserLoaded) {
@@ -99,8 +103,8 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
               const SizedBox(height: 10),
               Padding(
                 padding:
-                // !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
-                const EdgeInsets.only(left: 5),
+                    // !isOpen ? const EdgeInsets.only(left: 5) : EdgeInsets.zero,
+                    const EdgeInsets.only(left: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -166,7 +170,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
               ...List.generate(widget.listEntity.length, (index) {
                 return FloatingMenuItemWidget(
                   entity: widget.listEntity[index],
-                  currentIndex: widget.selectedIndex,
+                  currentIndex: currentMenuSelectedIndex,
                   onTap: (value) => widget.onChanged?.call(value),
                   isOpen: isOpen,
                 );
@@ -191,6 +195,25 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
         ),
       ),
     );
+  }
+
+  _getIndexByRoute() {
+    final routeName = ModalRoute.of(context)!.settings.name;
+
+    if (mounted) {
+      Future.delayed(
+        Duration.zero,
+        () {
+          if (routeName == RouteList.home) {
+            currentMenuSelectedIndex = 0;
+          } else if (routeName == RouteList.management) {
+            currentMenuSelectedIndex = 1;
+          } else if (routeName == RouteList.product) {
+            currentMenuSelectedIndex = 2;
+          }
+        },
+      );
+    }
   }
 
   ImageProvider<Object> _image(String? avatar) {

@@ -187,6 +187,7 @@ class Dialogs {
     int? year,
     Map<String, dynamic>? workingHours,
     List<WeeklyScheduleItemEntity>? schedule,
+    bool isEmployeeScheduleScreen = true,
   }) {
     return showDialog(
       context: context,
@@ -201,7 +202,7 @@ class Dialogs {
           month: month,
           year: year,
           onConfirm: onConfirm,
-          schedule: schedule,
+          schedule: schedule, isEmployeeScheduleScreen: isEmployeeScheduleScreen,
         ),
       ),
     );
@@ -220,13 +221,17 @@ class _ScheduleFieldContentDialog extends StatefulWidget {
     String toHour,
     String toMinute,
   ) onConfirm;
+
+  final bool isEmployeeScheduleScreen;
+
   const _ScheduleFieldContentDialog(
       {Key? key,
       this.day,
       this.month,
       this.year,
       required this.onConfirm,
-      required this.schedule})
+      required this.schedule,
+      required this.isEmployeeScheduleScreen})
       : super(key: key);
 
   @override
@@ -249,9 +254,13 @@ class _ScheduleFieldContentDialogState
     final formattedFilterQuery = DateTime.tryParse(lastFilteredQuery);
 
     int weekDay = 1;
-    if (formattedFilterQuery == null) {
+    if (formattedFilterQuery == null ) {
       weekDay = DateTime.now().weekday;
     } else {
+
+
+
+
       final dt = DateTime(formattedFilterQuery.year, formattedFilterQuery.month,
           formattedFilterQuery.day);
       final now = DateTime.now()
@@ -266,7 +275,7 @@ class _ScheduleFieldContentDialogState
       }
     }
 
-    if (widget.schedule != null) {
+    if (widget.schedule != null || widget.isEmployeeScheduleScreen == false) {
       final schedule = widget.schedule![weekDay + 1];
       selectedTimeToMinute = _getMinutesTo(schedule.workingHours.first.dateTo);
       selectedTimeToHour = _getHoursTo(schedule.workingHours.first.dateTo);
@@ -285,7 +294,6 @@ class _ScheduleFieldContentDialogState
       );
     }
 
-    lastFilteredQuery = BlocProvider.of<OrderFilterCubit>(context).state.query;
     print('From: $selectedTimeFromHour:$selectedTimeFromMinute');
     print('To: $selectedTimeToHour:$selectedTimeToMinute');
     super.initState();
@@ -331,7 +339,7 @@ class _ScheduleFieldContentDialogState
           const SizedBox(height: 5),
           widget.day != null
               ? Text(
-                  DateTime.tryParse(lastFilteredQuery) != null
+                  DateTime.tryParse(lastFilteredQuery) != null &&  widget.isEmployeeScheduleScreen == false
                       ? "${DateTime.parse(lastFilteredQuery).day} ${StringHelper.monthName(month: DateTime.parse(lastFilteredQuery).month).tr()} ${DateTime.parse(lastFilteredQuery).year}."
                       : "${widget.day} ${widget.month != null ? StringHelper.monthName(month: widget.month!).tr() : ""} ${widget.year}.",
                   style: const TextStyle(
