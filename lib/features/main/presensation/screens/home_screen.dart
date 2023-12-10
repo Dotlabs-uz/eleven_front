@@ -1,7 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:async';
+
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/api/api_constants.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
+import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/core/components/success_flash_bar.dart';
 import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
@@ -43,14 +48,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectServicesCubit = locator<SelectServicesCubit>();
-    final employeeScheduleCubit = locator<EmployeeScheduleCubit>();
     final barberCubit = locator<BarberCubit>()..load("", limit: 100);
 
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: selectServicesCubit),
         BlocProvider.value(value: barberCubit),
-        BlocProvider.value(value: employeeScheduleCubit),
       ],
       child: const _ContentWidget(),
     );
@@ -278,9 +281,15 @@ class _ContentWidgetState extends State<_ContentWidget> {
                   },
                 ),
                 BlocListener<EmployeeScheduleCubit, EmployeeScheduleState>(
-                  listener: (context, state) {
+                  listener: (context, state) async {
                     if (state is EmployeeScheduleSaved) {
                       SuccessFlushBar("change_success".tr()).show(context);
+
+                      Navigator.pushNamed(context, "/home");
+                      final lastFilterDate = BlocProvider.of<OrderFilterCubit>(context).state.query;
+                      BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                        query: lastFilterDate.isEmpty  ?  DateTime.now().toIso8601String( ) : lastFilterDate,
+                      );
                     }
                   },
                 ),
@@ -289,6 +298,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     print("Not working hours state $state");
                     if (state is NotWorkingHoursSaved) {
                       SuccessFlushBar("change_success".tr()).show(context);
+                      Navigator.pushNamed(context, "/home");
+                      final lastFilterDate = BlocProvider.of<OrderFilterCubit>(context).state.query;
+                      BlocProvider.of<OrderFilterCubit>(context).setFilter(
+                        query: lastFilterDate.isEmpty  ?  DateTime.now().toIso8601String( ) : lastFilterDate,
+                      );
                     }
                   },
                 ),
@@ -383,7 +397,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     OrderFilterHelper>(
                                   builder: (context, state) {
                                     return AnimatedSwitcher(
-                                        duration: const Duration(seconds: 1),
+                                        duration:
+                                            const Duration(seconds: 1),
                                         switchInCurve: Curves.easeIn,
                                         switchOutCurve: Curves.easeIn,
                                         child: TimeTableWidget(
@@ -395,12 +410,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           },
                                           onTapNotWorkingHour:
                                               _onDeleteNotWorkingHours,
-                                          orderFilterQuery:
-                                              BlocProvider.of<OrderFilterCubit>(
-                                                      context)
-                                                  .state
-                                                  .query,
-                                          onFieldTap: (hour, minute, barberId) {
+                                          orderFilterQuery: BlocProvider.of<
+                                                  OrderFilterCubit>(context)
+                                              .state
+                                              .query,
+                                          onFieldTap:
+                                              (hour, minute, barberId) {
                                             final dt = DateTime.tryParse(
                                                 BlocProvider.of<
                                                             OrderFilterCubit>(
@@ -469,14 +484,15 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                 final fieldSchedule =
                                                     FieldSchedule(
                                                   DateFormat("yyyy-MM-dd")
-                                                      .parse(
-                                                          dateTime.toString()),
+                                                      .parse(dateTime
+                                                          .toString()),
                                                   employeeId,
                                                   status,
                                                   {
                                                     "from":
                                                         "$fromHour:$fromMinute",
-                                                    "to": "$toHour:$toMinute"
+                                                    "to":
+                                                        "$toHour:$toMinute"
                                                   },
                                                 );
                                                 BlocProvider.of<
@@ -485,7 +501,9 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                     .save(listData: [
                                                   fieldSchedule
                                                 ]);
-                                              }, barberCreatedAt: barber.createdAt,
+                                              },
+                                              barberCreatedAt:
+                                                  barber.createdAt,
                                             );
                                           },
                                         )

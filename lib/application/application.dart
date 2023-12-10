@@ -25,6 +25,7 @@ import '../features/main/presensation/cubit/show_client_orders_history/show_clie
 import '../features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
 import '../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
 import '../features/main/presensation/widget/fade_page_route_builder.dart';
+import '../features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
 import '../get_it/locator.dart';
 
 class Application extends StatefulWidget {
@@ -54,6 +55,8 @@ class _ApplicationState extends State<Application> {
   late CrossInEmployeeScheduleProvider crossInEmployeeScheduleProvider;
   late LocaleCubit localeCubit;
   late NotWorkingHoursCubit notWorkingHoursCubit;
+  late EmployeeScheduleCubit employeeScheduleCubit ;
+
   late BarberCubit barberCubit;
 
   @override
@@ -76,6 +79,7 @@ class _ApplicationState extends State<Application> {
     localeCubit = locator();
     notWorkingHoursCubit = locator();
     barberCubit = locator();
+    employeeScheduleCubit = locator();
 
     super.initState();
   }
@@ -101,6 +105,7 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: showClientOrdersHistoryCubit),
         BlocProvider.value(value: localeCubit),
         BlocProvider.value(value: notWorkingHoursCubit),
+        BlocProvider.value(value: employeeScheduleCubit),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
