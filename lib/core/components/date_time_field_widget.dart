@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../entities/field_entity.dart';
+import '../utils/dialogs.dart';
 
 class DateTimeFieldWidget extends StatefulWidget {
   final FieldEntity fieldEntity;
@@ -30,13 +31,26 @@ class DateTimeFieldWidget extends StatefulWidget {
 class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
   late TextEditingController textEditingController;
   bool isFirstInit = true;
+  String selectedHourFrom = "8";
+  String selectedMinuteFrom = "00";
 
   @override
   void initState() {
     textEditingController =
         TextEditingController(text: widget.fieldEntity.val.toString());
     isFirstInit = true;
+    selectedHourFrom = extractHours(widget.fieldEntity.val);
+    selectedMinuteFrom = extractMinutes(widget.fieldEntity.val);
     super.initState();
+  }
+
+  String extractHours(DateTime time) {
+    return time.hour.toString();
+  }
+
+  String extractMinutes(DateTime time) {
+
+    return time.minute.toString() == "0" ? "00" : time.minute.toString();
   }
 
   @override
@@ -67,6 +81,25 @@ class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
         const SizedBox(height: 3),
         Row(
           children: [
+            IconButton(
+              icon: const Icon(Icons.calendar_today),
+              tooltip: 'Tap to open date picker',
+              onPressed: () async {
+                DateTime? beginDate = await DateTimeHelper.pickDate(context,
+                    initialDate: widget.fieldEntity.val);
+
+                setState(() {
+                  if (beginDate != null) {
+                    try {
+                      widget.fieldEntity.val = beginDate;
+                      widget.onChanged?.call(widget.fieldEntity.val);
+                    } catch (e) {
+                      log("Error $e");
+                    }
+                  }
+                });
+              },
+            ),
             Expanded(
               child: SizedBox(
                 height: 40,
@@ -86,7 +119,6 @@ class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
                         borderRadius: BorderRadius.circular(6),
                         borderSide: const BorderSide(
                           color: Color(0xff071E32),
-
                         ),
                       ),
                       border: OutlineInputBorder(
@@ -94,7 +126,6 @@ class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
                         borderSide: const BorderSide(
                           width: 2,
                           color: Color(0xff071E32),
-
                         ),
                       ),
                       hintText: widget.fieldEntity.hintText.tr(),
@@ -107,28 +138,72 @@ class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
                     onChanged: (value) {}),
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.calendar_today),
-              tooltip: 'Tap to open date picker',
-              onPressed: () async {
-                DateTime? beginDate = widget.withTime
-                    ? await DateTimeHelper.pickDateWithTime(context)
-                    : await DateTimeHelper.pickDate(context,
-                        initialDate: widget.fieldEntity.val);
-
-                setState(() {
-                  if (beginDate != null) {
-                    try {
-                      widget.fieldEntity.val = beginDate;
-                      widget.onChanged?.call(widget.fieldEntity.val);
-
-                    } catch (e) {
-                      log("Error $e");
-                    }
-                  }
-                });
-              },
-            ),
+            if (widget.withTime)
+              SizedBox(
+                height: 40,
+                child: Row(
+                  children: [
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black38, width: 1),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: DropdownButton<String>(
+                        value: selectedHourFrom,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        underline: const SizedBox(),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: listTimes.map((String items) {
+                          return DropdownMenuItem(
+                            value: items.toString(),
+                            child: Text(items.toString()),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          final DateTime dt = widget.fieldEntity.val;
+                          setState(() {
+                            selectedHourFrom = newValue!;
+                            widget.fieldEntity.val = dt.copyWith(hour: int.parse(selectedHourFrom));
+                          });
+                        },
+                      ),
+                    ),
+                    const Text(
+                      "-",
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black38, width: 1),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: DropdownButton<String>(
+                        value: selectedMinuteFrom,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        underline: const SizedBox(),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: listMinutes.map((String items) {
+                          return DropdownMenuItem(
+                            value: items.toString(),
+                            child: Text(items.toString()),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          final DateTime dt = widget.fieldEntity.val;
+                          setState(() {
+                            selectedMinuteFrom = newValue!;
+                            widget.fieldEntity.val = dt.copyWith(minute: int.parse(selectedMinuteFrom));
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ],

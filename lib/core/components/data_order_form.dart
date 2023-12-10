@@ -399,18 +399,21 @@ class DataOrderFormState extends State<DataOrderForm> {
                                 }),
                           ),
                           if (widget.fields['status']?.val != null &&
-                              widget.fields['status']!.val == OrderStatus.waitingToView )  const SizedBox(width: 10),
+                              widget.fields['status']!.val ==
+                                  OrderStatus.waitingToView)
+                            const SizedBox(width: 10),
                           if (widget.fields['status']?.val != null &&
-                              widget.fields['status']!.val == OrderStatus.waitingToView )     Expanded(
-                            child: ButtonWidget(
-                              text: "checked".tr(),
-                              color: Colors.blue,
-                              onPressed: () async {
-
-                                _updateOrder(OrderEntity.fromFields());
-                              },
+                              widget.fields['status']!.val ==
+                                  OrderStatus.waitingToView)
+                            Expanded(
+                              child: ButtonWidget(
+                                text: "checked".tr(),
+                                color: Colors.blue,
+                                onPressed: () async {
+                                  _updateOrder(OrderEntity.fromFields());
+                                },
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     const SizedBox(height: 20),
@@ -434,7 +437,6 @@ class DataOrderFormState extends State<DataOrderForm> {
       },
     );
   }
-
 
   _infoWidget(String title, dynamic value, String valueText) {
     return Row(
