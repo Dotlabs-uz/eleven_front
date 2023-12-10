@@ -8,6 +8,40 @@ import 'package:google_fonts/google_fonts.dart';
 import '../entities/field_entity.dart';
 import '../utils/dialogs.dart';
 
+final List<String> listTimes = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+];
+final List<String> listMinutes = [
+
+  ...List.generate(61, (index) {
+    return index.toString() =="0"  ? "00":index.toString();
+  }),
+];
+
 class DateTimeFieldWidget extends StatefulWidget {
   final FieldEntity fieldEntity;
   final bool isEnabled;
@@ -196,7 +230,8 @@ class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
                           final DateTime dt = widget.fieldEntity.val;
                           setState(() {
                             selectedMinuteFrom = newValue!;
-                            widget.fieldEntity.val = dt.copyWith(minute: int.parse(selectedMinuteFrom));
+                              widget.fieldEntity.val = dt.copyWith(minute: int.parse(selectedMinuteFrom));
+
                           });
                         },
                       ),

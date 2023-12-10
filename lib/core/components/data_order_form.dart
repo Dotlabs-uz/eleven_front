@@ -351,7 +351,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                             enableCancel: false,
                           );
                           return;
-                        } else if (orderStart.isBefore(DateTime.now())) {
+                        } else if (orderStart.isBefore(DateTime.now().copyWith(second: 0,microsecond: 0,millisecond: 0))) {
                           await confirm(
                             context,
                             title: const Text('orderStart').tr(),
