@@ -289,7 +289,7 @@ class _DayItemState extends State<_DayItem> {
             );
             BlocProvider.of<EmployeeScheduleCubit>(context)
                 .save(listData: [fieldSchedule]);
-          },
+          }, schedule: widget.listSchedule,
         );
       },
       child: Container(

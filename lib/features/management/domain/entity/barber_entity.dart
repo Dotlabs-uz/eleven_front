@@ -23,12 +23,14 @@ class BarberEntity extends Equatable {
   final String avatar;
   final String login;
   final int phone;
-    bool isActive;
-    bool isOnline;
+  bool isActive;
+  bool isOnline;
   bool inTimeTable;
   final bool isCurrentFilial;
   final List<NotWorkingHoursEntity> notWorkingHours;
   final FilialEntity filial;
+  final DateTime createdAt;
+  final List<EmployeeScheduleEntity> schedule;
   final WeeklyScheduleResultsEntity weeklySchedule;
 
   BarberEntity({
@@ -37,7 +39,9 @@ class BarberEntity extends Equatable {
     required this.firstName,
     required this.lastName,
     required this.avatar,
+    required this.createdAt,
     required this.isActive,
+    required this.schedule,
     required this.isOnline,
     required this.password,
     required this.login,
@@ -153,6 +157,14 @@ class BarberEntity extends Equatable {
       isForm: false,
       val: WeeklyScheduleResultsEntity.empty(),
     ),
+    "createdAt": FieldEntity<DateTime>(
+      label: "createdAt",
+      hintText: "createdAt",
+      type: Types.dateTime,
+      isRequired: false,
+      isForm: false,
+      val: DateTime.now(),
+    ),
   };
 
   Map<String, FieldEntity> getFields() {
@@ -177,11 +189,13 @@ class BarberEntity extends Equatable {
         "isActive": isActive,
         "avatar": avatar,
         "login": login,
+        "createdAt": createdAt,
       }[key];
 
   factory BarberEntity.fromRow(PlutoRow row) {
     return BarberEntity(
       id: row.cells["id"]?.value,
+      createdAt: row.cells["createdAt"]?.value,
       employeeId: row.cells["employeeId"]?.value,
       firstName: row.cells["firstName"]?.value,
       lastName: row.cells["lastName"]?.value,
@@ -195,6 +209,7 @@ class BarberEntity extends Equatable {
       // password: row.cells["password"]?.value,
       password: "",
       login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: [],
+      schedule: [],
     );
   }
 
@@ -214,6 +229,7 @@ class BarberEntity extends Equatable {
       'isCurrentFilial': PlutoCell(value: e.isCurrentFilial),
       'weeklySchedule': PlutoCell(value: e.weeklySchedule),
       'login': PlutoCell(value: e.login),
+      'createdAt': PlutoCell(value: e.createdAt),
     });
   }
 
@@ -280,7 +296,6 @@ class BarberEntity extends Equatable {
         title: 'phoneNumber'.tr(),
         field: 'phone',
         readOnly: false,
-
         type: PlutoColumnType.number(
           format: "",
           allowFirstDot: false,
@@ -292,7 +307,8 @@ class BarberEntity extends Equatable {
         title: 'isActive'.tr(),
         field: 'isActive',
         readOnly: false,
-        renderer: (rendererContext) => BoolForTableWidget(data: rendererContext),
+        renderer: (rendererContext) =>
+            BoolForTableWidget(data: rendererContext),
         type: PlutoColumnType.text(),
       ),
       PlutoColumn(
@@ -300,7 +316,8 @@ class BarberEntity extends Equatable {
         enableRowDrag: false,
         title: 'isOnline'.tr(),
         field: 'isOnline',
-        renderer: (rendererContext) => BoolForTableWidget(data: rendererContext),
+        renderer: (rendererContext) =>
+            BoolForTableWidget(data: rendererContext),
         readOnly: false,
         type: PlutoColumnType.text(),
       ),
@@ -322,8 +339,10 @@ class BarberEntity extends Equatable {
       isCurrentFilial: fields["isCurrentFilial"]?.val,
       inTimeTable: false,
       isOnline: fields["isOnline"]?.val,
-      isActive:fields["isActive"]?.val,
+      isActive: fields["isActive"]?.val,
+      createdAt: fields["createdAt"]?.val,
       notWorkingHours: [],
+      schedule: [],
     );
   }
 
@@ -342,8 +361,10 @@ class BarberEntity extends Equatable {
       isOnline: true,
       notWorkingHours: [],
       avatar: '',
+      createdAt: DateTime.now(),
       isCurrentFilial: true,
       weeklySchedule: WeeklyScheduleResultsEntity.empty(),
+      schedule: [],
     );
   }
 

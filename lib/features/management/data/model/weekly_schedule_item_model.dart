@@ -7,7 +7,7 @@ import 'package:eleven_crm/features/management/domain/entity/employee_schedule_e
 import '../../domain/entity/weekly_schedule_item_entity.dart';
 
 class WeeklyScheduleItemModel extends WeeklyScheduleItemEntity {
-  WeeklyScheduleItemModel({
+   WeeklyScheduleItemModel({
     required super.workingHours,
     required super.status,
   });
@@ -36,5 +36,11 @@ class WeeklyScheduleItemModel extends WeeklyScheduleItemEntity {
     data['status'] = status.index;
 
     return data;
+  }
+
+
+  @override
+  String toString() {
+    return "Status $status, working hours ${workingHours.map((e) => e).toList()}";
   }
 }

@@ -6,6 +6,7 @@ import '../../../../core/entities/field_entity.dart';
 import '../../../products/data/model/filial_model.dart';
 import '../../domain/entity/barber_entity.dart';
 import '../../domain/entity/weekly_schedule_results_entity.dart';
+import 'employee_schedule_model.dart';
 import 'weekly_schedule_item_model.dart';
 import 'weekly_schedule_results_model.dart';
 import 'not_working_hours_model.dart';
@@ -25,6 +26,8 @@ class BarberModel extends BarberEntity {
     required super.isOnline,
     required super.isActive,
     required super.inTimeTable,
+    required super.schedule,
+    required super.createdAt,
     required super.notWorkingHours,
     required super.isCurrentFilial,
     required super.weeklySchedule,
@@ -88,6 +91,8 @@ class BarberModel extends BarberEntity {
       avatar: json['avatar'] ?? "",
       isCurrentFilial: json['isCurrentFilial'] ?? true,
       weeklySchedule: WeeklyScheduleResultsModel.fromJson( json['weeklySchedule']),
+
+      schedule: List.from(json['schedule']).map((e) => EmployeeScheduleModel.fromJson(e, json['employeeId'] ?? "")).toList(), createdAt: DateTime.parse(json['createdAt']),
     );
   }
 
@@ -106,8 +111,9 @@ class BarberModel extends BarberEntity {
       inTimeTable: entity.inTimeTable,
       notWorkingHours: entity.notWorkingHours,
       avatar: entity.avatar,
+      createdAt: entity.createdAt,
       isCurrentFilial: entity.isCurrentFilial,
-      weeklySchedule: entity.weeklySchedule,
+      weeklySchedule: entity.weeklySchedule, schedule: entity.schedule,
     );
   }
 

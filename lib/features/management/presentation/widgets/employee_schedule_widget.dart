@@ -93,7 +93,7 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
         widget.onMultiSelectSave?.call(dataList);
 
         multiSelectedFields.clear();
-      },
+      }, schedule: [],
     );
   }
 
@@ -343,7 +343,7 @@ class _EmployeeScheduleTableWidgetState
                 currentMonth: widget.currentMonth,
                 isFieldSElected:
                     widget.listSelectedSchedule.contains(fieldSchedule),
-                dateTime: DateTime(year, widget.currentMonth, day),
+                dateTime: DateTime(year, widget.currentMonth, day), schedule: widget.employeeEntity.schedule,
               ),
             );
           },
@@ -397,6 +397,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
   final DateTime dateTime;
   final Function(FieldSchedule) onHoverDrag;
   final bool isFieldSElected;
+  final List<EmployeeScheduleEntity> schedule;
   final Function(
     int day,
     int month,
@@ -415,6 +416,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
     required this.fieldSchedule,
     required this.isFieldSElected,
     required this.onHoverDrag,
+    required this.schedule,
   }) : super(key: key);
 
   @override
@@ -473,7 +475,7 @@ class _EmployeeScheduleFieldWidgetState
             widget.fieldSchedule.employeeId,
             widget.fieldSchedule.workingHours,
           );
-        },
+        }, schedule: widget.schedule,
       );
     }
   }

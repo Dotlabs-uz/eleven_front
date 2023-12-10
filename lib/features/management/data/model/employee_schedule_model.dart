@@ -7,6 +7,7 @@ class EmployeeScheduleModel extends EmployeeScheduleEntity {
     required super.date,
     required super.status,
     required super.employee,
+    required super.workingHours,
     // required super.rest,
   });
 
@@ -15,6 +16,7 @@ class EmployeeScheduleModel extends EmployeeScheduleEntity {
     return EmployeeScheduleModel(
       date: json['date'],
       status: json['status'],
+      workingHours: json["workingHours"] ??const {"from": "8:00","to": "22:00"} ,
       employee: employeeId,
       // rest: List.from(json['rest'])
       //     .map((e) => EmployeeScheduleRestModel.fromJson(e))
@@ -26,6 +28,7 @@ class EmployeeScheduleModel extends EmployeeScheduleEntity {
     return EmployeeScheduleModel(
       date: entity.date,
       status: entity.status,
+      workingHours: entity.workingHours,
       employee: entity.employee,
       // rest: entity.rest,
     );
@@ -37,6 +40,7 @@ class EmployeeScheduleModel extends EmployeeScheduleEntity {
     data['date'] = date;
     data['status'] = status;
     data['employee'] = employee;
+    data['workingHours'] = workingHours;
     // data['rest'] = rest;
     return data;
   }

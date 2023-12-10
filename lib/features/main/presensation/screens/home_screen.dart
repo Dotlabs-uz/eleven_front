@@ -295,8 +295,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 BlocListener<BarberCubit, BarberState>(
                   listener: (context, state) {
                     if (state is BarberLoaded) {
-
-                      print("Barber loadded " );
+                      print("Barber loadded ");
                       if (mounted) {
                         Future.delayed(
                           Duration.zero,
@@ -402,11 +401,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                   .state
                                                   .query,
                                           onFieldTap: (hour, minute, barberId) {
-                                            final dt =   DateTime.tryParse(BlocProvider.of<OrderFilterCubit>(
-                                                context)
-                                                .state
-                                                .query);
-
+                                            final dt = DateTime.tryParse(
+                                                BlocProvider.of<
+                                                            OrderFilterCubit>(
+                                                        context)
+                                                    .state
+                                                    .query);
 
                                             activeData = OrderEntity.empty(
                                               hour: hour,
@@ -455,23 +455,22 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           },
                                           onChangeEmployeeSchedule:
                                               (employeeId, barber) {
-                                            final now = DateTime.now();
-                                            Dialogs.scheduleField(
+                                            Dialogs.scheduleTimeTableField(
                                               context: context,
-                                              day: now.day,
-                                              month: now.month,
-                                              year: now.year,
-                                              schedule: barber
-                                                  .weeklySchedule.schedule,
-                                              onConfirm: (dateTime,status,
-                                                  fromHour,
-                                                  fromMinute,
-                                                  toHour,
-                                                  toMinute) {
+                                              schedule: barber.schedule,
+                                              onConfirm: (
+                                                dateTime,
+                                                status,
+                                                fromHour,
+                                                fromMinute,
+                                                toHour,
+                                                toMinute,
+                                              ) {
                                                 final fieldSchedule =
                                                     FieldSchedule(
                                                   DateFormat("yyyy-MM-dd")
-                                                      .parse(dateTime.toString()),
+                                                      .parse(
+                                                          dateTime.toString()),
                                                   employeeId,
                                                   status,
                                                   {
@@ -486,7 +485,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                     .save(listData: [
                                                   fieldSchedule
                                                 ]);
-                                              }, isEmployeeScheduleScreen: false,
+                                              }, barberCreatedAt: barber.createdAt,
                                             );
                                           },
                                         )

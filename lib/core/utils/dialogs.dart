@@ -7,6 +7,7 @@ import 'package:eleven_crm/features/management/presentation/cubit/employee_sched
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:collection/collection.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../features/management/domain/entity/weekly_schedule_item_entity.dart';
 import '../../features/management/presentation/widgets/employee_schedule_widget.dart';
@@ -186,9 +187,7 @@ class Dialogs {
     int? day,
     int? month,
     int? year,
-    Map<String, dynamic>? workingHours,
-    List<WeeklyScheduleItemEntity>? schedule,
-    bool isEmployeeScheduleScreen = true,
+    required List<EmployeeScheduleEntity> schedule,
   }) {
     return showDialog(
       context: context,
@@ -204,18 +203,43 @@ class Dialogs {
           year: year,
           onConfirm: onConfirm,
           schedule: schedule,
-          isEmployeeScheduleScreen: isEmployeeScheduleScreen,
+        ),
+      ),
+    );
+  }
+
+  static scheduleTimeTableField({
+    required BuildContext context,
+    required Function(
+      DateTime date,
+      int status,
+      String fromHour,
+      String fromMinute,
+      String toHour,
+      String toMinute,
+    ) onConfirm,
+    required List<EmployeeScheduleEntity> schedule,
+    required DateTime barberCreatedAt,
+  }) {
+    return showDialog(
+      context: context,
+      useSafeArea: true,
+      builder: (context) => AlertDialog(
+        alignment: Alignment.center,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        content: _TimetableScheduleFieldContentDialog(
+          onConfirm: onConfirm,
+          schedule: schedule,
+          barberCreatedAt: barberCreatedAt,
         ),
       ),
     );
   }
 }
 
-class _ScheduleFieldContentDialog extends StatefulWidget {
-  final int? day;
-  final int? month;
-  final int? year;
-  final List<WeeklyScheduleItemEntity>? schedule;
+class _TimetableScheduleFieldContentDialog extends StatefulWidget {
   final Function(
     DateTime dateTime,
     int status,
@@ -225,17 +249,413 @@ class _ScheduleFieldContentDialog extends StatefulWidget {
     String toMinute,
   ) onConfirm;
 
-  final bool isEmployeeScheduleScreen;
+  final List<EmployeeScheduleEntity> schedule;
+  final DateTime barberCreatedAt;
 
-  const _ScheduleFieldContentDialog(
-      {Key? key,
-      this.day,
-      this.month,
-      this.year,
-      required this.onConfirm,
-      required this.schedule,
-      required this.isEmployeeScheduleScreen})
-      : super(key: key);
+  const _TimetableScheduleFieldContentDialog({
+    Key? key,
+    required this.onConfirm,
+    required this.schedule,
+    required this.barberCreatedAt,
+  }) : super(key: key);
+
+  @override
+  State<_TimetableScheduleFieldContentDialog> createState() =>
+      _TimetableScheduleFieldContentDialogState();
+}
+
+class _TimetableScheduleFieldContentDialogState
+    extends State<_TimetableScheduleFieldContentDialog> {
+  int selectedStatus = 1;
+  String selectedTimeFromHour = "8";
+  String selectedTimeFromMinute = "00";
+  String selectedTimeToHour = "22";
+  String selectedTimeToMinute = "00";
+  String lastFilteredQuery = "";
+  DateTime dateTime = DateTime.now();
+  bool hasElement = true;
+
+  @override
+  void initState() {
+    lastFilteredQuery = BlocProvider.of<OrderFilterCubit>(context).state.query;
+    final formattedFilterQuery = DateTime.tryParse(lastFilteredQuery);
+    final now = DateTime.now();
+    if (formattedFilterQuery != null) {
+      dateTime = dateTime.copyWith(
+          year: formattedFilterQuery.year,
+          day: formattedFilterQuery.day,
+          month: formattedFilterQuery.month);
+    }
+
+    final EmployeeScheduleEntity? scheduleElement =
+        widget.schedule.firstWhereOrNull((element) {
+      final elementDt = DateTime.parse(element.date);
+
+      print("Element dt $elementDt");
+      if (formattedFilterQuery == null) {
+        return elementDt.day == now.day &&
+            elementDt.month == now.month &&
+            elementDt.year == now.year;
+      }
+
+      return elementDt.day == formattedFilterQuery.day &&
+          elementDt.month == formattedFilterQuery.month &&
+          elementDt.year == formattedFilterQuery.year;
+    });
+
+    if (scheduleElement != null) {
+      final from = scheduleElement.workingHours['from'].toString();
+      final to = scheduleElement.workingHours['to'].toString();
+
+      print("scheduleElement != null to ${to} from ${from}");
+      selectedTimeFromHour = extractHours(from);
+      selectedTimeFromMinute = extractMinutes(from);
+      selectedTimeToHour = extractHours(to);
+      selectedTimeToMinute = extractMinutes(to);
+      hasElement = true;
+    } else {
+      hasElement = false;
+    }
+    if (mounted) {
+      Future.delayed(
+        Duration.zero,
+        () {
+          setState(() {});
+        },
+      );
+    }
+
+    super.initState();
+  }
+
+  String extractHours(String time) {
+    List<String> parts = time.split(":");
+    String hours = parts[0];
+
+    return hours;
+  }
+
+  String extractMinutes(String time) {
+    List<String> parts = time.split(":");
+    String minutes = parts[1];
+
+    return minutes == "0" ? "00" : minutes;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: Responsive.isDesktop(context)
+            ? 300
+            : MediaQuery.of(context).size.width,
+      ),
+      child: hasElement == false
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "barberStartWorkAt"
+                      .tr(args: [widget.barberCreatedAt.toString()]),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "pleaseSelectStatus".tr(),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 5),
+
+                Text(
+                  DateTime.tryParse(lastFilteredQuery) != null
+                      ? "${DateTime.parse(lastFilteredQuery).day} ${StringHelper.monthName(month: DateTime.parse(lastFilteredQuery).month).tr()} ${DateTime.parse(lastFilteredQuery).year}."
+                      : "${now.day} ${StringHelper.monthName(month: now.month).tr()} ${now.year}.",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 15),
+
+                Text("typeDay".tr()),
+                const SizedBox(height: 10),
+
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Theme(
+                    data: ThemeData(
+                      fontFamily: "Nunito",
+                    ),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black38, width: 1),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: DropdownButton<int>(
+                        value: selectedStatus,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        underline: const SizedBox(),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: Selections.listStatusIndex
+                            .map((StatusEmployeeScheduleEntity item) {
+                          return DropdownMenuItem<int>(
+                            value: item.status,
+                            child: Text(item.title),
+                          );
+                        }).toList(),
+                        onChanged: (int? newValue) {
+                          setState(() {
+                            selectedStatus = newValue!;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
+                Text("workingTime".tr()),
+                const SizedBox(height: 10),
+
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 40,
+                  child: Theme(
+                    data: ThemeData(
+                      fontFamily: "Nunito",
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Colors.black38, width: 1),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: DropdownButton<String>(
+                                  value: selectedTimeFromHour,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  underline: const SizedBox(),
+                                  icon: const Icon(Icons.keyboard_arrow_down),
+                                  items: listTimes.map((String items) {
+                                    return DropdownMenuItem(
+                                      value: items.toString(),
+                                      child: Text(items.toString()),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      selectedTimeFromHour = newValue!;
+                                    });
+                                  },
+                                ),
+                              ),
+                              const Text(
+                                "-",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Colors.black38, width: 1),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: DropdownButton<String>(
+                                  value: selectedTimeFromMinute,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  underline: const SizedBox(),
+                                  icon: const Icon(Icons.keyboard_arrow_down),
+                                  items: listMinutes.map((String items) {
+                                    return DropdownMenuItem(
+                                      value: items.toString(),
+                                      child: Text(items.toString()),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      selectedTimeFromMinute = newValue!;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Colors.black38, width: 1),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: DropdownButton<String>(
+                                  value: selectedTimeToHour,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  underline: const SizedBox(),
+                                  icon: const Icon(Icons.keyboard_arrow_down),
+                                  items: listTimes.map((String items) {
+                                    return DropdownMenuItem(
+                                      value: items.toString(),
+                                      child: Text(items.toString()),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      selectedTimeToHour = newValue!;
+                                    });
+                                  },
+                                ),
+                              ),
+                              const Text(
+                                "-",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Colors.black38, width: 1),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: DropdownButton<String>(
+                                  value: selectedTimeToMinute,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  underline: const SizedBox(),
+                                  icon: const Icon(Icons.keyboard_arrow_down),
+                                  items: listMinutes.map((String items) {
+                                    return DropdownMenuItem(
+                                      value: items.toString(),
+                                      child: Text(items.toString()),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      selectedTimeToMinute = newValue!;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+                SizedBox(
+                  height: 40,
+                  child: ButtonWidget(
+                    text: 'save'.tr(),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      // required int status,
+                      // required int fromHour,
+                      // required int fromMinute,
+                      // required int toHour,
+                      // required int toMinute,
+                      widget.onConfirm.call(
+                        dateTime,
+                        selectedStatus,
+                        selectedTimeFromHour,
+                        selectedTimeFromMinute,
+                        selectedTimeToHour,
+                        selectedTimeToMinute,
+                      );
+                    },
+                  ),
+                ),
+                // SizedBox(
+                //   height: 35,
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Expanded(
+                //         child: ButtonWidget(
+                //           text: 'back'.tr(),
+                //           onPressed: () => Navigator.pop(context),
+                //           color: const Color(0xffABACAE),
+                //         ),
+                //       ),
+                //       const SizedBox(width: 15),
+                //       Expanded(
+                //         child: ButtonWidget(
+                //           text: 'save'.tr(),
+                //           color: const Color(0xff99C499).withOpacity(0.75),
+                //           onPressed: () {
+                //             onConfirm.call();
+                //           },
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+              ],
+            ),
+    );
+  }
+}
+
+class _ScheduleFieldContentDialog extends StatefulWidget {
+  final int? day;
+  final int? month;
+  final int? year;
+  final List<EmployeeScheduleEntity> schedule;
+  final Function(
+    DateTime dateTime,
+    int status,
+    String fromHour,
+    String fromMinute,
+    String toHour,
+    String toMinute,
+  ) onConfirm;
+
+  const _ScheduleFieldContentDialog({
+    Key? key,
+    this.day,
+    this.month,
+    this.year,
+    required this.onConfirm,
+    required this.schedule,
+  }) : super(key: key);
 
   @override
   State<_ScheduleFieldContentDialog> createState() =>
@@ -254,36 +674,29 @@ class _ScheduleFieldContentDialogState
 
   @override
   void initState() {
-    lastFilteredQuery = BlocProvider.of<OrderFilterCubit>(context).state.query;
-    final formattedFilterQuery = DateTime.tryParse(lastFilteredQuery);
 
-    int weekDay = 1;
-    if (formattedFilterQuery == null) {
-      weekDay = DateTime.now().weekday;
-    } else {
-      final dt = DateTime(formattedFilterQuery.year, formattedFilterQuery.month,
-          formattedFilterQuery.day);
-      dateTime = dt;
-      final now = DateTime.now()
-          .copyWith(hour: 0, minute: 0, millisecond: 0, microsecond: 0);
+    dateTime = dateTime.copyWith(day: widget.day,month: widget.month,year: widget.year,);
 
-      if (now.difference(dt).inDays == 0) {
-        weekDay = DateTime.now().weekday;
-      } else {
-        weekDay = StringHelper.getWeekDayByDate(formattedFilterQuery.day,
-                formattedFilterQuery.month, formattedFilterQuery.year)
-            .index;
-      }
-    }
 
-    if (widget.schedule != null || widget.isEmployeeScheduleScreen == false) {
-      final schedule = widget.schedule![weekDay <= 7? weekDay : weekDay + 1];
-      selectedTimeToMinute = _getMinutesTo(schedule.workingHours.first.dateTo);
-      selectedTimeToHour = _getHoursTo(schedule.workingHours.first.dateTo);
-      selectedTimeFromMinute =
-          _getMinutesFrom(schedule.workingHours.first.dateFrom);
-      selectedTimeFromHour =
-          _getHoursFrom(schedule.workingHours.first.dateFrom);
+    final EmployeeScheduleEntity? scheduleElement =
+    widget.schedule.firstWhereOrNull((element) {
+      final elementDt = DateTime.parse(element.date);
+
+      print("Element dt $elementDt");
+        return elementDt.day == widget.day &&
+            elementDt.month == widget.month &&
+            elementDt.year == widget.year;
+    });
+
+    if (scheduleElement != null) {
+      final from = scheduleElement.workingHours['from'].toString();
+      final to = scheduleElement.workingHours['to'].toString();
+
+      print("scheduleElement != null to ${to} from ${from}");
+      selectedTimeFromHour = extractHours(from);
+      selectedTimeFromMinute = extractMinutes(from);
+      selectedTimeToHour = extractHours(to);
+      selectedTimeToMinute = extractMinutes(to);
     }
 
     if (mounted) {
@@ -295,26 +708,24 @@ class _ScheduleFieldContentDialogState
       );
     }
 
-    print('From: $selectedTimeFromHour:$selectedTimeFromMinute');
-    print('To: $selectedTimeToHour:$selectedTimeToMinute');
     super.initState();
   }
 
-  String _getHoursTo(DateTime dt) {
-    return dt.hour.toString();
+
+  String extractHours(String time) {
+    List<String> parts = time.split(":");
+    String hours = parts[0];
+
+    return hours;
   }
 
-  String _getMinutesTo(DateTime dt) {
-    return dt.minute.toString() == "0" ? "00" : dt.minute.toString();
+  String extractMinutes(String time) {
+    List<String> parts = time.split(":");
+    String minutes = parts[1];
+
+    return minutes == "0" ? "00" : minutes;
   }
 
-  String _getHoursFrom(DateTime dt) {
-    return dt.hour.toString();
-  }
-
-  String _getMinutesFrom(DateTime dt) {
-    return dt.minute.toString() == "0" ? "00" : dt.minute.toString();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -340,10 +751,7 @@ class _ScheduleFieldContentDialogState
           const SizedBox(height: 5),
           widget.day != null
               ? Text(
-                  DateTime.tryParse(lastFilteredQuery) != null &&
-                          widget.isEmployeeScheduleScreen == false
-                      ? "${DateTime.parse(lastFilteredQuery).day} ${StringHelper.monthName(month: DateTime.parse(lastFilteredQuery).month).tr()} ${DateTime.parse(lastFilteredQuery).year}."
-                      : "${widget.day} ${widget.month != null ? StringHelper.monthName(month: widget.month!).tr() : ""} ${widget.year}.",
+                  "${widget.day} ${widget.month != null ? StringHelper.monthName(month: widget.month!).tr() : ""} ${widget.year}.",
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,

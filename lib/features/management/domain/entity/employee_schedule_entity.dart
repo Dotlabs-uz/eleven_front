@@ -18,7 +18,7 @@ class EmployeeScheduleEntity extends Equatable {
     required this.date,
     this.status = 0,
     this.employee = "",
-    this.workingHours = const {"from": "8:00","to": "22:00"},
+    required this.workingHours ,
     // required this.rest,
   });
 

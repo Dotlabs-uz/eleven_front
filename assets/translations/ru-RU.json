@@ -680,5 +680,5 @@
   "pleaseEnterClientNameAndPhone": "Пожалуйста введите имя и номер клиента",
   "changeSchedule": "Изменить рассписание",
   "checked": "Проверено",
-  "data": "data"
+  "barberStartWorkAt": "Барбер был создан {}"
 }
