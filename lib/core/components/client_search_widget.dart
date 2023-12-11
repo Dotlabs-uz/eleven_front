@@ -133,7 +133,10 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       viewConstraints: const BoxConstraints(
-                          maxWidth: 130, minWidth: 130, maxHeight: 400),
+                        maxWidth: 130,
+                        minWidth: 130,
+                        maxHeight: 400,
+                      ),
                       builder:
                           (BuildContext context, SearchController controller) {
                         return SearchBar(
@@ -165,21 +168,22 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           (BuildContext context, SearchController controller) {
                         _debouncer(() {
                           widget.onNameChanged.call(controller.text);
-
                           BlocProvider.of<CustomerCubit>(context)
                               .load(controller.text);
                         });
 
                         return BlocBuilder<CustomerCubit, CustomerState>(
                           builder: (context, state) {
+                            print("state $state");
                             if (state is CustomerLoaded) {
                               listCustomers = state.data;
-
                               print("List customers ${listCustomers.length}");
 
                               _update();
+
                               BlocProvider.of<CustomerCubit>(context).init();
                             }
+
                             return ListView(
                               children: List<ListTile>.generate(
                                   listCustomers.length, (int index) {
@@ -222,17 +226,11 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                       viewShape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      viewTrailing: [
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                        )
-                      ],
                       viewConstraints: const BoxConstraints(
-                          maxWidth: 130,
-                          minWidth: 130,
-                          maxHeight: 400,
-                          minHeight: 0),
+                        maxWidth: 130,
+                        minWidth: 130,
+                        maxHeight: 400,
+                      ),
                       builder:
                           (BuildContext context, SearchController controller) {
                         return SearchBar(
