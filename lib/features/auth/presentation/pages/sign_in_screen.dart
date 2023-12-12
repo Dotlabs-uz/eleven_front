@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 import '../../../../core/components/button_widget.dart';
 import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/logo_widget.dart';
@@ -25,9 +24,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController controllerLogin = TextEditingController();
   final TextEditingController controllerPassword = TextEditingController();
 
-
-
-
   @override
   void initState() {
     // controllerLogin.text = "manager";
@@ -35,13 +31,11 @@ class _SignInScreenState extends State<SignInScreen> {
     super.initState();
   }
 
-
   @override
   void dispose() {
     controllerLogin.dispose();
     controllerPassword.dispose();
     super.dispose();
-
   }
 
   @override
@@ -100,6 +94,12 @@ class _SignInScreenState extends State<SignInScreen> {
                       controller: controllerPassword,
                       isPassword: true,
                       defaultBorderColor: Colors.black.withOpacity(0.3),
+                      onSubmit: (_) {
+                        BlocProvider.of<LoginCubit>(context).login(
+                          controllerLogin.text,
+                          controllerPassword.text,
+                        );
+                      },
                       label: 'password'.tr(),
                     ),
                   ),
@@ -107,7 +107,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   ButtonWidget(
                     borderRadius: BorderRadius.circular(14),
                     onPressed: () {
-
                       BlocProvider.of<LoginCubit>(context).login(
                         controllerLogin.text,
                         controllerPassword.text,
