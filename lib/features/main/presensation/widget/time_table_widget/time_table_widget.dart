@@ -515,7 +515,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                       end: entity.avatar.isEmpty ||
                               entity.avatar.contains("placeholder.png")
                           ? 5
-                          : 115),
+                          : 10),
                   child: ImageViewWidget(
                     avatar: entity.avatar,
                   ),

@@ -10,23 +10,18 @@ import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/loading_circle.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/assets.dart';
-import '../../../../core/utils/constants.dart';
 import '../../../../get_it/locator.dart';
-import '../../../main/presensation/cubit/avatar/avatar_cubit.dart';
-import '../../../products/presensation/cubit/service_product/service_product_cubit.dart';
-import '../../domain/entity/barber_entity.dart';
 import '../../domain/entity/barber_profile_tabs_entity.dart';
 import '../../domain/entity/employee_entity.dart';
 import '../cubit/employee_schedule/employee_schedule_cubit.dart';
-import '../widgets/barber_profile_schedule_body.dart';
 import '../widgets/schedule_calendar_widget.dart';
 
 class EmployeeProfileScreen extends StatefulWidget {
   final EmployeeEntity employeeEntity;
+  final Function() onBack;
   const EmployeeProfileScreen({
     Key? key,
-    required this.employeeEntity,
+    required this.employeeEntity, required this.onBack,
   }) : super(key: key);
 
   @override
@@ -58,6 +53,7 @@ class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
       ],
       child: ContentWidget(
         employeeEntity: widget.employeeEntity,
+        onBack: widget.onBack,
       ),
     );
   }
@@ -66,9 +62,11 @@ class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
 class ContentWidget extends StatefulWidget {
   final EmployeeEntity employeeEntity;
 
+  final Function() onBack;
   const ContentWidget({
     Key? key,
     required this.employeeEntity,
+    required this.onBack,
   }) : super(key: key);
 
   @override
@@ -89,7 +87,11 @@ class _ContentWidgetState extends State<ContentWidget> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pop(context);
+            widget.onBack.call();
+
+          },
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Colors.white,

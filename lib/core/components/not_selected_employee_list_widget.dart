@@ -70,24 +70,27 @@ class _NotSelectedBarbersListWidgetState
                 onTap: () {
                   listBarbers.remove(entity);
                   widget.onTap.call(entity.id);
+                  print("Hello galaxy");
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ImageViewWidget(avatar: entity.avatar),
-                      const SizedBox(height: 5),
-                      Center(
-                        child: Text(
-                          "${entity.firstName} ${entity.lastName}",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.black,
+                  child: AbsorbPointer(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ImageViewWidget(avatar: entity.avatar),
+                        const SizedBox(height: 5),
+                        Center(
+                          child: Text(
+                            "${entity.firstName} ${entity.lastName}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );

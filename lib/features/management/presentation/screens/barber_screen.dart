@@ -129,8 +129,15 @@ class _ContentWidgetState extends State<ContentWidget> {
       }
     } else {
       AnimatedNavigation.push(
-          context: context,
-          page: BarberProfileScreen(barberId: data.id, barberEntity: data));
+        context: context,
+        page: BarberProfileScreen(
+          barberId: data.id,
+          barberEntity: data,
+          onBack: () {
+            BlocProvider.of<BarberCubit>(context).load("");
+          },
+        ),
+      );
     }
   }
 

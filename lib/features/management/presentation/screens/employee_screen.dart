@@ -116,6 +116,9 @@ class _ContentWidgetState extends State<ContentWidget> {
               saveData: _saveData,
               closeForm: () => Navigator.pop(context),
               fields: data.getFields(),
+              onBackFromProfile: () {
+                BlocProvider.of<EmployeeCubit>(context).load("");
+              },
             ),
           ),
         ),
@@ -150,7 +153,6 @@ class _ContentWidgetState extends State<ContentWidget> {
       TopMenuEntity(
         searchCubit: widget.employeeCubit,
         iconList: [
-
           MyIconButton(
             onPressed: () {
               activeData = EmployeeEntity.empty();
@@ -171,7 +173,7 @@ class _ContentWidgetState extends State<ContentWidget> {
   fetch(
     int page,
   ) async {
-    BlocProvider.of<EmployeeCubit>(context).load("",page: page);
+    BlocProvider.of<EmployeeCubit>(context).load("", page: page);
   }
 
   initCubit() {
@@ -190,7 +192,6 @@ class _ContentWidgetState extends State<ContentWidget> {
                 ? SearchField(
                     onSearch: (value) {
                       BlocProvider.of<EmployeeCubit>(context).load(value);
-
                     },
                   )
                 : const SizedBox(),
@@ -276,6 +277,9 @@ class _ContentWidgetState extends State<ContentWidget> {
                       },
                       saveData: _saveData,
                       fields: activeData.getFields(),
+                      onBackFromProfile: () {
+                        BlocProvider.of<EmployeeCubit>(context).load("");
+                      },
                     ),
                   ),
                 );
@@ -299,8 +303,8 @@ class _ContentWidgetState extends State<ContentWidget> {
                         child: PageSelectorWidget(
                           pageCount: pageCount,
                           onChanged: (value) {
-                            BlocProvider.of<EmployeeCubit>(context).load("", page: value);
-
+                            BlocProvider.of<EmployeeCubit>(context)
+                                .load("", page: value);
                           },
                         ),
                       ),

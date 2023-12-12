@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../features/main/presensation/cubit/show_client_orders_history/show_client_orders_history_cubit.dart';
-import '../../features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
 
 class ClientSearchWidget extends StatefulWidget {
   final Function(String) onNameChanged;
@@ -39,6 +37,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
   final SearchController searchControllerName = SearchController();
   final SearchController searchControllerPhone = SearchController();
   final _debouncer = DebouncerService(milliseconds: 300);
+
 
   @override
   void initState() {

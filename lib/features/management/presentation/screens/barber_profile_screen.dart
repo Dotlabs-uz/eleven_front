@@ -29,10 +29,12 @@ import '../widgets/schedule_calendar_widget.dart';
 class BarberProfileScreen extends StatefulWidget {
   final String barberId;
   final BarberEntity barberEntity;
+  final Function() onBack;
   const BarberProfileScreen({
     Key? key,
     required this.barberId,
     required this.barberEntity,
+    required this.onBack,
   }) : super(key: key);
 
   @override
@@ -75,6 +77,7 @@ class _BarberProfileScreenState extends State<BarberProfileScreen> {
       child: ContentWidget(
         barberCubit: barberCubit,
         barberEntity: widget.barberEntity,
+        onBack: widget.onBack,
         barberId: widget.barberId,
       ),
     );
@@ -86,9 +89,11 @@ class ContentWidget extends StatefulWidget {
 
   final String barberId;
   final BarberEntity barberEntity;
+  final Function() onBack;
 
   const ContentWidget({
     Key? key,
+    required this.onBack,
     required this.barberCubit,
     required this.barberId,
     required this.barberEntity,
@@ -157,7 +162,13 @@ class _ContentWidgetState extends State<ContentWidget> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            
+            Navigator.pop(context);
+
+            widget.onBack.call();
+            
+          },
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Colors.white,

@@ -17,12 +17,14 @@ class DataEmployeeForm extends StatefulWidget {
   final Map<String, FieldEntity> fields;
   final Function() saveData;
   final Function() closeForm;
+  final Function() onBackFromProfile;
 
   const DataEmployeeForm({
     Key? key,
     required this.saveData,
     required this.closeForm,
     required this.fields,
+    required this.onBackFromProfile,
   }) : super(key: key);
 
   @override
@@ -81,7 +83,9 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
             // DataTextFieldWidget(fieldEntity: widget.fields['login']!),
             // DataTextFieldWidget(fieldEntity: widget.fields['password']!),
             RoleFieldWidget(fieldEntity: widget.fields['role']!),
-            DataPhoneNumberFieldWidget(fieldEntity: widget.fields['phone']!, id: widget.fields['id']?.val),
+            DataPhoneNumberFieldWidget(
+                fieldEntity: widget.fields['phone']!,
+                id: widget.fields['id']?.val),
             const SizedBox(height: 10),
             ButtonWidget(text: "save".tr(), onPressed: widget.saveData),
             const SizedBox(height: 10),
@@ -92,7 +96,8 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
                 AnimatedNavigation.push(
                   context: context,
                   page: EmployeeProfileScreen(
-                    employeeEntity:EmployeeEntity.fromFields() ,
+                    employeeEntity: EmployeeEntity.fromFields(),
+                    onBack: widget.onBackFromProfile,
                   ),
                 );
               },
