@@ -525,7 +525,7 @@ class _TimeTableWidgetState extends State<TimeTableWidget> {
                 ),
                 FittedBox(
                   child: Text(
-                    "${entity.firstName} ${entity.lastName}",
+                    "${entity.lastName[0].toUpperCase()}. ${entity.firstName}",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: AppColors.sideMenu,
