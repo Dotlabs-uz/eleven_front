@@ -30,8 +30,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void initState() {
-    controllerLogin.text = "manager";
-    controllerPassword.text = "manager123";
+    // controllerLogin.text = "manager";
+    // controllerPassword.text = "manager123";
     super.initState();
   }
 
