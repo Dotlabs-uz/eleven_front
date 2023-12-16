@@ -325,7 +325,7 @@ class _EmployeeScheduleTableWidgetState
                 startDateParsing,
                 widget.employeeEntity.id,
                 entity?.status ?? 0,
-                entity?.workingHours ?? {"from": "8:00", "to": "22:00"});
+                entity?.workingHours ?? {"from": "${Constants.startWork.toInt()}:00", "to": "${Constants.endWork.toInt()}"});
 
             return RegionDetector(
               onFocused: () {

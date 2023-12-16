@@ -1,5 +1,6 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/utils/constants.dart';
 import 'package:eleven_crm/core/utils/responsive.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
@@ -665,9 +666,9 @@ class _ScheduleFieldContentDialog extends StatefulWidget {
 class _ScheduleFieldContentDialogState
     extends State<_ScheduleFieldContentDialog> {
   int selectedStatus = 1;
-  String selectedTimeFromHour = "8";
+  String selectedTimeFromHour = Constants.startWork.toInt().toString();
   String selectedTimeFromMinute = "00";
-  String selectedTimeToHour = "22";
+  String selectedTimeToHour = Constants.endWork.toInt().toString();
   String selectedTimeToMinute = "00";
   String lastFilteredQuery = "";
   DateTime dateTime = DateTime.now();
@@ -714,7 +715,9 @@ class _ScheduleFieldContentDialogState
 
   String extractHours(String time) {
     List<String> parts = time.split(":");
-    String hours = parts[0];
+
+    print("Timeee $time")
+;    String hours = parts[0];
 
     return hours;
   }

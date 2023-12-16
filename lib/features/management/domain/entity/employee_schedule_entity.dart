@@ -2,6 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/utils/constants.dart';
+
 enum EmployeeScheduleStatus {
   notWork,
   work,
@@ -11,14 +13,14 @@ class EmployeeScheduleEntity extends Equatable {
   final String date;
   int status;
   final String employee;
-  final Map<String,dynamic> workingHours;
+  final Map<String, dynamic> workingHours;
   // final List<EmployeeScheduleRestEntity> rest;
 
   EmployeeScheduleEntity({
     required this.date,
     this.status = 0,
     this.employee = "",
-    required this.workingHours ,
+    required this.workingHours,
     // required this.rest,
   });
 
@@ -28,7 +30,10 @@ class EmployeeScheduleEntity extends Equatable {
       // rest: [],
       status: 0,
       employee: "",
-      workingHours:  const {"from": "8:00","to": "22:00"},
+      workingHours: {
+        "from": "${Constants.startWork.toInt()}:00",
+        "to": "${Constants.endWork.toInt()}:00"
+      },
     );
   }
   factory EmployeeScheduleEntity.emptyWithCustomValue(

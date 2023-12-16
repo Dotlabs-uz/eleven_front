@@ -67,8 +67,8 @@ class TimeTableWidget extends StatefulWidget {
 }
 
 class _TimeTableWidgetState extends State<TimeTableWidget> {
-  final DateTime from = DateTime(2023, 10, 7, 8);
-  final DateTime to = DateTime(2023, 10, 7, 22);
+  final DateTime from = DateTime(2023, 10, 7, Constants.startWork.toInt());
+  final DateTime to = DateTime(2023, 10, 7,  Constants.endWork.toInt());
 
   static final List<BarberEntity> listBarber = [];
   static final List<OrderEntity> listOrders = [];
