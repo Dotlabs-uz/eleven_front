@@ -23,7 +23,7 @@ import 'package:hive/hive.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/components/data_order_form.dart';
-import '../../../../core/components/not_selected_employee_list_widget.dart';
+import '../../../../core/components/not_selected_barber_list_widget.dart';
 import '../../../../core/components/responsive_builder.dart';
 import '../../../../core/utils/dialogs.dart';
 import '../../../../get_it/locator.dart';

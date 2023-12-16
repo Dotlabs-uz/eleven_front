@@ -90,7 +90,8 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
     return MouseRegion(
       cursor: SystemMouseCursors.move,
       child: Container(
-        width: widget.isDragging ? 200 : MediaQuery.of(context).size.width,
+        clipBehavior: Clip.antiAlias,
+        width: widget.isDragging ? 90 : MediaQuery.of(context).size.width,
         height: TimeTableHelper.getCardHeight(
           widget.order.orderStart,
           widget.order.orderEnd,
@@ -107,92 +108,107 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
         child: !widget.isDragging
             ? Stack(
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        color: widget.order.status == OrderStatus.waitingToView
-                            ? Colors.amber.shade600
-                            : widget.order.status == OrderStatus.timeLeft
-                                ? Colors.red.shade600
-                                : AppColors.timeTableCardSideColor,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 7,
-                          vertical: 2,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
-                              style: GoogleFonts.nunito(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            if (widget.order.fromSite)
-                              const SizedBox(width: 10),
-                            if (widget.order.fromSite)
-                              const Icon(
-                                Icons.cloud,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                          ],
-                        ),
-                      ),
-                      FittedBox(
-                        child: Padding(
+                  SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          color: widget.order.status == OrderStatus.waitingToView
+                              ? Colors.amber.shade600
+                              : widget.order.status == OrderStatus.timeLeft
+                                  ? Colors.red.shade600
+                                  : AppColors.timeTableCardSideColor,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 3),
-                          child: Text(
-                            "${widget.order.clientName} | +${widget.order.clientPhone}",
-                            style: GoogleFonts.nunito(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
+                            horizontal: 4,
                           ),
-                        ),
-                      ),
-                      ...widget.order.services.map(
-                        (e) => Flexible(
-                          child: FittedBox(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 3),
-                              child: Text(
-                                "${e.name} ${e.price}сум. ${e.duration}м.",
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${DateFormat('HH:mm').format(widget.order.orderStart)} / ${DateFormat('HH:mm').format(widget.order.orderEnd)}",
                                 style: GoogleFonts.nunito(
-                                  color: Colors.black,
-                                  fontSize: 12,
+                                  color: Colors.white,
+                                  fontSize: 10,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                            ),
+                              if (widget.order.fromSite)
+                                const SizedBox(width: 10),
+                              if (widget.order.fromSite)
+                                const Icon(
+                                  Icons.cloud,
+                                  color: Colors.white,
+                                  size: 11,
+                                ),
+                            ],
                           ),
                         ),
-                      ),
-                      Flexible(
-                        child: FittedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 3),
-                            child: Text(
-                              widget.order.description,
-                              style: GoogleFonts.nunito(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
+                        SizedBox(
+                          width: 100,
+
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 3, vertical: 3),
+                                child: Text(
+                                  "${widget.order.clientName} +${widget.order.clientPhone}",
+                                  style: GoogleFonts.nunito(
+                                    color: Colors.black,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+
+                                  ),
+                                  softWrap: true,
+
+                                ),
                               ),
-                            ),
+                              ...widget.order.services.map(
+                                    (e) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 3),
+                                  child: Text(
+                                    "${e.name} ${e.price}сум. ${e.duration}м.",
+                                    style: GoogleFonts.nunito(
+                                      color: Colors.black,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    softWrap: true,
+
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                child: FittedBox(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 3, vertical: 3),
+                                    child: Text(
+                                      widget.order.description,
+                                      style: GoogleFonts.nunito(
+                                        color: Colors.black,
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
+
+                      ],
+                    ),
                   ),
                   Positioned(
                     top: 0,

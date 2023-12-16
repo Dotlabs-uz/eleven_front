@@ -1,4 +1,5 @@
 import 'package:eleven_crm/core/components/image_view_widget.dart';
+import 'package:eleven_crm/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/management/domain/entity/barber_entity.dart';
@@ -51,7 +52,7 @@ class _NotSelectedBarbersListWidgetState
       shadowColor: Colors.transparent,
       margin: EdgeInsets.zero,
       child: Container(
-        width: 120,
+        width: Constants.notSelectedBarbersWidth,
         decoration:   BoxDecoration(
           color: const Color(0xffe0e0e0).withOpacity(0.3),
           borderRadius: const BorderRadius.only(
@@ -82,7 +83,7 @@ class _NotSelectedBarbersListWidgetState
                         const SizedBox(height: 5),
                         Center(
                           child: Text(
-                            "${entity.firstName} ${entity.lastName}",
+                            "${entity.lastName.toUpperCase()[0]}. ${entity.firstName}",
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.black,

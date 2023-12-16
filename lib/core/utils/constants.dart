@@ -8,14 +8,14 @@ class Constants {
   static double timeTableItemHeight =100;
   static double timeTableItemsMaxWith =500;
   static double sideMenuWidth =300;
-  static double notSelectedBarbersWidth =120;
+  static double notSelectedBarbersWidth =90;
   static double sizeTimeTableFieldPerMinuteRound =1.67;
   static double sizeTimeTableFieldPerMinute =1.6;
   static double onTimetableFieldItemRound =25;
   static double onTimetableFieldItem =25;
 
   static double sizeOfBarberProfileCard =300;
-  static double sizeOfTimeTableColumn =100;
+  static double sizeOfTimeTableColumn =125;
 
 
 

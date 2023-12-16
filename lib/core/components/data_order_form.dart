@@ -63,13 +63,14 @@ class DataOrderFormState extends State<DataOrderForm> {
 
   @override
   void initState() {
+    selectedProducts.clear();
     price = widget.fields['price']?.val ?? 0;
     duration = widget.fields['duration']?.val ?? 0;
     clientName = widget.fields['clientName']?.val ?? "";
     clientPhone = widget.fields['clientPhone']?.val ?? 998;
     barberId = widget.fields['barberId']?.val ?? "";
     orderStart = widget.fields['orderStart']?.val ?? DateTime.now();
-    selectedProducts.clear();
+    selectedProducts = List.from(widget.fields['services']?.val ?? []);
 
     if (mounted) {
       Future.delayed(
