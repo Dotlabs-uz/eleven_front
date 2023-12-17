@@ -41,6 +41,7 @@ import '../cubit/show_select_services/show_select_services_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../widget/my_icon_button.dart';
 import '../widget/time_table_widget/time_table_widget.dart';
+import 'package:collection/collection.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -72,13 +73,12 @@ class _ContentWidget extends StatefulWidget {
 class _ContentWidgetState extends State<_ContentWidget> {
   late OrderEntity activeData;
   late bool showSelectServices;
-
   late PlutoRow selectedRow;
   late PlutoGridStateManager stateManager;
   final WebSocketsService webSocketService =
       WebSocketsService(ApiConstants.ordersWebSocket);
 
-  DateTime filteredDate = DateTime.now();
+  static DateTime filteredDate = DateTime.now();
 
   @override
   void initState() {
@@ -203,6 +203,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
   int selectedValue = 0;
 
   List<BarberEntity> listBarbers = [];
+  static List<BarberEntity> listNotSelectedBarbers = [];
 
   _dateTimeWidget() {
     final now = DateTime.now();
@@ -231,6 +232,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
   @override
   void dispose() {
     orders.clear();
+    listNotSelectedBarbers.clear();
     listBarbers.clear();
     selectedValue = 0;
     activeData = OrderEntity.empty();
@@ -250,6 +252,45 @@ class _ContentWidgetState extends State<_ContentWidget> {
             .toJsonUpdate(withOrderEnd: withOrderEnd),
       },
     );
+  }
+
+  _removeBarberByFilter() {
+    final DateTime dateTime =
+        DateTime.parse(DateFormat("yyyy-MM-dd").format(filteredDate));
+
+    print("Filter Date _removeBarberByFilter $filteredDate");
+
+    if (listBarbers.isEmpty) return;
+
+    for (var barber in listBarbers) {
+      for (var element in barber.schedule) {
+        final dt = DateTime.parse(element.date);
+
+        if (dt.difference(dateTime).inDays == 0) {
+
+          print("date Time $dateTime");
+          if (element.status == 0) {
+            print(
+                "У барбера ${barber.firstName} ${barber.lastName} не рабочий день его нужно убрать. дата $dt");
+
+            barber.inTimeTable = false;
+            // listBarbers.remove(barber);
+            if (!listNotSelectedBarbers.contains(barber)) {
+              listNotSelectedBarbers.add(barber);
+            }
+          }   if(element.status == 1) {
+              print(
+                  "У барбера ${barber.firstName} ${barber.lastName} рабочий день его нужно вывести. дата $dt");
+            barber.inTimeTable = true;
+
+            if (!listBarbers.contains(barber)) {
+              listBarbers.add(barber);
+            }
+            listNotSelectedBarbers.remove(barber);
+          }
+        }
+      }
+    }
   }
 
   @override
@@ -286,9 +327,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
                       SuccessFlushBar("change_success".tr()).show(context);
 
                       Navigator.pushNamed(context, "/home");
-                      final lastFilterDate = BlocProvider.of<OrderFilterCubit>(context).state.query;
+                      final lastFilterDate =
+                          BlocProvider.of<OrderFilterCubit>(context)
+                              .state
+                              .query;
                       BlocProvider.of<OrderFilterCubit>(context).setFilter(
-                        query: lastFilterDate.isEmpty  ?  DateTime.now().toIso8601String( ) : lastFilterDate,
+                        query: lastFilterDate.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : lastFilterDate,
                       );
                     }
                   },
@@ -299,9 +345,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
                     if (state is NotWorkingHoursSaved) {
                       SuccessFlushBar("change_success".tr()).show(context);
                       Navigator.pushNamed(context, "/home");
-                      final lastFilterDate = BlocProvider.of<OrderFilterCubit>(context).state.query;
+                      final lastFilterDate =
+                          BlocProvider.of<OrderFilterCubit>(context)
+                              .state
+                              .query;
                       BlocProvider.of<OrderFilterCubit>(context).setFilter(
-                        query: lastFilterDate.isEmpty  ?  DateTime.now().toIso8601String( ) : lastFilterDate,
+                        query: lastFilterDate.isEmpty
+                            ? DateTime.now().toIso8601String()
+                            : lastFilterDate,
                       );
                     }
                   },
@@ -316,9 +367,20 @@ class _ContentWidgetState extends State<_ContentWidget> {
                           () {
                             setState(() {
                               final data = state.data.results;
-                              data.removeWhere((element) =>
-                                  element.isCurrentFilial == false);
-                              listBarbers = data;
+
+                              final List<BarberEntity> localList = [];
+
+                              for (var element in data) {
+                                if (element.isCurrentFilial == true) {
+                                  if (!listNotSelectedBarbers
+                                          .contains(element) &&
+                                      !localList.contains(element)) {
+                                    localList.add(element);
+                                  }
+                                }
+                              }
+                              listBarbers = localList;
+                              _removeBarberByFilter();
                             });
                           },
                         );
@@ -336,6 +398,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                       // webSocketService.addFilter({"orderStart": state.query});
                       filteredDate = DateTime.parse(state.query);
                       print("Filter date init $filteredDate");
+                      _removeBarberByFilter();
                     } else {
                       webSocketService.refresh();
                       orders.clear();
@@ -397,8 +460,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                     OrderFilterHelper>(
                                   builder: (context, state) {
                                     return AnimatedSwitcher(
-                                        duration:
-                                            const Duration(seconds: 1),
+                                        duration: const Duration(seconds: 1),
                                         switchInCurve: Curves.easeIn,
                                         switchOutCurve: Curves.easeIn,
                                         child: TimeTableWidget(
@@ -410,12 +472,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           },
                                           onTapNotWorkingHour:
                                               _onDeleteNotWorkingHours,
-                                          orderFilterQuery: BlocProvider.of<
-                                                  OrderFilterCubit>(context)
-                                              .state
-                                              .query,
-                                          onFieldTap:
-                                              (hour, minute, barberId) {
+                                          orderFilterQuery:
+                                              BlocProvider.of<OrderFilterCubit>(
+                                                      context)
+                                                  .state
+                                                  .query,
+                                          onFieldTap: (hour, minute, barberId) {
                                             final dt = DateTime.tryParse(
                                                 BlocProvider.of<
                                                             OrderFilterCubit>(
@@ -484,15 +546,14 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                 final fieldSchedule =
                                                     FieldSchedule(
                                                   DateFormat("yyyy-MM-dd")
-                                                      .parse(dateTime
-                                                          .toString()),
+                                                      .parse(
+                                                          dateTime.toString()),
                                                   employeeId,
                                                   status,
                                                   {
                                                     "from":
                                                         "$fromHour:$fromMinute",
-                                                    "to":
-                                                        "$toHour:$toMinute"
+                                                    "to": "$toHour:$toMinute"
                                                   },
                                                 );
                                                 BlocProvider.of<
@@ -502,8 +563,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                                   fieldSchedule
                                                 ]);
                                               },
-                                              barberCreatedAt:
-                                                  barber.createdAt,
+                                              barberCreatedAt: barber.createdAt,
                                             );
                                           },
                                         )
@@ -602,7 +662,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                             padding:
                                                 const EdgeInsets.only(left: 5),
                                             child: NotSelectedBarbersListWidget(
-                                              listBarbers: listBarbers,
+                                              listBarbers:
+                                                  listNotSelectedBarbers,
                                               onTap: (String barberId) {
                                                 _barberFromTimeTableCardAction(
                                                   barberId,
