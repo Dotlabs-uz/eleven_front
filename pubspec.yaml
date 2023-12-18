@@ -80,6 +80,8 @@ dependencies:
   badges: ^3.1.2
   animated_custom_dropdown: ^2.0.0
   material_floating_search_bar_2: ^0.5.0
+  dio: ^4.0.6
+  dio_http_cache: ^0.3.0
 
 dev_dependencies:
   flutter_test:

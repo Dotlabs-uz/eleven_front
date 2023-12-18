@@ -23,6 +23,7 @@ import 'package:eleven_crm/features/management/presentation/provider/cross_in_em
 import 'package:eleven_crm/features/products/domain/usecases/filial.dart';
 import 'package:eleven_crm/features/products/domain/usecases/service_product_category.dart';
 import 'package:http/http.dart';
+import 'package:dio/dio.dart' as dio;
 
 import '../core/api/api_client.dart';
 import '../core/utils/storage_service.dart';
@@ -284,6 +285,7 @@ void setup() {
 
   // ================ Core ================ //
 
+  locator.registerLazySingleton<dio.Dio>(() => dio.Dio());
   locator.registerLazySingleton<Client>(() => Client());
 
   locator
