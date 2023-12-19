@@ -34,7 +34,7 @@ class TimeTableHelper {
       }
 
       if(diffDays >= 1 ) {
-        return Constants.timeTableItemHeight * 14 ;
+        return Constants.timeTableItemHeight * (Constants.endWork.toInt()  - Constants.startWork.toInt());
       }
 
     }
@@ -49,7 +49,7 @@ class TimeTableHelper {
 
     final h = (differenceInMinutes * Constants.sizeTimeTableFieldPerMinuteRound).toDouble();
 
-    return h >= 1400 ? 1400 : h;
+    return h >= 1200 ? 1200 : h;
   }
 
   static double getTopPositionForOrder(OrderEntity order) {
