@@ -7,6 +7,7 @@ import 'package:eleven_crm/features/management/domain/entity/employee_schedule_e
 import 'package:eleven_crm/features/management/presentation/provider/cross_in_employee_schedule_provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:region_detector/region_detector.dart';
 
@@ -101,6 +102,14 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
   void initState() {
     scrollController = ScrollController();
 
+Future.delayed(const Duration(seconds: 1), () {
+
+  if(DateTime.now().day >= 14) {
+    scrollController.animateTo(300, duration: Duration(milliseconds: 200), curve: Curves.linear);
+  }
+
+},);
+
     multiSelectedFields.clear();
     super.initState();
   }
@@ -129,6 +138,7 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
           controller: scrollController,
           child: SingleChildScrollView(
             controller: scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [

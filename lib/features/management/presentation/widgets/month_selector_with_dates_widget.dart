@@ -106,7 +106,7 @@ class _MonthSelectorWithDatesWidgetState
   }
 
   _dateItemWidget(int day, int month, int year) {
-
+final now = DateTime.now();
     if( StringHelper.getDaysByMonthIndex(month: currentMonth)  < day ) {
       return const SizedBox(
         width: 35,
@@ -117,6 +117,8 @@ class _MonthSelectorWithDatesWidgetState
     }
 
 
+    final conditionNowDay =  now.day == day && now.month == month && now.year == year;
+
     return Container(
       constraints: const BoxConstraints(
         maxWidth: 35,
@@ -124,6 +126,12 @@ class _MonthSelectorWithDatesWidgetState
       ),
       padding: const EdgeInsets.all(8),
       width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: conditionNowDay ?  Colors.blue : null,
+        borderRadius: BorderRadius.circular(4),
+
+
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -131,7 +139,7 @@ class _MonthSelectorWithDatesWidgetState
           Text(
             day.toString(),
             style: TextStyle(
-              color: ColorHelper.getColorForCalendar(day, month, year),
+              color:conditionNowDay ?Colors.white : ColorHelper.getColorForCalendar(day, month, year),
               fontSize: 16,
             ),
           ),
@@ -141,7 +149,7 @@ class _MonthSelectorWithDatesWidgetState
               DateTime(year, month, day),
             ).toString().tr().substring(0, 2),
             style: TextStyle(
-              color: ColorHelper.getColorForCalendar(day, month, year),
+              color:conditionNowDay ?Colors.white : ColorHelper.getColorForCalendar(day, month, year),
               fontSize: 12,
             ),
           ),

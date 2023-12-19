@@ -71,6 +71,7 @@ class ContentWidget extends StatefulWidget {
 class _ContentWidgetState extends State<ContentWidget> {
   late bool isFormVisible;
   bool isSearch = false;
+  final ScrollController scrollController = ScrollController();
   late List<EmployeeEntity> customers;
   late EmployeeEntity activeData;
 
@@ -211,6 +212,7 @@ class _ContentWidgetState extends State<ContentWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SingleChildScrollView(
+        controller: scrollController,
         child: Column(
           children: [
             MultiBlocListener(
