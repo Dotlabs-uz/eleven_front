@@ -270,8 +270,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
           print("date Time $dateTime");
           if (element.status == 0) {
-            print(
-                "У барбера ${barber.firstName} ${barber.lastName} не рабочий день его нужно убрать. дата $dt");
+            // print(
+            //     "У барбера ${barber.firstName} ${barber.lastName} не рабочий день его нужно убрать. дата $dt");
 
             barber.inTimeTable = false;
             // listBarbers.remove(barber);
@@ -279,8 +279,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
               listNotSelectedBarbers.add(barber);
             }
           }   if(element.status == 1) {
-              print(
-                  "У барбера ${barber.firstName} ${barber.lastName} рабочий день его нужно вывести. дата $dt");
+              // print(
+              //     "У барбера ${barber.firstName} ${barber.lastName} рабочий день его нужно вывести. дата $dt");
             barber.inTimeTable = true;
 
             if (!listBarbers.contains(barber)) {

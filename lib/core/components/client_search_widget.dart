@@ -1,12 +1,12 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/services/debouncer_service.dart';
+import 'package:eleven_crm/core/utils/field_formatters.dart';
 import 'package:eleven_crm/features/management/domain/entity/customer_entity.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 class ClientSearchWidget extends StatefulWidget {
   final Function(String) onNameChanged;
@@ -37,7 +37,6 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
   final SearchController searchControllerName = SearchController();
   final SearchController searchControllerPhone = SearchController();
   final _debouncer = DebouncerService(milliseconds: 300);
-
 
   @override
   void initState() {
@@ -71,6 +70,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
               widget.onPhoneChanged.call(element.phoneNumber);
               searchControllerName.text = element.fullName;
               searchControllerPhone.text = element.phoneNumber.toString();
+
             }
           });
         },
@@ -161,6 +161,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           onTap: () => controller.openView(),
                           onChanged: (nameQuery) => controller.openView(),
                           leading: const SizedBox(),
+                          inputFormatters: [],
                         );
                       },
                       suggestionsBuilder:
@@ -201,6 +202,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                       controller.closeView(item.fullName);
                                       searchControllerPhone.text =
                                           item.phoneNumber.toString();
+
                                       widget.onNameChanged.call(item.fullName);
                                       widget.onPhoneChanged
                                           .call(item.phoneNumber);
@@ -213,6 +215,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                         );
                       },
                       listItemInMenu: listCustomers,
+                      inputFormatters: [],
                     ),
                   ),
                 ),
@@ -255,13 +258,21 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           onTap: () => controller.openView(),
                           onChanged: (phoneQuery) => controller.openView(),
                           leading: const SizedBox(),
+                          inputFormatters: [FieldFormatters.phoneMaskFormatter],
                         );
                       },
                       suggestionsBuilder:
                           (BuildContext context, SearchController controller) {
+
+                        if(controller.text.isEmpty)  {
+                          controller.text = "998";
+                        }
                         _debouncer(() {
                           widget.onPhoneChanged
                               .call(int.parse(controller.text));
+
+
+                          controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.value.text.length);
 
                           BlocProvider.of<CustomerCubit>(context)
                               .load("&phoneNumber=${controller.text}");
@@ -286,7 +297,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                 return ListTile(
                                   title: FittedBox(
                                     child: Text(
-                                      item.phoneNumber.toString(),
+                                      FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString()),
                                       style: const TextStyle(
                                         fontSize: 12,
                                       ),
@@ -295,7 +306,9 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                   onTap: () {
                                     setState(() {
                                       controller.closeView(
-                                          item.phoneNumber.toString());
+
+                                          FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString())
+                                          );
                                       searchControllerName.text = item.fullName;
                                       print(
                                           "search controller name ${item.fullName}");
@@ -312,6 +325,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                         );
                       },
                       listItemInMenu: listCustomers,
+                      inputFormatters: [FieldFormatters.phoneMaskFormatter],
                     ),
                   ),
                 ),

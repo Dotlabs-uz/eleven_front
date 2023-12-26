@@ -63,6 +63,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
   @override
   void initState() {
     currentMenuSelectedIndex = widget.selectedIndex;
+
     BlocProvider.of<CurrentUserCubit>(context).load();
     super.initState();
   }
@@ -86,7 +87,7 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
         }
       },
       child: Container(
-        width: isOpen ? 300 : 100,
+        width: isOpen ? 250 : 100,
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsets.all(10),
         decoration: const BoxDecoration(
@@ -122,12 +123,14 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "${currentUserEntity.firstName} ${currentUserEntity.lastName}",
-                                style: const TextStyle(
-                                  fontFamily: "Nunito",
-                                  fontSize: 16,
-                                  color: Colors.white,
+                              FittedBox(
+                                child: Text(
+                                  "${currentUserEntity.firstName} ${currentUserEntity.lastName}",
+                                  style: const TextStyle(
+                                    fontFamily: "Nunito",
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 3),

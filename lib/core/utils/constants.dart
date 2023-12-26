@@ -15,7 +15,7 @@ class Constants {
   static double onTimetableFieldItem =25;
 
   static double sizeOfBarberProfileCard =300;
-  static double sizeOfTimeTableColumn =125;
+  static double sizeOfTimeTableColumn =100;
 
 
 
