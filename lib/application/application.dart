@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/auth/presentation/cubit/login_cubit.dart';
+import 'package:eleven_crm/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/avatar/avatar_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/data_form/data_form_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/home_screen_form/home_screen_order_form_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:eleven_crm/features/management/presentation/provider/cross_in_em
 import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 import '../core/utils/app_colors.dart';
@@ -58,6 +60,7 @@ class _ApplicationState extends State<Application> {
   late EmployeeScheduleCubit employeeScheduleCubit ;
 
   late BarberCubit barberCubit;
+  String? token = null;
 
   @override
   void initState() {
@@ -80,8 +83,14 @@ class _ApplicationState extends State<Application> {
     notWorkingHoursCubit = locator();
     barberCubit = locator();
     employeeScheduleCubit = locator();
+    initialize();
 
     super.initState();
+  }
+
+  initialize() async {
+    final authenticationBox = await Hive.openBox('authenticationBox');
+    token = await authenticationBox.get('session_id');
   }
 
   @override
@@ -130,7 +139,9 @@ class _ApplicationState extends State<Application> {
         initialRoute: RouteList.login,
         // home: const LoginScreen(),
         onGenerateRoute: (RouteSettings settings) {
-          final Map<String, WidgetBuilder> routes = Routes.getRoutes(settings);
+
+
+          final Map<String, WidgetBuilder> routes = Routes.getRoutes(settings, token);
           // final WidgetBuilder builder;
           // if (settings.name != null) {
           //   builder = routes[settings.name]!;
@@ -139,7 +150,7 @@ class _ApplicationState extends State<Application> {
           // }
 
           return FadePageRouteBuilder(
-            builder: routes[settings.name]!,
+            builder:   routes[settings.name]!,
             settings: settings,
           );
         },
