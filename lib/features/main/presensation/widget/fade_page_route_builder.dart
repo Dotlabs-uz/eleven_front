@@ -12,7 +12,7 @@ class FadePageRouteBuilder<T> extends PageRouteBuilder<T> {
           pageBuilder: (context, animation, secondaryAnimation) =>
               builder(context),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var curve = Curves.ease;
+            var curve = Curves.easeInOut;
             var tween =
                 Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
             return FadeTransition(

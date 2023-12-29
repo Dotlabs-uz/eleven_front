@@ -275,7 +275,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           // controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.value.text.length);
 
                           BlocProvider.of<CustomerCubit>(context)
-                              .load("&phoneNumber=${controller.text}");
+                              .load("&phone=${controller.text}");
                         });
 
                         return BlocBuilder<CustomerCubit, CustomerState>(

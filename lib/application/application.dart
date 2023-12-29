@@ -60,7 +60,7 @@ class _ApplicationState extends State<Application> {
   late EmployeeScheduleCubit employeeScheduleCubit ;
 
   late BarberCubit barberCubit;
-  String? token = null;
+  static String? token ;
 
   @override
   void initState() {
@@ -83,12 +83,11 @@ class _ApplicationState extends State<Application> {
     notWorkingHoursCubit = locator();
     barberCubit = locator();
     employeeScheduleCubit = locator();
-    initialize();
 
     super.initState();
   }
 
-  initialize() async {
+  getSessionToken() async {
     final authenticationBox = await Hive.openBox('authenticationBox');
     token = await authenticationBox.get('session_id');
   }
@@ -139,6 +138,8 @@ class _ApplicationState extends State<Application> {
         initialRoute: RouteList.login,
         // home: const LoginScreen(),
         onGenerateRoute: (RouteSettings settings) {
+
+          getSessionToken();
 
 
           final Map<String, WidgetBuilder> routes = Routes.getRoutes(settings, token);
