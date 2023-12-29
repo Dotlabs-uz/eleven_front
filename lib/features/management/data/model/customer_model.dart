@@ -42,7 +42,7 @@ class CustomerModel extends CustomerEntity {
     return CustomerModel(
       id: json['_id'] ?? "",
       fullName: json['name'] ?? "",
-      phoneNumber: json['phone'] ?? 99,
+      phoneNumber: json['phone'] ?? 998,
       ordersCount:isForOrder ?0 : List.from(json['orders']).length,
       orders: isForOrder ? [] : List.from(json['orders'])
           .map((e) => OrderForClientModel.fromJson(e))

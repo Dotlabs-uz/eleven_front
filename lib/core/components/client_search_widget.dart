@@ -36,7 +36,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
   List<CustomerEntity> listCustomers = [];
   final SearchController searchControllerName = SearchController();
   final SearchController searchControllerPhone = SearchController();
-  final _debouncer = DebouncerService(milliseconds: 300);
+  final _debouncer = DebouncerService(milliseconds: 400);
 
   @override
   void initState() {
@@ -297,7 +297,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                 return ListTile(
                                   title: FittedBox(
                                     child: Text(
-                                      FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString()),
+                                      FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString().replaceAll("998", "")),
                                       style: const TextStyle(
                                         fontSize: 12,
                                       ),
@@ -307,7 +307,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                     setState(() {
                                       controller.closeView(
 
-                                          FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString())
+                                          FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString().replaceAll("998", ""))
                                           );
                                       searchControllerName.text = item.fullName;
                                       print(

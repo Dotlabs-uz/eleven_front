@@ -12,8 +12,8 @@ class CustomerResultsModel extends CustomerResultsEntity {
 
   factory CustomerResultsModel.fromJson(Map<String, dynamic> json) {
     return CustomerResultsModel(
-      count: json['count'],
-      pageCount: json['pageCount'],
+      count: json['count'] ?? 0,
+      pageCount: json['pageCount'] ?? 1,
       results: List.from(json['results'])
           .map((e) => CustomerModel.fromJson(Map.from(e)))
           .toList(),
