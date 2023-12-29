@@ -269,10 +269,10 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                         }
                         _debouncer(() {
                           widget.onPhoneChanged
-                              .call(int.parse(controller.text));
+                              .call(int.parse(FieldFormatters.phoneMaskFormatter.unmaskText(controller.text)));
 
 
-                          controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.value.text.length);
+                          // controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.value.text.length);
 
                           BlocProvider.of<CustomerCubit>(context)
                               .load("&phoneNumber=${controller.text}");

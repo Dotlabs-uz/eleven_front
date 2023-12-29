@@ -57,12 +57,13 @@ class CustomerCubit extends Cubit<CustomerState> {
     DateTime? startDate,
     DateTime? endDate,
   }) async {
+
     //loadingCubit.show();
     emit(CustomerLoading());
     searchText = searchText;
     final data = await getData(CustomerParams(
       page: page,
-      searchText: searchText,
+      searchText: searchText.replaceAll("(", "").replaceAll(")", "").replaceAll("-", "").replaceAll("+", "").replaceAll(" ", ""),
       ordering: ordering,
       endDate: endDate != null ? DateTimeHelper.formatToFilter(endDate) : null,
       startDate:
