@@ -5,6 +5,7 @@ class Assets {
   // Lottie
   static const String tLoadingIndicatorLottie = "assets/lottie/loading_indicator.json";
   static const String tEmptyLottie = "assets/lottie/empty.gif";
+  static const String tPageNotFound = "assets/lottie/page_not_found.gif";
 
 
   // Pngs

@@ -26,9 +26,11 @@ import '../features/main/presensation/cubit/order/not_working_hours/not_working_
 import '../features/main/presensation/cubit/show_client_orders_history/show_client_orders_history_cubit.dart';
 import '../features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
 import '../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
+import '../features/main/presensation/screens/page_not_found.dart';
 import '../features/main/presensation/widget/fade_page_route_builder.dart';
 import '../features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
 import '../get_it/locator.dart';
+import '../main.dart';
 
 class Application extends StatefulWidget {
   const Application({super.key});
@@ -57,10 +59,9 @@ class _ApplicationState extends State<Application> {
   late CrossInEmployeeScheduleProvider crossInEmployeeScheduleProvider;
   late LocaleCubit localeCubit;
   late NotWorkingHoursCubit notWorkingHoursCubit;
-  late EmployeeScheduleCubit employeeScheduleCubit ;
+  late EmployeeScheduleCubit employeeScheduleCubit;
 
   late BarberCubit barberCubit;
-  static String? token ;
 
   @override
   void initState() {
@@ -83,13 +84,9 @@ class _ApplicationState extends State<Application> {
     notWorkingHoursCubit = locator();
     barberCubit = locator();
     employeeScheduleCubit = locator();
+    getSessionToken();
 
     super.initState();
-  }
-
-  getSessionToken() async {
-    final authenticationBox = await Hive.openBox('authenticationBox');
-    token = await authenticationBox.get('session_id');
   }
 
   @override
@@ -122,27 +119,20 @@ class _ApplicationState extends State<Application> {
         locale: context.locale,
         title: 'Eleven CRM',
         navigatorKey: navigatorKey,
-
         theme: ThemeData(
           primaryColor: Colors.red,
           scaffoldBackgroundColor: AppColors.scaffoldColor,
-          // backgroundColor: Colors.white,
-
           iconTheme: const IconThemeData(color: Colors.blue),
           appBarTheme: const AppBarTheme(
-            // color: AppColor.menuBgColor,
             backgroundColor: AppColors.sideMenu,
           ),
         ),
-        // scrollBehavior: CustomScrollBehaviour(),
         initialRoute: RouteList.login,
         // home: const LoginScreen(),
+        onUnknownRoute: (settings) => PageNotFound.route(),
         onGenerateRoute: (RouteSettings settings) {
-
-          getSessionToken();
-
-
-          final Map<String, WidgetBuilder> routes = Routes.getRoutes(settings, token);
+          final Map<String, WidgetBuilder> routes =
+              Routes.getRoutes(settings, token);
           // final WidgetBuilder builder;
           // if (settings.name != null) {
           //   builder = routes[settings.name]!;
@@ -151,7 +141,7 @@ class _ApplicationState extends State<Application> {
           // }
 
           return FadePageRouteBuilder(
-            builder:   routes[settings.name]!,
+            builder: routes[settings.name]!,
             settings: settings,
           );
         },

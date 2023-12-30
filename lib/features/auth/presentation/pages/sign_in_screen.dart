@@ -12,6 +12,7 @@ import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/components/text_form_field_widget.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/utils/route_constants.dart';
+import '../../../../main.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -43,12 +44,19 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocListener<LoginCubit, LoginState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is LoginSuccess) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              RouteList.home,
-              (route) => false,
-            );
+
+            if(mounted) {
+              await getSessionToken().then((value) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  RouteList.home,
+                      (route) => false,
+                );
+              });
+            }
+
+
           } else if (state is LoginError) {
             ErrorFlushBar("change_error".tr(args: [state.message.tr()]))
                 .show(context);

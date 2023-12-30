@@ -7,6 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:sweet_cookie/sweet_cookie.dart';
 
+
+String? token ;
+
+Future getSessionToken() async {
+  final authenticationBox = await Hive.openBox('authenticationBox');
+  token = await authenticationBox.get('session_id');
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();

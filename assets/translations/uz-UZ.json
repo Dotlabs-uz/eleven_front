@@ -670,6 +670,8 @@
   "pleaseEnterClientNameAndPhone": "Iltimos, mijoz nomi va raqamini kiriting",
   "changeSchedule": "Jadvalni o'zgartirish",
   "checked": "Tasdiqlangan",
-  "barberStartWorkAt": "Sartarosh yaratildi {}"
+  "barberStartWorkAt": "Sartarosh yaratildi {}",
+  "pageNotFound": "Ууууппсс.... Такой страницы нет!"
+
 
 }
