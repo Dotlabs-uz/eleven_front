@@ -170,8 +170,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                       },
                       suggestionsBuilder:
                           (BuildContext context, SearchController controller) {
-                        _debouncer(() {
                           widget.onNameChanged.call(controller.text);
+                        _debouncer(() {
                           BlocProvider.of<CustomerCubit>(context)
                               .load(controller.text);
                         });
@@ -274,10 +274,14 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
 
                         if(controller.text.isEmpty)  {
                           controller.text = "998";
+
                         }
+
+                        widget.onPhoneChanged
+                            .call(int.parse(FieldFormatters.phoneMaskFormatter.unmaskText(controller.text)));
+
+
                         _debouncer(() {
-                          widget.onPhoneChanged
-                              .call(int.parse(FieldFormatters.phoneMaskFormatter.unmaskText(controller.text)));
 
 
                           // controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.value.text.length);
