@@ -158,7 +158,11 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           padding: const MaterialStatePropertyAll<EdgeInsets>(
                             EdgeInsets.symmetric(horizontal: 6, vertical: 0),
                           ),
-                          onTap: () => controller.openView(),
+                          onTap: () {
+                            controller.openView();
+                            BlocProvider.of<CustomerCubit>(context)
+                                .load(controller.text);
+                          },
                           onChanged: (nameQuery) => controller.openView(),
                           leading: const SizedBox(),
                           inputFormatters: [],
