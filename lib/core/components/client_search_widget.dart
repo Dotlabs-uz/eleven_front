@@ -71,7 +71,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                 widget.onNameChanged.call(element.fullName);
                 widget.onPhoneChanged.call(element.phoneNumber);
                 searchControllerName.text = element.fullName;
-                searchControllerPhone.text = element.phoneNumber.toString();
+                searchControllerPhone.text = FieldFormatters.phoneMaskFormatter.maskText(element.phoneNumber.toString());
               }
 
 
