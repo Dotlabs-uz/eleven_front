@@ -66,10 +66,14 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
           setState(() {
             if (listCustomers.length == 1) {
               final element = listCustomers.first;
-              widget.onNameChanged.call(element.fullName);
-              widget.onPhoneChanged.call(element.phoneNumber);
-              searchControllerName.text = element.fullName;
-              searchControllerPhone.text = element.phoneNumber.toString();
+
+              if(element.fullName == searchControllerName.text || element.phoneNumber.toString() == FieldFormatters.phoneMaskFormatter.unmaskText(searchControllerPhone.text)) {
+                widget.onNameChanged.call(element.fullName);
+                widget.onPhoneChanged.call(element.phoneNumber);
+                searchControllerName.text = element.fullName;
+                searchControllerPhone.text = element.phoneNumber.toString();
+              }
+
 
             }
           });
@@ -202,7 +206,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                     ),
                                   ),
                                   onTap: () {
-                                    setState(() {
+                                    if(mounted) {
+                                      setState(() {
                                       controller.closeView(item.fullName);
                                       searchControllerPhone.text =
                                           item.phoneNumber.toString();
@@ -211,6 +216,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                       widget.onPhoneChanged
                                           .call(item.phoneNumber);
                                     });
+                                    }
                                   },
                                 );
                               }),
@@ -316,7 +322,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                     ),
                                   ),
                                   onTap: () {
-                                    setState(() {
+                                    if(mounted) {
+                                      setState(() {
                                       controller.closeView(
 
                                           FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString().replaceAll("998", ""))
@@ -329,6 +336,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
 
                                       widget.onNameChanged.call(item.fullName);
                                     });
+                                    }
                                   },
                                 );
                               }),
