@@ -216,12 +216,23 @@ class DataOrderFormState extends State<DataOrderForm> {
                         onNameChanged: (value) {
                           widget.fields['clientName']!.val = value;
                           clientName = value;
-                          setState(() {});
+                          if(mounted) {
+                            Future.delayed(Duration.zero,() {
+                              setState(() {});
+
+                            },);
+                          }
                         },
                         onPhoneChanged: (value) {
                           widget.fields['clientPhone']!.val = value;
                           clientPhone = value;
-                          setState(() {});
+
+                          if(mounted) {
+                            Future.delayed(Duration.zero,() {
+                              setState(() {});
+
+                            },);
+                          }
                         },
                         clientPhone: clientPhone,
                         clientName: clientName,

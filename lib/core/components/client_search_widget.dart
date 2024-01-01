@@ -164,6 +164,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           ),
                           onTap: () {
                             controller.openView();
+                            controller.selection = TextSelection.collapsed(offset: controller.text.length);
+
                             BlocProvider.of<CustomerCubit>(context)
                                 .load(controller.text);
                           },
@@ -210,9 +212,12 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                       setState(() {
                                       controller.closeView(item.fullName);
                                       searchControllerPhone.text =
-                                          item.phoneNumber.toString();
+                                          FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString());
+
 
                                       widget.onNameChanged.call(item.fullName);
+
+
                                       widget.onPhoneChanged
                                           .call(item.phoneNumber);
                                     });
@@ -267,6 +272,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           ),
                           onTap: () {
                             controller.openView();
+                            controller.selection = TextSelection.collapsed(offset: controller.text.length);
+
                             BlocProvider.of<CustomerCubit>(context)
                                 .load("&phone=${controller.text}");
                           },
