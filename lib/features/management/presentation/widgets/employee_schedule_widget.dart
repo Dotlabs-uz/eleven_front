@@ -1,10 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/image_view_widget.dart';
+import 'package:eleven_crm/core/utils/animated_navigation.dart';
 import 'package:eleven_crm/core/utils/constants.dart';
 import 'package:eleven_crm/core/utils/dialogs.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:eleven_crm/features/management/presentation/provider/cross_in_employee_schedule_provider.dart';
+import 'package:eleven_crm/features/management/presentation/screens/employee_profile_screen.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -296,10 +298,17 @@ class _EmployeeScheduleTableWidgetState
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
-          height: 35,
-          width: 200,
-          child: _card(),
+        GestureDetector(
+          onTap: () {
+            AnimatedNavigation.push(context: context, page: EmployeeProfileScreen(employeeEntity: widget.employeeEntity, onBack: () {
+
+            },),);
+          },
+          child: SizedBox(
+            height: 35,
+            width: 200,
+            child: _card(),
+          ),
         ),
         // Text(widget.listSelectedSchedule.length.toString()),
         ...List.generate(

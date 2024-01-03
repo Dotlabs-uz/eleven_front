@@ -161,12 +161,13 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                             itemBuilder: (context, index) {
                               final category = listServiceCategories[index];
 
+
                               final listServices = category.services;
                               final listFormattedServices = listServices
-                                  .where((element) => element.listBarberId
-                                  .contains(barberId))
+                                  .where((element) =>element.listBarberId.contains(barberId))
                                   .toList();
                               // return const SizedBox();
+
                               return Column(
                                 children: [
                                   _serviceProductCategoryCard(
@@ -179,7 +180,8 @@ class _SelectServiceDialogWidgetState extends State<SelectServiceDialogWidget> {
                                         listFormattedServices.length,
                                             (index) {
                                           final service =
-                                          category.services[index];
+                                          listFormattedServices[index];
+
 
                                           return GestureDetector(
                                             onTap: () {

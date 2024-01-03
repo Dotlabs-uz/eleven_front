@@ -20,7 +20,7 @@ class ServiceProductModel extends ServiceProductEntity {
       price: json['price'],
       duration: json['duration'],
       listBarberId: List.from(json['listBarberId']),
-      category:withCategoryParse ? ServiceProductCategoryModel.fromJson( json['category'] ,false) : ServiceProductCategoryModel.fromEntity(ServiceProductCategoryEntity.empty()),
+      category:withCategoryParse ? ServiceProductCategoryModel.fromJson(  Map<String ,dynamic>.from(json['category'] ),false) : ServiceProductCategoryModel.fromEntity(ServiceProductCategoryEntity.empty()),
       sex: json['sex'] ?? "men",
     );
   }

@@ -61,7 +61,7 @@ class ProductsRemoteDataSourceImpl extends ProductsRemoteDataSource {
   Future<ServiceResultsProductModel> getServiceProducts(
       int page, String searchText, String? ordering, withCategoryParse) async {
     final response = await _client.get(
-        '${ApiConstants.serviceProduct}/?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}');
+        '${ApiConstants.serviceProduct}/?page=$page${searchText.isNotEmpty ? "&name=$searchText" : ""}&limit=100');
     final results =
         ServiceResultsProductModel.fromJson(response, withCategoryParse);
 
