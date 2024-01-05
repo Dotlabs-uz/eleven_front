@@ -1,12 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:eleven_crm/features/management/domain/entity/barber_results_entity.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/entities/app_error.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../entity/barber_entity.dart';
-import '../entity/customer_entity.dart';
-import '../entity/customer_results_entity.dart';
 import '../entity/manager_entity.dart';
 import '../entity/manager_results_entity.dart';
 import '../repositories/management_repository.dart';

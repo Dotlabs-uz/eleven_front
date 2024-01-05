@@ -1,19 +1,15 @@
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/utils/constants.dart';
 import 'package:eleven_crm/core/utils/responsive.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
-import 'package:eleven_crm/features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../features/management/domain/entity/weekly_schedule_item_entity.dart';
-import '../../features/management/presentation/widgets/employee_schedule_widget.dart';
 import '../components/button_widget.dart';
-import '../components/time_field_widget.dart';
 import 'assets.dart';
 import 'selections.dart';
 import 'string_helper.dart';
@@ -292,7 +288,7 @@ class _TimetableScheduleFieldContentDialogState
         widget.schedule.firstWhereOrNull((element) {
       final elementDt = DateTime.parse(element.date);
 
-      print("Element dt $elementDt");
+      debugPrint("Element dt $elementDt");
       if (formattedFilterQuery == null) {
         return elementDt.day == now.day &&
             elementDt.month == now.month &&
@@ -308,7 +304,7 @@ class _TimetableScheduleFieldContentDialogState
       final from = scheduleElement.workingHours['from'].toString();
       final to = scheduleElement.workingHours['to'].toString();
 
-      print("scheduleElement != null to ${to} from ${from}");
+      debugPrint("scheduleElement != null to $to from $from");
       selectedTimeFromHour = extractHours(from);
       selectedTimeFromMinute = extractMinutes(from);
       selectedTimeToHour = extractHours(to);
@@ -683,7 +679,7 @@ class _ScheduleFieldContentDialogState
     widget.schedule.firstWhereOrNull((element) {
       final elementDt = DateTime.parse(element.date);
 
-      print("Element dt $elementDt");
+      debugPrint("Element dt $elementDt");
         return elementDt.day == widget.day &&
             elementDt.month == widget.month &&
             elementDt.year == widget.year;
@@ -693,7 +689,7 @@ class _ScheduleFieldContentDialogState
       final from = scheduleElement.workingHours['from'].toString();
       final to = scheduleElement.workingHours['to'].toString();
 
-      print("scheduleElement != null to ${to} from ${from}");
+      debugPrint("scheduleElement != null to $to from $from");
       selectedTimeFromHour = extractHours(from);
       selectedTimeFromMinute = extractMinutes(from);
       selectedTimeToHour = extractHours(to);
@@ -716,7 +712,7 @@ class _ScheduleFieldContentDialogState
   String extractHours(String time) {
     List<String> parts = time.split(":");
 
-    print("Timeee $time")
+    debugPrint("Timeee $time")
 ;    String hours = parts[0];
 
     return hours;
@@ -1161,7 +1157,7 @@ class _TimeTableBarberDialogBodyState
                     timeFrom = timeFrom.copyWith(
                         hour: int.parse(selectedHourFrom), minute: 0);
 
-                    print("Time from $timeFrom");
+                    debugPrint("Time from $timeFrom");
                   });
                 },
               ),
@@ -1227,7 +1223,7 @@ class _TimeTableBarberDialogBodyState
                     selectedHourTo = newValue!;
                     timeTo = timeTo.copyWith(
                         hour: int.parse(selectedHourTo), minute: 0);
-                    print("Time to $timeTo");
+                    debugPrint("Time to $timeTo");
                   });
                 },
               ),

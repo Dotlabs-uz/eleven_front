@@ -1,6 +1,4 @@
-import '../../domain/entity/barber_results_entity.dart';
 import '../../domain/entity/manager_results_entity.dart';
-import 'barber_model.dart';
 import 'manager_model.dart';
 
 class ManagerResultsModel extends ManagerResultsEntity {

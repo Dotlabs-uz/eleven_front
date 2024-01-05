@@ -35,11 +35,11 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
 
           if (data != null) {
             if (action == SelectedServicesAction.remove) {
-              print("Data remove $data");
+              debugPrint("Data remove $data");
               selectedServices.remove(data);
             }
             if (action == SelectedServicesAction.add) {
-              print("Data add $data");
+              debugPrint("Data add $data");
 
               selectedServices.add(data);
             }
@@ -61,7 +61,7 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
   void didUpdateWidget(covariant SelectServicesWidget oldWidget) {
     if(barberId != widget.barberId) {
       initialize();
-      print("Barber id $barberId");
+      debugPrint("Barber id $barberId");
 
     }
     super.didUpdateWidget(oldWidget);
@@ -94,7 +94,7 @@ class SelectServicesWidgetState extends State<SelectServicesWidget> {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-                    print("Selected services len ${selectedServices.length}");
+                    debugPrint("Selected services len ${selectedServices.length}");
                     BlocProvider.of<ShowSelectServicesCubit>(context)
                         .enable(selectedServices, barberId);
                   },

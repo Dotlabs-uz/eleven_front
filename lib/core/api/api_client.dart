@@ -34,7 +34,7 @@ class ApiClient {
       queryParameters: params,
     );
 
-    print("Pth $pth");
+    debugPrint("Pth $pth");
 
     final header = {
       'Authorization': sessionId,
@@ -163,7 +163,7 @@ class ApiClient {
 
     log("Post uri = $uri");
     log("Post header = $userHeader");
-    print("Post body =  ${jsonEncode(params)}");
+    debugPrint("Post body =  ${jsonEncode(params)}");
     final response = await _client.post(
       uri,
       body: jsonEncode(params),
@@ -224,7 +224,7 @@ class ApiClient {
     }
 
     final pth = getPath(path, null);
-    print("Path $pth");
+    debugPrint("Path $pth");
     final response = await _client.patch(
       pth,
       body: jsonEncode(params),

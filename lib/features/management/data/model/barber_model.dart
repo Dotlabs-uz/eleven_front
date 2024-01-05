@@ -5,9 +5,7 @@ import 'package:flutter/cupertino.dart';
 import '../../../../core/entities/field_entity.dart';
 import '../../../products/data/model/filial_model.dart';
 import '../../domain/entity/barber_entity.dart';
-import '../../domain/entity/weekly_schedule_results_entity.dart';
 import 'employee_schedule_model.dart';
-import 'weekly_schedule_item_model.dart';
 import 'weekly_schedule_results_model.dart';
 import 'not_working_hours_model.dart';
 

@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/entity/employee_schedule_entity.dart';
 import '../../../domain/usecases/employee_schedule.dart';
 import '../../widgets/employee_schedule_widget.dart';
 

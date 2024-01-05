@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:eleven_crm/features/management/data/model/weekly_schedule_results_model.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_results_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/manager_results_entity.dart';
@@ -11,7 +10,6 @@ import '../entity/customer_entity.dart';
 import '../entity/customer_results_entity.dart';
 import '../entity/employee_entity.dart';
 import '../entity/employee_results_entity.dart';
-import '../entity/employee_schedule_entity.dart';
 import '../entity/manager_entity.dart';
 
 abstract class ManagementRepository {

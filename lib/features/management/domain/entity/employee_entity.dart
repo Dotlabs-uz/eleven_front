@@ -154,8 +154,8 @@ class EmployeeEntity extends Equatable {
       role: row.cells["role"]?.value,
       avatar: row.cells["avatar"]?.value,
       isCurrentFilial: row.cells["isCurrentFilial"]?.value,
-      schedule: [],
-      notWorkingHours: [],
+      schedule: const [],
+      notWorkingHours: const [],
       weeklySchedule: row.cells["weeklySchedule"]?.value,
     );
   }
@@ -295,8 +295,8 @@ class EmployeeEntity extends Equatable {
       role: fields["role"]?.val,
       avatar: fields["avatar"]?.val,
       isCurrentFilial: fields["isCurrentFilial"]?.val,
-      schedule: [],
-      notWorkingHours: [],
+      schedule: const [],
+      notWorkingHours: const [],
       weeklySchedule: fields["weeklySchedule"]?.val,
     );
   }
@@ -312,8 +312,8 @@ class EmployeeEntity extends Equatable {
       phoneNumber: 99,
       isCurrentFilial: true,
       role: "",
-      schedule: [],
-      notWorkingHours: [],
+      schedule: const [],
+      notWorkingHours: const [],
       weeklySchedule: WeeklyScheduleResultsEntity.empty(),
     );
   }

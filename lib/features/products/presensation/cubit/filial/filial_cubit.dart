@@ -1,6 +1,7 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eleven_crm/features/products/domain/entity/filial_results_entity.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import '../../../domain/entity/filial_entity.dart';
 import '../../../domain/usecases/filial.dart';
@@ -23,7 +24,7 @@ class FilialCubit extends Cubit<FilialState> {
     data.fold(
       (l) => emit(FilialError(l.errorMessage)),
       (r) {
-        print("Loaded $r");
+        debugPrint("Loaded $r");
         emit(FilialLoaded(r));
       },
     );

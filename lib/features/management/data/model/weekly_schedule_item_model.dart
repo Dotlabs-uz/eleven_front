@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:eleven_crm/features/management/data/model/working_hours_for_barber_schedule_model.dart';
-import 'package:eleven_crm/features/management/data/model/not_working_hours_model.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 
 import '../../domain/entity/weekly_schedule_item_entity.dart';

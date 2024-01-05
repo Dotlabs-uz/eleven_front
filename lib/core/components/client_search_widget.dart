@@ -5,7 +5,6 @@ import 'package:eleven_crm/core/utils/field_formatters.dart';
 import 'package:eleven_crm/features/management/domain/entity/customer_entity.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ClientSearchWidget extends StatefulWidget {
@@ -143,7 +142,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                       builder:
                           (BuildContext context, SearchController controller) {
                         return SearchBar(
-                          trailing: [],
+                          trailing: const [],
                           controller: controller,
                           backgroundColor:
                               MaterialStateProperty.all(Colors.white),
@@ -171,7 +170,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           },
                           onChanged: (nameQuery) => controller.openView(),
                           leading: const SizedBox(),
-                          inputFormatters: [],
+                          inputFormatters: const [],
                         );
                       },
                       suggestionsBuilder:
@@ -184,10 +183,10 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
 
                         return BlocBuilder<CustomerCubit, CustomerState>(
                           builder: (context, state) {
-                            print("state $state");
+                            debugPrint("state $state");
                             if (state is CustomerLoaded) {
                               listCustomers = state.data;
-                              print("List customers ${listCustomers.length}");
+                              debugPrint("List customers ${listCustomers.length}");
 
                               _update();
 
@@ -230,7 +229,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                         );
                       },
                       listItemInMenu: listCustomers,
-                      inputFormatters: [],
+                      inputFormatters: const [],
                     ),
                   ),
                 ),
@@ -251,7 +250,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                       builder:
                           (BuildContext context, SearchController controller) {
                         return SearchBar(
-                          trailing: [],
+                          trailing: const [],
                           controller: controller,
                           hintText: "phone".tr(),
                           backgroundColor:
@@ -336,7 +335,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                           FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString().replaceAll("998", ""))
                                           );
                                       searchControllerName.text = item.fullName;
-                                      print(
+                                      debugPrint(
                                           "search controller name ${item.fullName}");
                                       widget.onPhoneChanged
                                           .call(item.phoneNumber);

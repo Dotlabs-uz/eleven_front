@@ -3,7 +3,6 @@ import 'package:eleven_crm/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/management/domain/entity/barber_entity.dart';
-import '../utils/assets.dart';
 
 class NotSelectedBarbersListWidget extends StatefulWidget {
   final List<BarberEntity> listBarbers;
@@ -71,7 +70,7 @@ class _NotSelectedBarbersListWidgetState
                 onTap: () {
                   listBarbers.remove(entity);
                   widget.onTap.call(entity.id);
-                  print("Hello galaxy");
+                  debugPrint("Hello galaxy");
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),

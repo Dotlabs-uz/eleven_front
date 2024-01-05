@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/date_time_helper.dart';
 import '../../../../core/utils/dialogs.dart';
 import '../../../../core/utils/string_helper.dart';
@@ -50,7 +49,7 @@ class _ProfileScheduleItemWidgetState extends State<ProfileScheduleItemWidget> {
     final from = widget.weeklyScheduleItemEntity.workingHours.first.dateFrom;
     final to = widget.weeklyScheduleItemEntity.workingHours.first.dateTo;
 
-    print(
+    debugPrint(
         "Widget  day :${widget.day}  ${widget.weeklyScheduleItemEntity.workingHours.length}  ${widget.weeklyScheduleItemEntity.workingHours} ${widget.weeklyScheduleItemEntity.workingHours.first.dateTo.minute}");
     selectedHourFrom = int.parse(from.hour.toString()).toString();
     selectedMinuteFrom =

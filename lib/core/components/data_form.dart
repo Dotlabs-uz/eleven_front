@@ -8,7 +8,6 @@ import 'package:eleven_crm/core/components/data_text_field_widget.dart';
 import 'package:eleven_crm/core/components/payment_type_field_widget.dart';
 import 'package:eleven_crm/core/components/responsive_builder.dart';
 import 'package:eleven_crm/core/components/role_for_managers_field_widget.dart';
-import 'package:eleven_crm/core/components/select_services_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';

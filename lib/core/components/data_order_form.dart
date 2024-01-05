@@ -2,14 +2,11 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/api/api_constants.dart';
 import 'package:eleven_crm/core/components/barber_field_widget.dart';
-import 'package:eleven_crm/core/components/client_field_widget.dart';
 import 'package:eleven_crm/core/components/date_time_field_widget.dart';
 import 'package:eleven_crm/core/components/select_services_widget.dart';
 import 'package:eleven_crm/core/components/success_flash_bar.dart';
 import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/core/utils/number_helper.dart';
-import 'package:eleven_crm/core/utils/string_helper.dart';
-import 'package:eleven_crm/features/main/presensation/cubit/select_services/select_services_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/show_client_orders_history/show_client_orders_history_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
@@ -21,15 +18,11 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../features/main/data/model/order_model.dart';
 import '../../features/main/domain/entity/order_entity.dart';
 import '../../features/main/presensation/widget/order_history_menu_widget.dart';
-import '../../features/main/presensation/widget/select_service_dialog_widget.dart';
-import '../../features/management/presentation/cubit/customer/customer_cubit.dart';
 import '../../features/products/domain/entity/service_product_entity.dart';
 import '../entities/field_entity.dart';
 import 'button_widget.dart';
 import 'client_search_widget.dart';
-import 'data_int_field_widget.dart';
 import 'data_text_field_widget.dart';
-import 'payment_type_field_widget.dart';
 
 class DataOrderForm extends StatefulWidget {
   final Map<String, FieldEntity> fields;
@@ -99,8 +92,8 @@ class DataOrderFormState extends State<DataOrderForm> {
     for (var e in selectedProducts) {
       localPrice += e.price;
       localDuration += e.duration;
-      print("Price ${e.price}");
-      print("Duration ${e.duration}");
+      debugPrint("Price ${e.price}");
+      debugPrint("Duration ${e.duration}");
     }
 
     price = localPrice;
@@ -295,7 +288,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                           fieldEntity: widget.fields["services"]!,
                           onChanged: (listData) {
                             selectedProducts = listData;
-                            print("Selected services $selectedProducts");
+                            debugPrint("Selected services $selectedProducts");
                             widget.fields['services']!.val = selectedProducts;
                             getPriceAndDuration(selectedProducts);
                           },
@@ -332,7 +325,7 @@ class DataOrderFormState extends State<DataOrderForm> {
                     ButtonWidget(
                       text: "save".tr(),
                       onPressed: () async {
-                        print(
+                        debugPrint(
                             "Client name $clientName client phone $clientPhone");
                         if (clientName.isEmpty &&
                             clientPhone.toString() == "998") {

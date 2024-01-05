@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/success_flash_bar.dart';
-import '../../domain/entity/working_hours_for_barber_schedule_entity.dart';
 
 class BarberProfileScheduleBody extends StatelessWidget {
   final BarberEntity barberEntity;
@@ -31,8 +30,8 @@ class BarberProfileScheduleBody extends StatelessWidget {
                 (index) {
               final WeeklyScheduleItemEntity element =
                   barberEntity.weeklySchedule.schedule[index];
-              
-              print("Index ${index}");
+
+              debugPrint("Index $index");
               return Column(
                 children: [
                   const SizedBox(height: 10),

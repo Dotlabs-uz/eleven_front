@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 import '../../../../core/utils/hive_box_keys_constants.dart';
@@ -23,7 +24,7 @@ class ManagementLocalDataSourceImpl extends ManagementLocalDataSource {
 
     final json = await customerBox.get(HiveBoxKeysConstants.customerResult);
 
-    print("Box json clients $json");
+    debugPrint("Box json clients $json");
     if (json == null) return null;
     final result = CustomerResultsModel.fromJson(Map<String,dynamic>.from(json));
 

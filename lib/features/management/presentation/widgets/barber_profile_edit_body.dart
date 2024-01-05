@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/entities/field_entity.dart';
-import 'package:eleven_crm/core/utils/string_helper.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +10,6 @@ import '../../../../core/components/data_text_field_widget.dart';
 import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/filial_field_widget.dart';
 import '../../../../core/components/success_flash_bar.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/constants.dart';
-import '../../../../core/utils/date_time_helper.dart';
 
 class BarberProfileEditBody extends StatefulWidget {
   final BarberEntity barberEntity;

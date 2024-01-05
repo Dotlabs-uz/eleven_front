@@ -6,7 +6,6 @@ import 'package:eleven_crm/features/management/data/model/weekly_schedule_result
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_results_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_results_entity.dart';
-import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/manager_entity.dart';
 import 'package:eleven_crm/features/management/domain/entity/manager_results_entity.dart';
 

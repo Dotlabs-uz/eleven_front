@@ -1,9 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/search_field.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/components/drawer_widget.dart';
 import '../../../../core/components/floating_menu_widget.dart';
@@ -16,7 +14,6 @@ import '../../../auth/presentation/cubit/login_cubit.dart';
 import '../../domain/entity/top_menu_entity.dart';
 import '../cubit/menu/menu_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
-import '../widget/my_icon_button.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key, required this.menus}) : super(key: key);
@@ -96,10 +93,10 @@ class _MainScreenState extends State<MainScreen> {
                   ],
                 ),
               );
-              return ContentWidget(
-                menus: widget.menus,
-                openDrawer: () {},
-              );
+              // return ContentWidget(
+              //   menus: widget.menus,
+              //   openDrawer: () {},
+              // );
             },
             tabletBuilder: (context, constraints) {
               return Container(
@@ -131,22 +128,22 @@ class _MainScreenState extends State<MainScreen> {
                   ],
                 ),
               );
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    flex: constraints.maxWidth > 800 ? 12 : 10,
-                    child: ContentWidget(
-                      menus: widget.menus,
-                      openDrawer: () {},
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    child: const VerticalDivider(),
-                  ),
-                ],
-              );
+              // return Row(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     Flexible(
+              //       flex: constraints.maxWidth > 800 ? 12 : 10,
+              //       child: ContentWidget(
+              //         menus: widget.menus,
+              //         openDrawer: () {},
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       height: MediaQuery.of(context).size.height,
+              //       child: const VerticalDivider(),
+              //     ),
+              //   ],
+              // );
             },
             desktopBuilder: (context, constraints) {
               return Container(
@@ -769,7 +766,6 @@ class IconButtonBar extends StatefulWidget  {
 
   final List<Widget> children;
 
-  @override
   Size get preferredSize =>
       Size(childSize.width * children.length, childSize.height);
 

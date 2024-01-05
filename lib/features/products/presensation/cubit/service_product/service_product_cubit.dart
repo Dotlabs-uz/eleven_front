@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:eleven_crm/features/products/domain/usecases/service_product.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entity/service_product_entity.dart';
 

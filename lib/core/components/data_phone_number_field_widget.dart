@@ -1,11 +1,9 @@
 import 'dart:developer';
 
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../entities/field_entity.dart';
 import '../utils/app_colors.dart';

@@ -1,17 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
-import 'package:eleven_crm/features/products/domain/entity/service_product_category_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/assets.dart';
-import '../../../../get_it/locator.dart';
-import '../../../products/domain/entity/service_product_entity.dart';
-import '../../../products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
-import '../cubit/select_services/select_services_cubit.dart';
-import '../cubit/show_select_services/show_select_services_cubit.dart';
 
 class OrderHistoryMenuWidget extends StatelessWidget {
   const OrderHistoryMenuWidget({
@@ -123,7 +114,7 @@ class _MessageOrderCardWidgetState extends State<_MessageOrderCardWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _topSelection(),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Text(
             "${widget.clientName} ${widget.clientPhone}",
             style: const TextStyle(

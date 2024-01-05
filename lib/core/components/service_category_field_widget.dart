@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../features/management/domain/usecases/customer.dart';
 import '../../get_it/locator.dart';
 import '../constants/drop_down_decoration.dart';
 import '../entities/field_entity.dart';
@@ -125,7 +125,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     ));
 
     data.fold(
-      (l) => print("error ${l.errorMessage}"),
+      (l) => debugPrint("error ${l.errorMessage}"),
       (r) => listData = r.results,
     );
 
@@ -162,7 +162,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
               serviceProductCategoryCubit.init();
             }
             if (state is ServiceProductCategorySaved) {
-              print("State is $state");
+              debugPrint("State is $state");
 
               if (mounted) {
                 Future.delayed(

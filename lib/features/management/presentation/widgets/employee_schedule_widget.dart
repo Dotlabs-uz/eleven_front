@@ -1,4 +1,5 @@
-import 'package:collection/collection.dart';
+// ignore_for_file: depend_on_referenced_packages, must_be_immutable
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/image_view_widget.dart';
 import 'package:eleven_crm/core/utils/animated_navigation.dart';
@@ -9,7 +10,7 @@ import 'package:eleven_crm/features/management/presentation/provider/cross_in_em
 import 'package:eleven_crm/features/management/presentation/screens/employee_profile_screen.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:collection/collection.dart';
 import 'package:provider/provider.dart';
 import 'package:region_detector/region_detector.dart';
 
@@ -107,7 +108,7 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
 Future.delayed(const Duration(seconds: 1), () {
 
   if(DateTime.now().day >= 14) {
-    scrollController.animateTo(300, duration: Duration(milliseconds: 200), curve: Curves.linear);
+    scrollController.animateTo(300, duration: const Duration(milliseconds: 200), curve: Curves.linear);
   }
 
 },);
@@ -198,13 +199,13 @@ Future.delayed(const Duration(seconds: 1), () {
                               editedFields.clear();
                             },
                             onHoverDrag: (field) {
-                              print("Drag field ${field.dateTime}");
+                              debugPrint("Drag field ${field.dateTime}");
 
                               if (multiSelectedFields.contains(field) ==
                                   false) {
                                 // multiSelectedFields.remove(field);
                                 multiSelectedFields.add(field);
-                                print("Fild field $field");
+                                debugPrint("Fild field $field");
                                 setState(() {});
                               }
                             },

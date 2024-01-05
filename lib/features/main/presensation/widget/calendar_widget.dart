@@ -66,11 +66,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   _voice() async {
     try {
       if (assetsAudioPlayer.isPlaying.value == true) return;
-      print("Voice ");
+      debugPrint("Voice ");
 
       assetsAudioPlayer.play();
     } catch (error) {
-      print("Error voice $error");
+      debugPrint("Error voice $error");
       //mp3 unreachable
     }
   }
@@ -137,7 +137,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           if (snapshot.hasData) {
             final listSnapData = List.from(snapshot.data);
 
-            print("$listSnapData Dates");
+            debugPrint("$listSnapData Dates");
             if (listSnapData.isNotEmpty) {
               final data = listSnapData
                   .map((e) => DateFormat("yyyy-MM-dd").parse(e))
@@ -288,12 +288,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           child: viewWaitText
               ? _WaitText(
                   onTimerEnd: () {
-                    print("wait text");
+                    debugPrint("wait text");
                     viewWaitText = false;
                     setState(() {});
                   },
                 )
-              : SizedBox(),
+              : const SizedBox(),
         ),
       ],
     );

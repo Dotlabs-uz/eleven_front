@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eleven_crm/features/management/domain/entity/manager_entity.dart';
 import 'package:eleven_crm/features/management/domain/usecases/manager.dart';
 import 'package:equatable/equatable.dart';

@@ -5,7 +5,6 @@ import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../domain/entity/employee_entity.dart';
 import '../../domain/entity/weekly_schedule_item_entity.dart';
-import '../../domain/entity/working_hours_for_barber_schedule_entity.dart';
 import '../cubit/employee/employee_cubit.dart';
 import 'profile_schedule_item_widget.dart';
 

@@ -6,7 +6,6 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/api/api_constants.dart';
 import 'package:eleven_crm/core/components/empty_widget.dart';
-import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/core/components/success_flash_bar.dart';
 import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/core/utils/string_helper.dart';
@@ -35,13 +34,11 @@ import '../../domain/entity/order_entity.dart';
 import '../../domain/entity/top_menu_entity.dart';
 import '../cubit/data_form/data_form_cubit.dart';
 import '../cubit/order/not_working_hours/not_working_hours_cubit.dart';
-import '../cubit/order/order_cubit.dart';
 import '../cubit/select_services/select_services_cubit.dart';
 import '../cubit/show_select_services/show_select_services_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../widget/my_icon_button.dart';
 import '../widget/time_table_widget/time_table_widget.dart';
-import 'package:collection/collection.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -91,7 +88,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     final authenticationBox = await Hive.openBox('authenticationBox');
     final token = await authenticationBox.get('session_id');
     webSocketService.connect(token);
-    print("Saved ");
+    debugPrint("Saved ");
 
     activeData = OrderEntity.empty();
 
@@ -168,7 +165,6 @@ class _ContentWidgetState extends State<_ContentWidget> {
       debugPrint(
           "Barber not working len after ${barberEntity.notWorkingHours.length} ${barberEntity.id}");
 
-      // ignore: use_build_context_synchronously
       BlocProvider.of<BarberCubit>(context).save(barber: barberEntity);
     }
   }
@@ -258,7 +254,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     final DateTime dateTime =
         DateTime.parse(DateFormat("yyyy-MM-dd").format(filteredDate));
 
-    print("Filter Date _removeBarberByFilter $filteredDate");
+    debugPrint("Filter Date _removeBarberByFilter $filteredDate");
 
     if (listBarbers.isEmpty) return;
 
@@ -268,7 +264,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
         if (dt.difference(dateTime).inDays == 0) {
 
-          print("date Time $dateTime");
+          debugPrint("date Time $dateTime");
           if (element.status == 0) {
             // print(
             //     "У барбера ${barber.firstName} ${barber.lastName} не рабочий день его нужно убрать. дата $dt");
@@ -341,7 +337,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 ),
                 BlocListener<NotWorkingHoursCubit, NotWorkingHoursState>(
                   listener: (context, state) {
-                    print("Not working hours state $state");
+                    debugPrint("Not working hours state $state");
                     if (state is NotWorkingHoursSaved) {
                       SuccessFlushBar("change_success".tr()).show(context);
                       Navigator.pushNamed(context, "/home");
@@ -360,7 +356,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                 BlocListener<BarberCubit, BarberState>(
                   listener: (context, state) {
                     if (state is BarberLoaded) {
-                      print("Barber loadded ");
+                      debugPrint("Barber loadded ");
                       if (mounted) {
                         Future.delayed(
                           Duration.zero,
@@ -397,7 +393,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                       webSocketService.refresh();
                       // webSocketService.addFilter({"orderStart": state.query});
                       filteredDate = DateTime.parse(state.query);
-                      print("Filter date init $filteredDate");
+                      debugPrint("Filter date init $filteredDate");
                       _removeBarberByFilter();
                     } else {
                       webSocketService.refresh();
@@ -495,7 +491,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                             _editOrder(activeData);
                                           },
                                           onOrderDoubleTap: (entity) {
-                                            print("Entity $entity");
+                                            debugPrint("Entity $entity");
                                             activeData = entity;
                                             _editOrder(activeData);
                                           },
@@ -526,7 +522,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                                           onOrderEndResizeEnd: (order) =>
                                               _updateOrder(order),
                                           onOrderDragEnd: (order) {
-                                            print("Order drag end");
+                                            debugPrint("Order drag end");
                                             _updateOrder(order,
                                                 withOrderEnd: true);
                                           },
@@ -722,7 +718,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
     barber.inTimeTable = hasInTimeTable;
 
-    print("in time table $hasInTimeTable");
+    debugPrint("in time table $hasInTimeTable");
     setState(() {});
 
     BlocProvider.of<BarberCubit>(context).save(barber: barber);

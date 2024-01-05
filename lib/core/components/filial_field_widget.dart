@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -122,7 +123,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     ));
 
     data.fold(
-      (l) => print("error ${l.errorMessage}"),
+      (l) => debugPrint("error ${l.errorMessage}"),
       (r) => listData = r.results,
     );
 

@@ -19,6 +19,7 @@ import '../../../main/domain/entity/top_menu_entity.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
 import '../../../main/presensation/cubit/top_menu_cubit/top_menu_cubit.dart';
 import '../../../main/presensation/widget/my_icon_button.dart';
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
 import '../../domain/entity/service_product_category_entity.dart';

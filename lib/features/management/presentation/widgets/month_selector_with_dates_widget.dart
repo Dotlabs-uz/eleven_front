@@ -31,77 +31,72 @@ class _MonthSelectorWithDatesWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // decoration: const BoxDecoration(
-      //   color: Colors.red,
-      // ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            // color: Colors.amber,
-            width:  (31 * 35),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          // color: Colors.amber,
+          width:  (31 * 35),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
 
 
 
 
-                IconButton(
-                  onPressed: () {
-                    if (currentMonth != 1) {
-                      currentMonth--;
-                    }
-                    widget.onMonthChanged.call(currentMonth);
-                    setState(() {});
-                  },
-                  icon:   const Icon(Icons.chevron_left_outlined, size: 28, color: Colors.lightBlue,),
-                  color: Colors.black,
-                ),
-                Text(
-                  StringHelper.monthName(month: currentMonth).tr(),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    if (currentMonth != 12) {
-                      currentMonth++;
-                    }
-                    widget.onMonthChanged.call(currentMonth);
-                    setState(() {});
-                  },
-                  icon:   const Icon(Icons.chevron_right_outlined, size: 28, color: Colors.lightBlue,),
-
-                  color: Colors.black,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              // scrollDirection: Axis.horizontal,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(
-                31,
-                (index) {
-                  var fixedIndex = index + 1;
-                  return _dateItemWidget(
-                   fixedIndex, currentMonth, DateTime.now().year);
+              IconButton(
+                onPressed: () {
+                  if (currentMonth != 1) {
+                    currentMonth--;
+                  }
+                  widget.onMonthChanged.call(currentMonth);
+                  setState(() {});
                 },
+                icon:   const Icon(Icons.chevron_left_outlined, size: 28, color: Colors.lightBlue,),
+                color: Colors.black,
               ),
+              Text(
+                StringHelper.monthName(month: currentMonth).tr(),
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  if (currentMonth != 12) {
+                    currentMonth++;
+                  }
+                  widget.onMonthChanged.call(currentMonth);
+                  setState(() {});
+                },
+                icon:   const Icon(Icons.chevron_right_outlined, size: 28, color: Colors.lightBlue,),
+
+                color: Colors.black,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            // scrollDirection: Axis.horizontal,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(
+              31,
+              (index) {
+                var fixedIndex = index + 1;
+                return _dateItemWidget(
+                 fixedIndex, currentMonth, DateTime.now().year);
+              },
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

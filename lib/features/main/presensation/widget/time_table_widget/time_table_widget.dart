@@ -1,16 +1,12 @@
-import 'dart:async';
 
 import 'package:eleven_crm/core/components/empty_widget.dart';
 import 'package:eleven_crm/core/components/image_view_widget.dart';
-import 'package:eleven_crm/core/components/loading_circle.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order/not_working_hours/not_working_hours_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/order_filter_cubit.dart';
 import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/past_time_card_widget.dart';
 import 'package:eleven_crm/features/main/presensation/widget/time_table_widget/time_table_ruler_widget.dart';
 import 'package:eleven_crm/features/management/domain/entity/barber_entity.dart';
 import 'package:badges/badges.dart' as badges;
-import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
-import 'package:eleven_crm/features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';

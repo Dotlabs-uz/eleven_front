@@ -1,7 +1,7 @@
 import '../../presensation/widget/my_icon_button.dart';
 
 class TopMenuEntity {
-  final dynamic? searchCubit;
+  final dynamic searchCubit;
   final List<IconButtonImpl> iconList;
   final bool enableSearch ;
 

@@ -123,12 +123,12 @@ class _ContentWidgetState extends State<_ContentWidget> {
     final List<String> listIds = List.from(widget.fieldEntity.val);
 
     final List<BarberEntity> listSelected = [];
-    print("List id's ${listIds}");
-    print("List data len ${listData.length}");
+    debugPrint("List id's $listIds");
+    debugPrint("List data len ${listData.length}");
 
     for (var element in listData) {
-      print("listIds.contains(element.id) ${listIds.contains(element.id)}");
-      print("Element id ${element.id}");
+      debugPrint("listIds.contains(element.id) ${listIds.contains(element.id)}");
+      debugPrint("Element id ${element.id}");
       if (listIds.contains(element.id)) {
         listSelected.add(element);
       }
@@ -137,7 +137,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     setState(() {
       listSelectedBarbers = listSelected;
 
-      print("List selected barbers $listSelectedBarbers");
+      debugPrint("List selected barbers $listSelectedBarbers");
     });
   }
 
@@ -149,7 +149,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     ));
 
     data.fold(
-      (l) => print("error ${l.errorMessage}"),
+      (l) => debugPrint("error ${l.errorMessage}"),
       (r) => listData = r.results,
     );
 
@@ -308,7 +308,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
                   widget.onChange?.call(listData);
                 } else {
-                  print("Data == null");
+                  debugPrint("Data == null");
                 }
               },
             );

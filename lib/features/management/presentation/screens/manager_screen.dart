@@ -15,7 +15,6 @@ import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/loading_circle.dart';
 import '../../../../core/components/page_selector_widget.dart';
 import '../../../../core/components/responsive_builder.dart';
-import '../../../../core/components/search_field.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/hive_box_keys_constants.dart';
 import '../../../../get_it/locator.dart';

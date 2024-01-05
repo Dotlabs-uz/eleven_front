@@ -1,9 +1,7 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:eleven_crm/features/management/data/model/customer_model.dart';
 
 import '../../../products/data/model/service_product_model.dart';
-import '../../domain/entity/order_entity.dart';
 import '../../domain/entity/order_for_client_history_entity.dart';
 
 class OrderForClientModel extends OrderForClientEntity {

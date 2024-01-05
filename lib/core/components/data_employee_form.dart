@@ -4,12 +4,10 @@ import 'package:eleven_crm/features/management/domain/entity/employee_entity.dar
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../features/management/domain/entity/barber_entity.dart';
 import '../../features/management/presentation/screens/employee_profile_screen.dart';
 import '../entities/field_entity.dart';
 import '../utils/animated_navigation.dart';
 import 'button_widget.dart';
-import 'data_int_field_widget.dart';
 import 'data_text_field_widget.dart';
 import 'role_field_widget.dart';
 

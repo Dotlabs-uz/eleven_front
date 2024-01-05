@@ -33,12 +33,12 @@ class FieldCardWidget extends StatefulWidget {
 class _FieldCardWidgetState extends State<FieldCardWidget> {
   bool isCardAllowedToDrag(
       OrderEntity order, List<NotWorkingHoursEntity> notWorkingHours) {
-    final orderStart = order.orderStart;
-    final orderEnd = order.orderEnd;
+    // final orderStart = order.orderStart;
+    // final orderEnd = order.orderEnd;
 
-    for (final notWorkingHour in notWorkingHours) {
-      final notWorkingStart = notWorkingHour.dateFrom;
-      final notWorkingEnd = notWorkingHour.dateTo;
+    // for (final notWorkingHour in notWorkingHours) {
+      // final notWorkingStart = notWorkingHour.dateFrom;
+      // final notWorkingEnd = notWorkingHour.dateTo;
 
       // if (orderStart.isAfter(notWorkingStart) &&
       //     orderEnd.isBefore(notWorkingEnd)) {
@@ -59,7 +59,7 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
       //     orderEnd.isAtSameMomentAs(notWorkingEnd)) {
       //   return false; // Время заказа точно соответствует началу или концу "Not Working Hours", не разрешаем перенос
       // }
-    }
+    // }
 
     return true; // Время заказа не пересекается с "Not Working Hours", разрешаем перенос
   }
@@ -94,7 +94,7 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
             return Expanded(
               child: DragTarget<DragOrder>(
                 onAcceptWithDetails: (details) {
-                  print(
+                  debugPrint(
                     "On Accept With details ${details.data}, Offset ${details.offset}",
                   );
                 },
@@ -111,7 +111,7 @@ class _FieldCardWidgetState extends State<FieldCardWidget> {
                         widget.onDragEnded.call(p0, false);
                       },
                     );
-                    print("Drag order ${localOrder.orderStart}");
+                    debugPrint("Drag order ${localOrder.orderStart}");
                     if (isCardAllowedToDrag(
                         localOrder, widget.notWorkingHours)) {
                       TimeTableHelper.onAccept(

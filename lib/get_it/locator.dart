@@ -1,4 +1,3 @@
-import 'package:eleven_crm/core/services/web_sockets_service.dart';
 import 'package:eleven_crm/features/auth/domain/usecases/change_password.dart';
 import 'package:eleven_crm/features/main/domain/usecases/current_user.dart';
 import 'package:eleven_crm/features/main/domain/usecases/not_working_hours.dart';

@@ -5,8 +5,6 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/entities/app_error.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entity/service_product_category_entity.dart';
-import '../entity/service_product_entity.dart';
-import '../entity/service_results_product_entity.dart';
 import '../repository/products_repository.dart';
 
 class GetServiceProductCategory extends UseCase<ServiceProductCategoryResultsEntity, GetServiceProductCategoryParams> {

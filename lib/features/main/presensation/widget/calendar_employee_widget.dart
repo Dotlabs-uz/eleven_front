@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/utils/color_helper.dart';
 import '../../../../core/utils/string_helper.dart';
 import '../../../management/domain/entity/employee_schedule_entity.dart';
-import '../../../management/presentation/widgets/employee_schedule_widget.dart';
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
 class CalendarEmployeeWidget extends StatefulWidget {

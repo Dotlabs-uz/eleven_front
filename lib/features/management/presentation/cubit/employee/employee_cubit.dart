@@ -1,5 +1,4 @@
 import 'package:eleven_crm/features/management/domain/entity/weekly_schedule_results_entity.dart';
-import 'package:eleven_crm/features/management/domain/usecases/employee_schedule.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

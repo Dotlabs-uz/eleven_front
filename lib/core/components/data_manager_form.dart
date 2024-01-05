@@ -3,14 +3,10 @@ import 'package:eleven_crm/core/components/role_for_managers_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../features/management/presentation/screens/barber_profile_screen.dart';
 import '../entities/field_entity.dart';
-import '../utils/animated_navigation.dart';
 import 'button_widget.dart';
-import 'data_int_field_widget.dart';
 import 'data_phone_number_field_widget.dart';
 import 'data_text_field_widget.dart';
-import 'role_field_widget.dart';
 
 class DataManagerForm extends StatefulWidget {
   final Map<String, FieldEntity> fields;

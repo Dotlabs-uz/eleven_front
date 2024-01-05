@@ -59,7 +59,7 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
       "employee": employeeId,
     };
 
-    print("map data $map");
+    debugPrint("map data $map");
     await _client.post(
       ApiConstants.notWorkingHours,
       params: map,
@@ -69,7 +69,7 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<bool> saveOrder(OrderModel model) async {
-    print("Order model id ${model.id}");
+    debugPrint("Order model id ${model.id}");
     if (model.id.isEmpty) {
       await _client.post(ApiConstants.orders, params: model.toJson());
     } else {
@@ -90,7 +90,7 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<bool> savePhoto(List<int> file, String userId, String role) async {
-    print("User id $userId  role $role ")
+    debugPrint("User id $userId  role $role ")
 ;    await _client.postPhoto(fileBytes: file, userId: userId, role: role);
 
     return true;

@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:eleven_crm/core/components/success_flash_bar.dart';
-import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -133,7 +131,7 @@ class DataBarberFormState extends State<DataBarberForm> {
                               userId: widget.fields['id']?.val,
                               role: "barbers");
 
-                          print("Save ");
+                          debugPrint("Save ");
                         }
                       : () async {
                           _pickImage();

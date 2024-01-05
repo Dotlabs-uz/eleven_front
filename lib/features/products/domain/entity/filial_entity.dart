@@ -1,11 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/entities/field_entity.dart';
-import 'service_product_entity.dart';
 
 class FilialEntity extends Equatable {
   final String id;

@@ -5,8 +5,6 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/entities/app_error.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entity/barber_entity.dart';
-import '../entity/customer_entity.dart';
-import '../entity/customer_results_entity.dart';
 import '../repositories/management_repository.dart';
 
 class GetBarber extends UseCase<BarberResultsEntity, GetBarberParams> {

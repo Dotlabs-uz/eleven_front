@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/application/application.dart';
 import 'package:eleven_crm/get_it/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:sweet_cookie/sweet_cookie.dart';
 
 
 String? token ;

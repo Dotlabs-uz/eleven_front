@@ -1,14 +1,7 @@
-import 'dart:developer';
 
 import 'package:hive/hive.dart';
 
-import '../../../../core/api/api_client.dart';
-import '../../../../core/api/api_constants.dart';
-import '../model/filial_results_model.dart';
 import '../model/service_product_caregory_results_model.dart';
-import '../model/service_product_category_model.dart';
-import '../model/service_product_model.dart';
-import '../model/service_results_product_model.dart';
 
 abstract class ProductsLocalDataSource {
   // ================ SERVICE PRODUCT CATEGORY CRUD ================ //

@@ -7,9 +7,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../features/management/domain/entity/barber_entity.dart';
 import '../../features/management/domain/entity/employee_entity.dart';
 import '../../get_it/locator.dart';
-import '../utils/responsive.dart';
 import '../utils/storage_service.dart';
-import 'data_mobile_view_widget.dart';
 import 'empty_widget.dart';
 
 class DataTableWithForm extends StatefulWidget {

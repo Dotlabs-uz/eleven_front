@@ -1,6 +1,5 @@
 
 
-import 'package:eleven_crm/features/products/domain/entity/service_product_category_entity.dart';
 import 'package:equatable/equatable.dart';
 
 import 'filial_entity.dart';

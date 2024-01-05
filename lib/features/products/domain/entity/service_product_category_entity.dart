@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/entities/field_entity.dart';
@@ -53,7 +52,7 @@ class ServiceProductCategoryEntity extends Equatable {
   factory ServiceProductCategoryEntity.fromRow(PlutoRow row) {
     return ServiceProductCategoryEntity(
       id: row.cells["id"]?.value,
-      name: row.cells["name"]?.value, services: [],
+      name: row.cells["name"]?.value, services: const [],
     );
   }
 
@@ -132,7 +131,7 @@ class ServiceProductCategoryEntity extends Equatable {
   factory ServiceProductCategoryEntity.fromFields() {
     return ServiceProductCategoryEntity(
       id: fields["id"]?.val,
-      name: fields["name"]?.val, services: [],
+      name: fields["name"]?.val, services: const [],
     );
   }
 

@@ -1,14 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/components/button_widget.dart';
 import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/logo_widget.dart';
-import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/components/text_form_field_widget.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/utils/route_constants.dart';

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-import 'barber_entity.dart';
 import 'manager_entity.dart';
 
 class ManagerResultsEntity  extends Equatable{

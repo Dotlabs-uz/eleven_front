@@ -15,7 +15,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../get_it/locator.dart';
 import '../../../main/presensation/cubit/avatar/avatar_cubit.dart';

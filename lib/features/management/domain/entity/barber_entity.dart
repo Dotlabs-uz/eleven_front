@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../../core/components/bool_for_table_widget.dart';
-import '../../../../core/components/datetime_for_table_widget.dart';
 import '../../../../core/entities/field_entity.dart';
 import '../../../products/domain/entity/filial_entity.dart';
 import 'employee_schedule_entity.dart';
@@ -208,8 +207,8 @@ class BarberEntity extends Equatable {
       weeklySchedule: row.cells["weeklySchedule"]?.value,
       // password: row.cells["password"]?.value,
       password: "",
-      login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: [],
-      schedule: [],
+      login: row.cells["login"]?.value, inTimeTable: false, notWorkingHours: const [],
+      schedule: const [],
     );
   }
 
@@ -341,8 +340,8 @@ class BarberEntity extends Equatable {
       isOnline: fields["isOnline"]?.val,
       isActive: fields["isActive"]?.val,
       createdAt: fields["createdAt"]?.val,
-      notWorkingHours: [],
-      schedule: [],
+      notWorkingHours: const [],
+      schedule: const [],
     );
   }
 
@@ -359,12 +358,12 @@ class BarberEntity extends Equatable {
       inTimeTable: false,
       isActive: true,
       isOnline: true,
-      notWorkingHours: [],
+      notWorkingHours: const [],
       avatar: '',
       createdAt: DateTime.now(),
       isCurrentFilial: true,
       weeklySchedule: WeeklyScheduleResultsEntity.empty(),
-      schedule: [],
+      schedule: const[],
     );
   }
 

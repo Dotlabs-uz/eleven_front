@@ -298,7 +298,7 @@ class ServiceProductEntity extends Equatable {
       duration: 0,
       category: ServiceProductCategoryEntity.empty(),
       sex: "men",
-      listBarberId: [],
+      listBarberId:  const [],
     );
   }
 

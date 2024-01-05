@@ -216,7 +216,7 @@ class ManagerEntity extends Equatable {
   }
 
   factory ManagerEntity.empty() {
-    return   ManagerEntity(
+    return   const ManagerEntity(
       id: "",
       firstName: "",
       lastName: "",

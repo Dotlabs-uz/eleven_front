@@ -268,7 +268,6 @@ class _PageSelectorWidgetState extends State<PageSelectorWidget> {
         if (!((selectedPage + 5) > widget.pageCount))
           IconButton(
             onPressed: () {
-              print("Press");
               setState(() {
                 if (selectedPage + 5 > widget.pageCount) {
                   selectedPage = widget.pageCount;

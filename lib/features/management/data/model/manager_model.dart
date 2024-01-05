@@ -1,5 +1,4 @@
 import '../../../../core/entities/field_entity.dart';
-import '../../../products/data/model/filial_model.dart';
 import '../../domain/entity/manager_entity.dart';
 
 class ManagerModel extends ManagerEntity {

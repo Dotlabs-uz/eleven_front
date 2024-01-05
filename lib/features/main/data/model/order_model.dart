@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:eleven_crm/features/management/data/model/customer_model.dart';
+
+import 'package:flutter/material.dart';
 
 import '../../../products/data/model/service_product_model.dart';
 import '../../domain/entity/order_entity.dart';
@@ -94,7 +95,7 @@ class OrderModel extends OrderEntity {
     data['status'] = status.index;
     data['description'] = description;
     // data['filial'] = "6541c7a7dc28ae268a77572f";
-    print("Services $services");
+    debugPrint("Services $services");
     data['services'] = services.map((e) => e.id).toList();
 
     return data;
