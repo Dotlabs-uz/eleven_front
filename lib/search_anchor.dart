@@ -32,7 +32,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'features/management/presentation/cubit/customer/customer_cubit.dart';
 
-const int _kOpenViewMilliseconds = 600;
+const int _kOpenViewMilliseconds = 500;
 const Duration _kOpenViewDuration =
 Duration(milliseconds: _kOpenViewMilliseconds);
 const Duration _kAnchorFadeDuration = Duration(milliseconds: 150);
@@ -633,13 +633,21 @@ class _ViewContentState extends State<_ViewContent> {
   late final SearchController _controller;
   Widget result = const SizedBox();
   final FocusNode _focusNode = FocusNode();
-  final double maxMenuHeight = 600;
+  final double maxMenuHeight = 680;
   final double minMenuHeight = 320;
 
   @override
   void initState() {
     _viewRect =   Rect.fromLTRB(
         widget.viewRect.left, widget.viewRect.top, widget.viewRect.right, minMenuHeight);
+    if(mounted) {
+      Future.delayed(Duration.zero, () {
+        setState(() {
+
+        });
+      },);
+
+    }
 
     _controller = widget.searchController;
     if (!_focusNode.hasFocus) {
@@ -647,24 +655,6 @@ class _ViewContentState extends State<_ViewContent> {
     }
     super.initState();
 
-    // _controller.addListener(() {
-    //   if(_controller.text.isEmpty || _controller.text == "998") {
-    //     if (mounted) {
-    //       Future.delayed(
-    //         Duration.zero,
-    //             () {
-    //           setState(() {
-    //             _viewRect = Rect.fromLTRB(
-    //                 _viewRect.left, _viewRect.top, _viewRect.right, _viewRect.bottom);
-    //
-    //           });
-    //         },
-    //       );
-    //     }
-    //   }
-    // });
-
-    // log("View rect ${_viewRect.height } left ${_viewRect.left} right ${ _viewRect.top}");
     BlocProvider.of<CustomerCubit>(context).stream.listen((state) {
       if (state is CustomerLoaded) {
         final listItems = state.data;
@@ -686,6 +676,16 @@ class _ViewContentState extends State<_ViewContent> {
               });
             },
           );
+        }
+      }
+      if(state is InitialSize) {
+        if(mounted) {
+          Future.delayed(Duration.zero,() {
+            setState(() {
+              _viewRect =   Rect.fromLTRB(
+                  widget.viewRect.left, widget.viewRect.top, widget.viewRect.right, minMenuHeight);
+            });
+          },);
         }
       }
     });

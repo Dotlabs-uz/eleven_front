@@ -223,6 +223,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                                 .maskText(item.phoneNumber
                                                     .toString());
 
+                                        BlocProvider.of<CustomerCubit>(context).initSize();
+
                                         widget.onNameChanged
                                             .call(item.fullName);
 
@@ -282,6 +284,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                             controller.openView();
                             controller.selection = TextSelection.collapsed(
                                 offset: controller.text.length);
+                            BlocProvider.of<CustomerCubit>(context).initSize();
 
                             BlocProvider.of<CustomerCubit>(context)
                                 .load("&phone=${controller.text.replaceAll("(", "").replaceAll(")", "").replaceAll("-", "").replaceAll("+", "").replaceAll(" ", "")}");
