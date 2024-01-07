@@ -20,9 +20,9 @@ class CustomerCubit extends Cubit<CustomerState> {
     required this.deleteData,
   }) : super(CustomerInitial());
 
-  void init() {
-    emit(CustomerInitial());
-  }
+  void init() => emit(CustomerInitial());
+
+  void initSize() => emit(InitialSize());
 
   void save({required CustomerEntity customer}) async {
     emit(CustomerLoading());
@@ -63,7 +63,7 @@ class CustomerCubit extends Cubit<CustomerState> {
     searchText = searchText;
     final data = await getData(CustomerParams(
       page: page,
-      searchText: searchText.replaceAll("(", "").replaceAll(")", "").replaceAll("-", "").replaceAll("+", "").replaceAll(" ", ""),
+      searchText: searchText,
       ordering: ordering,
       endDate: endDate != null ? DateTimeHelper.formatToFilter(endDate) : null,
       startDate:

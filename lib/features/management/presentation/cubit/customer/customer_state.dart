@@ -10,6 +10,7 @@ abstract class CustomerState extends Equatable {
 class CustomerInitial extends CustomerState {}
 
 class CustomerLoading extends CustomerState {}
+class InitialSize extends CustomerState {}
 
 class CustomerLoaded extends CustomerState {
   final List<CustomerEntity> data;
