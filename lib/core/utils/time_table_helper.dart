@@ -19,6 +19,9 @@ class TimeTableHelper {
   static double getPastTimeHeight(
       DateTime from, DateTime to, DateTime? filter) {
 
+    final now = DateTime.now();
+
+
     if (filter != null) {
 
       final fromFormatted  = DateTime.parse(DateFormat('yyyy-MM-dd').format(from));
@@ -34,6 +37,10 @@ class TimeTableHelper {
         return Constants.timeTableItemHeight * (Constants.endWork.toInt()  - Constants.startWork.toInt());
       }
 
+    }
+
+    if(now.hour  < Constants.startWork ) {
+      return 0;
     }
 
     final differenceInMinutes =
