@@ -6,6 +6,7 @@ import 'package:eleven_crm/features/management/domain/entity/customer_entity.dar
 import 'package:eleven_crm/features/management/presentation/cubit/customer/customer_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eleven_crm/search_anchor.dart' as search;
 
 class ClientSearchWidget extends StatefulWidget {
   final Function(String) onNameChanged;
@@ -33,8 +34,10 @@ class ClientSearchWidget extends StatefulWidget {
 
 class _ClientSearchWidgetState extends State<ClientSearchWidget> {
   List<CustomerEntity> listCustomers = [];
-  final SearchController searchControllerName = SearchController();
-  final SearchController searchControllerPhone = SearchController();
+  final search.SearchController searchControllerName =
+      search.SearchController();
+  final search.SearchController searchControllerPhone =
+      search.SearchController();
   final _debouncer = DebouncerService(milliseconds: 400);
 
   @override
@@ -66,14 +69,16 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
             if (listCustomers.length == 1) {
               final element = listCustomers.first;
 
-              if(element.fullName == searchControllerName.text || element.phoneNumber.toString() == FieldFormatters.phoneMaskFormatter.unmaskText(searchControllerPhone.text)) {
+              if (element.fullName == searchControllerName.text ||
+                  element.phoneNumber.toString() ==
+                      FieldFormatters.phoneMaskFormatter
+                          .unmaskText(searchControllerPhone.text)) {
                 widget.onNameChanged.call(element.fullName);
-                widget.onPhoneChanged.call(element.phoneNumber);
+                widget.onPhoneChanged.call(int.parse(element.phoneNumber.toString().replaceAll("998", "")));
                 searchControllerName.text = element.fullName;
-                searchControllerPhone.text = FieldFormatters.phoneMaskFormatter.maskText(element.phoneNumber.toString());
+                searchControllerPhone.text = FieldFormatters.phoneMaskFormatter
+                    .maskText(element.phoneNumber.toString().replaceAll("998", ""));
               }
-
-
             }
           });
         },
@@ -129,7 +134,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                 Expanded(
                   child: SizedBox(
                     height: 40,
-                    child: SearchAnchor(
+                    child: search.SearchAnchor(
                       searchController: searchControllerName,
                       viewShape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
@@ -139,8 +144,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                         minWidth: 130,
                         maxHeight: 400,
                       ),
-                      builder:
-                          (BuildContext context, SearchController controller) {
+                      builder: (BuildContext context,
+                          search.SearchController controller) {
                         return SearchBar(
                           trailing: const [],
                           controller: controller,
@@ -163,7 +168,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           ),
                           onTap: () {
                             controller.openView();
-                            controller.selection = TextSelection.collapsed(offset: controller.text.length);
+                            controller.selection = TextSelection.collapsed(
+                                offset: controller.text.length);
 
                             BlocProvider.of<CustomerCubit>(context)
                                 .load(controller.text);
@@ -173,9 +179,9 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           inputFormatters: const [],
                         );
                       },
-                      suggestionsBuilder:
-                          (BuildContext context, SearchController controller) {
-                          widget.onNameChanged.call(controller.text);
+                      suggestionsBuilder: (BuildContext context,
+                          search.SearchController controller) {
+                        widget.onNameChanged.call(controller.text);
                         _debouncer(() {
                           BlocProvider.of<CustomerCubit>(context)
                               .load(controller.text);
@@ -186,7 +192,8 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                             debugPrint("state $state");
                             if (state is CustomerLoaded) {
                               listCustomers = state.data;
-                              debugPrint("List customers ${listCustomers.length}");
+                              debugPrint(
+                                  "List customers ${listCustomers.length}");
 
                               _update();
 
@@ -207,19 +214,21 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                                     ),
                                   ),
                                   onTap: () {
-                                    if(mounted) {
+                                    if (mounted) {
                                       setState(() {
-                                      controller.closeView(item.fullName);
-                                      searchControllerPhone.text =
-                                          FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString());
+                                        controller.closeView(item.fullName);
+                                        searchControllerPhone.text =
+                                            FieldFormatters
+                                                .phoneMaskFormatter
+                                                .maskText(item.phoneNumber
+                                                    .toString());
 
+                                        widget.onNameChanged
+                                            .call(item.fullName);
 
-                                      widget.onNameChanged.call(item.fullName);
-
-
-                                      widget.onPhoneChanged
-                                          .call(item.phoneNumber);
-                                    });
+                                        widget.onPhoneChanged
+                                            .call(item.phoneNumber);
+                                      });
                                     }
                                   },
                                 );
@@ -228,8 +237,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           },
                         );
                       },
-                      listItemInMenu: listCustomers,
-                      inputFormatters: const [],
+                      inputFormatters: [],
                     ),
                   ),
                 ),
@@ -237,7 +245,7 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                 Expanded(
                   child: SizedBox(
                     height: 40,
-                    child: SearchAnchor(
+                    child: search.SearchAnchor(
                       searchController: searchControllerPhone,
                       viewShape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
@@ -247,8 +255,9 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                         minWidth: 130,
                         maxHeight: 400,
                       ),
-                      builder:
-                          (BuildContext context, SearchController controller) {
+                      // inputFormatters: [FieldFormatters.phoneMaskFormatter],
+                      builder: (BuildContext context,
+                          search.SearchController controller) {
                         return SearchBar(
                           trailing: const [],
                           controller: controller,
@@ -271,35 +280,32 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           ),
                           onTap: () {
                             controller.openView();
-                            controller.selection = TextSelection.collapsed(offset: controller.text.length);
+                            controller.selection = TextSelection.collapsed(
+                                offset: controller.text.length);
 
                             BlocProvider.of<CustomerCubit>(context)
-                                .load("&phone=${controller.text}");
+                                .load("&phone=${controller.text.replaceAll("(", "").replaceAll(")", "").replaceAll("-", "").replaceAll("+", "").replaceAll(" ", "")}");
                           },
                           onChanged: (phoneQuery) => controller.openView(),
                           leading: const SizedBox(),
                           inputFormatters: [FieldFormatters.phoneMaskFormatter],
                         );
                       },
-                      suggestionsBuilder:
-                          (BuildContext context, SearchController controller) {
-
-                        if(controller.text.isEmpty)  {
+                      suggestionsBuilder: (BuildContext context,
+                          search.SearchController controller) {
+                        if (controller.text.isEmpty) {
                           controller.text = "998";
-
                         }
 
-                        widget.onPhoneChanged
-                            .call(int.parse(FieldFormatters.phoneMaskFormatter.unmaskText(controller.text)));
-
+                        widget.onPhoneChanged.call(int.parse(FieldFormatters
+                            .phoneMaskFormatter
+                            .unmaskText(controller.text)));
 
                         _debouncer(() {
-
-
                           // controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.value.text.length);
 
                           BlocProvider.of<CustomerCubit>(context)
-                              .load("&phone=${controller.text}");
+                              .load("&phone=${controller.text.replaceAll("(", "").replaceAll(")", "").replaceAll("-", "").replaceAll("+", "").replaceAll(" ", "")}");
                         });
 
                         return BlocBuilder<CustomerCubit, CustomerState>(
@@ -312,36 +318,39 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                               BlocProvider.of<CustomerCubit>(context).init();
                             }
                             return ListView(
-                              shrinkWrap: true,
                               children: List<ListTile>.generate(
                                   listCustomers.length, (int index) {
                                 final CustomerEntity item =
                                     listCustomers[index];
 
                                 return ListTile(
-                                  title: FittedBox(
-                                    child: Text(
-                                      FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString().replaceAll("998", "")),
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                      ),
+                                  title: Text(
+                                    FieldFormatters.phoneMaskFormatter.maskText(
+                                        item.phoneNumber
+                                            .toString()
+                                            .replaceAll("998", "")),
+                                    style: const TextStyle(
+                                      fontSize: 12,
                                     ),
                                   ),
                                   onTap: () {
-                                    if(mounted) {
+                                    if (mounted) {
                                       setState(() {
-                                      controller.closeView(
+                                        controller.closeView(FieldFormatters
+                                            .phoneMaskFormatter
+                                            .maskText(item.phoneNumber
+                                                .toString()
+                                                .replaceAll("998", "")));
+                                        searchControllerName.text =
+                                            item.fullName;
+                                        debugPrint(
+                                            "search controller name ${item.fullName}");
+                                        widget.onPhoneChanged
+                                            .call(item.phoneNumber);
 
-                                          FieldFormatters.phoneMaskFormatter.maskText(item.phoneNumber.toString().replaceAll("998", ""))
-                                          );
-                                      searchControllerName.text = item.fullName;
-                                      debugPrint(
-                                          "search controller name ${item.fullName}");
-                                      widget.onPhoneChanged
-                                          .call(item.phoneNumber);
-
-                                      widget.onNameChanged.call(item.fullName);
-                                    });
+                                        widget.onNameChanged
+                                            .call(item.fullName);
+                                      });
                                     }
                                   },
                                 );
@@ -350,7 +359,6 @@ class _ClientSearchWidgetState extends State<ClientSearchWidget> {
                           },
                         );
                       },
-                      listItemInMenu: listCustomers,
                       inputFormatters: [FieldFormatters.phoneMaskFormatter],
                     ),
                   ),
