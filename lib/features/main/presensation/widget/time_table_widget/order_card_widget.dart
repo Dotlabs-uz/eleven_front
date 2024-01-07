@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/utils/field_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -154,7 +155,7 @@ class _OrderCardWidgetState extends State<OrderCardWidget> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 3, vertical: 3),
                                 child: Text(
-                                  "${widget.order.clientName} +${widget.order.clientPhone}",
+                                  "${widget.order.clientName} ${FieldFormatters.phoneMaskFormatter.maskText(widget.order.clientPhone.toString())}",
                                   style: GoogleFonts.nunito(
                                     color: Colors.black,
                                     fontSize: 10,
