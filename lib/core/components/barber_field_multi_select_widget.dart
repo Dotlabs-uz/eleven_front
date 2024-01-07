@@ -13,6 +13,7 @@ import '../../get_it/locator.dart';
 import '../constants/drop_down_decoration.dart';
 import '../entities/field_entity.dart';
 import '../utils/assets.dart';
+import 'image_view_widget.dart';
 
 class BarberFieldMultiSelectWidget extends StatefulWidget {
   const BarberFieldMultiSelectWidget({
@@ -145,7 +146,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
     List<BarberEntity> listData = [];
     final data = await getBarbers.call(GetBarberParams(
       searchText: filter,
-      page: 1, limit: 20,
+      page: 1, limit: 100,
     ));
 
     data.fold(
@@ -184,6 +185,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
               items: listData,
               enabled: enabled,
 
+
               asyncItems: (text) async {
                 if (text.isNotEmpty) {
                   return _getData(text);
@@ -192,6 +194,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
               },
               itemAsString: (BarberEntity c) => "${c.firstName} ${c.lastName}",
               selectedItems: listSelectedBarbers,
+
 
               popupProps: PopupPropsMultiSelection.menu(
 
@@ -206,27 +209,8 @@ class _ContentWidgetState extends State<_ContentWidget> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          height: 34,
-                          width: 34,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey,
-                            image: item.avatar.isEmpty
-                                ? const DecorationImage(
-                                    image: AssetImage(
-                                      Assets.tAvatarPlaceHolder,
-                                    ),
-                                    fit: BoxFit.cover)
-                                : DecorationImage(
-                                    image: NetworkImage(
-                                      item.avatar,
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
-                        ),
+                        ImageViewWidget(avatar: item.avatar, size: 34),
+
                         const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,6 +237,7 @@ class _ContentWidgetState extends State<_ContentWidget> {
                   );
                 },
                 showSearchBox: true,
+
                 searchFieldProps: TextFieldProps(
                   controller: controllerSearch,
                   decoration: InputDecoration(

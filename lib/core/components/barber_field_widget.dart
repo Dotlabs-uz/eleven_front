@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/components/image_view_widget.dart';
 import 'package:eleven_crm/features/management/domain/usecases/barber.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:flutter/material.dart';
@@ -204,27 +205,7 @@ listData.removeWhere((element) => element.isCurrentFilial == false);
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          height: 34,
-                          width: 34,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey,
-                            image: item.avatar.isEmpty
-                                ? const DecorationImage(
-                                    image: AssetImage(
-                                      Assets.tAvatarPlaceHolder,
-                                    ),
-                                    fit: BoxFit.cover)
-                                : DecorationImage(
-                                    image: NetworkImage(
-                                      item.avatar,
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
-                        ),
+                       ImageViewWidget(avatar: item.avatar, size: 34),
                         const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,6 +233,7 @@ listData.removeWhere((element) => element.isCurrentFilial == false);
                 },
 
                 showSearchBox: true,
+
 
                 searchFieldProps: TextFieldProps(
                   controller: controllerSearch,
