@@ -5,7 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 
+// UTILS
+
+final now = DateTime.now();
+
 String? token ;
+
+
 
 Future getSessionToken() async {
   final authenticationBox = await Hive.openBox('authenticationBox');

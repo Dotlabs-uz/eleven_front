@@ -19,8 +19,8 @@ class ColorHelper {
     if(status ==  EmployeeScheduleStatus.work.index) {
       return const Color(0xff99C499);
 
-    }else if(status ==  EmployeeScheduleStatus.notWork.index) {
-      return const Color(0xffDFBBBB);
+    }  if(status ==  EmployeeScheduleStatus.notWork.index) {
+      return   Colors.white;
     }
 
     return Colors.transparent;

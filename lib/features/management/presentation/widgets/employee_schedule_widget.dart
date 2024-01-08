@@ -8,6 +8,7 @@ import 'package:eleven_crm/core/utils/dialogs.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_schedule_entity.dart';
 import 'package:eleven_crm/features/management/presentation/provider/cross_in_employee_schedule_provider.dart';
 import 'package:eleven_crm/features/management/presentation/screens/employee_profile_screen.dart';
+import 'package:eleven_crm/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
@@ -18,7 +19,6 @@ import '../../../../core/utils/color_helper.dart';
 import '../../../../core/utils/string_helper.dart';
 import '../../domain/entity/employee_entity.dart';
 import 'month_selector_with_dates_widget.dart';
-
 
 class FieldSchedule extends Equatable {
   final DateTime? dateTime;
@@ -97,7 +97,8 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
         widget.onMultiSelectSave?.call(dataList);
 
         multiSelectedFields.clear();
-      }, schedule: [],
+      },
+      schedule: [],
     );
   }
 
@@ -105,13 +106,16 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
   void initState() {
     scrollController = ScrollController();
 
-Future.delayed(const Duration(seconds: 1), () {
-
-  if(DateTime.now().day >= 14) {
-    scrollController.animateTo(300, duration: const Duration(milliseconds: 200), curve: Curves.linear);
-  }
-
-},);
+    Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        if (DateTime.now().day >= 14) {
+          scrollController.animateTo(300,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.linear);
+        }
+      },
+    );
 
     multiSelectedFields.clear();
     super.initState();
@@ -124,7 +128,8 @@ Future.delayed(const Duration(seconds: 1), () {
     editedFields.clear();
     scrollController.dispose();
     multiSelectedFields.clear();
-    Provider.of<CrossInEmployeeScheduleProvider>(context, listen: false).clear();
+    Provider.of<CrossInEmployeeScheduleProvider>(context, listen: false)
+        .clear();
     super.dispose();
   }
 
@@ -178,40 +183,42 @@ Future.delayed(const Duration(seconds: 1), () {
                         ...List.generate(widget.listEmployee.length, (index) {
                           final e = widget.listEmployee[index];
 
-                          return e.isCurrentFilial  == false?const SizedBox() : _EmployeeScheduleTableWidget(
-                            employeeEntity: e,
-                            currentMonth: currentMonth,
-                            currentYear: currentYear,
-                            onFieldEdit: (
-                              int day,
-                              int month,
-                              int year,
-                              int status,
-                              String employee,
-                              Map<String, dynamic> workingHours,
-                            ) {
-                              final dateTime = DateTime(year, month, day);
-                              final entity = FieldSchedule(
-                                  dateTime, employee, status, workingHours);
+                          return e.isCurrentFilial == false
+                              ? const SizedBox()
+                              : _EmployeeScheduleTableWidget(
+                                  employeeEntity: e,
+                                  currentMonth: currentMonth,
+                                  currentYear: currentYear,
+                                  onFieldEdit: (
+                                    int day,
+                                    int month,
+                                    int year,
+                                    int status,
+                                    String employee,
+                                    Map<String, dynamic> workingHours,
+                                  ) {
+                                    final dateTime = DateTime(year, month, day);
+                                    final entity = FieldSchedule(dateTime,
+                                        employee, status, workingHours);
 
-                              editedFields.add(entity);
-                              widget.onSave?.call(editedFields);
-                              editedFields.clear();
-                            },
-                            onHoverDrag: (field) {
-                              debugPrint("Drag field ${field.dateTime}");
+                                    editedFields.add(entity);
+                                    widget.onSave?.call(editedFields);
+                                    editedFields.clear();
+                                  },
+                                  onHoverDrag: (field) {
+                                    debugPrint("Drag field ${field.dateTime}");
 
-                              if (multiSelectedFields.contains(field) ==
-                                  false) {
-                                // multiSelectedFields.remove(field);
-                                multiSelectedFields.add(field);
-                                debugPrint("Fild field $field");
-                                setState(() {});
-                              }
-                            },
-                            listSelectedSchedule: multiSelectedFields,
-                            rowIndex: index,
-                          );
+                                    if (multiSelectedFields.contains(field) ==
+                                        false) {
+                                      // multiSelectedFields.remove(field);
+                                      multiSelectedFields.add(field);
+                                      debugPrint("Fild field $field");
+                                      setState(() {});
+                                    }
+                                  },
+                                  listSelectedSchedule: multiSelectedFields,
+                                  rowIndex: index,
+                                );
                         }),
                       ],
                     ),
@@ -288,7 +295,6 @@ class _EmployeeScheduleTableWidget extends StatefulWidget {
 class _EmployeeScheduleTableWidgetState
     extends State<_EmployeeScheduleTableWidget> {
   Offset? startDragPosition;
-
   @override
   void initState() {
     startDragPosition = null;
@@ -301,9 +307,13 @@ class _EmployeeScheduleTableWidgetState
       children: [
         GestureDetector(
           onTap: () {
-            AnimatedNavigation.push(context: context, page: EmployeeProfileScreen(employeeEntity: widget.employeeEntity, onBack: () {
-
-            },),);
+            AnimatedNavigation.push(
+              context: context,
+              page: EmployeeProfileScreen(
+                employeeEntity: widget.employeeEntity,
+                onBack: () {},
+              ),
+            );
           },
           child: SizedBox(
             height: 35,
@@ -312,6 +322,156 @@ class _EmployeeScheduleTableWidgetState
           ),
         ),
         // Text(widget.listSelectedSchedule.length.toString()),
+        now.month == widget.currentMonth ? _defaultView() : _whenMonthChanged(),
+      ],
+    );
+  }
+
+  _defaultView() {
+    return Row(
+      children: [
+        ...List.generate(
+          StringHelper.getDaysByMonthIndex(month: widget.currentMonth) -
+              now.day  + 1,
+          (index) {
+            final day = index  + 1;
+            final year = DateTime.now().year;
+            final month = widget.currentMonth;
+            final dateTimeNow = DateTime(year, month, day);
+
+            final EmployeeScheduleEntity? entity =
+                widget.employeeEntity.schedule.firstWhereOrNull((element) {
+              final elementDt = DateTime.parse(element.date);
+
+              return elementDt.day == day && elementDt.month == month && elementDt.year == year;
+            });
+            // final EmployeeScheduleEntity? entity =
+            //     widget.employeeEntity.schedule.firstWhereOrNull((element) {
+            //   final startDateParsing = DateTime.parse(element.date);
+            //
+            //   final startDate = DateTime(
+            //     startDateParsing.year,
+            //     startDateParsing.month,
+            //     startDateParsing.day,
+            //   );
+            //
+            //   return startDate.difference(dateTimeNow).inDays == 0 &&
+            //       startDate.month == widget.currentMonth;
+            //   // return startDate.month == startDateParsing.month;
+            // });
+
+            final startDateParsing = entity == null
+                ? null
+                : DateTime(
+                    DateTime.parse(entity.date).year,
+                    DateTime.parse(entity.date).month,
+                    DateTime.parse(entity.date).day,
+                  );
+
+            final fieldSchedule = FieldSchedule(
+                startDateParsing,
+                widget.employeeEntity.id,
+                entity?.status ?? 1,
+                entity?.workingHours ??
+                    {
+                      "from": "${Constants.startWork.toInt()}:00",
+                      "to": "${Constants.endWork.toInt()}:00"
+                    });
+
+            return RegionDetector(
+              onFocused: () {
+                if (fieldSchedule.dateTime != null) {
+                  if (fieldSchedule.dateTime!.isBefore(dateTimeNow)) return;
+                  widget.onHoverDrag.call(fieldSchedule);
+                }
+              },
+              child: _EmployeeScheduleFieldWidget(
+                key: Key((day + widget.currentMonth + year).toString()),
+                onFieldEdit: widget.onFieldEdit,
+                fieldSchedule: fieldSchedule,
+                row: widget.rowIndex,
+                onHoverDrag: widget.onHoverDrag,
+                currentMonth: widget.currentMonth,
+                isFieldSElected:
+                    widget.listSelectedSchedule.contains(fieldSchedule),
+                dateTime: DateTime(year, widget.currentMonth, day),
+                schedule: widget.employeeEntity.schedule,
+              ),
+            );
+          },
+        ),
+        SizedBox(
+          width: Constants.sizeOfMonthsSpaceInEmployeeSchedule,
+        ),
+        ...List.generate(
+          now.day,
+          (index) {
+            final day = index + 1;
+            final year = DateTime.now().year;
+            final month = widget.currentMonth + 1;
+            final dateTimeNow = DateTime(year, month, day);
+
+            final EmployeeScheduleEntity? entity =
+                widget.employeeEntity.schedule.firstWhereOrNull((element) {
+              final startDateParsing = DateTime.parse(element.date);
+
+              final startDate = DateTime(
+                startDateParsing.year,
+                startDateParsing.month,
+                startDateParsing.day,
+              );
+
+              return startDate.difference(dateTimeNow).inDays == 0 &&
+                  startDate.month == month;
+              // return startDate.month == startDateParsing.month;
+            });
+
+            final startDateParsing = entity == null
+                ? null
+                : DateTime(
+                    DateTime.parse(entity.date).year,
+                    DateTime.parse(entity.date).month,
+                    DateTime.parse(entity.date).day);
+
+            final fieldSchedule = FieldSchedule(
+                startDateParsing,
+                widget.employeeEntity.id,
+                entity?.status ?? 1,
+                entity?.workingHours ??
+                    {
+                      "from": "${Constants.startWork.toInt()}:00",
+                      "to": "${Constants.endWork.toInt()}"
+                    });
+
+            return RegionDetector(
+              onFocused: () {
+                if (fieldSchedule.dateTime != null) {
+                  if (fieldSchedule.dateTime!.isBefore(dateTimeNow)) return;
+                  widget.onHoverDrag.call(fieldSchedule);
+                }
+              },
+              child: _EmployeeScheduleFieldWidget(
+                key: Key((day + month + year).toString()),
+                onFieldEdit: widget.onFieldEdit,
+                fieldSchedule: fieldSchedule,
+                row: widget.rowIndex,
+                onHoverDrag: widget.onHoverDrag,
+                currentMonth: month,
+                isFieldSElected:
+                    widget.listSelectedSchedule.contains(fieldSchedule),
+                dateTime: DateTime(year, month, day),
+                schedule: widget.employeeEntity.schedule,
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  _whenMonthChanged() {
+    return Row(
+      children: [
         ...List.generate(
           StringHelper.getDaysByMonthIndex(month: widget.currentMonth),
           (index) {
@@ -344,8 +504,12 @@ class _EmployeeScheduleTableWidgetState
             final fieldSchedule = FieldSchedule(
                 startDateParsing,
                 widget.employeeEntity.id,
-                entity?.status ?? 0,
-                entity?.workingHours ?? {"from": "${Constants.startWork.toInt()}:00", "to": "${Constants.endWork.toInt()}"});
+                entity?.status ?? 1,
+                entity?.workingHours ??
+                    {
+                      "from": "${Constants.startWork.toInt()}:00",
+                      "to": "${Constants.endWork.toInt()}"
+                    });
 
             return RegionDetector(
               onFocused: () {
@@ -363,7 +527,8 @@ class _EmployeeScheduleTableWidgetState
                 currentMonth: widget.currentMonth,
                 isFieldSElected:
                     widget.listSelectedSchedule.contains(fieldSchedule),
-                dateTime: DateTime(year, widget.currentMonth, day), schedule: widget.employeeEntity.schedule,
+                dateTime: DateTime(year, widget.currentMonth, day),
+                schedule: widget.employeeEntity.schedule,
               ),
             );
           },
@@ -446,7 +611,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
 
 class _EmployeeScheduleFieldWidgetState
     extends State<_EmployeeScheduleFieldWidget> {
-  int status = 0;
+  int status = 1;
   bool isDragging = false;
   final blueWithOpacity = Colors.blue.withOpacity(0.4);
 
@@ -485,8 +650,6 @@ class _EmployeeScheduleFieldWidgetState
             };
           });
 
-
-
           widget.onFieldEdit.call(
             widget.fieldSchedule.dateTime!.day,
             widget.fieldSchedule.dateTime!.month,
@@ -495,7 +658,8 @@ class _EmployeeScheduleFieldWidgetState
             widget.fieldSchedule.employeeId,
             widget.fieldSchedule.workingHours,
           );
-        }, schedule: widget.schedule,
+        },
+        schedule: widget.schedule,
       );
     }
   }
@@ -522,11 +686,39 @@ class _EmployeeScheduleFieldWidgetState
     final bool beforeCondition = hoverProvider.dateTime != null &&
         widget.dateTime.isBefore(hoverProvider.dateTime!) &&
         hoverProvider.row == widget.row;
-    final bool topCondition = hoverProvider.dateTime != null &&
+    final bool topCondition = now.month != widget.currentMonth &&
+        hoverProvider.dateTime != null &&
         widget.dateTime.day == hoverProvider.dateTime?.day &&
         widget.row <= hoverProvider.row;
 
-    if (widget.fieldSchedule.dateTime == null) {
+    // if (widget.fieldSchedule.dateTime == null) {
+    //   return InkWell(
+    //     onTap: () => changeState(),
+    //     onHover: onHover,
+    //     child: Ink(
+    //       width: 35,
+    //       height: 35,
+    //       decoration: BoxDecoration(
+    //         color: beforeCondition
+    //             ? blueWithOpacity
+    //             : topCondition
+    //                 ? blueWithOpacity
+    //                 : hoverCondition
+    //                     ? Colors.blue
+    //                     : widget.isFieldSElected
+    //                         ? Colors.brown.shade200
+    //                         : ColorHelper.getColorForScheduleByStatus(status),
+    //         // color: multiSelectedFields.contains(widget.fieldSchedule)
+    //         //     ? Colors.brown
+    //         //     : Colors.red,
+    //         border: Border.all(width: 1, color: Colors.grey.shade200),
+    //       ),
+    //     ),
+    //   );
+    // } else {
+    // }
+
+    if (status == 0) {
       return InkWell(
         onTap: () => changeState(),
         onHover: onHover,
@@ -537,50 +729,21 @@ class _EmployeeScheduleFieldWidgetState
             color: beforeCondition
                 ? blueWithOpacity
                 : topCondition
-                    ? blueWithOpacity
-                    : hoverCondition
-                        ? Colors.blue
-                        : widget.isFieldSElected
-                            ? Colors.brown.shade200
-                            : Colors.white,
+                ? blueWithOpacity
+                : hoverCondition
+                ? Colors.blue
+                : widget.isFieldSElected
+                ? Colors.brown.shade200
+                : ColorHelper.getColorForScheduleByStatus(status),
             // color: multiSelectedFields.contains(widget.fieldSchedule)
             //     ? Colors.brown
             //     : Colors.red,
             border: Border.all(width: 1, color: Colors.grey.shade200),
+
           ),
+
         ),
       );
-    } else {
-      if (status == 0) {
-        return InkWell(
-          onTap: () => changeState(),
-          onHover: onHover,
-          child: Ink(
-            width: 35,
-            height: 35,
-            decoration: BoxDecoration(
-              color: beforeCondition
-                  ? blueWithOpacity
-                  : topCondition
-                      ? blueWithOpacity
-                      : hoverCondition
-                          ? Colors.blue
-                          : widget.isFieldSElected
-                              ? Colors.brown.shade200
-                              : DateTime.now().day ==
-                                          widget.fieldSchedule.dateTime!.day &&
-                                      widget.currentMonth ==
-                                          widget.fieldSchedule.dateTime!.month
-                                  ? Colors.blue.withOpacity(0.1)
-                                  : Colors.white,
-              // color: multiSelectedFields.contains(widget.fieldSchedule)
-              //     ? Colors.brown
-              //     : Colors.red,
-              border: Border.all(width: 1, color: Colors.grey.shade200),
-            ),
-          ),
-        );
-      }
     }
 
     return InkWell(

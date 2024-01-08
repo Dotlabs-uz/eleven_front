@@ -13,6 +13,7 @@ class Constants {
   static double sizeTimeTableFieldPerMinute =1.6;
   static double onTimetableFieldItemRound =25;
   static double onTimetableFieldItem =25;
+  static double sizeOfMonthsSpaceInEmployeeSchedule = 20;
 
   static double sizeOfBarberProfileCard =300;
   static double sizeOfTimeTableColumn =100;
