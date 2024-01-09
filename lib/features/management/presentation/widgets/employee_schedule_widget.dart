@@ -445,6 +445,7 @@ class _EmployeeScheduleTableWidgetState
                 fieldSchedule: fieldSchedule,
                 row: widget.rowIndex,
                 onHoverDrag: widget.onHoverDrag,
+                enableTopCross: false,
                 currentMonth: month,
                 isFieldSElected:
                     widget.listSelectedSchedule.contains(fieldSchedule),
@@ -578,6 +579,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
   final Function(FieldSchedule) onHoverDrag;
   final bool isFieldSElected;
   final List<EmployeeScheduleEntity> schedule;
+  final bool enableTopCross ;
   final Function(
     int day,
     int month,
@@ -597,6 +599,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
     required this.isFieldSElected,
     required this.onHoverDrag,
     required this.schedule,
+      this.enableTopCross = true,
   }) : super(key: key);
 
   @override
@@ -715,7 +718,7 @@ class _EmployeeScheduleFieldWidgetState
     final bool beforeCondition = hoverProvider.dateTime != null &&
         widget.dateTime.isBefore(hoverProvider.dateTime!) &&
         hoverProvider.row == widget.row;
-    final bool topCondition = widget.currentMonth == now.month &&
+    final bool topCondition =widget.enableTopCross &&
         hoverProvider.dateTime != null &&
         widget.dateTime.day == hoverProvider.dateTime?.day &&
         widget.row <= hoverProvider.row;
