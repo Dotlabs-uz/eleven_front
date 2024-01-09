@@ -332,9 +332,10 @@ class _EmployeeScheduleTableWidgetState
       children: [
         ...List.generate(
           StringHelper.getDaysByMonthIndex(month: widget.currentMonth) -
-              now.day  + 1,
+              now.day +
+              1,
           (index) {
-            final day = index  + 1;
+            final day = now.day + index;
             final year = DateTime.now().year;
             final month = widget.currentMonth;
             final dateTimeNow = DateTime(year, month, day);
@@ -343,30 +344,13 @@ class _EmployeeScheduleTableWidgetState
                 widget.employeeEntity.schedule.firstWhereOrNull((element) {
               final elementDt = DateTime.parse(element.date);
 
-              return elementDt.day == day && elementDt.month == month && elementDt.year == year;
+              return elementDt.day == day &&
+                  elementDt.month == month &&
+                  elementDt.year == year;
             });
-            // final EmployeeScheduleEntity? entity =
-            //     widget.employeeEntity.schedule.firstWhereOrNull((element) {
-            //   final startDateParsing = DateTime.parse(element.date);
-            //
-            //   final startDate = DateTime(
-            //     startDateParsing.year,
-            //     startDateParsing.month,
-            //     startDateParsing.day,
-            //   );
-            //
-            //   return startDate.difference(dateTimeNow).inDays == 0 &&
-            //       startDate.month == widget.currentMonth;
-            //   // return startDate.month == startDateParsing.month;
-            // });
 
-            final startDateParsing = entity == null
-                ? null
-                : DateTime(
-                    DateTime.parse(entity.date).year,
-                    DateTime.parse(entity.date).month,
-                    DateTime.parse(entity.date).day,
-                  );
+
+            final startDateParsing =  dateTimeNow;
 
             final fieldSchedule = FieldSchedule(
                 startDateParsing,
@@ -394,7 +378,7 @@ class _EmployeeScheduleTableWidgetState
                 currentMonth: widget.currentMonth,
                 isFieldSElected:
                     widget.listSelectedSchedule.contains(fieldSchedule),
-                dateTime: DateTime(year, widget.currentMonth, day),
+                dateTime: dateTimeNow,
                 schedule: widget.employeeEntity.schedule,
               ),
             );
@@ -427,11 +411,16 @@ class _EmployeeScheduleTableWidgetState
             });
 
             final startDateParsing = entity == null
-                ? null
+                ? DateTime(
+                    year,
+                    month,
+                    day,
+                  )
                 : DateTime(
                     DateTime.parse(entity.date).year,
                     DateTime.parse(entity.date).month,
-                    DateTime.parse(entity.date).day);
+                    DateTime.parse(entity.date).day,
+                  );
 
             final fieldSchedule = FieldSchedule(
                 startDateParsing,
@@ -440,7 +429,7 @@ class _EmployeeScheduleTableWidgetState
                 entity?.workingHours ??
                     {
                       "from": "${Constants.startWork.toInt()}:00",
-                      "to": "${Constants.endWork.toInt()}"
+                      "to": "${Constants.endWork.toInt()}:00"
                     });
 
             return RegionDetector(
@@ -459,7 +448,7 @@ class _EmployeeScheduleTableWidgetState
                 currentMonth: month,
                 isFieldSElected:
                     widget.listSelectedSchedule.contains(fieldSchedule),
-                dateTime: DateTime(year, month, day),
+                dateTime: dateTimeNow,
                 schedule: widget.employeeEntity.schedule,
               ),
             );
@@ -477,7 +466,8 @@ class _EmployeeScheduleTableWidgetState
           (index) {
             final day = index + 1;
             final year = DateTime.now().year;
-            final dateTimeNow = DateTime(year, widget.currentMonth, day);
+            final month = widget.currentMonth;
+            final dateTimeNow = DateTime(year, month, day);
 
             final EmployeeScheduleEntity? entity =
                 widget.employeeEntity.schedule.firstWhereOrNull((element) {
@@ -490,16 +480,21 @@ class _EmployeeScheduleTableWidgetState
               );
 
               return startDate.difference(dateTimeNow).inDays == 0 &&
-                  startDate.month == widget.currentMonth;
+                  startDate.month == month;
               // return startDate.month == startDateParsing.month;
             });
 
             final startDateParsing = entity == null
-                ? null
+                ? DateTime(
+                    year,
+                    month,
+                    day,
+                  )
                 : DateTime(
                     DateTime.parse(entity.date).year,
                     DateTime.parse(entity.date).month,
-                    DateTime.parse(entity.date).day);
+                    DateTime.parse(entity.date).day,
+                  );
 
             final fieldSchedule = FieldSchedule(
                 startDateParsing,
@@ -508,7 +503,7 @@ class _EmployeeScheduleTableWidgetState
                 entity?.workingHours ??
                     {
                       "from": "${Constants.startWork.toInt()}:00",
-                      "to": "${Constants.endWork.toInt()}"
+                      "to": "${Constants.endWork.toInt()}:00"
                     });
 
             return RegionDetector(
@@ -617,51 +612,85 @@ class _EmployeeScheduleFieldWidgetState
 
   @override
   void initState() {
+
     status = widget.fieldSchedule.status;
 
     super.initState();
   }
 
   changeState() {
-    if (widget.fieldSchedule.dateTime != null) {
-      final dt = DateTime.now();
-      if (widget.fieldSchedule.dateTime ==
-          DateTime(dt.year, dt.month, dt.day)) {
-        return;
-      }
-      Dialogs.scheduleField(
-        context: context,
-        day: widget.fieldSchedule.dateTime!.day,
-        month: widget.fieldSchedule.dateTime!.month,
-        year: widget.fieldSchedule.dateTime!.year,
-        onConfirm: (
-          DateTime _,
-          int status,
-          String fromHour,
-          String fromMinute,
-          String toHour,
-          String toMinute,
-        ) {
-          setState(() {
-            status = status;
-            widget.fieldSchedule.workingHours = {
-              "from": "$fromHour:$fromMinute",
-              "to": "$toHour:$toMinute"
-            };
-          });
+    Dialogs.scheduleField(
+      context: context,
+      day: widget.fieldSchedule.dateTime!.day,
+      month: widget.fieldSchedule.dateTime!.month,
+      year: widget.fieldSchedule.dateTime!.year,
+      onConfirm: (
+        DateTime _,
+        int status,
+        String fromHour,
+        String fromMinute,
+        String toHour,
+        String toMinute,
+      ) {
+        setState(() {
+          status = status;
+          widget.fieldSchedule.workingHours = {
+            "from": "$fromHour:$fromMinute",
+            "to": "$toHour:$toMinute"
+          };
+        });
 
-          widget.onFieldEdit.call(
-            widget.fieldSchedule.dateTime!.day,
-            widget.fieldSchedule.dateTime!.month,
-            widget.fieldSchedule.dateTime!.year,
-            status,
-            widget.fieldSchedule.employeeId,
-            widget.fieldSchedule.workingHours,
-          );
-        },
-        schedule: widget.schedule,
-      );
-    }
+        widget.onFieldEdit.call(
+          widget.fieldSchedule.dateTime!.day,
+          widget.fieldSchedule.dateTime!.month,
+          widget.fieldSchedule.dateTime!.year,
+          status,
+          widget.fieldSchedule.employeeId,
+          widget.fieldSchedule.workingHours,
+        );
+      },
+      schedule: widget.schedule,
+    );
+
+    // if (widget.fieldSchedule.dateTime != null) {
+    //   final dt = DateTime.now();
+    //   if (widget.fieldSchedule.dateTime ==
+    //       DateTime(dt.year, dt.month, dt.day)) {
+    //     return;
+    //   }
+    //   Dialogs.scheduleField(
+    //     context: context,
+    //     day: widget.fieldSchedule.dateTime!.day,
+    //     month: widget.fieldSchedule.dateTime!.month,
+    //     year: widget.fieldSchedule.dateTime!.year,
+    //     onConfirm: (
+    //       DateTime _,
+    //       int status,
+    //       String fromHour,
+    //       String fromMinute,
+    //       String toHour,
+    //       String toMinute,
+    //     ) {
+    //       setState(() {
+    //         status = status;
+    //         widget.fieldSchedule.workingHours = {
+    //           "from": "$fromHour:$fromMinute",
+    //           "to": "$toHour:$toMinute"
+    //         };
+    //       });
+    //
+    //       widget.onFieldEdit.call(
+    //         widget.fieldSchedule.dateTime!.day,
+    //         widget.fieldSchedule.dateTime!.month,
+    //         widget.fieldSchedule.dateTime!.year,
+    //         status,
+    //         widget.fieldSchedule.employeeId,
+    //         widget.fieldSchedule.workingHours,
+    //       );
+    //     },
+    //     schedule: widget.schedule,
+    //   );
+    // }
   }
 
   onHover(bool hover) {
@@ -686,7 +715,7 @@ class _EmployeeScheduleFieldWidgetState
     final bool beforeCondition = hoverProvider.dateTime != null &&
         widget.dateTime.isBefore(hoverProvider.dateTime!) &&
         hoverProvider.row == widget.row;
-    final bool topCondition = now.month != widget.currentMonth &&
+    final bool topCondition = widget.currentMonth == now.month &&
         hoverProvider.dateTime != null &&
         widget.dateTime.day == hoverProvider.dateTime?.day &&
         widget.row <= hoverProvider.row;
@@ -729,19 +758,17 @@ class _EmployeeScheduleFieldWidgetState
             color: beforeCondition
                 ? blueWithOpacity
                 : topCondition
-                ? blueWithOpacity
-                : hoverCondition
-                ? Colors.blue
-                : widget.isFieldSElected
-                ? Colors.brown.shade200
-                : ColorHelper.getColorForScheduleByStatus(status),
+                    ? blueWithOpacity
+                    : hoverCondition
+                        ? Colors.blue
+                        : widget.isFieldSElected
+                            ? Colors.brown.shade200
+                            : ColorHelper.getColorForScheduleByStatus(status),
             // color: multiSelectedFields.contains(widget.fieldSchedule)
             //     ? Colors.brown
             //     : Colors.red,
             border: Border.all(width: 1, color: Colors.grey.shade200),
-
           ),
-
         ),
       );
     }

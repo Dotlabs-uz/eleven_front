@@ -9,14 +9,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../main.dart';
 import '../components/button_widget.dart';
 import 'assets.dart';
 import 'selections.dart';
 import 'string_helper.dart';
 
 final List<String> listTimes = [
-  "8",
-  "9",
+  "00",
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
   "10",
   "11",
   "12",
@@ -30,21 +39,13 @@ final List<String> listTimes = [
   "20",
   "21",
   "22",
+  "23",
+  "24",
 ];
 final List<String> listMinutes = [
-  "00",
-  "5",
-  "10",
-  "15",
-  "20",
-  "25",
-  "30",
-  "35",
-  "40",
-  "45",
-  "50",
-  "55",
-  "60",
+  ...List.generate(61, (index) {
+    return index.toString() =="0"  ? "00":index.toString();
+  }),
 ];
 
 class Dialogs {
@@ -264,9 +265,9 @@ class _TimetableScheduleFieldContentDialog extends StatefulWidget {
 class _TimetableScheduleFieldContentDialogState
     extends State<_TimetableScheduleFieldContentDialog> {
   int selectedStatus = 1;
-  String selectedTimeFromHour = "8";
+  String selectedTimeFromHour = Constants.startWork.toString();
   String selectedTimeFromMinute = "00";
-  String selectedTimeToHour = "22";
+  String selectedTimeToHour = Constants.endWork.toString();
   String selectedTimeToMinute = "00";
   String lastFilteredQuery = "";
   DateTime dateTime = DateTime.now();
@@ -305,9 +306,9 @@ class _TimetableScheduleFieldContentDialogState
       final to = scheduleElement.workingHours['to'].toString();
 
       debugPrint("scheduleElement != null to $to from $from");
-      selectedTimeFromHour = extractHours(from);
+      selectedTimeFromHour = extractHours(from.split("T")[1]);
       selectedTimeFromMinute = extractMinutes(from);
-      selectedTimeToHour = extractHours(to);
+      selectedTimeToHour = extractHours(to.split("T")[1]);
       selectedTimeToMinute = extractMinutes(to);
       hasElement = true;
     } else {
@@ -341,7 +342,6 @@ class _TimetableScheduleFieldContentDialogState
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
     return Container(
       constraints: BoxConstraints(
         maxWidth: Responsive.isDesktop(context)
@@ -675,6 +675,9 @@ class _ScheduleFieldContentDialogState
     dateTime = dateTime.copyWith(day: widget.day,month: widget.month,year: widget.year,);
 
 
+
+    print("Date time field $dateTime");
+
     final EmployeeScheduleEntity? scheduleElement =
     widget.schedule.firstWhereOrNull((element) {
       final elementDt = DateTime.parse(element.date);
@@ -686,13 +689,17 @@ class _ScheduleFieldContentDialogState
     });
 
     if (scheduleElement != null) {
+
       final from = scheduleElement.workingHours['from'].toString();
       final to = scheduleElement.workingHours['to'].toString();
+      print(from);
+      print(to);
+
 
       debugPrint("scheduleElement != null to $to from $from");
-      selectedTimeFromHour = extractHours(from);
+      selectedTimeFromHour = extractHours(from.contains("T") ? from.split("T")[1]:from );
       selectedTimeFromMinute = extractMinutes(from);
-      selectedTimeToHour = extractHours(to);
+      selectedTimeToHour = extractHours(to.contains("T") ? to.split("T")[1]:to );
       selectedTimeToMinute = extractMinutes(to);
     }
 
@@ -875,6 +882,7 @@ class _ScheduleFieldContentDialogState
                   Expanded(
                     child: Row(
                       children: [
+
                         DecoratedBox(
                           decoration: BoxDecoration(
                             color: Colors.white,
