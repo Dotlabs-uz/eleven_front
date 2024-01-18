@@ -128,8 +128,8 @@ class _EmployeeScheduleWidgetState extends State<EmployeeScheduleWidget> {
     editedFields.clear();
     scrollController.dispose();
     multiSelectedFields.clear();
-    Provider.of<CrossInEmployeeScheduleProvider>(context, listen: false)
-        .clear();
+    // Provider.of<CrossInEmployeeScheduleProvider>(context, listen: false)
+    //     .clear();
     super.dispose();
   }
 

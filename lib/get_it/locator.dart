@@ -25,6 +25,7 @@ import 'package:http/http.dart';
 import 'package:dio/dio.dart' as dio;
 
 import '../core/api/api_client.dart';
+import '../core/api/api_client_http.dart';
 import '../core/utils/storage_service.dart';
 import '../features/auth/data/datasources/authentication_local_data_source.dart';
 import '../features/auth/data/datasources/authentication_remote_data_source.dart';
@@ -83,11 +84,15 @@ void setup() {
   // Customer
 
   locator.registerFactory(() => CustomerCubit(
-      getData: locator(), saveData: locator(), deleteData: locator(), getCustomerById: locator()));
+      getData: locator(),
+      saveData: locator(),
+      deleteData: locator(),
+      getCustomerById: locator()));
 
   // Employee
 
-  locator.registerFactory(() => EmployeeCubit(locator(), locator(), locator(), locator(),locator()));
+  locator.registerFactory(() =>
+      EmployeeCubit(locator(), locator(), locator(), locator(), locator()));
   locator.registerFactory(() => CrossInEmployeeScheduleProvider());
   locator.registerFactory(() => EmployeeScheduleCubit(
         locator(),
@@ -150,7 +155,8 @@ void setup() {
   // Main
 
   // Customer
-  locator.registerLazySingleton<GetCustomerById>(() => GetCustomerById(locator()));
+  locator
+      .registerLazySingleton<GetCustomerById>(() => GetCustomerById(locator()));
   locator.registerLazySingleton<GetCustomer>(() => GetCustomer(locator()));
   locator
       .registerLazySingleton<DeleteCustomer>(() => DeleteCustomer(locator()));
@@ -158,11 +164,13 @@ void setup() {
 
   // Employee
   locator.registerLazySingleton<GetEmployee>(() => GetEmployee(locator()));
-  locator.registerLazySingleton<GetEmployeeEntity>(() => GetEmployeeEntity(locator()));
+  locator.registerLazySingleton<GetEmployeeEntity>(
+      () => GetEmployeeEntity(locator()));
   locator
       .registerLazySingleton<DeleteEmployee>(() => DeleteEmployee(locator()));
   locator.registerLazySingleton<SaveEmployee>(() => SaveEmployee(locator()));
-  locator.registerLazySingleton<SaveEmployeeWeeklySchedule>(() => SaveEmployeeWeeklySchedule(locator()));
+  locator.registerLazySingleton<SaveEmployeeWeeklySchedule>(
+      () => SaveEmployeeWeeklySchedule(locator()));
 
   // Product
 
@@ -246,6 +254,7 @@ void setup() {
   locator.registerLazySingleton<MainRemoteDataSource>(
     () => MainRemoteDataSourceImpl(
       locator(),
+      locator(),
     ),
   );
 
@@ -287,8 +296,11 @@ void setup() {
   locator.registerLazySingleton<dio.Dio>(() => dio.Dio());
   locator.registerLazySingleton<Client>(() => Client());
 
-  locator
-      .registerLazySingleton<ApiClient>(() => ApiClient(locator(), locator()));
+  locator.registerLazySingleton<ApiClient>(
+      () => ApiClientImpl(locator(), locator()));
+
+  locator.registerLazySingleton<ApiClientHttp>(
+      () => ApiClientHttpImpl(locator(), locator()));
 
   locator.registerLazySingleton<StorageService>(() => StorageService());
 

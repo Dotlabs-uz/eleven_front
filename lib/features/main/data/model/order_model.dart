@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-
 import 'package:flutter/material.dart';
 
 import '../../../products/data/model/service_product_model.dart';
@@ -30,13 +29,11 @@ class OrderModel extends OrderEntity {
 
   factory OrderModel.fromJson(Map<String, dynamic> json,
       {bool withSubstract = false}) {
-
     return OrderModel(
       id: json['_id'] ?? "",
       orderStart: DateTime.parse(json['orderStart']).toLocal(),
-      orderEnd: withSubstract
-          ? DateTime.parse(json['orderEnd']).toLocal()
-          : DateTime.parse(json['orderEnd']).toLocal(),
+      orderEnd: DateTime.parse(json['orderEnd']).toLocal(),
+
       barberId: json['barber'] != null ? json['barber']['_id'] : "",
       paymentType:
           json['payment'] == "cash" ? OrderPayment.cash : OrderPayment.card,

@@ -246,17 +246,18 @@ packages:
     dependency: "direct main"
     description:
       name: dio
-      sha256: "7d328c4d898a61efc3cd93655a0955858e29a0aa647f0f9e02d59b3bb275e2e8"
+      sha256: "797e1e341c3dd2f69f2dad42564a6feff3bfb87187d05abb93b9609e6f1645c3"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.6"
+    version: "5.4.0"
   dio_http_cache:
     dependency: "direct main"
     description:
-      name: dio_http_cache
-      sha256: ced385a6fcf7f9fd238cc9b866a75583ee309d97bf1ceccaa00bb978b1d00db4
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "6e42068c6f866c67036de71f16126c7151f828a3"
+      url: "https://github.com/Samir-Sattarov/dio-http-cache.git"
+    source: git
     version: "0.3.0"
   dropdown_search:
     dependency: "direct main"
@@ -471,7 +472,7 @@ packages:
     source: hosted
     version: "0.15.4"
   http:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: http
       sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"

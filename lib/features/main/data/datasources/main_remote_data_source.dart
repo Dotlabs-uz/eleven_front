@@ -6,6 +6,7 @@ import 'package:eleven_crm/features/main/data/model/current_user_model.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/api/api_client.dart';
+import '../../../../core/api/api_client_http.dart';
 import '../../../../core/api/api_constants.dart';
 import '../../../auth/data/models/token_model.dart';
 import '../model/order_model.dart';
@@ -23,8 +24,9 @@ abstract class MainRemoteDataSource {
 
 class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   final ApiClient _client;
+  final ApiClientHttp _clientHttp;
 
-  MainRemoteDataSourceImpl(this._client);
+  MainRemoteDataSourceImpl(this._client, this._clientHttp);
 
   @override
   Future<CurrentUserModel> getCurrentUser() async {
@@ -90,8 +92,8 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<bool> savePhoto(List<int> file, String userId, String role) async {
-    debugPrint("User id $userId  role $role ")
-;    await _client.postPhoto(fileBytes: file, userId: userId, role: role);
+    debugPrint("User id $userId  role $role ");
+    await _clientHttp.postPhoto(fileBytes: file, userId: userId, role: role);
 
     return true;
   }

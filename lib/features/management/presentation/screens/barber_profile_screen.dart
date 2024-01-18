@@ -330,6 +330,9 @@ class _ContentWidgetState extends State<ContentWidget> {
                                 child:
                                     BlocBuilder<EmployeeCubit, EmployeeState>(
                                   builder: (context, state) {
+
+
+                                    print(state );
                                     if (state is EmployeeEntityLoaded) {
                                       final data = state.data;
                                       return ScheduleCalendarWidget(

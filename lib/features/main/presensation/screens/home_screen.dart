@@ -77,6 +77,11 @@ class _ContentWidgetState extends State<_ContentWidget> {
 
   static DateTime filteredDate = DateTime.now();
 
+
+  List<BarberEntity> listBarbers = [];
+  static List<BarberEntity> listNotSelectedBarbers = [];
+  List<OrderEntity> orders = [];
+
   @override
   void initState() {
     initialize();
@@ -191,50 +196,24 @@ class _ContentWidgetState extends State<_ContentWidget> {
     }
   }
 
-  Map<int, Widget> children = <int, Widget>{
-    0: Text("Day".tr()),
-    1: Text("Week".tr()),
-  };
 
-  int selectedValue = 0;
 
-  List<BarberEntity> listBarbers = [];
-  static List<BarberEntity> listNotSelectedBarbers = [];
 
-  _dateTimeWidget() {
-    final now = DateTime.now();
-    const style = TextStyle();
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "${now.day} ",
-          style: style,
-        ),
-        Text(
-          "${StringHelper.monthName(month: now.month).tr().toLowerCase()} ",
-          style: style,
-        ),
-        Text(
-          StringHelper.getDayOfWeekType(now).tr().toLowerCase(),
-          style: style,
-        ),
-      ],
-    );
+  @override
+  void didChangeDependencies() {
+    orders.clear();
+    BlocProvider.of<HomeScreenOrderFormCubit>(context).disable();
+    super.didChangeDependencies();
   }
-
-  List<OrderEntity> orders = [];
-
   @override
   void dispose() {
     orders.clear();
     listNotSelectedBarbers.clear();
     listBarbers.clear();
-    selectedValue = 0;
     activeData = OrderEntity.empty();
     showSelectServices = false;
-    BlocProvider.of<HomeScreenOrderFormCubit>(context).disable();
-
+    // BlocProvider.of<BarberCubit>(context).close();
+    //
     webSocketService.dispose();
 
     super.dispose();

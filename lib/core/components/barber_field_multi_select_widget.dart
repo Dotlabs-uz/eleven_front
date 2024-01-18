@@ -12,7 +12,6 @@ import '../../features/management/domain/entity/barber_entity.dart';
 import '../../get_it/locator.dart';
 import '../constants/drop_down_decoration.dart';
 import '../entities/field_entity.dart';
-import '../utils/assets.dart';
 import 'image_view_widget.dart';
 
 class BarberFieldMultiSelectWidget extends StatefulWidget {
