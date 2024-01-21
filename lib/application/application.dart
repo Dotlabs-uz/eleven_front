@@ -12,11 +12,15 @@ import 'package:eleven_crm/features/management/presentation/provider/cross_in_em
 import 'package:eleven_crm/features/products/presensation/cubit/service_product_category/service_product_category_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../core/utils/app_colors.dart';
+import '../core/utils/app_navigation.dart';
+import '../core/utils/menu_constants.dart';
 import '../core/utils/route_constants.dart';
 import '../core/utils/routes.dart';
+import '../features/auth/presentation/pages/sign_in_screen.dart';
 import '../features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import '../features/main/presensation/cubit/locale/locale_cubit.dart';
 import '../features/main/presensation/cubit/menu/menu_cubit.dart';
@@ -24,6 +28,7 @@ import '../features/main/presensation/cubit/order/not_working_hours/not_working_
 import '../features/main/presensation/cubit/show_client_orders_history/show_client_orders_history_cubit.dart';
 import '../features/main/presensation/cubit/show_order_history/show_order_history_cubit.dart';
 import '../features/main/presensation/cubit/show_select_services/show_select_services_cubit.dart';
+import '../features/main/presensation/screens/main_screen.dart';
 import '../features/main/presensation/screens/page_not_found.dart';
 import '../features/main/presensation/widget/fade_page_route_builder.dart';
 import '../features/management/presentation/cubit/employee_schedule/employee_schedule_cubit.dart';
@@ -110,13 +115,13 @@ class _ApplicationState extends State<Application> {
         BlocProvider.value(value: notWorkingHoursCubit),
         BlocProvider.value(value: employeeScheduleCubit),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         title: 'Eleven CRM',
-        navigatorKey: navigatorKey,
+        routerConfig: AppNavigation.router,
         theme: ThemeData(
           primaryColor: Colors.red,
           scaffoldBackgroundColor: AppColors.scaffoldColor,
@@ -125,24 +130,6 @@ class _ApplicationState extends State<Application> {
             backgroundColor: AppColors.sideMenu,
           ),
         ),
-        initialRoute: RouteList.login,
-        // home: const LoginScreen(),
-        onUnknownRoute: (settings) => PageNotFound.route(),
-        onGenerateRoute: (RouteSettings settings) {
-          final Map<String, WidgetBuilder> routes =
-              Routes.getRoutes(settings, token);
-          // final WidgetBuilder builder;
-          // if (settings.name != null) {
-          //   builder = routes[settings.name]!;
-          // } else {
-          //   builder = routes["login"]!;
-          // }
-
-          return FadePageRouteBuilder(
-            builder: routes[settings.name]!,
-            settings: settings,
-          );
-        },
       ),
     );
   }

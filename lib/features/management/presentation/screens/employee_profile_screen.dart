@@ -1,9 +1,9 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/widgets/employee_profile_schedule_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/loading_circle.dart';
 import '../../../../core/components/success_flash_bar.dart';
@@ -16,10 +16,9 @@ import '../widgets/schedule_calendar_widget.dart';
 
 class EmployeeProfileScreen extends StatefulWidget {
   final EmployeeEntity employeeEntity;
-  final Function() onBack;
   const EmployeeProfileScreen({
     Key? key,
-    required this.employeeEntity, required this.onBack,
+    required this.employeeEntity,
   }) : super(key: key);
 
   @override
@@ -51,7 +50,6 @@ class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
       ],
       child: ContentWidget(
         employeeEntity: widget.employeeEntity,
-        onBack: widget.onBack,
       ),
     );
   }
@@ -60,11 +58,9 @@ class _EmployeeProfileScreenState extends State<EmployeeProfileScreen> {
 class ContentWidget extends StatefulWidget {
   final EmployeeEntity employeeEntity;
 
-  final Function() onBack;
   const ContentWidget({
     Key? key,
     required this.employeeEntity,
-    required this.onBack,
   }) : super(key: key);
 
   @override
@@ -86,9 +82,8 @@ class _ContentWidgetState extends State<ContentWidget> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
-            widget.onBack.call();
-
+            context.pop();
+            BlocProvider.of<EmployeeCubit>(context).load("");
           },
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,

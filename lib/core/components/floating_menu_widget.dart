@@ -1,9 +1,9 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/main/domain/entity/current_user_entity.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/current_user/current_user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../features/auth/presentation/cubit/login_cubit.dart';
@@ -32,16 +32,16 @@ class FloatingMenuEntity {
 class FloatingMenuWidget extends StatefulWidget {
   final Function(FloatingMenuEntity)? onChanged;
 
-  final int selectedIndex;
   final List<FloatingMenuEntity> listEntity;
   final Function() onProfileTap;
+  final int currentIndex;
 
   const FloatingMenuWidget({
     Key? key,
     this.onChanged,
     required this.listEntity,
     required this.onProfileTap,
-    required this.selectedIndex,
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -53,20 +53,33 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
   String version = "";
   static CurrentUserEntity currentUserEntity = CurrentUserEntity.empty();
 
-  int currentMenuSelectedIndex = 0;
+  static int currentMenuSelectedIndex = 0;
   List<DateTime> listBlinkDates = [];
 
   @override
   void initState() {
-    currentMenuSelectedIndex = widget.selectedIndex;
+    currentMenuSelectedIndex = widget.currentIndex;
+
 
     BlocProvider.of<CurrentUserCubit>(context).load();
     super.initState();
   }
 
   @override
+  void didUpdateWidget(covariant FloatingMenuWidget oldWidget) {
+    if (currentMenuSelectedIndex != widget.currentIndex) {
+      currentMenuSelectedIndex = widget.currentIndex;
+
+      print("widget. current index ${widget.currentIndex}");
+      setState(() {
+
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _getIndexByRoute();
     return BlocListener<CurrentUserCubit, CurrentUserState>(
       listener: (context, state) {
         if (state is CurrentUserLoaded) {
@@ -176,13 +189,13 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
               }),
               CalendarWidget(
                 onRefreshTap: () {
-                  Navigator.pushNamed(context, "/home");
+                  Navigator.pushNamed(context, RouteList.home);
                   BlocProvider.of<OrderFilterCubit>(context).setFilter(
                     query: DateTime.now().toIso8601String(),
                   );
                 },
                 onDateTap: (DateTime dateTime) {
-                  Navigator.pushNamed(context, "/home");
+                  Navigator.pushNamed(context, RouteList.home);
                   BlocProvider.of<OrderFilterCubit>(context).setFilter(
                     query: dateTime.toIso8601String(),
                   );
@@ -194,33 +207,6 @@ class _FloatingMenuWidgetState extends State<FloatingMenuWidget> {
         ),
       ),
     );
-  }
-
-  _getIndexByRoute() {
-    final routeName = ModalRoute.of(context)!.settings.name;
-
-    if (mounted) {
-      Future.delayed(
-        Duration.zero,
-        () {
-          if (routeName == RouteList.home) {
-            currentMenuSelectedIndex = 0;
-          } else if (routeName == RouteList.management) {
-            currentMenuSelectedIndex = 1;
-          } else if (routeName == RouteList.product) {
-            currentMenuSelectedIndex = 2;
-          }
-        },
-      );
-    }
-  }
-
-  ImageProvider<Object> _image(String? avatar) {
-    if (avatar != null && avatar.isNotEmpty) {
-      return NetworkImage(avatar);
-    } else {
-      return const AssetImage(Assets.tAvatarPlaceHolder);
-    }
   }
 }
 
@@ -243,14 +229,29 @@ class FloatingMenuItemWidget extends StatefulWidget {
 }
 
 class _FloatingMenuItemWidgetState extends State<FloatingMenuItemWidget> {
+  static int currentIndex = -1;
+
+  @override
+  void initState() {
+    currentIndex = widget.currentIndex;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant FloatingMenuItemWidget oldWidget) {
+    if (currentIndex != widget.currentIndex) {
+      currentIndex = widget.currentIndex;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final condition = widget.entity.index == currentIndex;
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: GestureDetector(
-        onTap: () {
-          widget.onTap.call(widget.entity);
-        },
+        onTap: () => widget.onTap.call(widget.entity),
         child: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -260,12 +261,12 @@ class _FloatingMenuItemWidgetState extends State<FloatingMenuItemWidget> {
             //     : null),
           ),
           child: !widget.isOpen
-              ? _icon(widget.entity.index == widget.currentIndex)
+              ? _icon(condition)
               : Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    _icon(widget.entity.index == widget.currentIndex),
+                    _icon(condition),
                     const SizedBox(width: 10),
                     FittedBox(
                       child: Text(
@@ -273,13 +274,11 @@ class _FloatingMenuItemWidgetState extends State<FloatingMenuItemWidget> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.nunito(
-                          color: widget.entity.index == widget.currentIndex
-                              ? Colors.white
-                              : Colors.grey.shade300,
+                          color:
+                              condition ? Colors.white : Colors.grey.shade300,
                           fontSize: 16,
-                          fontWeight: widget.entity.index == widget.currentIndex
-                              ? FontWeight.w700
-                              : FontWeight.w400,
+                          fontWeight:
+                              condition ? FontWeight.w700 : FontWeight.w400,
                         ),
                       ),
                     ),

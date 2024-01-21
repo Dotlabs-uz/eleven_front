@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../../core/entities/field_entity.dart';
 import '../../../products/data/model/filial_model.dart';
+import '../../../products/domain/entity/filial_entity.dart';
 import '../../domain/entity/barber_entity.dart';
 import 'employee_schedule_model.dart';
 import 'weekly_schedule_results_model.dart';
@@ -69,7 +70,7 @@ class BarberModel extends BarberEntity {
   factory BarberModel.fromJson(Map<String, dynamic> json) {
 
     return BarberModel(
-      id: json['_id'],
+      id: json['_id'] ?? "",
       firstName: json['firstName'],
       employeeId: json['employeeId'] ?? "",
       lastName: json['lastName'],
@@ -81,14 +82,41 @@ class BarberModel extends BarberEntity {
       inTimeTable: json['inTimeTable'] ?? false,
       password: "",
       notWorkingHours: json['notWorkingHours'] != null &&
-              List.from(json['notWorkingHours']).isNotEmpty
+          List.from(json['notWorkingHours']).isNotEmpty
           ? List.from(json['notWorkingHours'])
-              .map((e) => NotWorkingHoursModel.fromJson(e))
-              .toList()
+          .map((e) => NotWorkingHoursModel.fromJson(e))
+          .toList()
           : [],
       avatar: json['avatar'] ?? "",
       isCurrentFilial: json['isCurrentFilial'] ?? true,
-      weeklySchedule: WeeklyScheduleResultsModel.fromJson( json['weeklySchedule']),
+      weeklySchedule: WeeklyScheduleResultsModel.fromJson( json['weeklySchedule'] ?? []),
+
+      schedule: List.from(json['schedule']).map((e) => EmployeeScheduleModel.fromJson(e, json['employeeId'] ?? "")).toList(), createdAt: DateTime.parse(json['createdAt']),
+    );
+  }
+  factory BarberModel.fromJsonWithoutFilial(Map<String, dynamic> json) {
+
+    return BarberModel(
+      id: json['_id'] ?? "",
+      firstName: json['firstName'],
+      employeeId: json['employeeId'] ?? "",
+      lastName: json['lastName'],
+      phone: json['phone'] ?? 998,
+      isActive: json['isActive'] ?? true,
+      isOnline: json['isOnline'] ?? true,
+      filial: FilialEntity.empty(),
+      login: "",
+      inTimeTable: json['inTimeTable'] ?? false,
+      password: "",
+      notWorkingHours: json['notWorkingHours'] != null &&
+          List.from(json['notWorkingHours']).isNotEmpty
+          ? List.from(json['notWorkingHours'])
+          .map((e) => NotWorkingHoursModel.fromJson(e))
+          .toList()
+          : [],
+      avatar: json['avatar'] ?? "",
+      isCurrentFilial: json['isCurrentFilial'] ?? true,
+      weeklySchedule: WeeklyScheduleResultsModel.fromJson( json['weeklySchedule'] ?? []),
 
       schedule: List.from(json['schedule']).map((e) => EmployeeScheduleModel.fromJson(e, json['employeeId'] ?? "")).toList(), createdAt: DateTime.parse(json['createdAt']),
     );
@@ -116,7 +144,7 @@ class BarberModel extends BarberEntity {
   }
 
   Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
+    final Map<String, dynamic> data = {};
     // data['_id'] = id;
 
     data['firstName'] = firstName;

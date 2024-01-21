@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/components/button_widget.dart';
@@ -25,8 +26,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void initState() {
-    // controllerLogin.text = "daler-web-dev";
-    // controllerPassword.text = "daler-web-dev";
+    controllerLogin.text = "daler-web-dev";
+    controllerPassword.text = "daler-web-dev";
     super.initState();
   }
 
@@ -44,17 +45,12 @@ class _SignInScreenState extends State<SignInScreen> {
       body: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) async {
           if (state is LoginSuccess) {
-
-            if(mounted) {
+            if (mounted) {
               await getSessionToken().then((value) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  RouteList.home,
-                      (route) => false,
-                );
+
+                context.go(RouteList.home);
               });
             }
-
-
           } else if (state is LoginError) {
             ErrorFlushBar("change_error".tr(args: [state.message.tr()]))
                 .show(context);

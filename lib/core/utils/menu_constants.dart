@@ -1,21 +1,15 @@
+import 'package:eleven_crm/core/utils/route_constants.dart';
 import 'package:eleven_crm/features/management/presentation/screens/employee_schedule_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../features/main/presensation/screens/home_screen.dart';
-import '../../features/main/presensation/screens/profile_screen.dart';
-import '../../features/management/presentation/screens/barber_screen.dart';
-import '../../features/management/presentation/screens/customer_screen.dart';
-import '../../features/management/presentation/screens/employee_screen.dart';
-import '../../features/management/presentation/screens/manager_screen.dart';
-import '../../features/products/presensation/screens/service_product_category_screen.dart';
-import '../../features/products/presensation/screens/service_products_screen.dart';
 
 class SubMenu {
   final String text;
   final Icon icon;
-  final Widget page;
+  final String route;
+  final String rootRoute;
 
-  SubMenu({required this.text, required this.icon, required this.page});
+  SubMenu({required this.text, required this.icon, required this.route,required this.rootRoute});
 }
 
 class Menus {
@@ -26,53 +20,46 @@ class Menus {
       icon: const Icon(Icons.display_settings_rounded),
       text: 'homeScreen',
       // page: const SizedBox(),
-      page: const HomeScreen(),
+      route: RouteList.orders,
+      rootRoute: RouteList.home,
     ),
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'employee_schedule',
-      page: const EmployeeScheduleScreen(),
-    ),
-    // SubMenu(
-    //   icon: const Icon(Icons.category),
-    //   text: 'order_payments',
-    //   page: Container(),
-    // ),
-    // SubMenu(
-    //   icon: const Icon(Icons.category),
-    //   text: 'blind_order_items',
-    //   page: Container(),
-    // ),
-  ];
+      route: RouteList.employeeSchedule,
+      rootRoute: RouteList.home,
 
-  // static List<SubMenu> crmMenu = [
-  //   SubMenu(
-  //     icon: const Icon(Icons.display_settings_rounded),
-  //     text: 'customer',
-  //     page: const CustomerPage(),
-  //   ),
-  // ];
+    ),
+  ];
 
   static List<SubMenu> managementMenu = [
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'customer',
-      page: const CustomerScreen(),
-    ), SubMenu(
+      route: RouteList.customers,
+      rootRoute: RouteList.management,
+
+    ),
+    SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'managers',
-      page: const ManagerScreen(),
+      route: RouteList.managers,
+      rootRoute: RouteList.management,
+
     ),
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'employee',
-      page: const EmployeeScreen(),
-    ),
+      route: RouteList.employees,
+      rootRoute: RouteList.management,
 
+    ),
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'barbers',
-      page: const BarberScreen(),
+      route: RouteList.barbers,
+      rootRoute: RouteList.management,
+
     ),
   ];
 
@@ -80,12 +67,17 @@ class Menus {
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'services',
-      page: const ServiceProductsScreen(),
+      route: RouteList.services,
+      rootRoute: RouteList.products,
+
+
     ),
     SubMenu(
       icon: const Icon(Icons.display_settings_rounded),
       text: 'service_product_category',
-      page: const ServiceProductCategoryScreen(),
+      route: RouteList.servicesCategory,
+      rootRoute: RouteList.products,
+
     ),
   ];
 
@@ -93,15 +85,17 @@ class Menus {
     SubMenu(
       icon: const Icon(Icons.category),
       text: 'profile',
-      page: const ProfileScreen(),
+      route: RouteList.profile,
+      rootRoute: RouteList.configs,
+
     ),
   ];
 
-  static List<SubMenu> statisticMenu = [
-    SubMenu(
-      icon: const Icon(Icons.display_settings_rounded),
-      text: 'statisticSalary',
-      page: Container(),
-    ),
-  ];
+  // static List<SubMenu> statisticMenu = [
+  //   SubMenu(
+  //     icon: const Icon(Icons.display_settings_rounded),
+  //     text: 'statisticSalary',
+  //     page: Container(),
+  //   ),
+  // ];
 }

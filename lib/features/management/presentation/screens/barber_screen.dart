@@ -1,9 +1,11 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:eleven_crm/core/api/api_constants.dart';
 import 'package:eleven_crm/core/utils/animated_navigation.dart';
 import 'package:eleven_crm/features/main/presensation/cubit/avatar/avatar_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -17,6 +19,7 @@ import '../../../../core/components/responsive_builder.dart';
 import '../../../../core/components/search_field.dart';
 import '../../../../core/components/success_flash_bar.dart';
 import '../../../../core/utils/hive_box_keys_constants.dart';
+import '../../../../core/utils/route_constants.dart';
 import '../../../../get_it/locator.dart';
 import '../../../main/domain/entity/top_menu_entity.dart';
 import '../../../main/presensation/cubit/data_form/data_form_cubit.dart';
@@ -26,6 +29,7 @@ import '../../../main/presensation/widget/my_icon_button.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
+import '../../data/model/barber_model.dart';
 import '../../domain/entity/barber_entity.dart';
 import '../cubit/barber/barber_cubit.dart';
 import 'barber_profile_screen.dart';
@@ -128,16 +132,7 @@ class _ContentWidgetState extends State<ContentWidget> {
         setState(() => isFormVisible = true);
       }
     } else {
-      AnimatedNavigation.push(
-        context: context,
-        page: BarberProfileScreen(
-          barberId: data.id,
-          barberEntity: data,
-          onBack: () {
-            BlocProvider.of<BarberCubit>(context).load("");
-          },
-        ),
-      );
+      context.push(RouteList.edit(RouteList.barbers, data.id), extra: data);
     }
   }
 

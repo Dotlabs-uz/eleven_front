@@ -671,7 +671,9 @@
   "changeSchedule": "Jadvalni o'zgartirish",
   "checked": "Tasdiqlangan",
   "barberStartWorkAt": "Sartarosh yaratildi {}",
-  "pageNotFound": "Ууууппсс.... Такой страницы нет!"
+  "pageNotFound": "Uuuuppss.... Bunday sahifa yo'q!",
+  "goToHome" : "Asosiy sahifaga qayting"
+
 
 
 }

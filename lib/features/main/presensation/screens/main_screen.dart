@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/components/drawer_widget.dart';
 import '../../../../core/components/floating_menu_widget.dart';
@@ -16,8 +17,11 @@ import '../cubit/menu/menu_cubit.dart';
 import '../cubit/top_menu_cubit/top_menu_cubit.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key, required this.menus}) : super(key: key);
-  final List<SubMenu> menus;
+  final StatefulNavigationShell navigationShell;
+  const MainScreen({
+    Key? key,
+    required this.navigationShell,
+  }) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -61,15 +65,20 @@ class _MainScreenState extends State<MainScreen> {
         },
         child: SafeArea(
           child: ResponsiveBuilder(
-
             mobileBuilder: (context, constraints) {
-
               return Container(
                 color: AppColors.mainTextColor,
                 child: Row(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SideMenuWidget(),
+                    SideMenuWidget(
+                      navigationShell: widget.navigationShell,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedIndex = value;
+                        });
+                      },
+                    ),
                     // Flexible(
                     //   flex: constraints.maxWidth > 1350 ? 3 : 4,
                     //   child: SingleChildScrollView(
@@ -79,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
                     // ),
                     Expanded(
                       child: ContentWidget(
-                        menus: widget.menus,
+                        navigationShell: widget.navigationShell,
                         openDrawer: () {},
                       ),
                     ),
@@ -104,7 +113,14 @@ class _MainScreenState extends State<MainScreen> {
                 child: Row(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SideMenuWidget(),
+                    SideMenuWidget(
+                      navigationShell: widget.navigationShell,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedIndex = value;
+                        });
+                      },
+                    ),
                     // Flexible(
                     //   flex: constraints.maxWidth > 1350 ? 3 : 4,
                     //   child: SingleChildScrollView(
@@ -114,7 +130,7 @@ class _MainScreenState extends State<MainScreen> {
                     // ),
                     Expanded(
                       child: ContentWidget(
-                        menus: widget.menus,
+                        navigationShell: widget.navigationShell,
                         openDrawer: () {},
                       ),
                     ),
@@ -151,7 +167,14 @@ class _MainScreenState extends State<MainScreen> {
                 child: Row(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SideMenuWidget(),
+                    SideMenuWidget(
+                      navigationShell: widget.navigationShell,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedIndex = value;
+                        });
+                      },
+                    ),
                     // Flexible(
                     //   flex: constraints.maxWidth > 1350 ? 3 : 4,
                     //   child: SingleChildScrollView(
@@ -161,7 +184,7 @@ class _MainScreenState extends State<MainScreen> {
                     // ),
                     Expanded(
                       child: ContentWidget(
-                        menus: widget.menus,
+                        navigationShell: widget.navigationShell,
                         openDrawer: () {},
                       ),
                     ),
@@ -183,108 +206,159 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-class SideMenuWidget extends StatelessWidget {
+class SideMenuWidget extends StatefulWidget {
+  final StatefulNavigationShell navigationShell;
+  final Function(int) onChanged;
   const SideMenuWidget({
     Key? key,
+    required this.navigationShell,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
+  State<SideMenuWidget> createState() => _SideMenuWidgetState();
+}
+
+class _SideMenuWidgetState extends State<SideMenuWidget> {
+  static int currentIndex = 0;
+  @override
+  void initState() {
+    currentIndex = widget.navigationShell.currentIndex;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant SideMenuWidget oldWidget) {
+    if (currentIndex != widget.navigationShell.currentIndex) {
+      currentIndex = widget.navigationShell.currentIndex;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
-      listener: (context, state) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          RouteList.login,
-          (route) => false,
-        );
-      },
-      child: BlocBuilder<MenuCubit, int>(
-        builder: (context, state) {
-          return FloatingMenuWidget(
-            listEntity: [
-              FloatingMenuEntity(
-                key: RouteList.home,
-                icon: Icons.home_filled,
-                title: "homeScreen".tr(),
-                index: 0,
-              ),
-              // FloatingMenuEntity(
-              //   key: RouteList.crm,
-              //   icon: Icons.accessibility_outlined,
-              //   title: "crm".tr(),
-              //   index: 2,
-              // ),
-              FloatingMenuEntity(
-                key: RouteList.management,
-                icon: Icons.manage_accounts_outlined,
-                title: "management".tr(),
-                index: 1,
-              ),
-              FloatingMenuEntity(
-                key: RouteList.product,
-                icon: Icons.assessment_outlined,
-                title: "product".tr(),
-                index: 2,
-              ),
-              // FloatingMenuEntity(
-              //   key: RouteList.configs,
-              //   icon: EvaIcons.settingsOutline,
-              //   title: "config".tr(),
-              //   index: 3,
-              // ),
-              // FloatingMenuEntity(
-              //   key: RouteList.settings,
-              //   icon: EvaIcons.barChart2,
-              //   title: "settings".tr(),
-              //   index: 4,
-              // ),
-              // FloatingMenuEntity(
-              //   key: RouteList.logout,
-              //   icon: EvaIcons.logOutOutline,
-              //   title: "signOut".tr(),
-              //   index: 5,
-              // ),
-            ],
-            onProfileTap: () {
-              BlocProvider.of<MenuCubit>(context).setMenu(3); // Profile
-              Navigator.pushNamed(context, RouteList.configs);
-            },
-            onChanged: (value) {
-              if (value.key == RouteList.logout) {
-              } else {
-                BlocProvider.of<MenuCubit>(context).setMenu(value.index);
-                Navigator.pushNamed(context, value.key);
-              }
-            },
-            selectedIndex: state,
-          );
+    return Material(
+      child: BlocListener<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if(state is LogoutSuccess) {
+            context.go(RouteList.logout);
+
+          }
         },
+        child: FloatingMenuWidget(
+          listEntity: [
+            FloatingMenuEntity(
+              key: RouteList.home,
+              icon: Icons.home_filled,
+              title: "homeScreen".tr(),
+              index: 0,
+            ),
+            // FloatingMenuEntity(
+            //   key: RouteList.crm,
+            //   icon: Icons.accessibility_outlined,
+            //   title: "crm".tr(),
+            //   index: 2,
+            // ),
+            FloatingMenuEntity(
+              key: RouteList.management,
+              icon: Icons.manage_accounts_outlined,
+              title: "management".tr(),
+              index: 1,
+            ),
+            FloatingMenuEntity(
+              key: RouteList.product,
+              icon: Icons.assessment_outlined,
+              title: "product".tr(),
+              index: 2,
+            ),
+            // FloatingMenuEntity(
+            //   key: RouteList.configs,
+            //   icon: EvaIcons.settingsOutline,
+            //   title: "config".tr(),
+            //   index: 3,
+            // ),
+            // FloatingMenuEntity(
+            //   key: RouteList.settings,
+            //   icon: EvaIcons.barChart2,
+            //   title: "settings".tr(),
+            //   index: 4,
+            // ),
+            // FloatingMenuEntity(
+            //   key: RouteList.logout,
+            //   icon: EvaIcons.logOutOutline,
+            //   title: "signOut".tr(),
+            //   index: 5,
+            // ),
+          ],
+          onProfileTap: () {
+            BlocProvider.of<MenuCubit>(context).setMenu(3); // Profile
+            context.go(RouteList.configs);
+          },
+          onChanged: (value) {
+            if (value.key == RouteList.logout) {
+            } else {
+              widget.navigationShell.goBranch(
+                value.index,
+                initialLocation: value.index == widget.navigationShell.currentIndex,
+              );
+
+              widget.onChanged.call(value.index);
+            }
+          },
+          currentIndex: currentIndex,
+        ),
       ),
     );
   }
 }
 
 class ContentWidget extends StatefulWidget {
-  const ContentWidget({Key? key, required this.openDrawer, required this.menus})
-      : super(key: key);
-  final List<SubMenu> menus;
+  const ContentWidget({
+    Key? key,
+    required this.openDrawer,
+    required this.navigationShell,
+  }) : super(key: key);
   final void Function() openDrawer;
+  final StatefulNavigationShell navigationShell;
 
   @override
   State<ContentWidget> createState() => _ContentWidgetState();
 }
 
 class _ContentWidgetState extends State<ContentWidget> {
-  late SubMenu page;
-
+  List<SubMenu> menus = [];
   @override
   void initState() {
-    initialize();
+    initializeMenus();
+
     super.initState();
   }
 
-  initialize() async {
-    page = widget.menus.first;
+  @override
+  void didUpdateWidget(covariant ContentWidget oldWidget) {
+    if (oldWidget.navigationShell.currentIndex !=
+        widget.navigationShell.currentIndex) {
+      initializeMenus();
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  initializeMenus() {
+    switch (widget.navigationShell.currentIndex) {
+      case 0:
+        menus = Menus.ordersMenu;
+
+        break;
+      case 1:
+        menus = Menus.managementMenu;
+
+        break;
+      case 2:
+        menus = Menus.productMenu;
+
+        break;
+    }
   }
 
   @override
@@ -297,7 +371,7 @@ class _ContentWidgetState extends State<ContentWidget> {
           _topMenu(),
           _searchAndActionsMenu(),
           Expanded(
-            child: page.page,
+            child: widget.navigationShell,
           ),
         ],
       ),
@@ -305,6 +379,8 @@ class _ContentWidgetState extends State<ContentWidget> {
   }
 
   _topMenu() {
+    final currentUrl =
+        GoRouter.of(context).routeInformationProvider.value.uri.toString();
     return SingleChildScrollView(
       physics: const ClampingScrollPhysics(),
       scrollDirection: Axis.horizontal,
@@ -312,44 +388,50 @@ class _ContentWidgetState extends State<ContentWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ...List.generate(
-            widget.menus.length,
-            (index) => InkWell(
-              onTap: () => setState(() => page = widget.menus[index]),
-              child: Ink(
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  decoration: BoxDecoration(
-                    border: page == widget.menus[index]
-                        ? Border(
-                            bottom: BorderSide(
-                              width: 1.0,
-                              color: Colors.lightBlue.shade900,
-                            ),
-                          )
-                        : null,
-                  ),
-                  child: Container(
-                    height: 35,
-                    margin: const EdgeInsets.only(
-                      left: 12,
-                      top: 4,
-                      right: 12,
-                      bottom: 0,
+            menus.length,
+            (index) {
+              final item = menus[index];
+              final itemUrl = "${item.rootRoute}/${item.route}";
+              return InkWell(
+                onTap: () {
+                  context.go(itemUrl);
+                },
+                child: Ink(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    decoration: BoxDecoration(
+                      border: currentUrl == itemUrl
+                          ? Border(
+                              bottom: BorderSide(
+                                width: 1.0,
+                                color: Colors.lightBlue.shade900,
+                              ),
+                            )
+                          : null,
                     ),
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Text(
-                      widget.menus[index].text.tr().toUpperCase(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontFamily: "Nunito",
-                        fontWeight: FontWeight.w700,
+                    child: Container(
+                      height: 35,
+                      margin: const EdgeInsets.only(
+                        left: 12,
+                        top: 4,
+                        right: 12,
+                        bottom: 0,
+                      ),
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Text(
+                        menus[index].text.tr().toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontFamily: "Nunito",
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           )
         ],
       ),
@@ -390,417 +472,6 @@ class _ContentWidgetState extends State<ContentWidget> {
           );
         },
       ),
-    );
-  }
-
-// Row(
-// crossAxisAlignment: CrossAxisAlignment.center,
-// children: [
-// Expanded(
-// child: Row(
-// mainAxisAlignment: MainAxisAlignment.start,
-// children: [
-// if (!ResponsiveBuilder.isDesktop(context))
-// IconButton(
-// onPressed: widget.openDrawer,
-// enableFeedback: true,
-// icon:
-// const Icon(Icons.menu, color: AppColor.menuBgColor),
-// ),
-// Padding(
-// padding: const EdgeInsets.all(8.0),
-// child: BlocBuilder<TopMenuCubit, List<MyIconButton>>(
-// builder: (context, listWidget) {
-// if (listWidget.isEmpty) return const SizedBox();
-// // return IconButtonBar(
-// //   childSize: const Size(48, 48),
-// //   children: listWidget,
-// // );
-// return Row(
-// crossAxisAlignment: CrossAxisAlignment.center,
-// children: listWidget
-//     .map(
-// (e) => Row(
-// mainAxisSize: MainAxisSize.min,
-// children: [
-// // RotatedBox(
-// //   quarterTurns: 2,
-// //   child: SvgPicture.asset(
-// //     Assets.tChevronLeftIcon,
-// //   ),
-// // ),
-//
-// // const Padding(
-// //   padding: EdgeInsets.symmetric(
-// //       horizontal: 8.0),
-// //   child: Text(
-// //     "|",
-// //     style: TextStyle(
-// //       fontSize: 16,
-// //       color: AppColor.menuBgColor,
-// //       fontWeight: FontWeight.w700,
-// //     ),
-// //   ),
-// // ),
-//
-// const SizedBox(width: 5),
-// e,
-// ],
-// ),
-// )
-//     .toList(),
-// );
-// },
-// ),
-// ),
-// const Padding(
-// padding: EdgeInsets.symmetric(horizontal: 8.0),
-// child: Text(
-// "|",
-// style: TextStyle(
-// fontSize: 16,
-// color: AppColor.menuBgColor,
-// fontWeight: FontWeight.w700,
-// ),
-// ),
-// ),
-// Padding(
-// padding: const EdgeInsets.only(left: 10),
-// child: Text(
-// page.text.tr().toUpperCase(),
-// style: GoogleFonts.nunito(
-// color: const Color(0xff0c2556),
-// fontSize: 14,
-// height: 1.8,
-// fontWeight: FontWeight.w800,
-// ),
-// ),
-// ),
-// ],
-// ),
-// ),
-// // Expanded(
-// //   child: IconButtonBar(
-// //     childSize: const Size(100, 48),
-// //     children: List.generate(
-// //       widget.menus.length,
-// //       (index) => InkWell(
-// //         onTap: () => setState(() => page = widget.menus[index]),
-// //         child: Ink(
-// //           child: AnimatedContainer(
-// //             duration: const Duration(milliseconds: 200),
-// //             decoration: BoxDecoration(
-// //               border: page == widget.menus[index]
-// //                   ? Border(
-// //                       bottom: BorderSide(
-// //                         width: 2.0,
-// //                         color: Colors.lightBlue.shade900,
-// //                       ),
-// //                     )
-// //                   : null,
-// //             ),
-// //             child: Padding(
-// //               padding: const EdgeInsets.all(12.0),
-// //               child: Text(
-// //                 widget.menus[index].text.tr().toUpperCase(),
-// //                 style: const TextStyle(
-// //                   color: Colors.black,
-// //                   fontSize: 14,
-// //                   fontFamily: "Nunito",
-// //                   fontWeight: FontWeight.w600,
-// //                 ),
-// //               ),
-// //             ),
-// //           ),
-// //         ),
-// //       ),
-// //     ),
-// //   ),
-// // ),
-// PopupMenuButton<SubMenu>(
-// padding: const EdgeInsets.only(right: 15),
-// icon: const Icon(
-// Icons.more_horiz_rounded,
-// color: AppColor.menuBgColor,
-// ),
-// initialValue: page,
-// // Callback that sets the selected popup menu item.
-// onSelected: (SubMenu item) {
-// setState(() => page = item);
-// },
-// itemBuilder: (BuildContext context) =>
-// <PopupMenuEntry<SubMenu>>[
-// ...widget.menus.map((data) {
-// var title = data.text.tr();
-// return PopupMenuItem<SubMenu>(
-// value: data,
-// child: Text(
-// '${title[0].toUpperCase()}${title.substring(1)}',
-// style: GoogleFonts.nunito(
-// color: Colors.black,
-// fontWeight: FontWeight.w700,
-// fontSize: 14,
-// ),
-// ),
-// );
-// })
-// ],
-// ),
-//
-// //////
-// // DropdownButton<SubMenu>(
-// //   icon: const Icon(Icons.menu),
-// //   underline: const SizedBox(),
-// //   hint: const SizedBox(),
-// //   value: page,
-// //   // selectedItemBuilder: (context) => [const SizedBox()],
-// //   items: widget.menus.map((SubMenu value) {
-// //     return DropdownMenuItem<SubMenu>(
-// //       value: value,
-// //       child: Padding(
-// //         padding: const EdgeInsets.all(8.0),
-// //         child: Text(value.text.tr()),
-// //       ),
-// //     );
-// //   }).toList(),
-// //
-// //   onChanged: (subMenu) {
-// //     if (subMenu != null) {
-// //       setState(() => page = subMenu);
-// //     }
-// //   },
-// // )
-// ],
-// ),
-}
-
-//
-//
-//
-// class DesktopLayout extends StatefulWidget {
-//   final  List<SubMenu> menus;  final DashboardController controller;
-//
-//   const DesktopLayout({Key? key, required this.menus, required this.controller,}) : super(key: key);
-//
-//   @override
-//   State<DesktopLayout> createState() => _DesktopLayoutState();
-// }
-//
-// class _DesktopLayoutState extends State<DesktopLayout> {
-//
-//   //
-//   // [
-//   //
-//   // CollapsibleItem(
-//   // text: "orders".tr(),
-//   // icon: Icons.add_shopping_cart_outlined,
-//   // onPressed: () {
-//   // setState(() {
-//   // context.read<MenuCubit>().setMenu(1);
-//   // Navigator.pushNamed(context, RouteList.orders);
-//   // });
-//   // },
-//   // ),
-//   // CollapsibleItem(
-//   // text: 'config'.tr(),
-//   // icon: EvaIcons.settingsOutline,
-//   // onPressed: () {
-//   // setState(() {
-//   // context.read<MenuCubit>().setMenu(2);
-//   // Navigator.pushNamed(context, RouteList.configs);
-//   // });
-//   // },
-//   // ),
-//   // CollapsibleItem(
-//   // text: 'crm'.tr(),
-//   // icon: Icons.accessibility_outlined,
-//   // onPressed: () {
-//   // setState(() {
-//   // context.read<MenuCubit>().setMenu(3);
-//   // Navigator.pushNamed(context, RouteList.crm);
-//   // });
-//   // },
-//   // ),
-//   // CollapsibleItem(
-//   // text: 'management'.tr(),
-//   // icon: Icons.manage_accounts,
-//   // onPressed: () {
-//   // setState(() {
-//   // context.read<MenuCubit>().setMenu(4);
-//   // Navigator.pushNamed(context, RouteList.management);
-//   // });
-//   // },
-//   // ),
-//   // CollapsibleItem(
-//   // text: 'product'.tr(),
-//   // icon: Icons.assessment_outlined,
-//   // onPressed: () {
-//   // setState(() {
-//   // context.read<MenuCubit>().setMenu(5);
-//   // Navigator.pushNamed(context, RouteList.product);
-//   // });
-//   // },
-//   // ),
-//   // CollapsibleItem(
-//   // text: 'signOut'.tr(),
-//   // icon: EvaIcons.logOutOutline,
-//   // onPressed: () {
-//   // setState(() {
-//   // context.read<LoginCubit>().logout();
-//   //
-//   // });
-//   // },
-//   // ),
-//   //
-//   // ];
-//
-//
-//   late List<CollapsibleItem> _items;
-//
-//   late String _headline;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _items = _generateItems;
-//     _headline = _items.firstWhere((item) => item.isSelected).text;
-//
-//   }
-//
-//
-//   List<CollapsibleItem> get _generateItems {
-//     return [
-//       CollapsibleItem(
-//         text: "orders".tr(),
-//         icon: Icons.add_shopping_cart_outlined,
-//         onPressed: () {
-//           setState(() {
-//             _headline = 'DashBoard';
-//             BlocProvider.of <MenuCubit>(context).setMenu(1);
-//             Navigator.pushNamed(context, RouteList.orders);
-//           });
-//         },
-//         isSelected: true,
-//       ),
-//       CollapsibleItem(
-//         text: 'config'.tr(),
-//         icon: EvaIcons.settingsOutline,
-//         onPressed: () {
-//           setState(() {
-//             _headline = 'Errors';
-//             BlocProvider.of <MenuCubit>(context).setMenu(2);
-//             Navigator.pushNamed(context, RouteList.configs);
-//           });
-//         },
-//       ),
-//       CollapsibleItem(
-//         text: 'crm'.tr(),
-//         icon: Icons.search,
-//         onPressed: () {
-//           setState(() {
-//             _headline = 'Search';
-//             BlocProvider.of <MenuCubit>(context).setMenu(3);
-//             Navigator.pushNamed(context, RouteList.crm);
-//           });
-//         },
-//       ),
-//       CollapsibleItem(
-//         text: 'Notifications',
-//         icon: Icons.notifications,
-//         onPressed: () => setState(() => _headline = 'Notifications'),
-//       ),
-//       CollapsibleItem(
-//         text: 'Settings',
-//         icon: Icons.settings,
-//         onPressed: () => setState(() => _headline = 'Settings'),
-//       ),
-//
-//     ];
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(
-//       child: CollapsibleSidebar(
-//         isCollapsed: MediaQuery.of(context).size.width <= 800,
-//         items: _items,
-//         // avatarImg: NetworkImage( "https://c4.wallpaperflare.com/wallpaper/764/505/66/baby-groot-4k-hd-superheroes-wallpaper-thumb.jpg"),
-//         title: 'John Smith',
-//
-//         backgroundColor: AppColor.menuBgColor,
-//         selectedTextColor: Colors.white,
-//         selectedIconColor: Colors.white,
-//
-//         selectedIconBox: Colors.white12,
-//         textStyle: const TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
-//         sidebarBoxShadow: [],
-//         titleStyle: const TextStyle(
-//           fontSize: 20,
-//           fontStyle: FontStyle.italic,
-//           color: Colors.white,
-//           fontWeight: FontWeight.bold,),
-//         toggleTitleStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, ),
-//
-//         onTitleTap: () {
-//         },
-//         body:  ContentWidget(
-//           menus: widget.menus,
-//           openDrawer: widget.controller.openDrawer,
-//         ),
-//
-//
-//       ),
-//     );
-//   }
-//
-//
-// }
-
-class IconButtonBar extends StatefulWidget  {
-  const IconButtonBar({
-    Key? key,
-    required this.childSize,
-    required this.children,
-  }) : super(key: key);
-
-  final Size childSize;
-
-  final List<Widget> children;
-
-  Size get preferredSize =>
-      Size(childSize.width * children.length, childSize.height);
-
-  @override
-  State<IconButtonBar> createState() => _IconButtonBarState();
-}
-
-class _IconButtonBarState extends State<IconButtonBar> {
-  final GlobalKey buttonKey = GlobalKey();
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        int visibleChildren =
-            constraints.constrain(widget.preferredSize).width ~/
-                widget.childSize.width;
-        visibleChildren = (visibleChildren < widget.children.length)
-            ? visibleChildren - 1
-            : widget.children.length;
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            ...widget.children.sublist(0, visibleChildren),
-            if (visibleChildren < widget.children.length)
-              OverflowMenu(
-                  key: buttonKey,
-                  children: widget.children
-                      .sublist(visibleChildren, widget.children.length)),
-          ]
-              .map<Widget>((Widget child) =>
-                  SizedBox.fromSize(size: widget.childSize, child: child))
-              .toList(),
-        );
-      },
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/image_view_widget.dart';
 import 'package:eleven_crm/core/components/loading_circle.dart';
+import 'package:eleven_crm/core/utils/route_constants.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/barber/barber_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/cubit/employee/employee_cubit.dart';
 import 'package:eleven_crm/features/management/presentation/widgets/barber_profile_edit_body.dart';
@@ -11,6 +12,7 @@ import 'package:eleven_crm/features/management/presentation/widgets/checker_with
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/components/error_flash_bar.dart';
 import '../../../../core/components/success_flash_bar.dart';
@@ -28,12 +30,10 @@ import '../widgets/schedule_calendar_widget.dart';
 class BarberProfileScreen extends StatefulWidget {
   final String barberId;
   final BarberEntity barberEntity;
-  final Function() onBack;
   const BarberProfileScreen({
     Key? key,
     required this.barberId,
     required this.barberEntity,
-    required this.onBack,
   }) : super(key: key);
 
   @override
@@ -76,7 +76,6 @@ class _BarberProfileScreenState extends State<BarberProfileScreen> {
       child: ContentWidget(
         barberCubit: barberCubit,
         barberEntity: widget.barberEntity,
-        onBack: widget.onBack,
         barberId: widget.barberId,
       ),
     );
@@ -88,11 +87,9 @@ class ContentWidget extends StatefulWidget {
 
   final String barberId;
   final BarberEntity barberEntity;
-  final Function() onBack;
 
   const ContentWidget({
     Key? key,
-    required this.onBack,
     required this.barberCubit,
     required this.barberId,
     required this.barberEntity,
@@ -162,11 +159,9 @@ class _ContentWidgetState extends State<ContentWidget> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            
-            Navigator.pop(context);
 
-            widget.onBack.call();
-            
+context.pop();
+            BlocProvider.of<BarberCubit>(context).load("");
           },
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
@@ -215,7 +210,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                 if (mounted) {
                   Future.delayed(
                     Duration.zero,
-                    () {
+                        () {
                       setState(() {
                         _file = null;
                         webImage = Uint8List(8);
@@ -295,7 +290,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           tab.title.tr(),
@@ -328,7 +323,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child:
-                                    BlocBuilder<EmployeeCubit, EmployeeState>(
+                                BlocBuilder<EmployeeCubit, EmployeeState>(
                                   builder: (context, state) {
 
 
@@ -339,7 +334,7 @@ class _ContentWidgetState extends State<ContentWidget> {
                                         listSchedule: data.schedule,
                                         onRefreshTap: () {},
                                         employeeId:
-                                            widget.barberEntity.employeeId,
+                                        widget.barberEntity.employeeId,
                                       );
                                     }
 

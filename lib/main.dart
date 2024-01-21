@@ -9,13 +9,12 @@ import 'package:hive/hive.dart';
 
 final now = DateTime.now();
 
-String? token ;
 
 
 
-Future getSessionToken() async {
+Future<String?> getSessionToken() async {
   final authenticationBox = await Hive.openBox('authenticationBox');
-  token = await authenticationBox.get('session_id');
+  return  await authenticationBox.get('session_id');
 }
 
 void main() async {

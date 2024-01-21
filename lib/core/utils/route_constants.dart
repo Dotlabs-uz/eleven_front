@@ -7,25 +7,43 @@ import '../components/floating_menu_widget.dart';
 class RouteList {
   RouteList._();
 
-  static const String initial = '/';
-  static const String home = '/home';
-
-  // static const String family = '/family';
-  // static const String checkup = '/checkup';
-
-  static const String login = '/login';
-  static const String logout = '/logout';
-
   // static const String arrival = '/arrival';
   static const String configs = '/configs';
   static const String crm = '/crm';
-  static const String management = '/management';
   static const String product = '/product';
-  static const String orders = '/orders';
   static const String homeScreen = '/home_screen';
   static const String settings = '/settings';
-}
 
+  // Screen routes
+
+  static const String orders = 'orders';
+  static const String employeeSchedule = 'employeeSchedule';
+  static const String customers = 'customers';
+  static const String managers = 'managers';
+  static const String employees = 'employees';
+  static const String barbers = 'barbers';
+  static const String services = 'services';
+  static const String servicesCategory = 'servicesCategory';
+  static const String profile = 'profile';
+
+  //  Base Routes
+
+  static const String initial = '/';
+  static const String login = '/login';
+  static const String logout = '/logout';
+  static const String home = '/home';
+  static const String management = '/management';
+  static const String managementBarber = '$management/$barbers';
+  static const String products = '/products';
+
+
+  static const String editBarber = '/$barbers/:id';
+  static const String editEmployee = '/$employees/:id';
+
+  static String edit(String route, String id) {
+    return "/$route/:$id";
+  }
+}
 
 final listEntityPages = [
   FloatingMenuEntity(
@@ -34,7 +52,6 @@ final listEntityPages = [
     title: "homeScreen".tr(),
     index: 0,
   ),
-
   FloatingMenuEntity(
     key: RouteList.management,
     icon: Icons.manage_accounts_outlined,

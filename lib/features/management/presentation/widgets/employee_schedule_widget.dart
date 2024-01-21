@@ -311,7 +311,6 @@ class _EmployeeScheduleTableWidgetState
               context: context,
               page: EmployeeProfileScreen(
                 employeeEntity: widget.employeeEntity,
-                onBack: () {},
               ),
             );
           },
@@ -349,8 +348,7 @@ class _EmployeeScheduleTableWidgetState
                   elementDt.year == year;
             });
 
-
-            final startDateParsing =  dateTimeNow;
+            final startDateParsing = dateTimeNow;
 
             final fieldSchedule = FieldSchedule(
                 startDateParsing,
@@ -579,7 +577,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
   final Function(FieldSchedule) onHoverDrag;
   final bool isFieldSElected;
   final List<EmployeeScheduleEntity> schedule;
-  final bool enableTopCross ;
+  final bool enableTopCross;
   final Function(
     int day,
     int month,
@@ -599,7 +597,7 @@ class _EmployeeScheduleFieldWidget extends StatefulWidget {
     required this.isFieldSElected,
     required this.onHoverDrag,
     required this.schedule,
-      this.enableTopCross = true,
+    this.enableTopCross = true,
   }) : super(key: key);
 
   @override
@@ -615,7 +613,6 @@ class _EmployeeScheduleFieldWidgetState
 
   @override
   void initState() {
-
     status = widget.fieldSchedule.status;
 
     super.initState();
@@ -718,7 +715,7 @@ class _EmployeeScheduleFieldWidgetState
     final bool beforeCondition = hoverProvider.dateTime != null &&
         widget.dateTime.isBefore(hoverProvider.dateTime!) &&
         hoverProvider.row == widget.row;
-    final bool topCondition =widget.enableTopCross &&
+    final bool topCondition = widget.enableTopCross &&
         hoverProvider.dateTime != null &&
         widget.dateTime.day == hoverProvider.dateTime?.day &&
         widget.row <= hoverProvider.row;

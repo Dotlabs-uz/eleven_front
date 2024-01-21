@@ -48,7 +48,7 @@ dependencies:
   dio: ^5.4.0
   dio_http_cache:
     git: https://github.com/Samir-Sattarov/dio-http-cache.git
-  go_router: ^12.1.3
+  go_router: ^13.0.1
   eva_icons_flutter: ^3.1.0
 #  packageA:
 #    git:

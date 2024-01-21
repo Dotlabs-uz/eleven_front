@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eleven_crm/core/components/data_phone_number_field_widget.dart';
+import 'package:eleven_crm/core/utils/route_constants.dart';
 import 'package:eleven_crm/features/management/domain/entity/employee_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../features/management/presentation/screens/employee_profile_screen.dart';
@@ -91,12 +93,10 @@ class DataEmployeeFormState extends State<DataEmployeeForm> {
             ButtonWidget(
               text: "navigateToEmployeeProfile".tr(),
               onPressed: () {
-                AnimatedNavigation.push(
-                  context: context,
-                  page: EmployeeProfileScreen(
-                    employeeEntity: EmployeeEntity.fromFields(),
-                    onBack: widget.onBackFromProfile,
-                  ),
+                final data = EmployeeEntity.fromFields();
+                context.push(
+                  RouteList.edit(RouteList.employees, data.id),
+                  extra: data,
                 );
               },
             ),
